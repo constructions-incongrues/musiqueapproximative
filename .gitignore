@@ -1,3 +1,4 @@
+/.vagrant
 # abt
 /src/config/databases.yml
 /etc/prod

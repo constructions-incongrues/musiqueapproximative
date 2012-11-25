@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+	DocumentRoot /vagrant/src/web
+	<Directory /vagrant/src/web>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+</VirtualHost>
