@@ -1,5 +1,10 @@
 Options +FollowSymLinks +ExecCGI
 
+# Deny access to MP3 leechers
+Order allow,deny
+Deny from mp3skull.com
+Allow from all
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
