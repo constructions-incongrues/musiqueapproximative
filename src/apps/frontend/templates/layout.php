@@ -32,7 +32,11 @@
 
     <div id="maintitle">Musique Approximative</div>
     <div id="about">
-      <p>Ceci est un <em>micropodcast</em>. Vous y trouverez un flux de morceaux glanés au fil du web. </p>
+      <p>
+        C'est l'exutoire anarchique d'une bande de mélomanes fêlés. <br />
+        C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun. <br />
+        L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.
+      </p>
       <p>Cliquez sur le nom d'un contributeur pour écouter sa playlist</p>
       <p>
         <strong>Contributeurs : </strong> 
