@@ -44,7 +44,7 @@
       </p>
       <p>
         Consommer la musique autrement :
-        <a href="http://feeds.feedburner.com/musique-approximative">Podcast</a> /
+        <a href="http://feeds.feedburner.com/musique-approximative">RSS</a> /
         <a href="http://www.facebook.com/pages/Musique-Approximative/179136112996">Facebook</a> /
         <a href="http://twitter.com/approximazik"">Twitter</a> /
         <a href="#email-subscription" class="email-subscription-link">Email</a>
