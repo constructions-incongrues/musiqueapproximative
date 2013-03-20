@@ -32,11 +32,11 @@
 
     <div id="maintitle">Musique Approximative</div>
     <div id="about">
-      <p>
+      <cite>
         C'est l'exutoire anarchique d'une bande de mélomanes fêlés. <br />
         C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun. <br />
         L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.
-      </p>
+      </cite>
       <p>Cliquez sur le nom d'un contributeur pour écouter sa playlist</p>
       <p>
         <strong>Contributeurs : </strong> 
