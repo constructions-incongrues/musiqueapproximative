@@ -437,7 +437,15 @@ function include_metas()
   $i18n = sfConfig::get('sf_i18n') ? $context->getI18N() : null;
   foreach ($context->getResponse()->getMetas() as $name => $content)
   {
-    echo tag('meta', array('name' => $name, 'content' => null === $i18n ? $content : $i18n->__($content)))."\n";
+    /*
+     * Facebook OGP requires <meta> tags to use a "property" attribute instead of a "name" attribute
+     * @see http://www.ogp.me
+     */
+    $nameAttribute = 'name';
+    if (strpos($name, 'og:') !== false || strpos($name, 'fb:') !== false) {
+      $nameAttribute = 'property';
+    }
+    echo tag('meta', array($nameAttribute => $name, 'content' => null === $i18n ? $content : $i18n->__($content)))."\n";
   }
 }
 
