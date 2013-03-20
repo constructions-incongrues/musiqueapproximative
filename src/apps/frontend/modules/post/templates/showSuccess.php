@@ -71,9 +71,9 @@ window.c           = '<?php echo $sf_request->getParameter('c') ?>';
    </p>
 
    <p>
-     <a id="play" x-js-postid="<?php echo $post->id ?>" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/tracks/<?php echo $post->track_filename ?>">Play</a> |
+     <a id="play" x-js-postid="<?php echo $post->id ?>" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>">Play</a> |
    	 <a id="pause" href="#">Pause</a> /
-   	 <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/tracks/<?php echo $post->track_filename ?>">Download</a>
+   	 <a href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>">Download</a>
    	 <?php if ($post->buy_url): ?>
    	   | <a href="<?php echo $post->buy_url?>" title="Support the artist !">Buy</a>
    	 <?php endif; ?>
