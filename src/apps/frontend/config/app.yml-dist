@@ -5,3 +5,4 @@
 all:
   urls:
     tracks: @ma.url.tracks@
+    secure_player: @ma.url.secure_player@

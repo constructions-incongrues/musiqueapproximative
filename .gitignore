@@ -1,7 +1,8 @@
-/.vagrant
+
 # abt
-/src/config/databases.yml
 /etc/prod
+/src/apps/frontend/config/app.yml
+/src/config/databases.yml
 
 # composer
 /vendor
@@ -11,6 +12,10 @@
 
 # symfony
 /src/cache
+/src/data/sql
 /src/log
 /src/web/tracks
-/src/data/sql
+
+ # vagrant
+ /.vagrant
+ 

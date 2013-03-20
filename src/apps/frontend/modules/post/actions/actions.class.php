@@ -29,20 +29,31 @@ class postActions extends sfActions
     {
       $title .= sprintf(' | Playlist de %s', $post->getContributorDisplayName());
     }
-    $this->getResponse()->setTitle(sprintf('%s | Musique Approximative', $title));
+    $title = sprintf('%s | Musique Approximative', $title);
+    $this->getResponse()->setTitle($title);
 
     // Get number of online posts
     $posts_count = Doctrine::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
+    $urlTrack = sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename);
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
-    $this->getResponse()->addMeta('og:description', strip_tags(Markdown($post->body)));
-    $this->getResponse()->addMeta('og:type', 'video');
+    // TODO : find out how to get fb_app_id value
+    // $this->getResponse()->addMeta('fb:app_id', 'musiqueapproximative');
+    $this->getResponse()->addMeta('og:title', $title);
+    $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
     $this->getResponse()->addMeta('og:image', 'http://www.musiqueapproximative.net/images/logo.png');
-    $this->getResponse()->addMeta('og:video', sprintf('http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&file=%s', urlencode('http://www.musiqueapproximative.net/tracks/'.$post->track_filename)));
+    $this->getResponse()->addMeta('og:type', 'video');
+    $this->getResponse()->addMeta(
+      'og:video', 
+      sprintf('http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&file=%s', urlencode($urlTrack))
+    );
+    $this->getResponse()->addMeta('og:video:secure_url', sprintf('%s?autostart=true&file=%s', sfConfig::get('app_urls_secure_player'), urlencode($urlTrack)));
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
     $this->getResponse()->addMeta('og:video:height', '100');
     $this->getResponse()->addMeta('og:video:width', '500');
+    $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
+    
 
     // Gather common query parameters
     $common_parameters = array(
