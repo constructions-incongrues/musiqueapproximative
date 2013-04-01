@@ -40,6 +40,7 @@ article p {color:#000;background-color:#FFF;text-align:center;font-size:13px;fon
 /* links */
 
 header a {color:#FFF;background-color:#000;}
+header a:hover {text-decoration: underline;}
 header a, article p a,article p.author a,.contributors a {text-decoration:none;}
 .about a {text-decoration: underline;}
 article p a,.author a{color:#555050;background: #FFF;}
