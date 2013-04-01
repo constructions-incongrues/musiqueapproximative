@@ -123,18 +123,13 @@
                             Raccourcis
                         </h2>
                         <ul class="shortcuts">
-                            <li>espace : play / pause
-                            </li>
-                            <li>j : morceau précédent
-                            </li>
-                            <li>k : morceau suivant
-                            </li>
-                            <li>p : parcourir les morceaux
-                            </li>
-                            <li>r : aléatoire
-                            </li>
-                            <li>s : recherche
-                            </li>
+                            <li>espace : play / pause</li>
+                            <li>j : morceau précédent</li>
+                            <li>k : morceau suivant</li>
+                            <li>p : parcourir tous les morceaux</li>
+                            <li>c : parcourir les morceaux du contributeur</li>
+                            <li>r : aléatoire</li>
+                            <li>s : recherche</li>
                         </ul>
                         <h2>
                             Crédits
@@ -179,7 +174,7 @@
             });
 
             // "Browse tracks"
-            $('.index-toggle').click(function(event) {
+            $('.index-toggle-all, .index-toggle-contributor').click(function(event) {
               if ($('#index').is(':visible')) {
                 $('#index, #close').hide();
               } else {
@@ -291,9 +286,15 @@
                 return false;
              });
 
-             // browse tracks
+             // browse tracks (all)
              $(document).bind('keydown', 'p', function() {
-                $('.index-toggle').click();
+                $('.index-toggle-all').click();
+                return false;
+             });
+
+             // browse tracks (all)
+             $(document).bind('keydown', 'c', function() {
+                $('.index-toggle-contributor').click();
                 return false;
              });
 

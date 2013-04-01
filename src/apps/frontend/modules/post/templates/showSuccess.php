@@ -1,9 +1,9 @@
 <?php use_helper('Markdown') ?>
 
 <?php slot('browse') ?>
-<a href="<?php echo url_for('post_list') ?>" class="index-toggle">Parcourir tous les morceaux (<?php echo $posts_count; ?>)</a>
+<a href="<?php echo url_for('post_list') ?>" class="index-toggle-all">Parcourir tous les morceaux (<?php echo $posts_count; ?>)</a>
 <br />
-<?php echo link_to(sprintf('Parcourir les morceaux de %s', $post->getContributorDisplayName()), '@post_list?c='.$sf_request->getParameter('c'), array('class' => 'index-toggle')) ?>
+<?php echo link_to(sprintf('Parcourir les morceaux de %s', $post->getContributorDisplayName()), '@post_list?c='.$sf_request->getParameter('c'), array('class' => 'index-toggle-contributor')) ?>
 <?php if ($contributor->UserProfile->website_url): ?>
   <?php echo link_to('(web)', $contributor->UserProfile->website_url, array('title' => 'Accéder au site internet de '.$contributor->username)); ?>
 <?php endif; ?>
