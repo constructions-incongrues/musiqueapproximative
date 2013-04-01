@@ -45,7 +45,7 @@ header a, article p a,article p.author a,.contributors a {text-decoration:none;}
 article p a,.author a{color:#555050;background: #FFF;}
 article p a:hover { color:#000;background: #FFF; }
 .contributors a, .contributors, a.all-tracks-l,a.all-tracks-l span,.all-tracks li  {color:#BBB;background: #000;}
-a.all-tracks-l span span,a.all-tracks-l span span span { color:#FFF;background: #000;}
+a.all-tracks-l span span,a.all-tracks-l span span span,.contributors a:hover { color:#FFF;background: #000;}
 a.all-tracks-l span span span span {visibility:hidden}
 a:hover.all-tracks-l span span span span {visibility:visible}
 a:hover.all-tracks-l,a:hover.all-tracks-l span,a:hover.all-tracks-l span span,a:hover.all-tracks-l span span span {background-color:#FFF;color: #000;}
