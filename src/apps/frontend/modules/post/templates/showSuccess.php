@@ -2,13 +2,10 @@
 
 <?php slot('browse') ?>
 <a href="<?php echo url_for('post_list') ?>" class="index-toggle">Parcourir tous les morceaux (<?php echo $posts_count; ?>)</a>
-<?php if ($sf_request->getParameter('c')): ?>
-    |
-  <?php echo link_to(sprintf('Les morceaux de %s', $post->getContributorDisplayName()), '@post_list?c='.$sf_request->getParameter('c'), array('class' => 'index-toggle')) ?>
-  <?php if ($contributor->UserProfile->website_url): ?>
-    <a> | </a>
-    <?php echo link_to($contributor->UserProfile->website_url, $contributor->UserProfile->website_url, array('title' => 'Accéder au site internet de '.$contributor->username)); ?>
-  <?php endif; ?>
+<br />
+<?php echo link_to(sprintf('Parcourir les morceaux de %s', $post->getContributorDisplayName()), '@post_list?c='.$sf_request->getParameter('c'), array('class' => 'index-toggle')) ?>
+<?php if ($contributor->UserProfile->website_url): ?>
+  <?php echo link_to('(web)', $contributor->UserProfile->website_url, array('title' => 'Accéder au site internet de '.$contributor->username)); ?>
 <?php endif; ?>
 <span id="close" style="display: none;"><a href=""> | fermer</a></span>
 <span id="loading" style="display: none;">(chargement...)</span>
