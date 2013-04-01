@@ -57,7 +57,8 @@ a:hover.all-tracks-l,a:hover.all-tracks-l span,a:hover.all-tracks-l span span,a:
 /* ====== Heading ====== */
 
 .contributors h1, header h1 {color:#fff;background: #000;}
-header h1 {font-size:11px;font-size:1.1rem;text-transform: uppercase;margin:6px 0 10px -10px;padding:5px 0 0 0;}
+header h1 {font-size:11px;font-size:1.1rem;text-transform: uppercase;margin:6px 0 0px -10px;padding:5px 0 0 0;}
+header h1:nth-child(3) {margin-top: -15px;padding-top:0;}
 article h1 {padding:20px 0 10px 0;color:#000;background: #FFF;}
 article h1.hide-on-mobile {font-size:40px;font-size:4.0rem;}
 article h1.hide-on-desktop {font-size:25px;font-size:2.5rem;text-align: left;}
@@ -71,6 +72,7 @@ article h2.hide-on-desktop {font-size:20px;font-size:2rem;text-align: left;}
 
 /* ----- list ----- */
 
+.contributors ul {margin-top: 15px;}
 .contributors ul,.contributors li {text-align:left;list-style-type:none;}
 .contributors li {padding:0 0 5px 0;margin-left: -8px;}
 .shortcuts {margin-left: 8px;}
