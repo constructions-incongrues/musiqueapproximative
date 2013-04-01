@@ -302,13 +302,19 @@
 
              // previous track
              $(document).bind('keydown', 'j', function() {
-                window.location = $('.nav-l a').attr('href');
+                var url = $('.nav-l a').attr('href');
+                if (url != undefined) {
+                    window.location = url;
+                }
                 return false;
              });
 
              // next track
              $(document).bind('keydown', 'k', function() {
-                window.location = $('.nav-r a').attr('href');
+                var url = $('.nav-r a').attr('href')
+                if (url != undefined) {
+                    window.location = url;
+                }
                 return false;
              });
         });
