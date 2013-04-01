@@ -17,13 +17,13 @@
 
 <section class="content">
   <article class="grid-100">
-<?php if ($post_previous): ?>
     <div class="nav-l grid-5 hide-on-mobile">
       <p>
+<?php if ($post_previous): ?>
         <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/left4.svg"></a>
+ <?php endif; ?>
       </p>
     </div>
- <?php endif; ?>
 
     <div class="nav-l grid-5 hide-on-desktop">
       <p>
@@ -92,17 +92,17 @@
           </div>
 <!-- grid-70 -->
     
-<?php if ($post_next): ?>
       <div class="nav-r grid-5 hide-on-mobile">
         <p>
+<?php if ($post_next): ?>
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">
             <img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/right4.svg">
           </a>
+<?php endif; ?>
         </p>
       </div>
       <div class="nav-r grid-5 hide-on-desktop">
         <p class="display:none;"><!-- Mobile debug --> </p>
       </div>
-<?php endif; ?>
     </article>
   </section>
