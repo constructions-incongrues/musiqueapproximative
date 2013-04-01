@@ -95,9 +95,9 @@
                         <h1>
                             À propos
                         </h1>
-                        <cite>
+                        <p>
                             C'est l'exutoire anarchique d'une bande de mélomanes fêlés. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.
-                        </cite>
+                        </p>
                         <h2>
                             Consommer de la musique autrement :
                         </h2>
@@ -140,13 +140,13 @@
                             Crédits
                         </h2>
                         <p>
-                            Musique Approximative est développé par Constructions Incongrues et est hébergé par Pastis Hosting. - Le code source du projet est distribué sous licence GNU AGPLv3.
+                            Musique Approximative est développé par <a href="http://www.constructions-incongrues.net">Constructions Incongrues</a> et est hébergé par <a href="http://www.pastis-hosting.net">Pastis Hosting</a>. Le code source du projet est <a href="https://github.com/constructions-incongrues/net.musiqueapproximative.www">distribué</a> sous licence <a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU AGPLv3</a>.
                         </p>
                         <p>
-                            <br />Le <a href="#">logo</a> Musique Approximative est de <a href="http://iris.ledrome.com/">Iris</a>.
+                            <br />Le <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/images/logo.png">logo</a> a été créé par <a href="http://iris.ledrome.com/">Iris Veverka</a>.
                         </p>
                         <p>
-                             Les flèches sont de <a href="http://www.juangarces.net/">Juan Garces</a>, de <a href="http://thenounproject.com/">The Noun Project</a>.
+                             Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a>, de <a href="http://thenounproject.com/">The Noun Project</a>.
                         </p> 
                     </div>
                     <div class="grid-50 pull-50">
