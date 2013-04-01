@@ -1,0 +1,106 @@
+/*
+Code by Constructions Incongrues www.constructions-incongrues.net/.p
+Code licensed under the  GNU AGPLv3:
+http://www.gnu.org/licenses/gpl.txt
+Version: 1.0 
+*/
+
+@import url(http://fonts.googleapis.com/css?family=Arvo);
+@import url(http://fonts.googleapis.com/css?family=Rambla);
+
+html { font-size:62.5%;}
+body { background-color:#000;color:#FFF;}
+
+.contributors ::selection, header ::selection,.title ::selection,.grid-90 ::selection {background-color:#FFF;color: #000}
+.content-text ::selection {background-color: #000;color:#FFF;}
+/* fonts */
+
+header h1, article p, .all-tracks ul,.contributors p,.contributors li {font-family:'Rambla',  sans-serif;}
+article h1, article h2, .title,.contributors h1,title,.contributors h2, input.submit, input.mailing, input.mailing-ok{font-family: 'Arvo',sans-serif;}
+/* ====== Text treatments ====== */
+
+article p {color:#000;background-color:#FFF;text-align:center;font-size:13px;font-size:1rem;padding:20px 0px 20px 0px;}
+
+@media all and (max-width:800px) {article p {text-align:left;}}
+@media all and (min-width:1200px) {.title {font-size:49px;font-size:4.9rem;}}
+@media all and (max-width:1050px) {.title {font-size:40px;font-size:3.5rem;}}
+@media all and (max-width:800px) {.title {font-size:35px;font-size:3.5rem;}}
+@media all and (max-width:720px) {.title {font-size:30px;font-size:3rem;}}
+@media all and (max-width:630px) {.title {font-size:25px;font-size:2.5rem;}}
+@media all and (max-width:530px) {.title {font-size:20px;font-size:2rem;}}
+@media all and (max-width:430px) {.title {font-size:15px;font-size:1.5rem;}}
+@media all and (max-width:370px) {.title {font-size:12px;font-size:1.2rem;}}
+
+.title {color:#FFF;background-color:#000}
+.title.hide-on-desktop {text-align: left;padding: 20px 0px 0px 0px;margin-left: -13px;}
+.title.hide-on-mobile {text-align: center;padding:20px 0 20px 0}
+
+.contributors p { padding:0 0 0 0px;text-align:justify;}
+
+/* links */
+
+header a {color:#FFF;background-color:#000;}
+header a, article p a,article p.author a,.contributors a {text-decoration:none;}
+.about a {text-decoration: underline;}
+article p a,.author a{color:#555050;background: #FFF;}
+article p a:hover { color:#000;background: #FFF; }
+.contributors a, .contributors, a.all-tracks-l,a.all-tracks-l span,.all-tracks li  {color:#BBB;background: #000;}
+a.all-tracks-l span span,a.all-tracks-l span span span { color:#FFF;background: #000;}
+a.all-tracks-l span span span span {visibility:hidden}
+a:hover.all-tracks-l span span span span {visibility:visible}
+a:hover.all-tracks-l,a:hover.all-tracks-l span,a:hover.all-tracks-l span span,a:hover.all-tracks-l span span span {background-color:#FFF;color: #000;}
+.about a {text-decoration: underline;background-color: #000;}
+.about a:hover {color:#FFF;text-decoration: underline;background-color: #000;}
+.nav-r a:hover,.nav-l a:hover {opacity: 0.7;}
+
+/* ====== Heading ====== */
+
+.contributors h1, header h1 {color:#fff;background: #000;}
+header h1 {font-size:11px;font-size:1.1rem;text-transform: uppercase;margin:6px 0 10px -10px;padding:5px 0 0 0;}
+article h1 {padding:20px 0 10px 0;color:#000;background: #FFF;}
+article h1.hide-on-mobile {font-size:40px;font-size:4.0rem;}
+article h1.hide-on-desktop {font-size:25px;font-size:2.5rem;text-align: left;}
+article h2 {color:#555;background-color:#FFF;padding:10px 0 52px 0;}
+article h1, article h2{ text-align: center;}
+
+article h2.hide-on-mobile {font-size:35px;font-size:3.5rem;}
+article h2.hide-on-desktop {font-size:20px;font-size:2rem;text-align: left;}
+.contributors h1 {font-size:13px;font-size:1.3rem;padding:20px 0 20px 0;background-color: #000;}
+.contributors h2 {font-size: 10px;font-size: 1rem;color:#FFF;padding: 10px 0 10px 0;}
+
+/* ----- list ----- */
+
+.contributors ul,.contributors li {text-align:left;list-style-type:none;}
+.contributors li {padding:0 0 5px 0;margin-left: -8px;}
+.shortcuts {margin-left: 8px;}
+.all-tracks ul {padding:0px 0px 20px 0px;;}
+.all-tracks li {font-size:10px;font-size:1rem;padding: 2px 0 1px 0;margin-left:-20px}
+
+/* **************** TEMPLATE ***************** */
+/* ====== Page Head, Body, and Foot ====== */
+
+.content-text,article {background-color: #FFF;}
+input.search,input.submit,input.mailing,input.mailing-ok{background-color:#FFF;color: #000;}
+input.mailing,input.mailing-ok {border: 0px;padding: 2px;margin-top: 5px;}
+input.mailing {width:60%;}
+.content{padding:0 0 0 0;}
+.content-text {padding: 0 0px 40px 0;top:40px;position: relative}
+
+input.search {border:none;padding:3px 1px 3px 1px;margin:0 0 0 0;}
+input.submit {border:none;font-size:08px;font-size:0.8rem;margin:2px -11px 0 0; padding: 3px;}
+img {text-align: center;width: 30px;}
+
+div.descriptif {padding-top: 20px;margin-top: 50px;}
+div.descriptif p {font-size: 1.2rem;padding-top: 0;}
+@media all and (max-width:767px) {.contributors {margin-left: -20px;}}
+@media all and (min-width:800px) {.descriptif {text-align: center;}}
+
+.nav-l img,.nav-r {vertical-align: middle;}
+
+
+/* search */
+
+.grid-60.hide-on-desktop {margin-left:-12px;padding-bottom: 10px;text-align:left; }
+.grid-60.hide-on-mobile {padding-top: 6px;text-align: right; }
+
+
