@@ -1,12 +1,14 @@
 <?php use_helper('Markdown') ?>
 
 <?php slot('browse') ?>
-<a href="<?php echo url_for('post_list') ?>" class="index-toggle-all">Parcourir tous les morceaux (<?php echo $posts_count; ?>)</a>
+<h1><a href="<?php echo url_for('post_list') ?>" class="index-toggle-all">Parcourir tous les morceaux (<?php echo $posts_count; ?>)</a></h1>
 <br />
+<h1>
 <?php echo link_to(sprintf('Parcourir les morceaux de %s', $post->getContributorDisplayName()), '@post_list?c='.$sf_request->getParameter('c'), array('class' => 'index-toggle-contributor')) ?>
 <?php if ($contributor->UserProfile->website_url): ?>
   <?php echo link_to('(web)', $contributor->UserProfile->website_url, array('title' => 'Accéder au site internet de '.$contributor->username)); ?>
 <?php endif; ?>
+</h1>
 <span id="close" style="display: none;"><a href=""> | fermer</a></span>
 <span id="loading" style="display: none;">(chargement...)</span>
 <?php end_slot() ?>
@@ -84,7 +86,7 @@
       </div>
       <p class="author">
         <span title="Posté le <?php echo strftime('%d/%m/%Y', $post->getDateTimeObject('created_at')->getTimestamp()) ?> à <?php echo $post->getDateTimeObject('created_at')->format('H:i') ?>">Contribué par</span> : <a rel="author" href="<?php echo url_for('@homepage?c='.$post->getSfGuardUser()->username) ?>" title="Écouter la playlist de <?php echo $post->getContributorDisplayName() ?>"><?php echo $post->getContributorDisplayName() ?></a><br />
-        <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postId="<?php echo $post->id ?>">Télécharger</a>
+        <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
 <?php if ($post->buy_url): ?>
          / <a href="<?php echo $post->buy_url ?>" title="Soutenez l'artiste !">Acheter</a>
 <?php endif ?>

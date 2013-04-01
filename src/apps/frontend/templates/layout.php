@@ -60,9 +60,7 @@
     <div class="grid-container">
         <header class="grid-100 grid-parent">
             <div class="grid-40">
-                <h1>
-                    <?php include_slot('browse') ?>
-                </h1>
+                <?php include_slot('browse') ?>
             </div>
             <div id="index"></div>
             <div class="grid-60 hide-on-mobile">
@@ -171,6 +169,10 @@
                         $('#jquery_jplayer_1').jPlayer("play");
                     }
                 }
+            });
+
+            $("#jquery_jplayer_1").bind($.jPlayer.event.ended, function(event) {
+                window.location = $('.nav-l a').attr('href');
             });
 
             // "Browse tracks"
