@@ -171,7 +171,10 @@
                 ready: function (event) {
                     $(this).jPlayer("setMedia", {
                         mp3: window.trackUrl
-                    })
+                    });
+                    if (window.autoplay) {
+                        $('#jquery_jplayer_1').jPlayer("play");
+                    }
                 }
             });
 
