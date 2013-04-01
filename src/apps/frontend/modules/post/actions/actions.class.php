@@ -57,7 +57,6 @@ class postActions extends sfActions
 
     // Gather common query parameters
     $common_parameters = array(
-      'play'   => $request->getParameter('play', 1),
       'random' => $request->getParameter('random', 0),
     );
     if ($request->getParameter('c'))

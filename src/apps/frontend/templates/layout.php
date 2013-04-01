@@ -172,7 +172,7 @@
             });
 
             $("#jquery_jplayer_1").bind($.jPlayer.event.ended, function(event) {
-                window.location = $('.nav-l a').attr('href');
+                window.location = $('.nav-l a').attr('href') + '&play=1';
             });
 
             // "Browse tracks"
