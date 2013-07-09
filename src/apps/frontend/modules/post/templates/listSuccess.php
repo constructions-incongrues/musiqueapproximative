@@ -1,3 +1,4 @@
+<?php use_helper('Text') ?>
 <section class="all-tracks">
     <div class="grid-100">
         <div class="grid-50">
@@ -13,7 +14,7 @@
                       <span><?php echo $post->track_author ?> 
                         <span>- 
                           <span><?php echo $post->track_title ?> 
-                            <span>(<?php echo $post->getContributorDisplayName() ?>)</span>
+                            <span>(<?php echo truncate_text($post->getContributorDisplayName()) ?>)</span>
                           </span>
                         </span>
                       </span>
