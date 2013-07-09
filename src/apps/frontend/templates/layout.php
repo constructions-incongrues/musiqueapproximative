@@ -121,7 +121,7 @@
                         <h2>
                             Raccourcis
                         </h2>
-                        <ul class="shortcuts hide-on-mobile">
+                        <ul class="shortcuts hide-on-mobile" id="shortcuts">
                             <li>espace : play / pause</li>
                             <li>j : morceau précédent</li>
                             <li>k : morceau suivant</li>
