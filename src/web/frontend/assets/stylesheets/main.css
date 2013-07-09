@@ -57,7 +57,7 @@ a:hover.all-tracks-l,a:hover.all-tracks-l span,a:hover.all-tracks-l span span,a:
 /* ====== Heading ====== */
 
 .contributors h1, header h1 {color:#fff;background: #000;}
-header p {font-size:11px;font-size:1.1rem;text-transform: uppercase;position:relative;top:8px;left:-10px;padding:5px 0 0 0;}
+header p {font-size:11px;font-size:1.1rem;text-transform: uppercase;position:relative;top:8px;left:-10px;margin-bottom:10px;padding:5px 0 0 0;}
 header p:nth-child(3) {margin-top: -15px;padding-top:0;}
 article h1 {padding:20px 0 10px 0;color:#000;background: #FFF;}
 article h1.hide-on-mobile {font-size:40px;font-size:4.0rem;}
