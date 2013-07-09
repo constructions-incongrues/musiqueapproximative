@@ -62,7 +62,7 @@
             <div class="grid-40">
                 <?php include_slot('browse') ?>
             </div>
-            <div id="index"></div>
+            <div id="index" style="display: none;"></div>
             <div class="grid-60 hide-on-mobile">
                 <form id="search" method="get" action="<?php echo url_for('post_list') ?>">
                     <input type="text" class="search" name="q" value=""> <input type="submit" class="submit" value="Search !">
@@ -189,11 +189,6 @@
                     }
                   });
               }
-              return false;
-            });
-
-            $('#close a').click(function() {
-              $('#index, #close').hide();
               return false;
             });
 
