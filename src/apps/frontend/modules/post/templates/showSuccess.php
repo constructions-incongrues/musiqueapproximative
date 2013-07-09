@@ -1,10 +1,11 @@
 <?php use_helper('Markdown') ?>
 
 <?php slot('browse') ?>
+<p>
 Parcourir : 
 <a href="<?php echo url_for('@post_list') ?>" class="index-toggle-all">tous les morceaux</a> | 
 <a href="<?php echo url_for('@post_list?c='.$contributor->username) ?>"><?php echo $post->getContributorDisplayName() ?></a>
-<span id="close" style="display: none;"><a href=""> | fermer</a></span>
+</p><span id="close" style="display: none;"><a href=""> | fermer</a></span>
 <span id="loading" style="display: none;">(chargement...)</span>
 <?php end_slot() ?>
 
