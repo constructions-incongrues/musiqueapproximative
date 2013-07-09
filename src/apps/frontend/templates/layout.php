@@ -179,7 +179,7 @@
             $('.index-toggle-all, .index-toggle-contributor').click(function(event) {
               if ($('#index').is(':visible')) {
                 $('#index, #close').hide();
-                $(this).removeClass('current');
+                $('.index-toggle-all, .index-toggle-contributor').removeClass('current');
               } else {
                   $('#loading').fadeIn();
                   $('#index').load($(event.target).attr('href'), function() {
