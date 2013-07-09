@@ -134,9 +134,8 @@
                             Approximix
                         </h2>
                         <p>
-                           <a href="http://www.musiques-incongrues.net/forum/discussion/4787">ApproxiMix</a>, un logiciel pour Mac et Windows permettant de mixer comme un pro les morceaux mis sur le site. 
+                           <a href="http://www.guillaume-evrard.com/approximix/">ApproxiMix</a> est une application qui permet de mixer (approximativement) musique et image. La musique provient de Musique Approximative, et les visuels sont piochés dans les contenus postés par les utilisateurs du <a href="http://www.musiques-incongrues.net">forum des Musiques Incongrues</a>.
                         </p>
-                        <p><a href="http://ge.lib.free.fr/apps/ApproxiMix/ApproxiMix-MAC-v0.3.zip">MAC v.03</a> / <a href="http://ge.lib.free.fr/apps/ApproxiMix/ApproxiMix-WIN-v0.3.zip">WIN v.03</a></p>
                         <h2>
                             Crédits
                         </h2>
