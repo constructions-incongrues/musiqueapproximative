@@ -1,7 +1,3 @@
-<?php if ($list_title): ?>
-<h4><?php echo $list_title ?> (<?php echo link_to('retour', '@homepage') ?>)</h4>
-<?php endif; ?>
-
 <section class="all-tracks">
     <div class="grid-100">
         <div class="grid-50">
