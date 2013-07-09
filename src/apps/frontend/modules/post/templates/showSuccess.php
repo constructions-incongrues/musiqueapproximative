@@ -5,8 +5,8 @@
 Parcourir : 
 <a href="<?php echo url_for('@post_list') ?>" class="index-toggle-all">tous les morceaux</a> | 
 <a href="<?php echo url_for('@post_list?c='.$contributor->username) ?>" class="index-toggle-contributor"><?php echo $post->getContributorDisplayName() ?></a>
-</p>
 <span id="loading" style="display: none;">(chargement...)</span>
+</p>
 <?php end_slot() ?>
 
 <script>
