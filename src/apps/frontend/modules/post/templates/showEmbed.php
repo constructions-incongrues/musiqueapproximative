@@ -15,5 +15,3 @@ div.musiqueapproximative {width:500px;border:solid 1px black;background-color: #
 	</audio>
 	<h4>Contribué par <a title="Écouter les autres morceaux contribués par <?php echo $post->getContributorDisplayName() ?>" href="<?php echo url_for('@homepage') ?>?c=<?php echo $post->getSfGuardUser()->username ?>" target="_blank"><?php echo $post->getContributorDisplayName() ?></a> sur <a href="http://www.musiqueapproximative.net">Musique Approximative</a></h4>
 </div>
-
-

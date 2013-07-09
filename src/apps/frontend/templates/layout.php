@@ -64,12 +64,12 @@
             </div>
             <div id="index"></div>
             <div class="grid-60 hide-on-mobile">
-                <form method="get" action="<?php echo url_for('post_list') ?>">
+                <form id="search" method="get" action="<?php echo url_for('post_list') ?>">
                     <input type="text" class="search" name="q" value=""> <input type="submit" class="submit" value="Search !">
                 </form>
             </div>
             <div class="grid-60 hide-on-desktop">
-                <form method="get" action="<?php echo url_for('post_list') ?>">
+                <form id="search" method="get" action="<?php echo url_for('post_list') ?>">
                     <input type="text" class="search" name="q" value=""> <input type="submit" class="submit" value="Search !">
                 </form>
             </div>
@@ -139,7 +139,7 @@
                             <br />Le <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/images/logo.png">logo</a> a été créé par <a href="http://iris.ledrome.com/">Iris Veverka</a>.
                         </p>
                         <p>
-                             Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a>, de <a href="http://thenounproject.com/">The Noun Project</a>.
+                             Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a> pour <a href="http://thenounproject.com/">The Noun Project</a>.
                         </p> 
                     </div>
                     <div class="grid-50 pull-50">
@@ -264,6 +264,10 @@
                   $('.nav-r a').attr('title', '');
                   $('.nav-l a').attr('title', '');
                 });
+
+            $('form#search').submit(function() {
+                return false;
+            });
 
             /*
              * Hotkeys
