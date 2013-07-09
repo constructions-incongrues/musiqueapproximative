@@ -18,7 +18,7 @@
     <!--[if lt IE 9]>
     <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/html5.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/main.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/main.css?1" type="text/css">
     <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/reset.css" type="text/css"><!--[if (gt IE 8) | (IEMobile)]><!-->
     <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/unsemantic-grid-responsive.css" type="text/css"><!--<![endif]-->
     <!--[if (lt IE 9) & (!IEMobile)]>
