@@ -36,6 +36,7 @@ article p {color:#000;background-color:#FFF;text-align:center;font-size:13px;fon
 .title.hide-on-mobile {text-align: center;padding:20px 0 20px 0}
 
 .contributors p { padding:0 0 0 0px;text-align:justify;}
+.current {fw}
 
 /* links */
 
@@ -91,7 +92,7 @@ input.mailing {width:60%;}
 .content-text {padding: 0 0px 40px 0;top:40px;position: relative}
 
 input.search {border:none;padding:3px 1px 3px 1px;margin:0 0 0 0;}
-input.submit {border:none;font-size:08px;font-size:0.8rem;margin:2px -11px 0 0; padding: 3px;}
+input.submit {border:none;font-size:08px;font-size:0.8rem;margin:2px -11px 0 0; padding: 3px 0 2px 0;}
 img {text-align: center;width: 30px;}
 
 div.descriptif {padding-top: 20px;margin-top: 50px;}
