@@ -14,7 +14,7 @@
                       <span><?php echo $post->track_author ?> 
                         <span>- 
                           <span><?php echo $post->track_title ?> 
-                            <span>(<?php echo truncate_text($post->getContributorDisplayName()) ?>)</span>
+                            <span>(<?php echo truncate_text($post->getContributorDisplayName(), 15) ?>)</span>
                           </span>
                         </span>
                       </span>

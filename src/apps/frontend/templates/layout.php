@@ -64,7 +64,7 @@
             </div>
             <div class="grid-60 hide-on-mobile">
                 <form id="search" method="get" action="<?php echo url_for('post_list') ?>">
-                    <input type="text" class="search" name="q" value=""> <input type="submit" class="submit" value="Search !">
+                    <input type="text" class="search" name="q" value="<?php echo $sf_request->getParameter('q') ?>"> <input type="submit" class="submit" value="Search !">
                 </form>
             </div>
             <div class="grid-60 hide-on-desktop">
@@ -262,10 +262,6 @@
                   $('.nav-r a').attr('title', '');
                   $('.nav-l a').attr('title', '');
                 });
-
-            $('form#search').submit(function() {
-                return false;
-            });
 
             /*
              * Hotkeys
