@@ -36,7 +36,7 @@ article p {color:#000;background-color:#FFF;text-align:center;font-size:13px;fon
 .title.hide-on-mobile {text-align: center;padding:20px 0 20px 0}
 
 .contributors p { padding:0 0 0 0px;text-align:justify;}
-.current {fw}
+.current {font-weight: bold;}
 
 /* links */
 
