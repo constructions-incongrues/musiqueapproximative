@@ -164,11 +164,12 @@
 //<![CDATA[
         $(document).ready(function(){
             $('#jquery_jplayer_1').jPlayer({
-                swfPath: '.<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player',
-                solution: 'html',
+                swfPath: '<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player',
+                solution: 'html, flash',
                 supplied: 'mp3',
                 errorAlerts: false,
                 warningAlerts: false,
+                preload: 'auto',
                 ready: function (event) {
                     $(this).jPlayer("setMedia", {
                         mp3: window.trackUrl
