@@ -610,7 +610,7 @@ class Markdown_Parser {
 
 		# Process anchor and image tags. Images must come first,
 		# because ![foo][f] looks like an anchor.
-		"doImages"            =>  10,
+		//"doImages"            =>  10,
 		"doAnchors"           =>  20,
 		
 		# Make links out of things like `<http://example.com/>`
