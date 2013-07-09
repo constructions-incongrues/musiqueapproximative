@@ -121,7 +121,7 @@
                         <h2>
                             Raccourcis
                         </h2>
-                        <ul class="shortcuts">
+                        <ul class="shortcuts hide-on-mobile">
                             <li>espace : play / pause</li>
                             <li>j : morceau précédent</li>
                             <li>k : morceau suivant</li>
@@ -130,6 +130,13 @@
                             <li>r : aléatoire</li>
                             <li>s : recherche</li>
                         </ul>
+                        <h2>
+                            Approximix
+                        </h2>
+                        <p>
+                           <a href="http://www.musiques-incongrues.net/forum/discussion/4787">ApproxiMix</a>, un logiciel pour Mac et Windows permettant de mixer comme un pro les morceaux mis sur le site. 
+                        </p>
+                        <p><a href="http://ge.lib.free.fr/apps/ApproxiMix/ApproxiMix-MAC-v0.3.zip">MAC v.03</a> / <a href="http://ge.lib.free.fr/apps/ApproxiMix/ApproxiMix-WIN-v0.3.zip">WIN v.03</a></p>
                         <h2>
                             Crédits
                         </h2>
