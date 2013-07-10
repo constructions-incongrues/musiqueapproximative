@@ -82,7 +82,8 @@ Parcourir :
       </div>
       <p class="author">
         <span title="Posté le <?php echo strftime('%d/%m/%Y', $post->getDateTimeObject('created_at')->getTimestamp()) ?> à <?php echo $post->getDateTimeObject('created_at')->format('H:i') ?>">Contribué par</span> : <a rel="author" href="<?php echo url_for('@homepage?c='.$post->getSfGuardUser()->username) ?>" title="Écouter la playlist de <?php echo $post->getContributorDisplayName() ?>"><?php echo $post->getContributorDisplayName() ?></a><br />
-        <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
+        <a href="" title="Partager ce morceau sur Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href), 'facebook-share-dialog', 'width=626,height=436'); return false;">Partager</a>
+         / <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
 <?php if ($post->buy_url): ?>
          / <a href="<?php echo $post->buy_url ?>" title="Soutenez l'artiste !">Acheter</a>
 <?php endif ?>
