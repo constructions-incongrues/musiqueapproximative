@@ -1,0 +1,251 @@
+/*
+ * Skin for jPlayer Plugin (http://jplayer.org/)
+ * jPlayer Version: 2.1.0
+ *
+ * Skin Name: Premium Pixels
+ * Author: @thelukemcdonald (lukemcdonald.com)
+ * Description: A responsive CSS3 jPlayer skin with playlist funcitonality. Design by @ormanclark (premiumpixels.com).
+ * Version: 2.0
+ * Tags: audio, playlist, dark, play, pause, volume-bar, progress-bar
+ *
+  *************************************************************
+ * Date: 19rd March 2013
+ * Customized for Musique Approximative 
+ * By Constructions Incongrues www.constructions-incongrues.net
+ *************************************************************
+ *
+/* DEMO STYLES
+----------------------------------------------- */
+* {
+  padding: 0;
+  margin: 0;
+  outline: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition-property: background-color, border-color, color, opacity;
+  -webkit-transition-timing-function: linear;
+  -webkit-transition-duration: 0.15s;
+  -khtml-transition-property: background-color, border-color, color, opacity;
+  -khtml-transition-timing-function: linear;
+  -khtml-transition-duration: 0.15s;
+  -moz-transition-property: background-color, border-color, color, opacity;
+  -moz-transition-timing-function: linear;
+  -moz-transition-duration: 0.15s;
+  -o-transition-property: background-color, border-color, color, opacity;
+  -o-transition-timing-function: linear;
+  -o-transition-duration: 0.15s;
+  transition-property: background-color, border-color, color, opacity;
+  transition-timing-function: linear;
+  transition-duration: 0.15s;
+}
+
+
+
+/* GENERAL
+----------------------------------------------- */
+      
+.jp-jplayer {
+  width: 0px;
+  height: 0px;
+  background-color: #000000;
+}
+.jp-audio {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 0;
+  font-size: 1em;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans L", sans-serif;
+  color: #fff;
+  line-height: 1.6;
+
+}
+.jp-audio a {
+  color: #555050;
+text-decoration: none;}
+.jp-audio a:hover {
+  color: #000;
+}
+.jp-interface {
+  position: relative;
+  height: 30px;
+  width: 100%;
+}
+/* CONTROLS
+----------------------------------------------- */
+
+
+
+@media all and (max-width:800px) {.jp-controls{text-align:left;}}
+@media all and (min-width:800px) {.jp-controls{text-align:center;}}
+
+.jp-controls {
+
+
+  list-style-type: none;
+  padding: 20px 0 0 0;
+
+  z-index: 100;
+}
+
+
+.jp-controls:after {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 30px;
+  width: 0;
+  height: 30px;
+
+}
+.jp-controls ul
+{
+    display:inline;
+
+}
+.jp-controls li {
+      display:inline;
+      
+      
+
+}
+
+.jp-controls a  {color:#FFF;font-family: 'Rambla', sans-serif;font-size: 13px;font-size: 1.3rem;text-transform: uppercase;
+background-color: #000;
+padding: 4px 4px 2px 4px;}
+
+.jp-controls {color:#000;font-size: 15px;font-size: 1.5rem;}
+.jp-controls a:hover, .jp-controls a.not
+{
+background-color:#AAA;color:#000;
+}
+.jp-play,
+.jp-pause,
+{
+  z-index: 1;
+  outline: none;
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+}
+
+
+
+/* PROGRESS BAR
+----------------------------------------------- */
+.jp-progress {
+  position: absolute;
+  padding: 0px 1px 0 0px;
+  
+  margin-bottom: 12px;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+
+}
+.jp-seek-bar,
+.jp-play-bar {
+  width: 0px;
+  height: 5px;
+
+}
+.jp-seek-bar {
+  cursor: pointer;
+  position: relative;
+  z-index: 999;
+}
+.jp-seek-bar:before {
+  content: " ";
+  display: block;
+  background: transparent;
+
+  width: 100%;
+  position: relative;
+  top: -16px;
+  left: -1px;
+
+    background-color: #AAA;
+    height:29px;
+
+}
+.jp-play-bar {
+  position: absolute;
+  
+  background: #000;
+    height:29px;
+    top:-16px;
+}
+
+/* TIME HOLDER
+----------------------------------------------- */
+.jp-time-holder {
+  background: #fff;
+  font-family: 'Rambla', sans-serif;
+  position: relative;
+  font-size: 1.5em;
+  top: -37px;
+  left: -2px;
+  color:#FFF;
+  
+}
+
+.jp-current-time
+{
+   float: right;
+  display:inline;
+  text-align: right;
+  color: #000;
+}
+
+.jp-duration:before 
+{
+  content:"/";
+
+}
+
+.jp-duration
+{
+
+  float: right;
+  display:inline;
+  text-align: right;
+  color: #000;
+
+}
+
+/* CSS3 ANIMATINS
+----------------------------------------------- */
+/* Progress Bar Animation */
+@-webkit-keyframes progress {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: -7px;
+  }
+}
+@-moz-keyframes progress {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: -7px;
+  }
+}
+@-ms-keyframes progress {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: -7px;
+  }
+}
+@-o-keyframes progress {
+  0% {
+    background-position: 0;
+  }
+  100% {
+    background-position: -7px;
+  }
+}

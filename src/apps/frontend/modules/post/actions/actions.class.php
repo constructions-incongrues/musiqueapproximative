@@ -57,7 +57,6 @@ class postActions extends sfActions
 
     // Gather common query parameters
     $common_parameters = array(
-      'play'   => $request->getParameter('play', 1),
       'random' => $request->getParameter('random', 0),
     );
     if ($request->getParameter('c'))
@@ -111,10 +110,10 @@ class postActions extends sfActions
     }
     else
     {
-      $posts = Doctrine::getTable('Post')->getOnlinePosts($request->getParameter('contributor'));
-      if ($request->getParameter('contributor'))
+      $posts = Doctrine::getTable('Post')->getOnlinePosts($request->getParameter('c'));
+      if ($request->hasParameter('c'))
       {
-        $list_title = sprintf('%s a posté %d morceau(x) à ce jour', $request->getParameter('contributor'), count($posts));
+        $list_title = sprintf('%s a posté %d morceau(x) à ce jour', $request->getParameter('c'), count($posts));
       }
     }
 

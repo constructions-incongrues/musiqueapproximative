@@ -1,19 +1,34 @@
-<?php if ($list_title): ?>
-<h4><?php echo $list_title ?> (<?php echo link_to('retour', '@homepage') ?>)</h4>
+<?php use_helper('Text') ?>
+<section class="all-tracks">
+    <div class="grid-100">
+        <div class="grid-50">
+            <ul>
+<?php $i = 0; ?>
+<?php foreach ($posts as $post): ?>
+                <li>
+<?php if ($sf_request->hasParameter('c')): ?>
+                    <a href="<?php echo url_for('@post_show?slug='.$post->slug) ?>?c=<?php echo $sf_request->getParameter('c') ?>" class="all-tracks-l">
+<?php else: ?>
+                    <a href="<?php echo url_for('@post_show?slug='.$post->slug) ?>" class="all-tracks-l">
 <?php endif; ?>
-
-<ul>
-  <?php foreach ($posts as $post): ?>
-
-    <li>
-      <a href="<?php echo url_for('@post_show?slug='.$post->slug) ?>">
-        <span class="number">Itération <?php echo $post->id ?></span>
-        <span id="t-trax">
-          <?php echo $post->track_author ?> - <?php echo $post->track_title ?>
-          <span class="author">(<?php echo $post->getContributorDisplayName() ?>)</span>
-        </span>
-      </a>
-    </li>
-
-  <?php endforeach; ?>
-</ul>
+                      <span><?php echo $post->track_author ?> 
+                        <span>- 
+                          <span><?php echo $post->track_title ?> 
+                            <span>(<?php echo $post->getContributorDisplayName() ?>)</span>
+                          </span>
+                        </span>
+                      </span>
+                    </a>
+                </li>
+<?php $i++; ?>
+<?php if ($i == count($posts) / 2): ?>
+            </ul>
+        </div>
+        <div class="grid-50">
+            <ul>
+<?php endif; ?>
+<?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</section>

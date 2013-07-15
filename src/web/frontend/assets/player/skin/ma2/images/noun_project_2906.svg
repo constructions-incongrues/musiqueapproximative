@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100px" height="75px" viewBox="0 0 100 75" style="enable-background:new 0 0 100 75;" xml:space="preserve">
+<g>
+	<polygon style="fill:#010101;" points="37.5,12.5 62.5,0 62.5,75 37.5,62.5  "/>
+</g>
+<g>
+	<path style="fill:#010101;" d="M25,62.5c-13.807,0-25-11.193-25-25s11.193-25,25-25V62.5z"/>
+</g>
+<polygon style="fill:#010101;" points="100,43.75 75,43.75 75,31.25 100,31.25 100,43.75 "/>
+</svg>
