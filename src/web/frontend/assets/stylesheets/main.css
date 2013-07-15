@@ -100,7 +100,7 @@ div.descriptif p {font-size: 1.2rem;padding-top: 0;}
 @media all and (max-width:767px) {.contributors {margin-left: -20px;}}
 @media all and (min-width:800px) {.descriptif {text-align: center;}}
 
-.nav-l img,.nav-r img {vertical-align: middle;}
+.nav-l img,.nav-r img{vertical-align: middle;}
 
 
 /* search */
