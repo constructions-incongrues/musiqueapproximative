@@ -1,3 +1,20 @@
+<?php slot('formats_head') ?>
+<?php foreach ($formats as $name => $format): ?>
+  <link rel="alternate" type="<?php echo $format['contentType'] ?>" href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>" />
+<?php endforeach; ?>
+<?php end_slot() ?>
+
+<?php slot('formats_footer') ?>
+<h2>Formats</h2>
+<ul class="shortcuts hide-on-mobile">
+<p>Toutes ces données sont aussi accessibles sous des formats exploitables programmatiquement. SERVEZ-VOUS !</p>
+<?php foreach ($formats as $name => $format): ?>
+  <li><a href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>"><?php echo $name ?></a></li>
+<?php endforeach; ?>
+</ul>
+<?php end_slot() ?>
+
+
 <?php use_helper('Text') ?>
 <section class="all-tracks">
     <div class="grid-100">

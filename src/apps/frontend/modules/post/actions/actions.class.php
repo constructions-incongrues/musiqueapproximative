@@ -54,7 +54,6 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:video:width', '500');
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
     
-
     // Gather common query parameters
     $common_parameters = array(
       'random' => $request->getParameter('random', 0),
@@ -70,7 +69,13 @@ class postActions extends sfActions
     }
     $common_query_string = trim($common_query_string, '&');
 
+    // Formats specifics
+    $formats = $this->setFormats($request);
+    $formatsLimited = array();
+    $formatsLimited['json'] = $formats['json'];
+
     // Pass data to view
+    $this->formats = $formatsLimited;
     $this->post = $post;
     $this->posts_count = $posts_count;
     $this->post_next = Doctrine::getTable('Post')->getNextPost($post, $request->getParameterHolder()->getAll());
@@ -118,17 +123,10 @@ class postActions extends sfActions
     }
 
     // Formats specifics
-    $formats = array(
-    	'csv'  => array('layout' => false, 'contentType' => 'text/csv'),
-    	'max'  => array('layout' => false, 'contentType' => 'application/maxmsp+text'),
-    	'xspf' => array('layout' => false, 'contentType' => 'application/xspf+xml')
-    );
-    if (in_array($request->getParameter('sf_format'), array_keys($formats))) {
-    	$this->setLayout($formats[$request->getParameter('sf_format')]['layout']);
-    	$this->getResponse()->setContentType($formats[$request->getParameter('sf_format')]['contentType']);
-    }
+    $formats = $this->setFormats($request);
 
     // Pass data to view
+    $this->formats = $formats;
     $this->posts = $posts;
     $this->list_title = $list_title;
   }
@@ -260,5 +258,23 @@ class postActions extends sfActions
     
     // Select template
     return sfView::SUCCESS;
+  }
+
+  protected function setFormats(sfWebRequest $request)
+  {
+    $formats = array(
+      'csv'  => array('layout' => false, 'contentType' => 'text/csv'),
+      'json' => array('layout' => false, 'contentType' => 'application/json'),
+      'max'  => array('layout' => false, 'contentType' => 'application/maxmsp+text'),
+      'xspf' => array('layout' => false, 'contentType' => 'application/xspf+xml')
+    );
+    if (in_array($request->getParameter('format'), array_keys($formats))) {
+      $request->setParameter('sf_format', $request->getParameter('format'));
+      $this->setLayout($formats[$request->getParameter('format')]['layout']);
+      $this->getResponse()->setContentType($formats[$request->getParameter('format')]['contentType']);
+    }
+
+    return $formats;
+
   }
 }

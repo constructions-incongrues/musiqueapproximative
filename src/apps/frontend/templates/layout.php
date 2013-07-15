@@ -41,6 +41,9 @@
     <link rel="alternate" type="application/json+oembed" href="<?php echo url_for('@post_oembed?format=json&url=http://www.musiqueapproximative.net'.$_SERVER['REQUEST_URI'], true) ?>" />
     <link rel="alternate" type="text/xml+oembed" href="<?php echo url_for('@post_oembed?format=xml&url=http://www.musiqueapproximative.net'.$_SERVER['REQUEST_URI'], true) ?>" />
 
+    <!-- Formats -->
+    <?php include_slot('formats_head') ?>
+
     <!-- RSS -->
     <!--
     <link type="application/rss+xml" title="Musique Approximative" rel="alternate" href="<?php echo url_for('@post_feed') ?>"/>
@@ -146,8 +149,9 @@
                             <br />Le <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/images/logo.png">logo</a> a été créé par <a href="http://iris.ledrome.com/">Iris Veverka</a>.
                         </p>
                         <p>
-                             Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a> pour <a href="http://thenounproject.com/">The Noun Project</a>.
-                        </p> 
+                          Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a> pour <a href="http://thenounproject.com/">The Noun Project</a>.
+                        </p>
+                        <?php include_slot('formats_footer') ?>
                     </div>
                     <div class="grid-50 pull-50">
                         <?php include_component('post', 'contributors') ?>
@@ -225,7 +229,7 @@
               $('#random').addClass('not');
             }
 
-            // Random button
+            // Randomx button
             $('#random').click(
               function(event) {
                 var current_post_id = $('#download').data().postid;
@@ -264,6 +268,7 @@
                         'href',
                         data + '?' + queryCommon);
                     });
+
                 }
 
                   // TODO : get appropriate information and update links titles
