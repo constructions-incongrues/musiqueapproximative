@@ -66,7 +66,11 @@ Parcourir :
                           <a href="javascript:;" class="jp-pause" tabindex="1">pause</a>
                       </li>
                       <li>
+<?php if ($sf_request->getParameter('random') == '1'): ?>
                           <a href="#" id="random">random</a>
+<?php else: ?>
+                          <a href="#" id="random" class="not">random</a>
+<?php endif; ?>
                       </li>
                   </ul>
                   <div class="jp-time-holder hide-on-mobile">

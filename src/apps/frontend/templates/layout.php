@@ -208,7 +208,7 @@
 
             $('.nav-l img, .nav-r img').height($('.content').height());
 
-            if (window.random) {
+            if (window.random !== 0) {
               var current_post_id = $('#download').data().postid;
               var queryCommon = 'play=' + window.autoplay + '&random=' + window.random;
               if (window.c != undefined) {
@@ -221,12 +221,13 @@
               $.get(urlRandom, {}, function(data) {
                 $('.nav-r a').attr('href', data + '?' + queryCommon);
               });
+            } else {
+              $('#random').addClass('not');
             }
 
             // Random button
             $('#random').click(
               function(event) {
-                event.preventDefault();
                 var current_post_id = $('#download').data().postid;
                 if ($(this).hasClass('not')) {
                   $(this).removeClass('not');
@@ -268,6 +269,8 @@
                   // TODO : get appropriate information and update links titles
                   $('.nav-r a').attr('title', '');
                   $('.nav-l a').attr('title', '');
+
+                  return false;
                 });
 
             /*
