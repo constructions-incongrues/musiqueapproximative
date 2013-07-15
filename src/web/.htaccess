@@ -11,6 +11,9 @@ Allow from all
   # Back
   RewriteRule ^login$ admin_prod.php [QSA,L]
 
+  RewriteCond %{HTTP_HOST} ^musiqueapproximative\.net$
+  RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+
   # Front
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^(.*)$ index.php [QSA,L]
