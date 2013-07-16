@@ -16,13 +16,14 @@ Parcourir :
 <?php end_slot() ?>
 
 <?php slot('formats_footer') ?>
-<h2>Formats</h2>
-<p>Toutes ces données sont aussi accessibles sous des formats exploitables programmatiquement. SERVEZ-VOUS !</p>
-<ul class="shortcuts hide-on-mobile">
+<h2>Servez-vous !</h2>
+<p>Ce post est aussi disponible aux formats suivants :
 <?php foreach ($formats as $name => $format): ?>
-  <li><a href="<?php echo url_for(sprintf('@post_show?slug=%s&format=%s', $post->slug, $name)) ?>"><?php echo $name ?></a></li>
-<?php endforeach; ?>
-</ul>
+    <a href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a> 
+  <?php endforeach; ?>
+</p>
+<br />
+<br />
 <?php end_slot() ?>
 
 <script>

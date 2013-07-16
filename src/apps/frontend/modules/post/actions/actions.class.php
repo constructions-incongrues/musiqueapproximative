@@ -263,10 +263,10 @@ class postActions extends sfActions
   protected function setFormats(sfWebRequest $request)
   {
     $formats = array(
-      'csv'  => array('layout' => false, 'contentType' => 'text/csv'),
-      'json' => array('layout' => false, 'contentType' => 'application/json'),
-      'max'  => array('layout' => false, 'contentType' => 'application/maxmsp+text'),
-      'xspf' => array('layout' => false, 'contentType' => 'application/xspf+xml')
+      'csv'  => array('layout' => false, 'contentType' => 'text/csv',                'about' => null),
+      'json' => array('layout' => false, 'contentType' => 'application/json',        'about' => 'http://jsonapi.org/format/#url-based-json-api'),
+      'max'  => array('layout' => false, 'contentType' => 'application/maxmsp+text', 'about' => null),
+      'xspf' => array('layout' => false, 'contentType' => 'application/xspf+xml',    'about' => 'http://xspf.org/')
     );
     if (in_array($request->getParameter('format'), array_keys($formats))) {
       $request->setParameter('sf_format', $request->getParameter('format'));

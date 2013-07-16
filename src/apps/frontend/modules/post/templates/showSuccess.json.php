@@ -1,18 +1,11 @@
 <?php
-$post = $sf_data->getRaw('post')->toArray();
-$post['previous'] = $sf_context->getRouting()->generate(
-  'post_show', array(
-    'slug'   => $post_previous->slug, 
-    'format' => $sf_request->getParameter('format')
-  ),
-  true
-);
-$post['next'] = $sf_context->getRouting()->generate(
-  'post_show', array(
-    'slug'   => $post_next->slug,
-    'format' => $sf_request->getParameter('format')
-  ), 
-  true
-);
-?>
-<?php echo json_encode($post) ?>
+// @see http://jsonapi.org/format/#url-based-json-api
+$json = html_entity_decode($post->toJson(
+  $sf_data->getRaw('sf_request'), 
+  $sf_data->getRaw('sf_context'), 
+  $sf_data->getRaw('post_previous'), 
+  $sf_data->getRaw('post_next')
+));
+
+// Even single ressources are displayed as lists
+echo sprintf('{ "posts": [%s] }', $json);

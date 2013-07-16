@@ -28,6 +28,7 @@ class PostTable extends Doctrine_Table
 
     // Fetch posts
     $post = $q->fetchOne();
+
     $q->free();
 
     return $post;
@@ -122,7 +123,7 @@ class PostTable extends Doctrine_Table
   protected function buildOnlinePostsQuery($contributor = null, $count = null)
   {
     $q = Doctrine_Query::create()
-      ->select(self::FIELDS_BASIC)
+      ->select('*')
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
       ->where('p.is_online = 1 and p.publish_on <= date_add(now(), interval 2 hour)')

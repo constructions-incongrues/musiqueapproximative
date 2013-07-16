@@ -16,4 +16,111 @@ class Post extends BasePost
   {
     return $this->getSfGuardUser()->getDisplayName();
   }
+
+  /**
+   * @see http://jsonapi.org/format/#url-based-json-api
+   */
+  public function toJson(sfWebRequest $request, sfContext $context, $postPrevious = null, $postNext = null)
+  {
+    // Get post as array
+    $post = parent::toArray(true, false);
+
+    // Post ID
+    $post['id'] = $post['slug'];
+
+    // Post canonical URL
+    $post['href'] = $context->getRouting()->generate(
+      'post_show', array(
+        'slug'   => $post['id'],
+        'format' => 'json'
+      ),
+      true
+    );
+    // Post canonical URL
+    unset($post['slug']);
+
+    // Body 
+    $context->getConfiguration()->loadHelpers('Markdown');
+    $bodyMarkdown = $post['body'];
+    $bodyHtml = Markdown($bodyMarkdown);
+    unset($post['body']);
+    $post['body'] = array('html' => $bodyHtml, 'markdown' => $bodyMarkdown);
+
+    // Track
+    $post['track'] = array(
+      'href' =>  sprintf(
+        '%s%s/tracks/%s', 
+        $request->getUriPrefix(), 
+        $request->getRelativeUrlRoot(),
+        urlencode($post['track_filename'])
+      ),
+      'title'  => $post['track_title'],
+      'author' => $post['track_author'],
+      'md5'    => $post['track_md5']
+    );
+    unset(
+      $post['track_filename'],
+      $post['track_title'],
+      $post['track_author'],
+      $post['track_md5']
+    );
+
+    // Contributor
+    $post['contributor'] = array(
+      'name'         => $this->getContributorDisplayName(),
+      'slug'         => $this->getSfGuardUser()->username,
+      'href_website' => $this->getSfGuardUser()->UserProfile->website_url
+    );
+    unset(
+      $post['contributor_id'],
+      $post['contributor_name'],
+      $post['contributor_slug']
+    );
+
+    // Hidden fields
+    unset(
+      $post['sfGuardUser'],
+      $post['svn_revision'],
+      $post['is_online']
+    );
+
+
+    // Post links
+    $post['links'] = array();
+
+    // Previous post
+    if ($postPrevious) {
+      $post['links']['post_previous'] = $context->getRouting()->generate(
+        'post_show', array(
+          'slug'   => $postPrevious->slug, 
+          'format' => 'json'
+        ),
+        true
+      );
+    }
+
+    // Next post
+    if ($postNext) {
+      $post['links']['post_next'] = $context->getRouting()->generate(
+        'post_show', array(
+          'slug'   => $postNext->slug,
+          'format' => 'json'
+        ), 
+        true
+      );
+    }
+
+    // Contributor playlist
+    $post['links']['contributor_playlist'] = $context->getRouting()->generate(
+      'post_list', 
+      array(
+        'c' => $post['contributor']['slug'], 
+        'format' => 'json'
+      ),
+      true
+    );
+
+    // Encode data to JSON
+    return json_encode($post);
+  }
 }
