@@ -17,8 +17,8 @@ Parcourir :
 
 <?php slot('formats_footer') ?>
 <h2>Formats</h2>
-<ul class="shortcuts hide-on-mobile">
 <p>Toutes ces données sont aussi accessibles sous des formats exploitables programmatiquement. SERVEZ-VOUS !</p>
+<ul class="shortcuts hide-on-mobile">
 <?php foreach ($formats as $name => $format): ?>
   <li><a href="<?php echo url_for(sprintf('@post_show?slug=%s&format=%s', $post->slug, $name)) ?>"><?php echo $name ?></a></li>
 <?php endforeach; ?>

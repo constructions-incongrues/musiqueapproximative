@@ -73,7 +73,7 @@ article h2.hide-on-desktop {font-size:20px;font-size:2rem;text-align: left;}
 
 /* ----- list ----- */
 
-.contributors ul {margin-top: 15px;}
+.contributors_ul ul {margin-top: 15px;}
 .contributors ul,.contributors li {text-align:left;list-style-type:none;}
 .contributors li {padding:0 0 5px 0;margin-left: -8px;}
 .shortcuts {position:relative;left: 8px;}
@@ -100,7 +100,7 @@ div.descriptif p {font-size: 1.2rem;padding-top: 0;}
 @media all and (max-width:767px) {.contributors {margin-left: -20px;}}
 @media all and (min-width:800px) {.descriptif {text-align: center;}}
 
-.nav-l img,.nav-r img{vertical-align: middle;}
+.nav-l ,.nav-r {vertical-align: middle;}
 
 
 /* search */

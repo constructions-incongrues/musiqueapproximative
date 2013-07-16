@@ -153,7 +153,7 @@
                         </p>
                         <?php include_slot('formats_footer') ?>
                     </div>
-                    <div class="grid-50 pull-50">
+                    <div class="grid-50 pull-50 contributors_ul">
                         <?php include_component('post', 'contributors') ?>
                     </div>                   
                 </div><!-- .grid-90 -->
