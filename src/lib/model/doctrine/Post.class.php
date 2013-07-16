@@ -56,7 +56,8 @@ class Post extends BasePost
       ),
       'title'  => $post['track_title'],
       'author' => $post['track_author'],
-      'md5'    => $post['track_md5']
+      // TODO : md5 is empty
+      // 'md5'    => $post['track_md5']
     );
     unset(
       $post['track_filename'],
