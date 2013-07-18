@@ -209,9 +209,12 @@
             $('a.email-subscription-link').click(function(event) {
               $('div#email-subscription').toggle();
             });
-
-            $('.nav-l img, .nav-r img').height($('.content').height());
-
+            
+            var h = $('.content').height();
+            var pad = (h-30)/2;
+            $('.nav-l img, .nav-r img').height(h);
+  		      $('.nav-l img, .nav-r img').css({'paddin-top':pad+'px','padding-bottom':pad+'px'});
+            
             if (window.random !== 0) {
               var current_post_id = $('#download').data().postid;
               var queryCommon = 'play=' + window.autoplay + '&random=' + window.random;
