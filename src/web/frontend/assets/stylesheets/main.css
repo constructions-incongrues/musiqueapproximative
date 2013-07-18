@@ -32,10 +32,10 @@ article p {color:#000;background-color:#FFF;text-align:center;font-size:13px;fon
 @media all and (max-width:370px) {.title {font-size:12px;font-size:1.2rem;}}
 
 .title {color:#FFF;background-color:#000}
-.title.hide-on-desktop {text-align: left;padding: 20px 0px 0px 0px;margin-left: -13px;}
+.title.hide-on-desktop {text-align: left;padding: 20px 0 0 0;margin-left: -13px;}
 .title.hide-on-mobile {text-align: center;padding:20px 0 20px 0}
 
-.contributors p { padding:0 0 0 0px;text-align:justify;}
+.contributors p { padding:0 0 0 0;text-align:justify;}
 .current {font-weight: bold;}
 
 /* links */
@@ -44,7 +44,7 @@ header a {color:#FFF;background-color:#000;}
 header a:hover {text-decoration: underline;}
 header a, article p a,article p.author a,.contributors a {text-decoration:none;}
 .about a {text-decoration: underline;}
-article p a,.author a{color:#555050;background: #FFF;}
+article p a, .author a {color:#555050;background: #FFF;}
 article p a:hover { color:#000;background: #FFF; }
 .contributors a, .contributors, a.all-tracks-l,a.all-tracks-l span,.all-tracks li  {color:#BBB;background: #000;}
 a.all-tracks-l span span,a.all-tracks-l span span span,.contributors a:hover { color:#FFF;background: #000;}
@@ -63,7 +63,7 @@ header p:nth-child(3) {margin-top: -15px;padding-top:0;}
 article h1 {padding:20px 0 10px 0;color:#000;background: #FFF;}
 article h1.hide-on-mobile {font-size:40px;font-size:4.0rem;}
 article h1.hide-on-desktop {font-size:25px;font-size:2.5rem;text-align: left;}
-article h2 {color:#555;background-color:#FFF;padding:10px 0 52px 0;}
+article h2 {color:#555;background-color:#FFF;}
 article h1, article h2{ text-align: center;}
 
 article h2.hide-on-mobile {font-size:35px;font-size:3.5rem;}
@@ -77,7 +77,7 @@ article h2.hide-on-desktop {font-size:20px;font-size:2rem;text-align: left;}
 .contributors ul,.contributors li {text-align:left;list-style-type:none;}
 .contributors li {padding:0 0 5px 0;margin-left: -8px;}
 .shortcuts {position:relative;left: 8px;}
-.all-tracks ul {padding:0px 0px 20px 0px;;}
+.all-tracks ul {padding:0 0 20px 0;}
 .all-tracks li {font-size:10px;font-size:1rem;padding: 2px 0 1px 0;margin-left:-20px;text-transform: capitalize;}
 
 /* **************** TEMPLATE ***************** */
@@ -89,14 +89,14 @@ input.search,input.submit,input.mailing,input.mailing-ok{background-color:#FFF;c
 input.mailing,input.mailing-ok {border: 0px;padding: 2px;margin-top: 5px;}
 input.mailing {width:60%;}
 .content{padding:0 0 0 0;}
-.content-text {padding: 0 0px 40px 0;top:40px;position: relative}
+.content-text {padding: 0 0 40px 0;top:40px;position: relative}
 
 input.search {border:none;padding:3px 1px 3px 1px;margin:0 0 0 0;}
 input.submit {border:none;font-size:08px;font-size:0.8rem;margin:2px -11px 0 0; padding: 3px 0 2px 0;}
 img {text-align: center;width: 30px;}
 
-div.descriptif {padding-top: 20px;margin-top: 50px;}
-div.descriptif p {font-size: 1.2rem;padding-top: 0;}
+div.descriptif { margin: 20px 0 30px 0; }
+div.descriptif p { font-size: 1.2rem; }
 @media all and (max-width:767px) {.contributors {margin-left: -20px;}}
 @media all and (min-width:800px) {.descriptif {text-align: center;}}
 
@@ -109,3 +109,4 @@ div.descriptif p {font-size: 1.2rem;padding-top: 0;}
 .grid-60.hide-on-mobile {padding-top: 6px;text-align: right; }
 
 
+.author { margin-top: 70px; padding: 0;text-align: center;}
