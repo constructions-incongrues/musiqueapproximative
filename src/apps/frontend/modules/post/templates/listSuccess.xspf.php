@@ -38,4 +38,3 @@ foreach ($posts as $post) {
 }
 echo str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="utf-8"?>', $playlist->toString());
 error_reporting($errorLevel);
-?>

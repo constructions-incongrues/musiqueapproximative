@@ -1,3 +1,5 @@
+<?php use_helper('Text') ?>
+
 <?php slot('formats_head') ?>
 <?php foreach ($formats as $name => $format): ?>
   <link rel="alternate" type="<?php echo $format['contentType'] ?>" href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>" />
@@ -8,17 +10,25 @@
 <h2>Servez-vous !</h2>
 <p>Cette playlist est aussi disponible aux formats suivants :
 <?php foreach ($formats as $name => $format): ?>
-    <a href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a> 
-  <?php endforeach; ?>
+  <?php if ($format['display']): ?>
+  <a href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a> 
+  <?php endif ?>
+<?php endforeach; ?>
 </p>
 <br />
 <br />
 <?php end_slot() ?>
 
-
-<?php use_helper('Text') ?>
 <section class="all-tracks">
     <div class="grid-100">
+        <p class="formats">
+        Autre formats : 
+<?php foreach ($formats as $name => $format): ?>
+  <?php if ($format['display']): ?>
+          <a href="<?php echo url_for(sprintf('@post_list?c=%s&q=%s&format=%s', $sf_request->getParameter('c'), $sf_request->getParameter('q'), $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a> 
+  <?php endif ?>
+<?php endforeach; ?>
+        </p>
         <div class="grid-50">
             <ul>
 <?php $i = 0; ?>
