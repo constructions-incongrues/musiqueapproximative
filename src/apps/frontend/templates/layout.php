@@ -210,7 +210,7 @@
             var h = $('.content').height();
             var pad = (h-30)/2;
             $('.nav-l img, .nav-r img').height(h);
-  		      $('.nav-l img, .nav-r img').css({'paddin-top':pad+'px','padding-bottom':pad+'px'});
+  		      $('.nav-l img, .nav-r img').css({'padding-top':pad+'px','padding-bottom':pad+'px'});
             
             if (window.random !== 0) {
               var current_post_id = $('#download').data().postid;
