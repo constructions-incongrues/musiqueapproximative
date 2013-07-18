@@ -44,7 +44,7 @@ header a {color:#FFF;background-color:#000;}
 header a:hover {text-decoration: underline;}
 header a, article p a,article p.author a,.contributors a {text-decoration:none;}
 .about a {text-decoration: underline;}
-article p a,.author a{color:#555050;background: #FFF;}
+article p a, .author a {color:#555050;background: #FFF;}
 article p a:hover { color:#000;background: #FFF; }
 .contributors a, .contributors, a.all-tracks-l,a.all-tracks-l span,.all-tracks li  {color:#BBB;background: #000;}
 a.all-tracks-l span span,a.all-tracks-l span span span,.contributors a:hover { color:#FFF;background: #000;}
@@ -95,8 +95,8 @@ input.search {border:none;padding:3px 1px 3px 1px;margin:0 0 0 0;}
 input.submit {border:none;font-size:08px;font-size:0.8rem;margin:2px -11px 0 0; padding: 3px 0 2px 0;}
 img {text-align: center;width: 30px;}
 
-div.descriptif {padding-top: 20px;margin-top: 50px;}
-div.descriptif p {font-size: 1.2rem;padding-top: 0;}
+div.descriptif { margin-bottom: 2em; }
+div.descriptif p { font-size: 1.2rem; }
 @media all and (max-width:767px) {.contributors {margin-left: -20px;}}
 @media all and (min-width:800px) {.descriptif {text-align: center;}}
 
@@ -109,3 +109,4 @@ div.descriptif p {font-size: 1.2rem;padding-top: 0;}
 .grid-60.hide-on-mobile {padding-top: 6px;text-align: right; }
 
 
+.author { margin-top: 40px; padding: 0;}
