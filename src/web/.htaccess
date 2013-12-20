@@ -1,4 +1,4 @@
-Options +FollowSymLinks +ExecCGI
+Options FollowSymLinks
 
 # Deny access to MP3 leechers
 Order allow,deny
