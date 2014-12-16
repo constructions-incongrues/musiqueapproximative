@@ -111,7 +111,7 @@ class postActions extends sfActions
     if ($this->getRequestParameter('q'))
     {
       $posts = Doctrine::getTable('Post')->search($request->getParameter('q'));
-      $list_title = sprintf('%d résultat(s) pour la recherche "%s"', count($posts), $request->getParameter('q'));
+      $list_title = sprintf('%d résultat(s) pour la recherche "%s" | Musique Approximative', count($posts), $request->getParameter('q'));
       $this->getResponse()->setTitle($list_title);
     }
     else
@@ -120,7 +120,7 @@ class postActions extends sfActions
       if ($request->hasParameter('c'))
       {
         $list_title = sprintf('%s a posté %d morceau(x) à ce jour', $request->getParameter('c'), count($posts));
-        $this->getResponse()->setTitle(sprintf('La playlist de %s', $request->getParameter('c')));
+        $this->getResponse()->setTitle(sprintf('La playlist de %s | Musique Approximative', $request->getParameter('c')));
       }
     }
 
