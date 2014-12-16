@@ -45,7 +45,7 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:image', 'http://www.musiqueapproximative.net/images/logo.png');
     $this->getResponse()->addMeta('og:type', 'video');
     $this->getResponse()->addMeta(
-      'og:video', 
+      'og:video',
       sprintf('http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&file=%s', urlencode($urlTrack))
     );
     $this->getResponse()->addMeta('og:video:secure_url', sprintf('%s?autostart=true&file=%s', sfConfig::get('app_urls_secure_player'), urlencode($urlTrack)));
@@ -53,7 +53,7 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:video:height', '100');
     $this->getResponse()->addMeta('og:video:width', '500');
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
-    
+
     // Gather common query parameters
     $common_parameters = array(
       'random' => $request->getParameter('random', 0),
@@ -112,6 +112,7 @@ class postActions extends sfActions
     {
       $posts = Doctrine::getTable('Post')->search($request->getParameter('q'));
       $list_title = sprintf('%d résultat(s) pour la recherche "%s"', count($posts), $request->getParameter('q'));
+      $this->getResponse()->setTitle($list_title);
     }
     else
     {
@@ -119,6 +120,7 @@ class postActions extends sfActions
       if ($request->hasParameter('c'))
       {
         $list_title = sprintf('%s a posté %d morceau(x) à ce jour', $request->getParameter('c'), count($posts));
+        $this->getResponse()->setTitle(sprintf('La playlist de %s', $request->getParameter('c')));
       }
     }
 
@@ -241,7 +243,7 @@ class postActions extends sfActions
 
     // Encode data depending on requested format
     if ($request->getParameter('format', 'json') == 'json') {
-      $dataEncoded = json_encode($data);  
+      $dataEncoded = json_encode($data);
       // $this->getResponse()->setContentType('application/json+oembed');
       $this->getResponse()->setContentType('application/json');
     } else if ($request->getParameter('format', 'json') == 'xml') {
@@ -255,7 +257,7 @@ class postActions extends sfActions
 
     // Pass data to view
     $this->data = $dataEncoded;
-    
+
     // Select template
     return sfView::SUCCESS;
   }
@@ -264,20 +266,20 @@ class postActions extends sfActions
   {
     $formats = array(
       'json' => array(
-        'layout'      => false, 
-        'contentType' => 'application/json', 
+        'layout'      => false,
+        'contentType' => 'application/json',
         'about'       => 'http://jsonapi.org/format/#url-based-json-api',
         'display'     => true
       ),
       'max' => array(
-        'layout'      => false, 
+        'layout'      => false,
         'contentType' => 'application/maxmsp+text',
         'about'       => null,
         'display'     => false
       ),
       'xspf' => array(
         'layout'      => false,
-        'contentType' => 'application/xspf+xml', 
+        'contentType' => 'application/xspf+xml',
         'about'       => 'http://xspf.org/',
         'display'     => true
       )
