@@ -12,5 +12,10 @@ class ProjectConfiguration extends sfProjectConfiguration
     $this->enablePlugins('sfAdminDashPlugin');
     $this->enablePlugins('sfFeed2Plugin');
     $this->enablePlugins('sfJqueryReloadedPlugin');
+
+    if (strpos(__DIR__, 'vagrant') !== 'false') {
+        $this->setCacheDir('/tmp');
+        $this->setLogDir('/tmp');
+    }
   }
 }
