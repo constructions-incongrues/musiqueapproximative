@@ -32,6 +32,7 @@ mysql --defaults-file=/etc/mysql/debian.cnf net_musiqueapproximative_www < /vagr
 # Configuration du projet
 apt-get install -y ant 
 cd /vagrant
+./composer.phar install --prefer-dist
 ant configure build -Dprofile=vagrant
 /vagrant/src/symfony cache:clear
 
