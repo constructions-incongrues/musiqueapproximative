@@ -46,11 +46,23 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:type', 'video');
     $this->getResponse()->addMeta(
       'og:video',
-      sprintf('http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&file=%s', urlencode($urlTrack))
+      sprintf(
+        'http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&file=%s&height=500&width=500&image=%s', 
+        urlencode($urlTrack), 
+        urlencode('http://www.musiqueapproximative.net/images/logo.png')
+      )
     );
-    $this->getResponse()->addMeta('og:video:secure_url', sprintf('%s?autostart=true&file=%s', sfConfig::get('app_urls_secure_player'), urlencode($urlTrack)));
+    $this->getResponse()->addMeta(
+      'og:video:secure_url', 
+      sprintf(
+        '%s?autostart=true&file=%s&height=500&width=500&image=%s', 
+        sfConfig::get('app_urls_secure_player'), 
+        urlencode($urlTrack),
+        urlencode('http://www.musiqueapproximative.net/images/logo.png')
+      )
+    );
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
-    $this->getResponse()->addMeta('og:video:height', '100');
+    $this->getResponse()->addMeta('og:video:height', '500');
     $this->getResponse()->addMeta('og:video:width', '500');
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
 
