@@ -33,8 +33,6 @@ mysql --defaults-file=/etc/mysql/debian.cnf net_musiqueapproximative_www < /vagr
 apt-get install -y ant 
 cd /vagrant
 ant configure build -Dprofile=vagrant
-chmod -R 777 /vagrant/src/cache
-chmod -R 777 /vagrant/src/log
 /vagrant/src/symfony cache:clear
 
 # Mise à disposition du projet dans Apache
