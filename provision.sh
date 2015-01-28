@@ -25,7 +25,7 @@ echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf
 apt-get install -y phpmyadmin
 
 # Création de la base de données
-mysql --defaults-file=/etc/mysql/debian.cnf -e "drop database if exists net_musiqueapproximative_ww"w
+mysql --defaults-file=/etc/mysql/debian.cnf -e "drop database if exists net_musiqueapproximative_www"
 mysql --defaults-file=/etc/mysql/debian.cnf -e "create database net_musiqueapproximative_www default charset utf8 collate utf8_general_ci"
 mysql --defaults-file=/etc/mysql/debian.cnf net_musiqueapproximative_www < /vagrant/src/data/fixtures/net_musiqueapproximative_www.dump.sql
 
