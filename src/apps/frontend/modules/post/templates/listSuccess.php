@@ -35,9 +35,9 @@
 <?php foreach ($posts as $post): ?>
                 <li>
 <?php if ($sf_request->hasParameter('c')): ?>
-                    <a href="<?php echo url_for('@post_show?slug='.$post->slug) ?>?c=<?php echo $sf_request->getParameter('c') ?>" class="all-tracks-l">
+                    <a title="#<?php echo $post->id ?>" href="<?php echo url_for('@post_show?slug='.$post->slug) ?>?c=<?php echo $sf_request->getParameter('c') ?>" class="all-tracks-l">
 <?php else: ?>
-                    <a href="<?php echo url_for('@post_show?slug='.$post->slug) ?>" class="all-tracks-l">
+                    <a title="#<?php echo $post->id ?>" href="<?php echo url_for('@post_show?slug='.$post->slug) ?>" class="all-tracks-l">
 <?php endif; ?>
                       <span><?php echo $post->track_author ?> 
                         <span>- 
