@@ -17,6 +17,6 @@
 /src/log
 /src/web/tracks
 
- # vagrant
- /.vagrant
+# vagrant
+/.vagrant
  
