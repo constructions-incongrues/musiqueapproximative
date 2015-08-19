@@ -6,6 +6,11 @@ default:
   with_layout: true
   lifetime:    86400
 
+cache:
+  enabled:     true
+  with_layout: true
+  lifetime:    86400
+
 # TODO
 # Si on active le cache il faut :
 # - nettoyer le cache de frontend depuis backend à la modification de la liste des morceaux
