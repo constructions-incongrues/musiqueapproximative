@@ -42,23 +42,26 @@ class postActions extends sfActions
     // $this->getResponse()->addMeta('fb:app_id', 'musiqueapproximative');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
-    $this->getResponse()->addMeta('og:image', 'http://www.musiqueapproximative.net/images/logo.png');
-    $this->getResponse()->addMeta('og:type', 'video');
+    $this->getResponse()->addMeta('og:image', 'http://www.musiqueapproximative.net/images/logo_500.png');
+    $this->getResponse()->addMeta('og:image:type', 'image/png');
+    $this->getResponse()->addMeta('og:image:height', '500');
+    $this->getResponse()->addMeta('og:image:width', '500');
+    $this->getResponse()->addMeta('og:type', 'video.other');
     $this->getResponse()->addMeta(
       'og:video',
       sprintf(
-        'http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&file=%s&height=500&width=500&image=%s', 
-        urlencode($urlTrack), 
-        urlencode('http://www.musiqueapproximative.net/images/logo.png')
+        'http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&displaytitle=true&file=%s&height=500&width=500&image=%s',
+        urlencode($urlTrack),
+        urlencode('http://www.musiqueapproximative.net/images/logo_500.png')
       )
     );
     $this->getResponse()->addMeta(
-      'og:video:secure_url', 
+      'og:video:secure_url',
       sprintf(
-        '%s?autostart=true&file=%s&height=500&width=500&image=%s', 
-        sfConfig::get('app_urls_secure_player'), 
+        '%s?autostart=true&file=%s&height=500&width=500&image=%s',
+        sfConfig::get('app_urls_secure_player'),
         urlencode($urlTrack),
-        urlencode('http://www.musiqueapproximative.net/images/logo.png')
+        urlencode('http://www.musiqueapproximative.net/images/logo_500.png')
       )
     );
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
