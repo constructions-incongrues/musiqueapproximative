@@ -19,6 +19,8 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", path: "provision.sh"
 
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+
   # @see https://github.com/phinze/landrush
   config.landrush.enabled = true
   config.vm.hostname = "musiqueapproximative.vagrant.dev"
