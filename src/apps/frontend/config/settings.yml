@@ -5,7 +5,7 @@ prod:
   .settings:
     no_script_name:         true
     logging_enabled:        false
-    cache:                  true
+    cache:                  false
 
 cache:
   .settings:
