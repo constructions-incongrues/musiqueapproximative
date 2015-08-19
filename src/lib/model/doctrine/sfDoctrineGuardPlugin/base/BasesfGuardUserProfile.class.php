@@ -31,7 +31,7 @@
  * @package    musique-approximative
  * @subpackage model
  * @author     Tristan Rivoallan <tristan@rivoallan.net>
- * @version    SVN: $Id: Builder.php 7380 2010-03-15 21:07:50Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BasesfGuardUserProfile extends sfDoctrineRecord
 {
@@ -41,27 +41,27 @@ abstract class BasesfGuardUserProfile extends sfDoctrineRecord
         $this->hasColumn('user_id', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
-             'length' => '4',
+             'length' => 4,
              ));
         $this->hasColumn('first_name', 'string', 30, array(
              'type' => 'string',
-             'length' => '30',
+             'length' => 30,
              ));
         $this->hasColumn('last_name', 'string', 30, array(
              'type' => 'string',
-             'length' => '30',
+             'length' => 30,
              ));
         $this->hasColumn('facebook_uid', 'string', 20, array(
              'type' => 'string',
-             'length' => '20',
+             'length' => 20,
              ));
         $this->hasColumn('email', 'string', 255, array(
              'type' => 'string',
-             'length' => '255',
+             'length' => 255,
              ));
         $this->hasColumn('email_hash', 'string', 255, array(
              'type' => 'string',
-             'length' => '255',
+             'length' => 255,
              ));
 
 

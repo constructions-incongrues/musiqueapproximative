@@ -3,6 +3,5 @@ src/web/tracks/*
 .git
 src/cache/*
 src/log/*
-vendor/composer
 vendor/constructions-incongrues
 etc

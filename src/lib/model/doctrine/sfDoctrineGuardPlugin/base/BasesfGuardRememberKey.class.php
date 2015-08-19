@@ -25,7 +25,7 @@
  * @package    musique-approximative
  * @subpackage model
  * @author     Tristan Rivoallan <tristan@rivoallan.net>
- * @version    SVN: $Id: Builder.php 7380 2010-03-15 21:07:50Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BasesfGuardRememberKey extends sfDoctrineRecord
 {
@@ -36,20 +36,20 @@ abstract class BasesfGuardRememberKey extends sfDoctrineRecord
              'type' => 'integer',
              'primary' => true,
              'autoincrement' => true,
-             'length' => '4',
+             'length' => 4,
              ));
         $this->hasColumn('user_id', 'integer', 4, array(
              'type' => 'integer',
-             'length' => '4',
+             'length' => 4,
              ));
         $this->hasColumn('remember_key', 'string', 32, array(
              'type' => 'string',
-             'length' => '32',
+             'length' => 32,
              ));
         $this->hasColumn('ip_address', 'string', 50, array(
              'type' => 'string',
              'primary' => true,
-             'length' => '50',
+             'length' => 50,
              ));
 
         $this->option('symfony', array(
@@ -66,7 +66,8 @@ abstract class BasesfGuardRememberKey extends sfDoctrineRecord
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
 
-        $timestampable0 = new Doctrine_Template_Timestampable();
+        $timestampable0 = new Doctrine_Template_Timestampable(array(
+             ));
         $this->actAs($timestampable0);
     }
 }

@@ -6,7 +6,7 @@
  * @package    musique-approximative
  * @subpackage filter
  * @author     Tristan Rivoallan <tristan@rivoallan.net>
- * @version    SVN: $Id: sfDoctrineFormFilterGeneratedTemplate.php 24171 2009-11-19 16:37:50Z Kris.Wallsmith $
+ * @version    SVN: $Id$
  */
 abstract class BasePostIndexFormFilter extends BaseFormFilterDoctrine
 {

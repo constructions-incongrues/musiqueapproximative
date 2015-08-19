@@ -25,7 +25,7 @@
  * @package    musique-approximative
  * @subpackage model
  * @author     Tristan Rivoallan <tristan@rivoallan.net>
- * @version    SVN: $Id: Builder.php 7380 2010-03-15 21:07:50Z jwage $
+ * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseUserProfile extends sfDoctrineRecord
 {
@@ -35,19 +35,19 @@ abstract class BaseUserProfile extends sfDoctrineRecord
         $this->hasColumn('user_id', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
-             'length' => '4',
+             'length' => 4,
              ));
         $this->hasColumn('display_name', 'string', 255, array(
              'type' => 'string',
-             'length' => '255',
+             'length' => 255,
              ));
         $this->hasColumn('email', 'string', 255, array(
              'type' => 'string',
-             'length' => '255',
+             'length' => 255,
              ));
         $this->hasColumn('website_url', 'string', 255, array(
              'type' => 'string',
-             'length' => '255',
+             'length' => 255,
              ));
 
 

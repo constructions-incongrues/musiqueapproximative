@@ -3,7 +3,7 @@
 
 prod:
   .settings:
-    no_script_name:         false 
+    no_script_name:         false
     logging_enabled:        false
 
 dev:
@@ -43,4 +43,7 @@ all:
 
     secure_module:          sfGuardAuth
     secure_action:          secure
-
+    
+    # Vendors paths
+    swiftmailer_dir: <?php echo __DIR__."/../../../../vendor/swiftmailer/swiftmailer/lib\n" ?>
+    doctrine_dir: <?php echo __DIR__."/../../../../vendor/lexpress/doctrine1/lib\n" ?>

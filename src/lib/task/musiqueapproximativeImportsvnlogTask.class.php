@@ -71,7 +71,7 @@ EOF;
     {
       $filename = (array)$file;
       $filename = $filename[0];
-      if (Doctrine::getTable('Post')->findByTrackMd5(md5($filename), Doctrine_Core::HYDRATE_ARRAY))
+      if (Doctrine_Core::getTable('Post')->findByTrackMd5(md5($filename), Doctrine_Core::HYDRATE_ARRAY))
       {
         $this->logSection('notice', sprintf('Track "%s" was previously imported', basename($filename)));
         continue;

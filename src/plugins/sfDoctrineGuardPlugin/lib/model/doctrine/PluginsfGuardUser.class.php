@@ -115,7 +115,7 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
    */
   public function addGroupByName($name, $con = null)
   {
-    $group = Doctrine::getTable('sfGuardGroup')->findOneByName($name);
+    $group = Doctrine_Core::getTable('sfGuardGroup')->findOneByName($name);
     if (!$group)
     {
       throw new sfException(sprintf('The group "%s" does not exist.', $name));
@@ -137,7 +137,7 @@ abstract class PluginsfGuardUser extends BasesfGuardUser
    */
   public function addPermissionByName($name, $con = null)
   {
-    $permission = Doctrine::getTable('sfGuardPermission')->findOneByName($name);
+    $permission = Doctrine_Core::getTable('sfGuardPermission')->findOneByName($name);
     if (!$permission)
     {
       throw new sfException(sprintf('The permission "%s" does not exist.', $name));

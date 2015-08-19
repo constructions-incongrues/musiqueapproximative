@@ -6,6 +6,8 @@
         }
     ],
     "require": {
-        "constructions-incongrues/ananas-build-toolkit": "dev-master"
+        "constructions-incongrues/ananas-build-toolkit": "dev-master",
+        "lexpress/symfony1": "1.5.*",
+        "lexpress/doctrine1": "1.3.*"
     }
 }

@@ -146,7 +146,7 @@ class Adduserprofile extends Doctrine_Migration_Base
 
       foreach ($profiles as $id => $profile)
       {
-        if (Doctrine::getTable('sfGuardUser')->find($id))
+        if (Doctrine_Core::getTable('sfGuardUser')->find($id))
         {
           $user_profile = new UserProfile();
           $user_profile->user_id = $id;

@@ -6,7 +6,7 @@ class postComponents extends sfComponents
     $contributors = array();
 
     // TODO : this is crappy performance-wise
-    $contributors = Doctrine::getTable('sfGuardUser')
+    $contributors = Doctrine_Core::getTable('sfGuardUser')
     	->createQuery('u')
     	->innerJoin('u.UserProfile p')
     	->where('u.is_active = 1')

@@ -8,7 +8,7 @@
  * @package    musique-approximative
  * @subpackage form
  * @author     Tristan Rivoallan <tristan@rivoallan.net>
- * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 24171 2009-11-19 16:37:50Z Kris.Wallsmith $
+ * @version    SVN: $Id$
  */
 abstract class BasesfGuardUserForm extends BaseFormDoctrine
 {
@@ -30,7 +30,7 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
     ));
 
     $this->setValidators(array(
-      'id'               => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
+      'id'               => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
       'username'         => new sfValidatorString(array('max_length' => 128)),
       'algorithm'        => new sfValidatorString(array('max_length' => 128, 'required' => false)),
       'salt'             => new sfValidatorString(array('max_length' => 128, 'required' => false)),
@@ -78,34 +78,30 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
 
   }
 
-  protected function doSave($con = null)
+  protected function doUpdateObject($values)
   {
-    $this->savegroupsList($con);
-    $this->savepermissionsList($con);
+    $this->updategroupsList($values);
+    $this->updatepermissionsList($values);
 
-    parent::doSave($con);
+    parent::doUpdateObject($values);
   }
 
-  public function savegroupsList($con = null)
+  public function updategroupsList($values)
   {
-    if (!$this->isValid())
-    {
-      throw $this->getErrorSchema();
-    }
-
     if (!isset($this->widgetSchema['groups_list']))
     {
       // somebody has unset this widget
       return;
     }
 
-    if (null === $con)
+    if (!array_key_exists('groups_list', $values))
     {
-      $con = $this->getConnection();
+      // no values for this widget
+      return;
     }
 
     $existing = $this->object->groups->getPrimaryKeys();
-    $values = $this->getValue('groups_list');
+    $values = $values['groups_list'];
     if (!is_array($values))
     {
       $values = array();
@@ -124,26 +120,22 @@ abstract class BasesfGuardUserForm extends BaseFormDoctrine
     }
   }
 
-  public function savepermissionsList($con = null)
+  public function updatepermissionsList($values)
   {
-    if (!$this->isValid())
-    {
-      throw $this->getErrorSchema();
-    }
-
     if (!isset($this->widgetSchema['permissions_list']))
     {
       // somebody has unset this widget
       return;
     }
 
-    if (null === $con)
+    if (!array_key_exists('permissions_list', $values))
     {
-      $con = $this->getConnection();
+      // no values for this widget
+      return;
     }
 
     $existing = $this->object->permissions->getPrimaryKeys();
-    $values = $this->getValue('permissions_list');
+    $values = $values['permissions_list'];
     if (!is_array($values))
     {
       $values = array();

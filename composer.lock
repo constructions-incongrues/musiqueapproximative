@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "0ab1f7cddcf447e0e6477c47c0cce4a5",
+    "hash": "0aaade971de1399ea3fae1f9540d0dce",
     "packages": [
         {
             "name": "constructions-incongrues/ananas-build-toolkit",
@@ -15,7 +16,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/constructions-incongrues/ananas-build-toolkit/zipball/0.8.7",
+                "url": "https://github.com/constructions-incongrues/ananas-build-toolkit/zipball/0.19.1",
                 "reference": "0.8.7",
                 "shasum": ""
             },
@@ -27,22 +28,161 @@
                 "source": "https://github.com/constructions-incongrues/ananas-build-toolkit"
             },
             "time": "2013-03-29 10:17:17"
+        },
+        {
+            "name": "lexpress/doctrine1",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LExpress/doctrine1.git",
+                "reference": "b7682da098acacdd8063d59740697962eea8bfb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LExpress/doctrine1/zipball/b7682da098acacdd8063d59740697962eea8bfb6",
+                "reference": "b7682da098acacdd8063d59740697962eea8bfb6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pdo": "*",
+                "php": ">=5.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Konsta Vesterinen",
+                    "email": "kvesteri@cc.hut.fi"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                }
+            ],
+            "description": "PHP5 Database ORM",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "orm"
+            ],
+            "time": "2014-02-05 09:53:08"
+        },
+        {
+            "name": "lexpress/symfony1",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LExpress/symfony1.git",
+                "reference": "cf86a0f1b57dbca443fa2843ba74cbecee06a9f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LExpress/symfony1/zipball/cf86a0f1b57dbca443fa2843ba74cbecee06a9f8",
+                "reference": "cf86a0f1b57dbca443fa2843ba74cbecee06a9f8",
+                "shasum": ""
+            },
+            "require": {
+                "swiftmailer/swiftmailer": "~5.2"
+            },
+            "require-dev": {
+                "psr/log": "*"
+            },
+            "suggest": {
+                "lexpress/doctrine1": "Doctrine plugin",
+                "propel/sf-propel-o-r-m-plugin": "Propel plugin",
+                "psr/log": "Psr logger"
+            },
+            "bin": [
+                "data/bin/symfony"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Fork of symfony 1.4 with dic, form enhancements, latest swiftmailer and better performance",
+            "time": "2015-07-22 13:05:29"
+        },
+        {
+            "name": "swiftmailer/swiftmailer",
+            "version": "v5.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swiftmailer/swiftmailer.git",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1,<0.9.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.4-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/swift_required.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Corbyn"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Swiftmailer, free feature-rich PHP mailer",
+            "homepage": "http://swiftmailer.org",
+            "keywords": [
+                "email",
+                "mail",
+                "mailer"
+            ],
+            "time": "2015-06-06 14:19:39"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "constructions-incongrues/ananas-build-toolkit": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
 }

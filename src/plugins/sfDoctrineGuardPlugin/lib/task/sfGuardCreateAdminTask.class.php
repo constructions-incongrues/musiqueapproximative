@@ -52,7 +52,7 @@ EOF;
   {
     $databaseManager = new sfDatabaseManager($this->configuration);
 
-    $user = Doctrine::getTable('sfGuardUser')->findOneByUsername($arguments['username']);
+    $user = Doctrine_Core::getTable('sfGuardUser')->findOneByUsername($arguments['username']);
 
     if (!$user)
     {

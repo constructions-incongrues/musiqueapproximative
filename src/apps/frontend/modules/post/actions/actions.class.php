@@ -18,7 +18,7 @@ class postActions extends sfActions
   public function executeShow(sfWebRequest $request)
   {
     // Retrieve appropriate post from database
-    $post = Doctrine::getTable('Post')->getOnlinePostBySlug($request->getParameter('slug'));
+    $post = Doctrine_Core::getTable('Post')->getOnlinePostBySlug($request->getParameter('slug'));
 
     // Throw a 404 error if no post is found
     $this->forward404Unless($post);
@@ -33,7 +33,7 @@ class postActions extends sfActions
     $this->getResponse()->setTitle($title);
 
     // Get number of online posts
-    $posts_count = Doctrine::getTable('Post')->countOnlinePosts();
+    $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
     $urlTrack = sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename);
@@ -93,8 +93,8 @@ class postActions extends sfActions
     $this->formats = $formatsLimited;
     $this->post = $post;
     $this->posts_count = $posts_count;
-    $this->post_next = Doctrine::getTable('Post')->getNextPost($post, $request->getParameterHolder()->getAll());
-    $this->post_previous = Doctrine::getTable('Post')->getPreviousPost($post, $request->getParameterHolder()->getAll());
+    $this->post_next = Doctrine_Core::getTable('Post')->getNextPost($post, $request->getParameterHolder()->getAll());
+    $this->post_previous = Doctrine_Core::getTable('Post')->getPreviousPost($post, $request->getParameterHolder()->getAll());
     $this->common_query_string = $common_query_string;
     $this->contributor = $post->getSfGuardUser();
 
@@ -111,7 +111,7 @@ class postActions extends sfActions
   public function executeHome(sfWebRequest $request)
   {
     $filters = $request->getParameterHolder()->getAll();
-    $this->forward404Unless($post = Doctrine::getTable('Post')->getLastPost($filters));
+    $this->forward404Unless($post = Doctrine_Core::getTable('Post')->getLastPost($filters));
     $routeRedirect = '@post_show?slug='.$post->slug;
     if (isset($filters['c']))
     {
@@ -125,13 +125,13 @@ class postActions extends sfActions
     $list_title = null;
     if ($this->getRequestParameter('q'))
     {
-      $posts = Doctrine::getTable('Post')->search($request->getParameter('q'));
+      $posts = Doctrine_Core::getTable('Post')->search($request->getParameter('q'));
       $list_title = sprintf('%d résultat(s) pour la recherche "%s" | Musique Approximative', count($posts), $request->getParameter('q'));
       $this->getResponse()->setTitle($list_title);
     }
     else
     {
-      $posts = Doctrine::getTable('Post')->getOnlinePosts($request->getParameter('c'));
+      $posts = Doctrine_Core::getTable('Post')->getOnlinePosts($request->getParameter('c'));
       if ($request->hasParameter('c'))
       {
         $list_title = sprintf('%s a posté %d morceau(x) à ce jour', $request->getParameter('c'), count($posts));
@@ -158,7 +158,7 @@ class postActions extends sfActions
       'authorEmail'   => 'bertier@musiqueapproximative.net',
     ));
 
-    $posts = Doctrine::getTable('Post')->getOnlinePosts($request->getParameter('contributor'), $request->getParameter('count', 50));
+    $posts = Doctrine_Core::getTable('Post')->getOnlinePosts($request->getParameter('contributor'), $request->getParameter('count', 50));
     foreach ($posts as $post)
     {
       $strf = strptime($post->publish_on, '%Y-%m-%d %H:%M:%S');
@@ -200,7 +200,7 @@ class postActions extends sfActions
 
   public function executeRandom(sfWebRequest $request)
   {
-  	$post = Doctrine::getTable('Post')->getRandomPost($request->getParameterHolder()->getAll());
+  	$post = Doctrine_Core::getTable('Post')->getRandomPost($request->getParameterHolder()->getAll());
 
   	sfConfig::set('sf_web_debug', false);
 
@@ -216,7 +216,7 @@ class postActions extends sfActions
    */
   public function executeNext(sfWebRequest $request)
   {
-  	$post = Doctrine::getTable('Post')->getNextPost(Doctrine::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+  	$post = Doctrine_Core::getTable('Post')->getNextPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
 
   	sfConfig::set('sf_web_debug', false);
 
@@ -226,7 +226,7 @@ class postActions extends sfActions
 
   public function executePrev(sfWebRequest $request)
   {
-  	$post = Doctrine::getTable('Post')->getPreviousPost(Doctrine::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+  	$post = Doctrine_Core::getTable('Post')->getPreviousPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
 
   	sfConfig::set('sf_web_debug', false);
 
@@ -237,7 +237,7 @@ class postActions extends sfActions
   public function executeOembed(sfWebRequest $request)
   {
     // Retrieve appropriate post from database
-    $post = Doctrine::getTable('Post')->getOnlinePostBySlug(basename($request->getParameter('url')));
+    $post = Doctrine_Core::getTable('Post')->getOnlinePostBySlug(basename($request->getParameter('url')));
 
     // Throw a 404 error if no post is found
     $this->forward404Unless($post);
