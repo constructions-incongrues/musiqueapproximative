@@ -5,3 +5,4 @@ src/cache/*
 src/log/*
 vendor/constructions-incongrues
 etc
+/.vagrant
