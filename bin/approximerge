@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# ApproximaCHO
+
+set -e
+
+# TODO
+# - getargs propre
+# - id3 tags
+#   - Artist : V/A
+#   - Tracknum : ?
+#   - Album : Approximashows
+# - cleanup post generation
+# - ws pour rechercher par filename / md5 (?)
+# - playlist (artiste / titre - contributeur)
+# - texte de présentation
+# - mp3gain ?
+# - self service
+# - jinglebank
+# - packaging
+#   - image (sox spectrogram ?)
+#   - playlist
+#   - text
+#   - titre auto
+#
+#
+# sudo apt-get install sox libsox-fmt-mp3
+
+# Parameters
+TRACKSDIR=${1:-"."}
+DURATION_MAX=${2:-3600}
+OUTFILE=${3:-"./musiqueapproximative_$(date +%Y%m%d_%H%M%S)"}
+WORKDIR=${4:-"/tmp"}
+WORKDIR="${WORKDIR}/approximerge.$$"
+DURATION_CURRENT=0
+SOX_LOGLEVEL=${5:-1}
+
+# Create working directory
+mkdir -p $WORKDIR
+
+echo -e "> Setup"
+echo -e "Source directory             : ${TRACKSDIR}"
+echo -e "Working directory            : ${WORKDIR}"
+echo -e "Output file                  : ${OUTFILE}"
+echo -e "Output file target duration  : ${DURATION_MAX}"
+echo
+
+# Select tracks
+IFS_OLD=$IFS
+IFS=$'\n'
+TRACKS=$(find ${TRACKSDIR} -name "*.mp3" | sort --random-sort | tail -n100)
+echo "> Collecting and preparing tracks"
+for TRACK in ${TRACKS}; do
+    # Copy file to working directory
+    cp "${TRACK}" "${WORKDIR}/"
+    FILENAME=$(basename ${TRACK})
+
+    # Homegeneize audio characteristics
+    sox -V1 -r 44100 "${TRACK}" "${WORKDIR}/${FILENAME}"
+    if [ $? -ne 0 ]; then
+        rm -v "${TRACK}" "${WORKDIR}/${FILENAME}"
+        continue
+    fi
+
+    DURATION_CURRENT=$((DURATION_CURRENT+$(LC_ALL=C printf "%.0f\n" $(sox --i -D "${WORKDIR}/${FILENAME}"))))
+    echo -e "${DURATION_CURRENT} / ${DURATION_MAX} : ${FILENAME}"
+    if [ "$DURATION_CURRENT" -ge "$DURATION_MAX" ]; then
+        break
+    fi
+done
+echo
+
+# Concatenate tracks
+echo -e "> Concatenating tracks"
+sox -V1 $(ls ${WORKDIR}/*.mp3) "${OUTFILE}"
+mp3info -d "${OUTFILE}"
+mp3info -a "Various Artists" -l "Musique Approximative" -y "$(date +%Y)" -t "$(basename ${OUTFILE})" "${OUTFILE}"
+echo -e "Generation succeedeed : $(basename ${OUTFILE})"
+if [ $? -eq 0 ]; then
+    rm -r "${WORKDIR}"
+fi
