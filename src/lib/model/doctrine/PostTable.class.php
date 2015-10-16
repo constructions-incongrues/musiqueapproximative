@@ -2,7 +2,7 @@
 
 class PostTable extends Doctrine_Table
 {
-  const FIELDS_BASIC = 'p.body, p.track_title, p.track_author, p.track_filename, p.slug, p.buy_url, u.username';
+  const FIELDS_BASIC = 'p.body, p.track_title, p.track_author, p.track_filename, p.track_md5, p.slug, p.buy_url, u.username';
 
   /**
    * Returns last online post.
@@ -194,6 +194,18 @@ class PostTable extends Doctrine_Table
     // Fetch posts
     $post = $q->fetchOne();
     $q->free();
+
+    return $post;
+  }
+
+  public function getByMd5sum($md5sum)
+  {
+    $q = Doctrine_Query::create()
+      ->select(self::FIELDS_BASIC)
+      ->from('Post p')
+      ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
+      ->where('p.is_online = 1 and p.track_md5 = ?');
+    $post = $q->fetchOne(array($md5sum));
 
     return $post;
   }

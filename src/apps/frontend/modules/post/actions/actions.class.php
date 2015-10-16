@@ -108,6 +108,15 @@ class postActions extends sfActions
     return $templateName;
   }
 
+  public function executeMd5(sfWebRequest $request)
+  {
+    $post = Doctrine_Core::getTable('Post')->getByMd5Sum($request->getParameter('md5sum'));
+    $this->getResponse()->setContentType('application/json');
+    echo $post->toJson($request, $this->getContext());
+    sfConfig::set('sf_web_debug', false);
+    return sfView::NONE;
+  }
+
   public function executeHome(sfWebRequest $request)
   {
     $filters = $request->getParameterHolder()->getAll();
@@ -306,6 +315,5 @@ class postActions extends sfActions
     }
 
     return $formats;
-
   }
 }

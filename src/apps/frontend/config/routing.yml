@@ -10,6 +10,10 @@ post_oembed:
   url:  /oembed
   param: { module: post, action: oembed }
 
+post_md5:
+  url:  /post/md5/:md5sum
+  param: { module: post, action: md5 }
+
 post_show:
   url:  /post/:slug
   param: { module: post, action: show }
