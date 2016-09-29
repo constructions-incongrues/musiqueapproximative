@@ -46,7 +46,7 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:image:type', 'image/png');
     $this->getResponse()->addMeta('og:image:height', '500');
     $this->getResponse()->addMeta('og:image:width', '500');
-    $this->getResponse()->addMeta('og:type', 'video.other');
+    $this->getResponse()->addMeta('og:type', 'video');
     $this->getResponse()->addMeta(
       'og:video',
       sprintf(

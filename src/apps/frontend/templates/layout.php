@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -101,8 +101,8 @@
                             Consommer de la musique autrement :
                         </h2>
                         <p>
-                            <a href="http://feeds.feedburner.com/musique-approximative">RSS</a> 
-                            / <a href="https://www.facebook.com/musiqueapproximative">Facebook</a> 
+                            <a href="http://feeds.feedburner.com/musique-approximative">RSS</a>
+                            / <a href="https://www.facebook.com/musiqueapproximative">Facebook</a>
                             / <a href="http://twitter.com/approximazik">Twitter</a>
                             / <a href="#email-subscription" class="email-subscription-link">Email</a>
                         </p>
@@ -148,11 +148,15 @@
                         <p>
                           Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a> pour <a href="http://thenounproject.com/">The Noun Project</a>.
                         </p>
+                         <h2>
+                             Aidez-nous <3
+                         </h2>
+                         <p>Le fonctionnement de ce site demande du temps et de l'argent. Vous pouvez nous aider en nous faisant un <a href="https://www.helloasso.com/associations/constructions-incongrues">don</a>!</p>
                         <?php include_slot('formats_footer') ?>
                     </div>
                     <div class="grid-50 pull-50 contributors_ul">
                         <?php include_component('post', 'contributors') ?>
-                    </div>                   
+                    </div>
                 </div><!-- .grid-90 -->
             </section>
 
@@ -206,12 +210,12 @@
             $('a.email-subscription-link').click(function(event) {
               $('div#email-subscription').toggle();
             });
-            
+
             var h = $('.content').height();
             var pad = (h-30)/2;
             $('.nav-l img, .nav-r img').height(h);
   		      $('.nav-l img, .nav-r img').css({'padding-top':pad+'px','padding-bottom':pad+'px'});
-            
+
             if (window.random !== 0) {
               var current_post_id = $('#download').data().postid;
               var queryCommon = 'play=' + window.autoplay + '&random=' + window.random;
@@ -292,7 +296,7 @@
                 } else {
                     $player.jPlayer('pause');
                 }
-                return false;   
+                return false;
              });
 
              // random

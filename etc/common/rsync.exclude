@@ -6,3 +6,5 @@ src/log/*
 vendor/constructions-incongrues
 etc
 /.vagrant
+/.otto
+/.idea
