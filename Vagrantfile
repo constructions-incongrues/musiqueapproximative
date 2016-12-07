@@ -12,7 +12,10 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "pixative/debian-wheezy-64"
+  config.vm.box = "debian/wheezy64"
+
+
+  config.vm.network "private_network", type: "dhcp", nictype: "virtio"
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
@@ -21,7 +24,11 @@ Vagrant.configure(2) do |config|
 
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
 
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--hpet", "on"]
+  end
+
   # @see https://github.com/phinze/landrush
   config.landrush.enabled = true
-  config.vm.hostname = "musiqueapproximative.vagrant.dev"
+  config.vm.hostname = "musiqueapproximative.vagrant.test"
 end
