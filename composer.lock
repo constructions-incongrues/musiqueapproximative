@@ -4,43 +4,46 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0aaade971de1399ea3fae1f9540d0dce",
+    "content-hash": "d1cc972d1ad48c7290c7c6c8a0262aa4",
     "packages": [
         {
             "name": "constructions-incongrues/ananas-build-toolkit",
-            "version": "dev-master",
+            "version": "0.34.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/constructions-incongrues/ananas-build-toolkit.git",
-                "reference": "0.8.7"
+                "url": "git@github.com:constructions-incongrues/ananas-build-toolkit.git",
+                "reference": "b63052d648a36bff0e952c1fcc19a00d1f378ec8"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/constructions-incongrues/ananas-build-toolkit/zipball/0.19.1",
-                "reference": "0.8.7",
-                "shasum": ""
+            "require": {
+                "php": ">=5.5.0"
             },
             "type": "library",
+            "authors": [
+                {
+                    "name": "Constructions Incongrues",
+                    "email": "contact@constructions-incongrues.net"
+                }
+            ],
             "description": "L'Ananas Build Toolkit est un framework de configuration et de déploiement de projet logiciel.",
-            "homepage": "http://constructions-incongrues.github.com/ananas-build-toolkit/",
+            "homepage": "https://github.com/constructions-incongrues/ananas-build-toolkit",
             "support": {
                 "issues": "https://github.com/constructions-incongrues/ananas-build-toolkit/issues",
                 "source": "https://github.com/constructions-incongrues/ananas-build-toolkit"
             },
-            "time": "2013-03-29 10:17:17"
+            "time": "2016-09-13 15:23:33"
         },
         {
             "name": "lexpress/doctrine1",
-            "version": "v1.3.0",
+            "version": "v1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LExpress/doctrine1.git",
-                "reference": "b7682da098acacdd8063d59740697962eea8bfb6"
+                "reference": "0564971b2badd778914ac0fcb74518a00d6918f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LExpress/doctrine1/zipball/b7682da098acacdd8063d59740697962eea8bfb6",
-                "reference": "b7682da098acacdd8063d59740697962eea8bfb6",
+                "url": "https://api.github.com/repos/LExpress/doctrine1/zipball/0564971b2badd778914ac0fcb74518a00d6918f1",
+                "reference": "0564971b2badd778914ac0fcb74518a00d6918f1",
                 "shasum": ""
             },
             "require": {
@@ -73,20 +76,20 @@
                 "database",
                 "orm"
             ],
-            "time": "2014-02-05 09:53:08"
+            "time": "2016-06-17 09:49:47"
         },
         {
             "name": "lexpress/symfony1",
-            "version": "v1.5.6",
+            "version": "v1.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LExpress/symfony1.git",
-                "reference": "cf86a0f1b57dbca443fa2843ba74cbecee06a9f8"
+                "reference": "aeb49b2f834c9d7ca891bae3f378f63b0149eb60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LExpress/symfony1/zipball/cf86a0f1b57dbca443fa2843ba74cbecee06a9f8",
-                "reference": "cf86a0f1b57dbca443fa2843ba74cbecee06a9f8",
+                "url": "https://api.github.com/repos/LExpress/symfony1/zipball/aeb49b2f834c9d7ca891bae3f378f63b0149eb60",
+                "reference": "aeb49b2f834c9d7ca891bae3f378f63b0149eb60",
                 "shasum": ""
             },
             "require": {
@@ -119,27 +122,268 @@
                 "MIT"
             ],
             "description": "Fork of symfony 1.4 with dic, form enhancements, latest swiftmailer and better performance",
-            "time": "2015-07-22 13:05:29"
+            "time": "2016-02-02 14:17:29"
+        },
+        {
+            "name": "pear-pear.php.net/Archive_Tar",
+            "version": "1.4.2",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/Archive_Tar-1.4.2.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.2.0.0"
+            },
+            "replace": {
+                "pear-pear/archive_tar": "== 1.4.2.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "New BSD License"
+            ],
+            "description": "This class provides handling of tar files in PHP.\nIt supports creating, listing, extracting and adding to tar files.\nGzip support is available if PHP has the zlib extension built-in or\nloaded. Bz2 compression is also supported with the bz2 extension loaded."
+        },
+        {
+            "name": "pear-pear.php.net/Console_Getopt",
+            "version": "1.4.1",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/Console_Getopt-1.4.1.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.4.0.0"
+            },
+            "replace": {
+                "pear-pear/console_getopt": "== 1.4.1.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "description": "This is a PHP implementation of \"getopt\" supporting both\nshort and long options."
+        },
+        {
+            "name": "pear-pear.php.net/PEAR",
+            "version": "1.10.1",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/PEAR-1.10.1.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "ext-pcre": "*",
+                "ext-xml": "*",
+                "pear-pear.php.net/archive_tar": ">=1.4.0.0",
+                "pear-pear.php.net/console_getopt": ">=1.4.1.0",
+                "pear-pear.php.net/structures_graph": ">=1.1.0.0",
+                "pear-pear.php.net/xml_util": ">=1.3.0.0",
+                "php": ">=5.4.0.0"
+            },
+            "conflict": {
+                "pear-pear.php.net/pear_frontend_gtk": "<0.4.0.0",
+                "pear-pear.php.net/pear_frontend_web": "<=0.4.0.0"
+            },
+            "replace": {
+                "pear-pear/pear": "== 1.10.1.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "New BSD License"
+            ],
+            "description": "The PEAR package contains:\n * the PEAR installer, for creating, distributing\n   and installing packages\n * the PEAR_Exception PHP5 error handling mechanism\n * the PEAR_ErrorStack advanced error handling mechanism\n * the PEAR_Error error handling mechanism\n * the OS_Guess class for retrieving info about the OS\n   where PHP is running on\n * the System class for quick handling of common operations\n   with files and directories\n * the PEAR base class\n  Features in a nutshell:\n  * full support for channels\n  * pre-download dependency validation\n  * new package.xml 2.0 format allows tremendous flexibility while maintaining BC\n  * support for optional dependency groups and limited support for sub-packaging\n  * robust dependency support\n  * full dependency validation on uninstall\n  * remote install for hosts with only ftp access - no more problems with\n    restricted host installation\n  * full support for mirroring\n  * support for bundling several packages into a single tarball\n  * support for static dependencies on a url-based package\n  * support for custom file roles and installation tasks"
+        },
+        {
+            "name": "pear-pear.php.net/Structures_Graph",
+            "version": "1.1.1",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/Structures_Graph-1.1.1.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.3.0.0"
+            },
+            "replace": {
+                "pear-pear/structures_graph": "== 1.1.1.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "LGPL-3.0+"
+            ],
+            "description": "Structures_Graph is a package for creating and manipulating graph datastructures. It allows building of directed\nand undirected graphs, with data and metadata stored in nodes. The library provides functions for graph traversing\nas well as for characteristic extraction from the graph topology."
+        },
+        {
+            "name": "pear-pear.php.net/Validate",
+            "version": "0.6.5",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/Validate-0.6.5.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=4.2.0.0"
+            },
+            "replace": {
+                "pear-pear/validate": "== 0.6.5.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "New BSD"
+            ],
+            "description": "Package to validate various datas. It includes :\n    - numbers (min/max, decimal or not)\n    - email (syntax, domain check, rfc822)\n    - string (predifined type alpha upper and/or lowercase, numeric,...)\n    - date (min, max, rfc822 compliant)\n    - uri (RFC2396)\n    - possibility valid multiple data with a single method call (::multiple)"
+        },
+        {
+            "name": "pear-pear.php.net/XML_Parser",
+            "version": "1.3.7",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/XML_Parser-1.3.7.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "pear-pear.php.net/pear": "*",
+                "php": ">=4.2.0.0"
+            },
+            "replace": {
+                "pear-pear/xml_parser": "== 1.3.7.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "BSD License"
+            ],
+            "description": "This is an XML parser based on PHPs built-in xml extension.\nIt supports two basic modes of operation: \"func\" and \"event\".  In \"func\" mode, it will look for a function named after each element (xmltag_ELEMENT for start tags and xmltag_ELEMENT_ for end tags), and in \"event\" mode it uses a set of generic callbacks.\n\nSince version 1.2.0 there's a new XML_Parser_Simple class that makes parsing of most XML documents easier, by automatically providing a stack for the elements.\nFurthermore its now possible to split the parser from the handler object, so you do not have to extend XML_Parser anymore in order to parse a document with it."
+        },
+        {
+            "name": "pear-pear.php.net/XML_Tree",
+            "version": "1.1",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/XML_Tree-1.1.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "replace": {
+                "pear-pear/xml_tree": "== 1.1.0.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "PHP License"
+            ],
+            "description": "*** PHP5 now comes with very good XML handling, consider using it if possible ***\n\nAllows for the building of XML data structures using a tree\nrepresentation, without the need for an extension like DOMXML."
+        },
+        {
+            "name": "pear-pear.php.net/XML_Util",
+            "version": "1.3.0",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/XML_Util-1.3.0.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">=5.3.0.0"
+            },
+            "replace": {
+                "pear-pear/xml_util": "== 1.3.0.0"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "BSD License"
+            ],
+            "description": "Selection of methods that are often needed when working with XML documents.  Functionality includes creating of attribute lists from arrays, creation of tags, validation of XML names and more."
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.1",
+            "version": "v5.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
+                "reference": "4cc92842069c2bbc1f28daaaf1d2576ec4dfe153"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
-                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/4cc92842069c2bbc1f28daaaf1d2576ec4dfe153",
+                "reference": "4cc92842069c2bbc1f28daaaf1d2576ec4dfe153",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.1,<0.9.4"
+                "mockery/mockery": "~0.9.1"
             },
             "type": "library",
             "extra": {
@@ -172,15 +416,13 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2015-06-06 14:19:39"
+            "time": "2016-07-08 11:51:25"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "constructions-incongrues/ananas-build-toolkit": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

@@ -1,13 +1,20 @@
 {
     "repositories": [
         {
-            "type": "composer",
-            "url": "http://constructions-incongrues.github.com/packages"
+            "type": "git",
+            "url": "git@github.com:constructions-incongrues/ananas-build-toolkit.git"
+        },
+        {
+            "type": "pear",
+            "url": "https://pear.php.net"
         }
     ],
     "require": {
-        "constructions-incongrues/ananas-build-toolkit": "dev-master",
+        "constructions-incongrues/ananas-build-toolkit": "^0.34",
         "lexpress/symfony1": "1.5.*",
-        "lexpress/doctrine1": "1.3.*"
+        "lexpress/doctrine1": "1.3.*",
+        "pear-pear.php.net/Validate": " ^0.6.2",
+        "pear-pear.php.net/XML_Parser": "^1.2.7",
+        "pear-pear.php.net/XML_Tree": "^1.1.0"
     }
 }
