@@ -44,5 +44,6 @@ rm -f /var/www/index.html
 
 # Informations
 echo
-echo -e "Le site est disponible à l'adresse : http://musiqueapproximative.vagrant.dev/frontend_dev.php"
-echo -e "PhpMyAdmin est disponible à l'adresse : http://musiqueapproximative.vagrant.dev/phpmyadmin/ (root / root)"
+echo -e "Le site est disponible à l'adresse : http://musiqueapproximative.vagrant.test/frontend_dev.php"
+echo -e "Le site (admin) est disponible à l'adresse : http://musiqueapproximative.vagrant.test/admin_dev.php"
+echo -e "PhpMyAdmin est disponible à l'adresse : http://musiqueapproximative.vagrant.test/phpmyadmin/ (root / root)"
