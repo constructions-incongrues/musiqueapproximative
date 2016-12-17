@@ -1,0 +1,17 @@
+*-dist
+*.bak
+*.orig
+*.swo
+*~
+.git
+/.idea
+/.otto
+/.vagrant
+/composer.*
+/etc
+/vendor/constructions-incongrues/ananas-build-toolkit
+etc
+src/cache/*
+src/log/*
+src/web/tracks/*
+vendor/constructions-incongrues

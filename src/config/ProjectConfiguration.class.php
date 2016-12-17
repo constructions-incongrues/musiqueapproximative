@@ -14,6 +14,11 @@ class ProjectConfiguration extends sfProjectConfiguration
         $this->enablePlugins('sfJqueryReloadedPlugin');
 
         // For legacy PEAR packages
-        set_include_path(get_include_path().DIRECTOR_SEPARATOR.__DIR__.'/../lib/vendor');
+        set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/../lib/vendor');
+
+        if (strpos(__DIR__, 'vagrant') !== false) {
+            $this->setCacheDir('/tmp/symfony_cache');
+            $this->setLogDir('/tmp/symfony_logs');
+        }
     }
 }

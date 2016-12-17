@@ -3,6 +3,10 @@
 
 # default values
 all:
+  autoplay: @ma.autoplay@
+  domain: @ma.domain@
+  theme: @ma.theme@
+  title: @ma.title@
   urls:
-    tracks: @ma.url.tracks@
-    secure_player: @ma.url.secure_player@
+    tracks: http://@ma.domain@/tracks
+    secure_player: https://@ma.domain@/player.swf

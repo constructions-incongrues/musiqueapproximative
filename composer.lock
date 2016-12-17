@@ -4,15 +4,16 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "c57f2b1d321dee31f10e2acb2e4ce8dd",
     "content-hash": "d1cc972d1ad48c7290c7c6c8a0262aa4",
     "packages": [
         {
             "name": "constructions-incongrues/ananas-build-toolkit",
-            "version": "0.34.4",
+            "version": "0.34.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:constructions-incongrues/ananas-build-toolkit.git",
-                "reference": "b63052d648a36bff0e952c1fcc19a00d1f378ec8"
+                "reference": "b2115f4441ed97c7be4290757fb6c67b91a61684"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -30,7 +31,7 @@
                 "issues": "https://github.com/constructions-incongrues/ananas-build-toolkit/issues",
                 "source": "https://github.com/constructions-incongrues/ananas-build-toolkit"
             },
-            "time": "2016-09-13 15:23:33"
+            "time": "2016-10-06 11:31:11"
         },
         {
             "name": "lexpress/doctrine1",
@@ -80,16 +81,16 @@
         },
         {
             "name": "lexpress/symfony1",
-            "version": "v1.5.7",
+            "version": "v1.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LExpress/symfony1.git",
-                "reference": "aeb49b2f834c9d7ca891bae3f378f63b0149eb60"
+                "reference": "472cadec58021ab527edfc69522d70657c3fa073"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LExpress/symfony1/zipball/aeb49b2f834c9d7ca891bae3f378f63b0149eb60",
-                "reference": "aeb49b2f834c9d7ca891bae3f378f63b0149eb60",
+                "url": "https://api.github.com/repos/LExpress/symfony1/zipball/472cadec58021ab527edfc69522d70657c3fa073",
+                "reference": "472cadec58021ab527edfc69522d70657c3fa073",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +123,7 @@
                 "MIT"
             ],
             "description": "Fork of symfony 1.4 with dic, form enhancements, latest swiftmailer and better performance",
-            "time": "2016-02-02 14:17:29"
+            "time": "2016-10-06 07:44:16"
         },
         {
             "name": "pear-pear.php.net/Archive_Tar",
@@ -367,16 +368,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.3",
+            "version": "v5.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "4cc92842069c2bbc1f28daaaf1d2576ec4dfe153"
+                "reference": "545ce9136690cea74f98f86fbb9c92dd9ab1a756"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/4cc92842069c2bbc1f28daaaf1d2576ec4dfe153",
-                "reference": "4cc92842069c2bbc1f28daaaf1d2576ec4dfe153",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/545ce9136690cea74f98f86fbb9c92dd9ab1a756",
+                "reference": "545ce9136690cea74f98f86fbb9c92dd9ab1a756",
                 "shasum": ""
             },
             "require": {
@@ -416,7 +417,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-07-08 11:51:25"
+            "time": "2016-11-24 01:01:23"
         }
     ],
     "packages-dev": [],

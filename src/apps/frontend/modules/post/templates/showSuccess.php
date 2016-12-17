@@ -2,8 +2,8 @@
 
 <?php slot('browse') ?>
 <p>
-Parcourir : 
-<a href="<?php echo url_for('@post_list') ?>" class="index-toggle-all">tous les morceaux</a> | 
+Parcourir :
+<a href="<?php echo url_for('@post_list') ?>" class="index-toggle-all">tous les morceaux</a> |
 <a href="<?php echo url_for('@post_list?c='.$contributor->username) ?>" class="index-toggle-contributor"><?php echo $post->getContributorDisplayName() ?></a>
 <span id="loading" style="display: none;">(chargement...)</span>
 </p>
@@ -20,7 +20,7 @@ Parcourir :
 <p>Ce post est aussi disponible aux formats suivants :
 <?php foreach ($formats as $name => $format): ?>
   <?php if ($format['display']): ?>
-  <a href="<?php echo url_for(sprintf('@post_show?slug=%s&format=%s', $post->slug, $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a> 
+  <a href="<?php echo url_for(sprintf('@post_show?slug=%s&format=%s', $post->slug, $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a>
   <?php endif ?>
 <?php endforeach; ?>
 </p>
@@ -37,7 +37,7 @@ Parcourir :
     <div class="nav-l grid-5 hide-on-mobile">
       <p>
 <?php if ($post_previous): ?>
-        <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/left4.svg"></a>
+        <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/left4.svg"></a>
  <?php endif; ?>
       </p>
     </div>
@@ -66,7 +66,7 @@ Parcourir :
       <h2 class="hide-on-desktop">
           <?php echo $post->track_title ?>
       </h2>
-      
+
       <div class="descriptif">
         <?php echo Markdown($post->body) ?>
       </div>
@@ -100,10 +100,10 @@ Parcourir :
                       <div class="jp-duration"></div>
                       <div class="jp-current-time"></div>
                   </div>
-              </div>         
+              </div>
           </div><!-- .jp-audio -->
       </div><!-- .wrapper -->
-               
+
       <p class="author">
         <span title="Posté le <?php echo strftime('%d/%m/%Y', $post->getDateTimeObject('created_at')->getTimestamp()) ?> à <?php echo $post->getDateTimeObject('created_at')->format('H:i') ?>">Contribué par</span> : <a rel="author" href="<?php echo url_for('@homepage?c='.$post->getSfGuardUser()->username) ?>" title="Écouter la playlist de <?php echo $post->getContributorDisplayName() ?>"><?php echo $post->getContributorDisplayName() ?></a><br />
         <a href="" title="Partager ce morceau sur Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href), 'facebook-share-dialog', 'width=626,height=436'); return false;">Partager</a>
@@ -114,12 +114,12 @@ Parcourir :
       </p>
           </div>
 <!-- grid-70 -->
-    
+
       <div class="nav-r grid-5 hide-on-mobile">
         <p>
 <?php if ($post_next): ?>
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">
-            <img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/right4.svg">
+            <img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/right4.svg">
           </a>
 <?php endif; ?>
         </p>

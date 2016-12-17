@@ -1,0 +1,41 @@
+/* Colors */
+body { background-color:green ;color: red;}
+.contributors ::selection, header ::selection,.title ::selection,.grid-90 ::selection {background-color: red;color: green }
+.content-text ::selection {background-color: green ;color: red;}
+article p {color:green ;background-color: red;text-align:center;font-size:13px;font-size:1rem;padding:20px 0px 20px 0px;}
+.title {color: red;background-color:green }
+header a {color: red;background-color:green ;}
+article p a, .author a {color:#555050;background:  red;}
+article p a:hover { color:green ;background:  red; }
+a.all-tracks-l span span,a.all-tracks-l span span span { color: red;background: green ;}
+a:hover.all-tracks-l,.contributors a:hover,a:hover.all-tracks-l span,a:hover.all-tracks-l span span,a:hover.all-tracks-l span span span {background-color: red;color: green ;text-decoration: none;}
+.about a:hover {color: red;text-decoration: underline;background-color: green ;}
+article h1 {padding:20px 0 10px 0;color:green ;background:  red;}
+article h2 {color:#555;background-color: red;}
+.contributors h2 {font-size: 10px;font-size: 1rem;color: red;padding: 10px 0 10px 0;}
+.content-text,article {background-color:  red;}
+input.search,input.submit,input.mailing,input.mailing-ok{background-color: red;color: green ;}
+
+/* Fonts */
+header p, article p, .all-tracks ul,.contributors p,.contributors li {font-family:'Comic Sans MS', sans-serif; color:yellow;}
+article h1, article h2, .title,.contributors h1,title,.contributors h2, input.submit, input.mailing, input.mailing-ok{font-family: 'Comic Sans MS',sans-serif; color: yellow;}
+
+/* Hiding */
+.contributors, header div, p.author, #random { display: none; }
+
+/* Player */
+.jp-jplayer { background-color: yellow; }
+.jp-audio { color: #fff; }
+.jp-audio a { color: #555050; }
+.jp-audio a:hover { color: yellow; }
+.jp-controls a  { color: yellow; font-family: 'Comic Sans MS', sans-serif; background-color: red; }
+.jp-controls { color:yellow; }
+.jp-controls a:hover, .jp-controls a.not { background-color:red; color:yellow; }
+.jp-seek-bar:before { background-color: red; }
+.jp-play-bar { background: yellow; }
+.jp-time-holder { background: #fff; font-family: 'Comic Sans MS', sans-serif; color:#FFF; }
+.jp-current-time { color: yellow; }
+.jp-duration { color: yellow; }
+
+/* Misc */
+.content-text { top: 0; }

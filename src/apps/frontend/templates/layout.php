@@ -8,11 +8,11 @@
     <!-- favicon and other icons -->
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="pinned-icon.png">
-    <meta name="application-name" content="Musique Approximative">
-    <link rel="shortcut icon" type="image/png" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/favicon.png"/>
-    <link rel="apple-touch-icon" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/apple-touch-icon-72x72-precomposed.png"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/apple-touch-icon-72x72-precomposed.png"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/img/apple-touch-icon-114x114-precomposed.png"/>
+    <meta name="application-name" content="<?php echo sfConfig::get('app_title') ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/favicon.png"/>
+    <link rel="apple-touch-icon" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-114x114-precomposed.png" />
 
     <!-- Stylesheets -->
     <!--[if lt IE 9]>
@@ -26,31 +26,35 @@
     <![endif]-->
     <link type="text/css" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/skin/ma2/ma.css" rel="stylesheet">
 
+    <link type="text/css" href="<?php echo sprintf('%s/%s/main.css', $sf_request->getRelativeUrlRoot(), sfConfig::get('app_theme')) ?>" rel="stylesheet">
+
     <?php include_http_metas() ?>
-    <?php include_metas() ?>
+  <?php foreach ($sf_context->getResponse()->getMetas() as $name => $content): ?>
+    <meta property="<?php echo $name ?>" content="<?php echo html_entity_decode(html_entity_decode($content)) ?>" />
+  <?php endforeach ?>
 
     <!-- Opengraph -->
-    <meta property="og:site_name" content="Musique Approximative" />
+    <meta property="og:site_name" content="<?php echo sfConfig::get('app_title') ?>" />
 
     <?php include_title() ?>
 
     <!-- oEmbed -->
-    <link rel="alternate" type="application/json+oembed" href="<?php echo url_for('@post_oembed?format=json&url=http://www.musiqueapproximative.net'.$_SERVER['REQUEST_URI'], true) ?>" />
-    <link rel="alternate" type="text/xml+oembed" href="<?php echo url_for('@post_oembed?format=xml&url=http://www.musiqueapproximative.net'.$_SERVER['REQUEST_URI'], true) ?>" />
+    <link rel="alternate" type="application/json+oembed" href="<?php echo url_for(sprintf('@post_oembed?format=json&url=http://%s%s', sfConfig::get('app_domain'), $_SERVER['REQUEST_URI'], true)) ?>" />
+    <link rel="alternate" type="text/xml+oembed" href="<?php echo url_for(sprintf('@post_oembed?format=xml&url=http://%s%s', sfConfig::get('app_domain'), $_SERVER['REQUEST_URI'], true)) ?>" />
 
     <!-- Formats -->
     <?php include_slot('formats_head') ?>
 
     <!-- RSS -->
     <!--
-    <link type="application/rss+xml" title="Musique Approximative" rel="alternate" href="<?php echo url_for('@post_feed') ?>"/>
+    <link type="application/rss+xml" title="<?php echo sfConfig::get('app_title') ?>" rel="alternate" href="<?php echo url_for('@post_feed') ?>"/>
     -->
-    <link type="application/rss+xml" title="Musique Approximative" rel="alternate" href="http://feeds.feedburner.com/musique-approximative"/>
+    <link type="application/rss+xml" title="<?php echo sfConfig::get('app_title') ?>" rel="alternate" href="http://feeds.feedburner.com/musique-approximative"/>
   </head>
   <body>
     <script type="text/javascript">
     window.script_name = '<?php echo $sf_request->getScriptName() ?>';
-    window.autoplay    = <?php echo $sf_request->getParameter('play', 0) ?>;
+    window.autoplay    = <?php echo $sf_request->getParameter('play', sfConfig::get('app_autoplay', 0)) ?>;
     window.random      = <?php echo $sf_request->getParameter('random', 0) ?>;
 <?php if ($sf_request->getParameter('c')): ?>
     window.c           = '<?php echo $sf_request->getParameter('c') ?>';
@@ -81,12 +85,19 @@
 
             <div class="grid-90 prefix-5 suffix-5 infos">
                 <p class="title hide-on-mobile">
-                    Musique Approximative
+                    <?php echo sfConfig::get('app_title') ?>
                 </p>
                 <p class="title hide-on-desktop">
-                    Musique Approximative
+                    <?php echo sfConfig::get('app_title') ?>
                 </p>
             </div>
+
+<?php if (sfConfig::get('app_theme') == 'quickos'): ?>
+            <div class="grid-90 prefix-5 suffix-5" style="text-align: center;">
+              <img src="<?php echo sprintf('%s/quickos/quickos_recto.png', $sf_request->getRelativeUrlRoot()) ?>" style="width:20%" />
+            </div>
+<?php endif ?>
+
             <section class="contributors">
                 <div class="grid-90 prefix-5 suffix-5">
 

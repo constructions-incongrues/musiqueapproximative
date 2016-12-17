@@ -29,20 +29,20 @@ class postActions extends sfActions
     {
       $title .= sprintf(' | Playlist de %s', $post->getContributorDisplayName());
     }
-    $title = sprintf('%s | Musique Approximative', $title);
+    $title = sprintf('%s | %s', $title, sfConfig::get('app_title'));
     $this->getResponse()->setTitle($title);
 
     // Get number of online posts
     $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
-    $urlTrack = sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename);
+    $urlTrack = rawurlencode(sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename));
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     // TODO : find out how to get fb_app_id value
     // $this->getResponse()->addMeta('fb:app_id', 'musiqueapproximative');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
-    $this->getResponse()->addMeta('og:image', 'http://www.musiqueapproximative.net/images/logo_500.png');
+    $this->getResponse()->addMeta('og:image', sprintf('http://%s/theme/%s/images/logo_500.png', sfConfig::get('app_domain'), sfConfig::get('app_theme')));
     $this->getResponse()->addMeta('og:image:type', 'image/png');
     $this->getResponse()->addMeta('og:image:height', '500');
     $this->getResponse()->addMeta('og:image:width', '500');
@@ -50,18 +50,19 @@ class postActions extends sfActions
     $this->getResponse()->addMeta(
       'og:video',
       sprintf(
-        'http://www.musiqueapproximative.net/swf/mediaplayer-5.9/player.swf?autostart=true&displaytitle=true&file=%s&height=500&width=500&image=%s',
-        urlencode($urlTrack),
-        urlencode('http://www.musiqueapproximative.net/images/logo_500.png')
+        'http://%s/player.swf?autostart=true&file=%s&height=500&width=500&image=%s',
+        sfConfig::get('app_domain'),
+        $urlTrack,
+        sprintf('https://%s/theme/%s/images/logo_500.png', sfConfig::get('app_domain'), sfConfig::get('app_theme'))
       )
     );
     $this->getResponse()->addMeta(
       'og:video:secure_url',
       sprintf(
-        '%s?autostart=true&file=%s&height=500&width=500&image=%s',
-        sfConfig::get('app_urls_secure_player'),
-        urlencode($urlTrack),
-        urlencode('http://www.musiqueapproximative.net/images/logo_500.png')
+        'https://%s/player.swf?autostart=true&file=%s&height=500&width=500&image=%s',
+        sfConfig::get('app_domain'),
+        $urlTrack,
+        sprintf('https://%s/theme/%s/images/logo_500.png', sfConfig::get('app_domain'), sfConfig::get('app_theme'))
       )
     );
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
@@ -135,7 +136,7 @@ class postActions extends sfActions
     if ($this->getRequestParameter('q'))
     {
       $posts = Doctrine_Core::getTable('Post')->search($request->getParameter('q'));
-      $list_title = sprintf('%d résultat(s) pour la recherche "%s" | Musique Approximative', count($posts), $request->getParameter('q'));
+      $list_title = sprintf('%d résultat(s) pour la recherche "%s" | %s', count($posts), $request->getParameter('q'), sfConfig::get('app_title'));
       $this->getResponse()->setTitle($list_title);
     }
     else
@@ -144,7 +145,7 @@ class postActions extends sfActions
       if ($request->hasParameter('c'))
       {
         $list_title = sprintf('%s a posté %d morceau(x) à ce jour', $request->getParameter('c'), count($posts));
-        $this->getResponse()->setTitle(sprintf('La playlist de %s | Musique Approximative', $request->getParameter('c')));
+        $this->getResponse()->setTitle(sprintf('La playlist de %s | %s', $request->getParameter('c'), sfConfig::get('app_title')));
       }
     }
 
@@ -162,8 +163,8 @@ class postActions extends sfActions
     sfContext::getInstance()->getConfiguration()->loadHelpers('Markdown');
     $feed = sfFeedPeer::newInstance('rss201');
     $feed->initialize(array(
-      'title'         => 'Musique Approximative',
-      'link'          => 'http://www.musiqueapproximative.net',
+      'title'         => sfConfig::get('app_title'),
+      'link'          => sfConfig::get('app_url_root'),
       'authorEmail'   => 'bertier@musiqueapproximative.net',
     ));
 
@@ -174,7 +175,7 @@ class postActions extends sfActions
       $publish_timestamp = mktime($strf['tm_hour'], $strf['tm_min'], $strf['tm_sec'], $strf['tm_mon'] + 1, $strf['tm_mday'], $strf['tm_year'] + 1900);
 
       // Canonical URL to post's associated file
-      $track_file_url = htmlspecialchars(sprintf('http://www.musiqueapproximative.net/tracks/%s', rawurlencode($post->track_filename)));
+      $track_file_url = htmlspecialchars(sprintf('%s/tracks/%s', sfConfig::get('app_url_root'), rawurlencode($post->track_filename)));
 
       // Make sure no errors are generated when files do not exist (useful in dev mode)
       if (!is_readable(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename))
@@ -257,7 +258,7 @@ class postActions extends sfActions
       'version'       => 1,
       'type'          => 'rich',
       'provider_name' => 'MusiqueApproximative',
-      'provider_url'  => 'http://www.musiqueapproximative.net',
+      'provider_url'  => sfConfig::get('app_url_root'),
       'height'        => 220,
       'width'         => 510,
       'title'         => sprintf('%s - %s', $post->track_author, $post->track_title),

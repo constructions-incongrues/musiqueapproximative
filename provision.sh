@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Profil ABT
+PROFILE=${1:=vagrant}
+echo "profile=$PROFILE"
+
 # Mise à jour des dépots
 apt-get -qq update
 
@@ -29,18 +33,22 @@ apt-get install -y phpmyadmin
 # Création de la base de données
 mysql --defaults-file=/etc/mysql/debian.cnf -e "drop database if exists net_musiqueapproximative_www"
 mysql --defaults-file=/etc/mysql/debian.cnf -e "create database net_musiqueapproximative_www default charset utf8 collate utf8_general_ci"
-mysql --defaults-file=/etc/mysql/debian.cnf net_musiqueapproximative_www < /vagrant/src/data/fixtures/net_musiqueapproximative_www.dump.sql
+mysql --defaults-file=/etc/mysql/debian.cnf net_musiqueapproximative_www < /vagrant/src/data/fixtures/${PROFILE}.dump.sql
+
+# Création d'un utilisateur admin générique
+/vagrant/src/symfony guard:create-user admin admin
+/vagrant/src/symfony guard:promote admin
 
 # Configuration du projet
 apt-get install -y ant
 cd /vagrant
 ./composer.phar install --prefer-dist --no-progress
-ant configure build -Dprofile=vagrant
+ant configure build -Dprofile=${PROFILE}
 /vagrant/src/symfony cache:clear
 
 # Mise à disposition du projet dans Apache
-ln -sf /vagrant/src/web/* /var/www/
-rm -f /var/www/index.html
+ln -sf /vagrant/src/web/* /var/www/html/
+rm -f /var/www/html/index.html
 
 # Informations
 echo
