@@ -28,6 +28,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--hpet", "on"]
+    v.linked_clone = true
   end
 
   # @see https://github.com/phinze/landrush
