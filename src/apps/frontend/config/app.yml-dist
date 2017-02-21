@@ -8,5 +8,5 @@ all:
   theme: @ma.theme@
   title: @ma.title@
   urls:
-    tracks: http://@ma.domain@/tracks
+    tracks: //@ma.domain@/tracks
     secure_player: https://@ma.domain@/player.swf

@@ -18,7 +18,7 @@
     <!--[if lt IE 9]>
     <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/html5.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/main.css?1" type="text/css">
+    <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/main.css" type="text/css">
     <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/reset.css" type="text/css"><!--[if (gt IE 8) | (IEMobile)]><!-->
     <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/unsemantic-grid-responsive.css" type="text/css"><!--<![endif]-->
     <!--[if (lt IE 9) & (!IEMobile)]>
@@ -118,7 +118,7 @@
                             / <a href="#email-subscription" class="email-subscription-link">Email</a>
                         </p>
                         <div class="mailing-list" id="email-subscription" style="display:none;">
-                            <form method="post" action="http://feedburner.google.com/fb/a/mailverify">
+                            <form method="post" action="//feedburner.google.com/fb/a/mailverify">
                                 <input type="text" class="mailing" name="email" placeholder="Votre adresse email" />
                                 <input type="submit" class="mailing-ok" value="Recevoir les nouveaux morceaux par email">
                             </form>
@@ -146,6 +146,12 @@
                         </h2>
                         <p>
                            <a href="http://www.guillaume-evrard.com/approximix/">ApproxiMix</a> est une application qui permet de mixer (approximativement) musique et image. La musique provient de Musique Approximative, et les visuels sont piochés dans les contenus postés par les utilisateurs du <a href="http://www.musiques-incongrues.net">forum des Musiques Incongrues</a>.
+                        </p>
+                        <h2>
+                            Radio Approximative
+                        </h2>
+                        <p>
+                          <a href="http://radio.musiqueapproximative.net">Radio Approximative</a> est un projet musical et informatique où chaque émission est générée aléatoirement à partir du corpus de morceaux disponibles et de génériques et jingles créés par les contributeurs du site.
                         </p>
                         <h2>
                             Crédits

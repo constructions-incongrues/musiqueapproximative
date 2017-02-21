@@ -2,11 +2,11 @@
 Code by Constructions Incongrues www.constructions-incongrues.net/.p
 Code licensed under the  GNU AGPLv3:
 http://www.gnu.org/licenses/gpl.txt
-Version: 1.0 
+Version: 1.0
 */
 
-@import url(http://fonts.googleapis.com/css?family=Arvo);
-@import url(http://fonts.googleapis.com/css?family=Rambla);
+@import url(//fonts.googleapis.com/css?family=Arvo);
+@import url(//fonts.googleapis.com/css?family=Rambla);
 
 html { font-size:62.5%;}
 body { background-color:#000;color:#FFF;}
