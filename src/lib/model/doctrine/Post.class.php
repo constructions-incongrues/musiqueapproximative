@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\Process\Process;
+
 /**
  * Post
  *
@@ -124,12 +126,22 @@ class Post extends BasePost
     return json_encode($post);
   }
 
+  /**
+   * Deletes frontend template cache.
+   *
+   */
   public function postSave($event)
   {
-      // @see http://symfony.com/legacy/doc/book/1_2/en/12-caching#chapter_12_sub_clearing_cache_across_applications_new_in_symfony_1_1
-      $frontend_cache_dir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'frontend'.DIRECTORY_SEPARATOR.sfConfig::get('sf_environment').DIRECTORY_SEPARATOR.'template';
-      $cache = new sfFileCache(array('cache_dir' => $frontend_cache_dir)); // Use the same settings as the ones defined in the frontend factories.yml
-      $cache->removePattern('**');
-  }
+    // Frontend template cache directory
+    $frontendCacheDir = sprintf(
+      '%s/frontend/%s/template',
+      sfConfig::get('sf_cache_dir'),
+      sfConfig::get('sf_environment')
+    );
 
+    // Execute process asynchronously
+    // @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
+    $process = new Process(sprintf('rm -rf %s/*', $frontendCacheDir));
+    $process->start();
+  }
 }
