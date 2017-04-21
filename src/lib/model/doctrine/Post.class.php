@@ -142,26 +142,29 @@
 
 		  // Generate track picture from logo
 		  $webDir = sfConfig::get('sf_web_dir');
-		  $process = new Process(
-			  sprintf(
-			  	'bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
-				  $webDir,
-				    $webDir,
-				  $event->getInvoker()->id,
-				  $event->getInvoker()->id
-			  )
-		  );
-		  $process->run();
-		  $process = new Process(
-			  sprintf(
-				  'convert -type Grayscale %s/avatars/%s.png %s/avatars/%s.png',
-				  $webDir,
-				  $event->getInvoker()->id,
-				  $webDir,
-				  $event->getInvoker()->id
-			  )
-		  );
-		  $process->run();
+		  $postId = $event->getInvoker()->id;
+		  if (!file_exists(sprintf('%s/avatars/%s.png'), $webDir, $postId)) {
+			  $process = new Process(
+				  sprintf(
+					  'bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
+					  $webDir,
+					  $webDir,
+					  $postId,
+					  $postId
+				  )
+			  );
+			  $process->run();
+			  $process = new Process(
+				  sprintf(
+					  'convert -type Grayscale %s/avatars/%s.png %s/avatars/%s.png',
+					  $webDir,
+					  $postId,
+					  $webDir,
+					  $postId
+				  )
+			  );
+			  $process->run();
+		  }
 
 		  // Delete frontend cache *asynchronously*
 	      // @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
