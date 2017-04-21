@@ -42,7 +42,7 @@
 	    unset($post['slug']);
 
 	    // Body
-	    $context->getConfiguration()->loadHelpers('Markdown');
+	    $context->getConfiguration()->loadHelpers(['Markdown']);
 	    $bodyMarkdown = $post['body'];
 	    $bodyHtml = Markdown($bodyMarkdown);
 	    unset($post['body']);
@@ -153,6 +153,7 @@
 					  $postId
 				  )
 			  );
+			  $process->setTimeout(10);
 			  $process->run();
 			  $process = new Process(
 				  sprintf(
@@ -163,7 +164,7 @@
 					  $postId
 				  )
 			  );
-			  $process->run();
+			  $process->start();
 		  }
 
 		  // Delete frontend cache *asynchronously*
