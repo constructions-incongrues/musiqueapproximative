@@ -17,6 +17,10 @@ apt-get -y install libapache2-mod-php5 php5-cli
 a2enmod rewrite
 service apache2 restart
 
+# Installation des outils de glitch
+apt-get -y install python-pip python-pil imagemagick
+pip install bndr
+
 # Installation de MySQL
 echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections

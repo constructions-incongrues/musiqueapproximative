@@ -38,11 +38,14 @@ class postActions extends sfActions
     // Define opengraph metadata (see http://ogp.me/)
     $urlTrack = rawurlencode(sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename));
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
-    // TODO : find out how to get fb_app_id value
-    // $this->getResponse()->addMeta('fb:app_id', 'musiqueapproximative');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
-    $this->getResponse()->addMeta('og:image', sprintf('http://%s/theme/%s/images/logo_500.png', sfConfig::get('app_domain'), sfConfig::get('app_theme')));
+    if (sfConfig::get('app_theme') == 'musiqueapproximative') {
+    	$urlImg = sprintf( '%s/avatars/%s.png', $request->getUriPrefix(), $post->id);
+    } else {
+		$urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get( 'app_theme'));
+    }
+    $this->getResponse()->addMeta('og:image', $urlImg);
     $this->getResponse()->addMeta('og:image:type', 'image/png');
     $this->getResponse()->addMeta('og:image:height', '500');
     $this->getResponse()->addMeta('og:image:width', '500');
@@ -53,7 +56,7 @@ class postActions extends sfActions
         'http://%s/player.swf?autostart=true&file=%s&height=500&width=500&image=%s',
         sfConfig::get('app_domain'),
         $urlTrack,
-        sprintf('https://%s/theme/%s/images/logo_500.png', sfConfig::get('app_domain'), sfConfig::get('app_theme'))
+        $urlImg
       )
     );
     $this->getResponse()->addMeta(
@@ -62,7 +65,7 @@ class postActions extends sfActions
         'https://%s/player.swf?autostart=true&file=%s&height=500&width=500&image=%s',
         sfConfig::get('app_domain'),
         $urlTrack,
-        sprintf('https://%s/theme/%s/images/logo_500.png', sfConfig::get('app_domain'), sfConfig::get('app_theme'))
+        $urlImg
       )
     );
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');

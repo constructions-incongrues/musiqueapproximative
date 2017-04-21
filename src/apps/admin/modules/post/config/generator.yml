@@ -41,12 +41,12 @@ generator:
         class: false
       form: 
         display: 
-          Track: [body, _body_preview, track_author, track_title, track_filename]
+          Track: [body, _track_picture, track_author, track_title, track_filename]
           Support: [buy_url]
           Publication: [publish_on, is_unique, is_online]
       edit:
         display: 
-          Track: [body, _body_preview, track_author, track_title, track_filename]
+          Track: [body, _track_picture, track_author, track_title, track_filename]
           Support: [buy_url]
           Publication: [publish_on, is_online]
       new:

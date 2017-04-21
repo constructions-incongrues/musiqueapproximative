@@ -1,4 +1,3 @@
-
 # abt
 /etc/prod
 /src/apps/frontend/config/app.yml
@@ -16,7 +15,8 @@
 /src/data/sql
 /src/log
 /src/web/tracks
+/src/web/avatars/*.png
 
 # vagrant
 /.vagrant
- 
+
