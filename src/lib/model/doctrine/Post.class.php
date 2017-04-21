@@ -122,6 +122,9 @@
 	      true
 	    );
 
+	    // Avatar
+		$post['links']['avatar'] = sprintf('%s/avatars/%s.png', $request->getUriPrefix(), $post['id']);
+
 	    // Encode data to JSON
 	    return json_encode($post);
 	  }
