@@ -41,19 +41,19 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
     if (sfConfig::get('app_theme') == 'musiqueapproximative') {
-    	$urlImg = sprintf( '%s/avatars/%s.png', $request->getUriPrefix(), $post->id);
+      $urlImg = sprintf('%s/avatars/%s.png', $request->getUriPrefix(), $post->id);
     } else {
-		$urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get( 'app_theme'));
+      $urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
     }
     $this->getResponse()->addMeta('og:image', $urlImg);
     $this->getResponse()->addMeta('og:image:type', 'image/png');
-    $this->getResponse()->addMeta('og:image:height', '500');
-    $this->getResponse()->addMeta('og:image:width', '500');
+    $this->getResponse()->addMeta('og:image:height', '476');
+    $this->getResponse()->addMeta('og:image:width', '476');
     $this->getResponse()->addMeta('og:type', 'video');
     $this->getResponse()->addMeta(
       'og:video',
       sprintf(
-        'http://%s/player.swf?autostart=true&file=%s&height=500&width=500&image=%s',
+        'http://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
         sfConfig::get('app_domain'),
         $urlTrack,
         $urlImg
@@ -62,28 +62,26 @@ class postActions extends sfActions
     $this->getResponse()->addMeta(
       'og:video:secure_url',
       sprintf(
-        'https://%s/player.swf?autostart=true&file=%s&height=500&width=500&image=%s',
+        'https://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
         sfConfig::get('app_domain'),
         $urlTrack,
         $urlImg
       )
     );
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
-    $this->getResponse()->addMeta('og:video:height', '500');
-    $this->getResponse()->addMeta('og:video:width', '500');
+    $this->getResponse()->addMeta('og:video:height', '476');
+    $this->getResponse()->addMeta('og:video:width', '476');
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
 
     // Gather common query parameters
     $common_parameters = array(
       'random' => $request->getParameter('random', 0),
     );
-    if ($request->getParameter('c'))
-    {
+    if ($request->getParameter('c')) {
       $common_parameters['c'] = $request->getParameter('c');
     }
     $common_query_string = '';
-    foreach ($common_parameters as $name => $value)
-    {
+    foreach ($common_parameters as $name => $value) {
       $common_query_string .= sprintf('%s=%s&', $name, $value);
     }
     $common_query_string = trim($common_query_string, '&');
@@ -213,12 +211,12 @@ class postActions extends sfActions
 
   public function executeRandom(sfWebRequest $request)
   {
-  	$post = Doctrine_Core::getTable('Post')->getRandomPost($request->getParameterHolder()->getAll());
+    $post = Doctrine_Core::getTable('Post')->getRandomPost($request->getParameterHolder()->getAll());
 
-  	sfConfig::set('sf_web_debug', false);
+    sfConfig::set('sf_web_debug', false);
 
-  	// Pass data to view
-  	$this->post = $post;
+    // Pass data to view
+    $this->post = $post;
   }
 
   /**
@@ -229,22 +227,22 @@ class postActions extends sfActions
    */
   public function executeNext(sfWebRequest $request)
   {
-  	$post = Doctrine_Core::getTable('Post')->getNextPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+    $post = Doctrine_Core::getTable('Post')->getNextPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
 
-  	sfConfig::set('sf_web_debug', false);
+    sfConfig::set('sf_web_debug', false);
 
-  	// Pass data to view
-  	$this->post = $post;
+    // Pass data to view
+    $this->post = $post;
   }
 
   public function executePrev(sfWebRequest $request)
   {
-  	$post = Doctrine_Core::getTable('Post')->getPreviousPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+    $post = Doctrine_Core::getTable('Post')->getPreviousPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
 
-  	sfConfig::set('sf_web_debug', false);
+    sfConfig::set('sf_web_debug', false);
 
-  	// Pass data to view
-  	$this->post = $post;
+    // Pass data to view
+    $this->post = $post;
   }
 
   public function executeOembed(sfWebRequest $request)
