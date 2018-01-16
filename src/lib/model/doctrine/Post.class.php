@@ -160,7 +160,7 @@
           $process->run();
 
           // 10% chance to get a colored avatar
-          if (in_array(random_int(0, 9), range(0, 9))) {
+          if (in_array(mt_rand(0, 9), range(0, 9))) {
             $process = new Process(
               sprintf(
                 'convert -type Grayscale %s/avatars/%s.png %s/avatars/%s.png',
