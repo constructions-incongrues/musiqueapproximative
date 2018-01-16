@@ -146,7 +146,7 @@
         // Generate track picture from logo
         $webDir = sfConfig::get('sf_web_dir');
         $postId = $event->getInvoker()->id;
-        if (!file_exists(sprintf('%s/avatars/%s.png'), $webDir, $postId)) {
+        if (!file_exists(sprintf('%s/avatars/%s.png', $webDir, $postId))) {
           $process = new Process(
             sprintf(
               'timeout --kill-after=60s 30s bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
