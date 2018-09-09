@@ -149,14 +149,14 @@
         if (!file_exists(sprintf('%s/avatars/%s.png', $webDir, $postId))) {
           $process = new Process(
             sprintf(
-              'timeout --kill-after=60s 30s bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
+              'timeout --kill-after=60s --signal=SIGKILL 30s bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
               $webDir,
               $webDir,
               $postId,
               $postId
             )
           );
-          $process->setTimeout(10);
+          $process->setTimeout(120);
           $process->run();
 
           // 10% chance to get a colored avatar
