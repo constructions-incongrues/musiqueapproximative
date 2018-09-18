@@ -13,17 +13,17 @@
 git clone git@github.com:constructions-incongrues/net.musiqueapproximative.www.git
 ```
 
+### Ajouter au fichier `/etc/hosts`
+
+```hosts
+127.0.0.1   www.musiqueapproximative.test adminer.musiqueapproximative.test
+```
+
 ### Démarrer l'application
 
 ```sh
 cd net.musiqueapproximative.www
 docker-compose up
-```
-
-### Ajouter au fichier `/etc/hosts`
-
-```hosts
-127.0.0.1   www.musiqueapproximative.test adminer.musiqueapproximative.test
 ```
 
 ### C'est prêt
