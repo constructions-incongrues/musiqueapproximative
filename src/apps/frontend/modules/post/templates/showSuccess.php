@@ -37,7 +37,7 @@ Parcourir :
     <div class="nav-l grid-5 hide-on-mobile">
       <p>
 <?php if ($post_previous): ?>
-        <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/left4.svg"></a>
+        <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
  <?php endif; ?>
       </p>
     </div>
@@ -119,7 +119,7 @@ Parcourir :
         <p>
 <?php if ($post_next): ?>
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">
-            <img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/right4.svg">
+            <img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/right4.svg">
           </a>
 <?php endif; ?>
         </p>
