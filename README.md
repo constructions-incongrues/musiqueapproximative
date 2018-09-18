@@ -33,3 +33,21 @@ docker-compose up
 - Admin (prod) : <http://www.musiqueapproximative.test/admin_prod.php>
 - Admin (dev) : <http://www.musiqueapproximative.test/admin_dev.php>
 - Gestion de la base de données <http://adminer.musiqueapproximative.test> (identifiants de connexion : root / root)
+
+## Publication d'une nouvelle version
+
+### Création de la version dans le dépôt de sources
+
+```sh
+VERSION=<VERSION>
+git hf release start ${VERSION}
+git hf release finish ${VERSION}
+```
+
+### Déploiement vers le serveur de production
+
+```sh
+VERSION=<VERSION>
+git checkout ${VERSION}
+ant configure build deploy -Dprofile=pastishosting
+```
