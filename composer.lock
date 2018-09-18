@@ -4,16 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2b5fe24d1de1dc88b52d095c18b617ac",
-    "content-hash": "37b5364fe55861690d334de7b091fa17",
+    "content-hash": "62989b1fc20fc191732ff3584cc3e041",
     "packages": [
         {
             "name": "constructions-incongrues/ananas-build-toolkit",
-            "version": "0.34.5",
+            "version": "0.34.6",
             "source": {
                 "type": "git",
-                "url": "git@github.com:constructions-incongrues/ananas-build-toolkit.git",
-                "reference": "b2115f4441ed97c7be4290757fb6c67b91a61684"
+                "url": "https://github.com/constructions-incongrues/ananas-build-toolkit.git",
+                "reference": "0ee984b9958c677b26aa15208fd6ca62fb7d28af"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -31,7 +30,7 @@
                 "issues": "https://github.com/constructions-incongrues/ananas-build-toolkit/issues",
                 "source": "https://github.com/constructions-incongrues/ananas-build-toolkit"
             },
-            "time": "2016-10-06 11:31:11"
+            "time": "2017-03-06T15:25:45+00:00"
         },
         {
             "name": "lexpress/doctrine1",
@@ -77,7 +76,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2016-06-17 09:49:47"
+            "time": "2016-06-17T09:49:47+00:00"
         },
         {
             "name": "lexpress/symfony1",
@@ -123,7 +122,7 @@
                 "MIT"
             ],
             "description": "Fork of symfony 1.4 with dic, form enhancements, latest swiftmailer and better performance",
-            "time": "2016-10-06 07:44:16"
+            "time": "2016-10-06T07:44:16+00:00"
         },
         {
             "name": "pear-pear.php.net/Archive_Tar",
@@ -181,7 +180,7 @@
             "license": [
                 "BSD-2-Clause"
             ],
-            "description": "This is a PHP implementation of \"getopt\" supporting both\nshort and long options."
+            "description": "This is a PHP implementation of &quot;getopt&quot; supporting both\nshort and long options."
         },
         {
             "name": "pear-pear.php.net/PEAR",
@@ -418,7 +417,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-12-29 10:02:40"
+            "time": "2016-12-29T10:02:40+00:00"
         },
         {
             "name": "symfony/process",
@@ -467,7 +466,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16 14:07:22"
+            "time": "2017-02-16T14:07:22+00:00"
         }
     ],
     "packages-dev": [],

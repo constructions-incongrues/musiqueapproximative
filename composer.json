@@ -2,7 +2,7 @@
     "repositories": [
         {
             "type": "git",
-            "url": "git@github.com:constructions-incongrues/ananas-build-toolkit.git"
+            "url": "https://github.com/constructions-incongrues/ananas-build-toolkit.git"
         },
         {
             "type": "pear",
