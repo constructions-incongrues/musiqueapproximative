@@ -3,10 +3,10 @@
 
 # default values
 all:
-  autoplay: @ma.autoplay@
-  domain: @ma.domain@
-  theme: @ma.theme@
-  title: @ma.title@
+  autoplay: ${APP_AUTOPLAY}
+  domain: ${APP_DOMAIN}
+  theme: ${APP_THEME}
+  title: ${APP_TITLE}
   urls:
-    tracks: //@ma.domain@/tracks
-    secure_player: https://@ma.domain@/player.swf
+    tracks: //${APP_DOMAIN}/tracks
+    secure_player: https://${APP_DOMAIN}/player.swf

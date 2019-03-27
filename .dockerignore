@@ -1,3 +1,2 @@
 .git
-
-# Ajouter les éventuels dossiers var, cache, log, etc
+/var

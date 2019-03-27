@@ -1,22 +1,12 @@
-# abt
-/etc/prod
-/src/apps/frontend/config/app.yml
-/src/config/databases.yml
-
-# composer
-/vendor
-
-# ide
 *.bak
 *.orig
-
-# symfony
+/src/.env
+/src/apps/frontend/config/app.yml
 /src/cache
+/src/config/databases.yml
 /src/data/sql
 /src/log
-/src/web/tracks
+/src/vendor
 /src/web/avatars/*.png
-
-# vagrant
-/.vagrant
-
+/src/web/tracks
+/var

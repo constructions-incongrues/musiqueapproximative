@@ -1,25 +1,32 @@
-# Composer
-FROM composer:1 AS composer
+# Base images
+FROM composer:1 as composer
+FROM php:5.6.40-cli-alpine
 
-# Any *-apache image listed on this page : https://store.docker.com/images/php
-FROM php:5.6-fpm-alpine
+# Set working directory
+WORKDIR /usr/local/src
 
-# Copy composer binary
-COPY --from=composer /usr/bin/composer /usr/bin/composer
+# Set default timezone
+RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime && \
+    echo "date.timezone = Europe/Paris" > /usr/local/etc/php/php.ini
 
-# Setup prestissimo
-RUN composer global require hirak/prestissimo
+# Install Composer
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
-# Define default working directory
-WORKDIR /usr/local/src/app
+# Installation et configuration de fixuid
+# https://github.com/boxboat/fixuid
+RUN addgroup --gid 1000 musiqueapproximative && \
+    adduser --uid 1000 --ingroup musiqueapproximative --home /home/musiqueapproximative --shell /bin/sh --disabled-password --gecos "" musiqueapproximative && \
+    curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.4-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf - && \
+    chown root:root /usr/local/bin/fixuid && \
+    chmod 4755 /usr/local/bin/fixuid && \
+    mkdir -p /etc/fixuid && \
+    printf "user: musiqueapproximative\ngroup: musiqueapproximative\n" > /etc/fixuid/config.yml
 
-# Install required packages and PHP extensions
-RUN apk --no-cache --update add apache-ant bash make curl git zip \
-    && docker-php-ext-install -j$(nproc) opcache pdo_mysql
+# Install additional packages and PHP extensions
+RUN apk --update --no-cache add bash curl gettext make zip && \
+    docker-php-ext-install -j$(nproc) opcache pdo_mysql
 
 # Copy application sources to container
-COPY ./ /usr/local/src/app
-COPY etc/docker/php.ini /usr/local/etc/php/
+COPY --chown=musiqueapproximative:musiqueapproximative ./src /usr/local/src
 
-# Build application
-RUN make install
+USER musiqueapproximative:musiqueapproximative

@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__.'/../../vendor/autoload.php');
-require_once dirname(__FILE__).'/../../vendor/lexpress/symfony1/lib/autoload/sfCoreAutoload.class.php';
+require_once(__DIR__.'/../vendor/autoload.php');
+require_once dirname(__FILE__).'/../vendor/lexpress/symfony1/lib/autoload/sfCoreAutoload.class.php';
 sfCoreAutoload::register();
 
 class ProjectConfiguration extends sfProjectConfiguration
@@ -16,10 +16,5 @@ class ProjectConfiguration extends sfProjectConfiguration
 
         // For legacy PEAR packages
         set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/../lib/vendor');
-
-        if (strpos(__DIR__, 'vagrant') !== false) {
-            $this->setCacheDir('/tmp/symfony_cache');
-            $this->setLogDir('/tmp/symfony_logs');
-        }
     }
 }
