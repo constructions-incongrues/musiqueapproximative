@@ -8,5 +8,8 @@
 /src/log
 /src/vendor
 /src/web/avatars/*.png
+/src/web/avatars/*.mp4
 /src/web/tracks
 /var
+/src/web/avatars/_files/
+/src/web/avatars/_sfpg_data/*

@@ -19,8 +19,6 @@
 <br />
 <?php end_slot() ?>
 
-<h2><a href="https://www.musiqueapproximative.net/login">Se connecter</a></h2>
-
 <section class="all-tracks">
     <div class="grid-100">
         <p class="formats">

@@ -106,7 +106,7 @@
                             À propos
                         </h1>
                         <p>
-                            C'est l'exutoire anarchique d'une bande de mélomanes fêlés. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.
+                            C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.
                         </p>
                         <h2>
                             Consommer de la musique autrement :
@@ -169,6 +169,8 @@
                              Aidez-nous <3
                          </h2>
                          <p>Le fonctionnement de ce site demande du temps et de l'argent. Vous pouvez nous aider en nous faisant un <a href="https://www.helloasso.com/associations/constructions-incongrues">don</a>!</p>
+                        <h2>Contribution</h2>
+                        <p><a href="https://www.musiqueapproximative.net/login">Se connecter</a></p>
                         <?php include_slot('formats_footer') ?>
                     </div>
                     <div class="grid-50 pull-50 contributors_ul">
