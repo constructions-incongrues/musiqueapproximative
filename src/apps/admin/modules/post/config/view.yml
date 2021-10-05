@@ -1,2 +1,2 @@
 all:
-  javascripts: [admin/behaviors.js?v=1]
+  javascripts: [admin/behaviors.js?v=2]
