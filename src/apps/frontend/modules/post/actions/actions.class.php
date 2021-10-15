@@ -41,7 +41,7 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
     if (sfConfig::get('app_theme') == 'musiqueapproximative') {
-      $urlImg = sprintf('%s/avatars/%s.png', $request->getUriPrefix(), $post->id);
+      $urlImg = sprintf('%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
     } else {
       $urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
     }
