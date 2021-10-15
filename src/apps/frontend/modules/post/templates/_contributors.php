@@ -1,5 +1,4 @@
-<h1>Les <?php echo count($contributors) ?> contributeurs</h1>
-<p>Cliquer sur le nom d'un contributeur pour écouter sa playlist</p>
+<h1>Les <?php echo count($contributors) ?> mélomanes fêlé⋅e⋅s</h1>
 
 <div class="grid-25">
 	<ul>

@@ -109,23 +109,16 @@
                             C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.
                         </p>
                         <h2>
-                            Consommer de la musique autrement :
-                        </h2>
-                        <p>
-                            <a href="http://feeds.feedburner.com/musique-approximative">RSS</a>
-                            / <a href="#email-subscription" class="email-subscription-link">Email</a>
-                        </p>
-                        <div class="mailing-list" id="email-subscription" style="display:none;">
-                            <form method="post" action="//feedburner.google.com/fb/a/mailverify">
-                                <input type="text" class="mailing" name="email" placeholder="Votre adresse email" />
-                                <input type="submit" class="mailing-ok" value="Recevoir les nouveaux morceaux par email">
-                            </form>
-                        </div>
-                        <h2>
                             Contact
                         </h2>
                         <p>
                             <a href="mailto:bertier@musiqueapproximative.net">bertier@musiqueapproximative.net</a>
+                        </p>
+                        <h2>
+                            Abonnement
+                        </h2>
+                        <p>
+                            <a href="http://feeds.feedburner.com/musique-approximative">RSS</a>
                         </p>
                         <h2>
                             Raccourcis
@@ -139,12 +132,6 @@
                             <li>r : aléatoire</li>
                             <li>s : recherche</li>
                         </ul>
-                        <h2>
-                            Approximix
-                        </h2>
-                        <p>
-                           <a href="http://www.guillaume-evrard.com/approximix/">ApproxiMix</a> est une application qui permet de mixer (approximativement) musique et image. La musique provient de Musique Approximative, et les visuels sont piochés dans les contenus postés par les utilisateurs du <a href="http://www.musiques-incongrues.net">forum des Musiques Incongrues</a>.
-                        </p>
                         <h2>
                             Radio Approximative
                         </h2>
@@ -160,13 +147,10 @@
                         <p>
                             <br />Le <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/images/logo.png">logo</a> a été créé par <a href="http://iris.ledrome.com/">Iris Veverka</a>.
                         </p>
-                        <p>
-                          Les flèches ont été créées par <a href="http://www.juangarces.net/">Juan Garces</a> pour <a href="http://thenounproject.com/">The Noun Project</a>.
-                        </p>
-                         <h2>
-                             Aidez-nous <3
-                         </h2>
-                         <p>Le fonctionnement de ce site demande du temps et de l'argent. Vous pouvez nous aider en nous faisant un <a href="https://www.helloasso.com/associations/constructions-incongrues">don</a>!</p>
+                        <h2>
+                            Aidez-nous !
+                        </h2>
+                        <p>Le fonctionnement de ce site demande du temps et de l'argent. Vous pouvez nous aider en nous faisant un <a href="https://www.helloasso.com/associations/constructions-incongrues">don</a>!</p>
                         <h2>Contribution</h2>
                         <p><a href="https://www.musiqueapproximative.net/login">Se connecter</a></p>
                         <?php include_slot('formats_footer') ?>
