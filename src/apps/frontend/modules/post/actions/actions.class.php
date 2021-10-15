@@ -167,6 +167,8 @@ class postActions extends sfActions
       'title'         => sfConfig::get('app_title'),
       'link'          => sfConfig::get('app_url_root'),
       'authorEmail'   => 'bertier@musiqueapproximative.net',
+      'description'   => "C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.",
+      'language'      => 'fr  '
     ));
 
     $posts = Doctrine_Core::getTable('Post')->getOnlinePosts($request->getParameter('contributor'), $request->getParameter('count', 50));
@@ -192,10 +194,10 @@ class postActions extends sfActions
       $item->initialize(array(
         'title'       => sprintf('%s - %s', $post->track_author, $post->track_title),
         'link'        => '@post_show?slug='.$post->slug,
-        'authorName'  => $post->getSfGuardUser()->username,
+        'authorName'  => $post->getContributorDisplayName(),
         'pubDate'     => $publish_timestamp,
         'uniqueId'    => $post->slug,
-        'description' => Markdown($post->body)
+        'description' => sprintf("%s<p><small>Contribué par %s</small></p>", Markdown($post->body), $post->getContributorDisplayName())
       ));
       $enclosure = new sfFeedEnclosure();
       $enclosure->initialize(array(
