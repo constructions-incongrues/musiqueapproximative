@@ -168,7 +168,7 @@ class postActions extends sfActions
       'link'          => sfConfig::get('app_url_root'),
       'authorEmail'   => 'bertier@musiqueapproximative.net',
       'description'   => "C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.",
-      'language'      => 'fr  '
+      'language'      => 'fr'
     ));
 
     $posts = Doctrine_Core::getTable('Post')->getOnlinePosts($request->getParameter('contributor'), $request->getParameter('count', 50));
