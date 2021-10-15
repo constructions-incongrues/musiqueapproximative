@@ -157,7 +157,7 @@ class Post extends BasePost
         )
       );
       $process->setTimeout(10);
-      $process->run();
+      // $process->run();
 
       // 10% chance to get a colored avatar
       if (in_array(random_int(0, 9), range(0, 9))) {
@@ -170,7 +170,7 @@ class Post extends BasePost
             $postId
           )
         );
-        $process->start();
+        // $process->start();
       }
     }
 
