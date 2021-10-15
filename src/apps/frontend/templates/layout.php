@@ -113,8 +113,6 @@
                         </h2>
                         <p>
                             <a href="http://feeds.feedburner.com/musique-approximative">RSS</a>
-                            / <a href="https://www.facebook.com/musiqueapproximative">Facebook</a>
-                            / <a href="http://twitter.com/approximazik">Twitter</a>
                             / <a href="#email-subscription" class="email-subscription-link">Email</a>
                         </p>
                         <div class="mailing-list" id="email-subscription" style="display:none;">
