@@ -1,16 +1,7 @@
 {
-    "repositories": [
-        {
-            "type": "pear",
-            "url": "https://pear.php.net"
-        }
-    ],
     "require": {
         "lexpress/symfony1": "1.5.*",
         "lexpress/doctrine1": "1.3.*",
-        "pear-pear.php.net/Validate": " ^0.6.2",
-        "pear-pear.php.net/XML_Parser": "^1.2.7",
-        "pear-pear.php.net/XML_Tree": "^1.1.0",
         "symfony/process": "^3.2"
     }
 }

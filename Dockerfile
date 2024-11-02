@@ -1,6 +1,6 @@
 # Base images
 FROM composer:1 as composer
-FROM php:5.6.40-cli-alpine
+FROM php:7.4.33
 
 # Set working directory
 WORKDIR /usr/local/src
@@ -23,8 +23,7 @@ RUN addgroup --gid 1000 musiqueapproximative && \
     printf "user: musiqueapproximative\ngroup: musiqueapproximative\n" > /etc/fixuid/config.yml
 
 # Install additional packages and PHP extensions
-RUN apk --update --no-cache add bash curl gettext make zip && \
-    docker-php-ext-install -j$(nproc) opcache pdo_mysql
+RUN apt-get update && apt-get install -y bash curl gettext git make zip && docker-php-ext-install -j$(nproc) opcache pdo_mysql
 
 # Copy application sources to container
 COPY --chown=musiqueapproximative:musiqueapproximative ./src /usr/local/src
