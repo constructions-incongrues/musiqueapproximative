@@ -1,7 +1,10 @@
 {
     "require": {
-        "lexpress/symfony1": "1.5.*",
         "lexpress/doctrine1": "1.3.*",
-        "symfony/process": "^3.2"
+        "lexpress/symfony1": "1.5.*",
+        "nyholm/psr7": "^1.8",
+        "php": "^7.4",
+        "symfony/process": "^3.2",
+        "constructionsincongrues/asset-gatherer": "^0.3.0"
     }
 }

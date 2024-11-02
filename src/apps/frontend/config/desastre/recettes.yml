@@ -1,0 +1,12 @@
+demo:
+  javascripts:
+    directories: [demo/javascripts]
+    extensions: [js]
+  stylesheets:
+    directories: [demo/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      module: post
+      action: show
+      desastre: demo 

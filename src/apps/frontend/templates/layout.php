@@ -50,6 +50,9 @@
     <link type="application/rss+xml" title="<?php echo sfConfig::get('app_title') ?>" rel="alternate" href="<?php echo url_for('@post_feed') ?>"/>
     -->
     <link type="application/rss+xml" title="<?php echo sfConfig::get('app_title') ?>" rel="alternate" href="http://feeds.feedburner.com/musique-approximative"/>
+
+    <!-- Désastres -->
+    <?php include_stylesheets() ?>
   </head>
   <body>
     <script type="text/javascript">
@@ -165,6 +168,8 @@
     <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/jquery.js" type="text/javascript"></script>
     <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/jquery.hotkeys.js" type="text/javascript"></script>
     <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/jquery.jplayer.min.js" type="text/javascript"></script>
+    <!-- Désastres -->
+    <?php include_javascripts(); ?>
     <script type="text/javascript">
 //<![CDATA[
         $(document).ready(function(){

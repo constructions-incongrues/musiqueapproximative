@@ -51,3 +51,9 @@ VERSION=<VERSION>
 git checkout ${VERSION}
 ant configure build deploy -Dprofile=pastishosting
 ```
+
+## Recettes pour un désastre
+
+Les recettes sont configurées dans le fichier `src/apps/frontend/config/desastre/recettes.yml`.
+
+Le contenu des recettes se trouve dans le dossier `src/web/desastre/recettes`.
