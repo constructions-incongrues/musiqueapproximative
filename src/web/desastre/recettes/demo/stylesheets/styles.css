@@ -1,10 +1,10 @@
 @keyframes rotate3D {
-    0% { transform: perspective(400px) rotateY(0); }
-    100% { transform: perspective(400px) rotateY(360deg); }
+    0% { transform: perspective(400px) rotateY(0); color: fuchsia;}
+    100% { transform: perspective(400px) rotateY(360deg); color: red; background-color: black;}
 }
 
 article h1, article h2 {
-    background-color: fuchsia;
+    background-color: greenyellow;
     text-transform: uppercase;
     animation: rotate3D 2.6s linear infinite;
 }

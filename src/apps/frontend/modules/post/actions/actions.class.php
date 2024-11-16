@@ -24,7 +24,7 @@ class postActions extends sfActions
       $request->getMethod(), 
       $request->getUri(), 
     );
-    $psrRequest = $psrRequest->withQueryParams(array_merge($query, $request->getParameterHolder()->getAll()));
+    $psrRequest = $psrRequest->withQueryParams(array_merge($query, $request->getParameterHolder()->getAll() + $query));
 
     $gatherer->gatherAssetsForRequest($psrRequest);
     $disasterIngredients = array_pop($gatherer->getAssets());

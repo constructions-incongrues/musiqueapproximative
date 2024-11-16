@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b549b00e1dd5082d540bbac9e9040a0",
+    "content-hash": "47c4cb22c006bf8081c54aaea000cb2b",
     "packages": [
         {
             "name": "constructionsincongrues/asset-gatherer",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/constructions-incongrues/asset-gatherer.git",
-                "reference": "139a0c924ba185f17ddd6b73a3a8e24dac6ce628"
+                "reference": "4d5af108bdf7022c373b7f96400a842cd782a3a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/constructions-incongrues/asset-gatherer/zipball/139a0c924ba185f17ddd6b73a3a8e24dac6ce628",
-                "reference": "139a0c924ba185f17ddd6b73a3a8e24dac6ce628",
+                "url": "https://api.github.com/repos/constructions-incongrues/asset-gatherer/zipball/4d5af108bdf7022c373b7f96400a842cd782a3a7",
+                "reference": "4d5af108bdf7022c373b7f96400a842cd782a3a7",
                 "shasum": ""
             },
             "require": {
@@ -48,9 +48,9 @@
             "description": "A PHP package to gather assets based on HTTP request rules and configuration in YAML.",
             "support": {
                 "issues": "https://github.com/constructions-incongrues/asset-gatherer/issues",
-                "source": "https://github.com/constructions-incongrues/asset-gatherer/tree/v0.3.0"
+                "source": "https://github.com/constructions-incongrues/asset-gatherer/tree/v0.4.0"
             },
-            "time": "2024-11-02T16:36:29+00:00"
+            "time": "2024-11-09T08:54:11+00:00"
         },
         {
             "name": "doctrine/deprecations",

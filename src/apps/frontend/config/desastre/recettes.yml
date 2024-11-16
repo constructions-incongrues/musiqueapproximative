@@ -1,12 +1,55 @@
-demo:
+bleu_title:
   javascripts:
-    directories: [demo/javascripts]
+    directories: [bleu/javascripts]
     extensions: [js]
   stylesheets:
-    directories: [demo/stylesheets]
+    directories: [bleu/stylesheets]
     extensions: [css]
   rules:
+    mode: OR
+    module: post
     query:
-      module: post
-      action: show
-      desastre: demo 
+      title:
+        regex: /.*bleu.*/i
+
+bleu_artist:
+  javascripts:
+    directories: [bleu/javascripts]
+    extensions: [js]
+  stylesheets:
+    directories: [bleu/stylesheets]
+    extensions: [css]
+  rules:
+    mode: OR
+    module: post
+    query:
+      artist:
+        regex: /.*bleu.*/i
+
+rouge_title:
+  javascripts:
+    directories: [rouge/javascripts]
+    extensions: [js]
+  stylesheets:
+    directories: [rouge/stylesheets]
+    extensions: [css]
+  rules:
+    mode: OR
+    module: post
+    query:
+      title:
+        regex: /.*rouge.*/i
+
+rouge_artist:
+  javascripts:
+    directories: [rouge/javascripts]
+    extensions: [js]
+  stylesheets:
+    directories: [rouge/stylesheets]
+    extensions: [css]
+  rules:
+    mode: OR
+    module: post
+    query:
+      artist:
+        regex: /.*rouge.*/i
