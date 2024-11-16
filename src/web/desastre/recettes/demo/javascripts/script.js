@@ -1,1 +1,0 @@
-document.querySelector('article h1').textContent = "DEMO: " + document.querySelector('article h1').textContent;

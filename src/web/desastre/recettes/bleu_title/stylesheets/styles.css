@@ -1,0 +1,49 @@
+article h2 {
+  animation: glitch 1s linear infinite;
+}
+
+@keyframes glitch{
+  2%,64%{
+    color: hsl(193, 100%, 81%);
+    transform: translate(2px,0) skew(-45deg);
+    color: hsl(261, 100%, 50%);
+  }
+  4%,60%{
+    transform: translate(-2px,0) skew(12deg);
+  }
+  68%{
+    color: white;
+    transform: translate(-4px,0) skew(45deg);
+    color: cyan;
+  }
+}
+
+@keyframes glitchTop{
+  2%,64%{
+    transform: translate(2px,-2px);
+  }
+  4%,60%{
+    transform: translate(-2px,2px);
+  }
+  62%{
+    transform: translate(13px,-1px) skew(-13deg); 
+  }
+}
+
+div:after{
+  animation: glitchBotom 1.5s linear infinite;
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+}
+
+@keyframes glitchBotom{
+  2%,64%{
+    transform: translate(-2px,0);
+  }
+  4%,60%{
+    transform: translate(-2px,0);
+  }
+  62%{
+    transform: translate(-22px,5px) skew(21deg); 
+  }
+}

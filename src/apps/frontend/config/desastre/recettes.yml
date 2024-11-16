@@ -1,9 +1,9 @@
 bleu_title:
   javascripts:
-    directories: [bleu/javascripts]
+    directories: [bleu_title/javascripts]
     extensions: [js]
   stylesheets:
-    directories: [bleu/stylesheets]
+    directories: [bleu_title/stylesheets]
     extensions: [css]
   rules:
     mode: OR
@@ -14,10 +14,10 @@ bleu_title:
 
 bleu_artist:
   javascripts:
-    directories: [bleu/javascripts]
+    directories: [bleu_artist/javascripts]
     extensions: [js]
   stylesheets:
-    directories: [bleu/stylesheets]
+    directories: [bleu_artist/stylesheets]
     extensions: [css]
   rules:
     mode: OR
@@ -25,31 +25,3 @@ bleu_artist:
     query:
       artist:
         regex: /.*bleu.*/i
-
-rouge_title:
-  javascripts:
-    directories: [rouge/javascripts]
-    extensions: [js]
-  stylesheets:
-    directories: [rouge/stylesheets]
-    extensions: [css]
-  rules:
-    mode: OR
-    module: post
-    query:
-      title:
-        regex: /.*rouge.*/i
-
-rouge_artist:
-  javascripts:
-    directories: [rouge/javascripts]
-    extensions: [js]
-  stylesheets:
-    directories: [rouge/stylesheets]
-    extensions: [css]
-  rules:
-    mode: OR
-    module: post
-    query:
-      artist:
-        regex: /.*rouge.*/i
