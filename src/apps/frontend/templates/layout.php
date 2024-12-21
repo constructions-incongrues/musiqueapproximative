@@ -142,6 +142,12 @@
                           <a href="http://radio.musiqueapproximative.net">Radio Approximative</a> est un projet musical et informatique où chaque émission est générée aléatoirement à partir du corpus de morceaux disponibles et de génériques et jingles créés par les contributeurs du site.
                         </p>
                         <h2>
+                            Ondes
+                        </h2>
+                        <p>
+                          <a href="http://ondes.pantagruweb.club/public/musiqueapproximative">Pantagruweb</a> a bien mangé. Il ne compte pas s'arrêter là.
+                        </p>
+                        <h2>
                             Crédits
                         </h2>
                         <p>
