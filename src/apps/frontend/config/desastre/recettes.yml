@@ -6,8 +6,6 @@ bleu_title:
     directories: [bleu_title/stylesheets]
     extensions: [css]
   rules:
-    mode: OR
-    module: post
     query:
       title:
         regex: /.*bleu.*/i
@@ -20,8 +18,43 @@ bleu_artist:
     directories: [bleu_artist/stylesheets]
     extensions: [css]
   rules:
-    mode: OR
-    module: post
     query:
       artist:
         regex: /.*bleu.*/i
+
+amour:
+  javascripts:
+    directories: [amour/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [amour/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      title:
+        regex: /.*(amour|love).*/i
+      
+robot:
+  javascripts:
+    directories: [robot/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [robot/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      title:
+        regex: /.*robot.*/i
+
+fish:
+  javascripts:
+    directories: [fish/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [fish/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      title:
+        regex: /.*(fish|poisson).*/i
+      

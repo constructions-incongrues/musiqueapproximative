@@ -1,0 +1,49 @@
+article {
+     position: relative;
+}
+
+.amour{
+     height: 100%;
+     position: absolute;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 100%;
+}
+
+
+
+.amour svg{
+     max-width: 1000px;
+     z-index: 10000;
+}
+
+.coeur{
+     height: 100%;
+     position: absolute;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     left: 10%;
+     width: fit-content;
+     animation: beat 1s infinite;
+     animation-timing-function: ease-in-out;
+     animation-delay: 1s;
+     animation-fill-mode: both;
+     z-index: 10000;
+}
+
+@keyframes beat {
+     0%, 100% {
+          transform: scale(1);
+     }
+     50% {
+          transform: scale(1.1);
+     }
+}
+
+.coeur svg{
+     max-width: 150px;
+     height: 100%;
+     z-index: 10000;
+}
