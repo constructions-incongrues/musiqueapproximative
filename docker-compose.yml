@@ -13,11 +13,11 @@ services:
 
   php:
     build: .
-    command: [/bin/sh, -c, make configure && php -S 0.0.0.0:8000 -t web]
+    command: [/bin/sh, -c, make configure && composer install && php -S 0.0.0.0:8000 -t web]
     depends_on:
       - db
     ports:
-      - 8000:8000
+      - 8001:8000
     volumes:
       - ./src:/usr/local/src
       - ./etc/${PROFILE-musiqueapproximative.localhost}/.env:/usr/local/src/.env
