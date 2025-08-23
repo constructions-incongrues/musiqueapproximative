@@ -33,7 +33,7 @@ amour:
     query:
       title:
         regex: /.*(amour|love).*/i
-      
+
 robot:
   javascripts:
     directories: [robot/javascript]
@@ -57,17 +57,19 @@ fish:
     query:
       title:
         regex: /.*(fish|poisson).*/i
+
 noir:
   javascripts:
     directories: [noir/javascript]
     extensions: [js]
   stylesheets:
     directories: [noir/stylesheets]
+    extensions: [css]
   rules:
     query:
       title:
         regex: /.*(noir|black).*/i
-        
+
 light:
   javascripts:
     directories: [light/javascript]
@@ -79,4 +81,4 @@ light:
     query:
       title:
         regex: /.*(light|lumière).*/i
-      
+
