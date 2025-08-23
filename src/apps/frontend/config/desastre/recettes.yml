@@ -57,6 +57,17 @@ fish:
     query:
       title:
         regex: /.*(fish|poisson).*/i
+noir:
+  javascripts:
+    directories: [noir/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [noir/stylesheets]
+  rules:
+    query:
+      title:
+        regex: /.*(noir|black).*/i
+        
 light:
   javascripts:
     directories: [light/javascript]
