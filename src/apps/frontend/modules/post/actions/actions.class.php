@@ -16,13 +16,13 @@ class postActions extends sfActions
   private function getDisaster(sfWebRequest $request, sfWebResponse $response, array $query = [])
   {
     $gathererUriRoot = '/desastre/recettes';
-    
+
     $gatherer = new AssetGatherer(sfConfig::get('sf_web_dir').$gathererUriRoot);
     $gatherer->loadConfiguration(__DIR__.'/../../../config/desastre/recettes.yml');
 
     $psrRequest = new ServerRequest(
-      $request->getMethod(), 
-      $request->getUri(), 
+      $request->getMethod(),
+      $request->getUri(),
     );
     $psrRequest = $psrRequest->withQueryParams(array_merge($query, $request->getParameterHolder()->getAll() + $query));
 
@@ -107,7 +107,7 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:video:height', '476');
     $this->getResponse()->addMeta('og:video:width', '476');
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
-    
+
     // Gather common query parameters
     $common_parameters = array(
       'random' => $request->getParameter('random', 0),
@@ -134,7 +134,6 @@ class postActions extends sfActions
     $this->post_previous = Doctrine_Core::getTable('Post')->getPreviousPost($post, $request->getParameterHolder()->getAll());
     $this->common_query_string = $common_query_string;
     $this->contributor = $post->getSfGuardUser();
-    $this->disaster_ingredients = $disasterIngredients;
 
     // Select template
     if ($request->hasParameter('embed')) {
