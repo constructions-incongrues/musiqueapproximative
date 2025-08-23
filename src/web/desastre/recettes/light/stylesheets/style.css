@@ -1,0 +1,50 @@
+.content-text, article,article h2,article h1,article p{
+     background-color: transparent;
+}
+
+.content{
+     background:#F0FFFD;
+     position: relative;
+     overflow: hidden;
+}
+
+.content:after{
+     content: '';
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 9%;
+     height: 100%;
+     background: linear-gradient(90deg, rgb(232, 252, 249) 0%, rgb(255, 255, 255) 50%, rgb(232, 252, 249) 100%);
+     display: block;
+     animation: sparkles 4s ease-in-out infinite both;
+     filter: blur(50px);
+     bottom: 0;
+     opacity: 0.2;
+     transform: rotate(45deg);
+}
+
+.light{
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 16%;
+     height: 100%;
+     background: linear-gradient(90deg,rgba(240, 255, 253, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(240, 255, 253, 1) 100%);
+     display: block;
+     transform: rotate(45deg);
+     /* animation: sparkles 6s ease-in-out infinite both; */
+     filter: blur(50px);
+     opacity: 0.5;
+}
+
+@keyframes sparkles{
+     0%{
+          transform: translate(0, 0);
+          opacity: 1;
+     }
+
+     100%{
+          opacity: 0.5;
+          transform: translate(650%, 0);
+     }

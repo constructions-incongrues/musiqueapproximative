@@ -57,4 +57,15 @@ fish:
     query:
       title:
         regex: /.*(fish|poisson).*/i
+light:
+  javascripts:
+    directories: [light/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [light/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      title:
+        regex: /.*(light|lumière).*/i
       
