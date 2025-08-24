@@ -130,8 +130,6 @@
                             <li>espace : play / pause</li>
                             <li>j : morceau précédent</li>
                             <li>k : morceau suivant</li>
-                            <li>p : parcourir tous les morceaux</li>
-                            <li>c : parcourir les morceaux du contributeur</li>
                             <li>r : aléatoire</li>
                             <li>s : recherche</li>
                         </ul>
@@ -198,25 +196,6 @@
 
             $("#jquery_jplayer_1").bind($.jPlayer.event.ended, function(event) {
                 window.location = $('.nav-l a').attr('href') + '&play=1';
-            });
-
-            // "Browse tracks"
-            $('.index-toggle-all, .index-toggle-contributor').click(function(event) {
-              if ($('#index').is(':visible')) {
-                $('#index, #close').hide();
-                $('.index-toggle-all, .index-toggle-contributor').removeClass('current');
-              } else {
-                  $('#loading').fadeIn();
-                  $('#index').load($(event.target).attr('href'), function() {
-                    $('#loading').fadeOut();
-                        $('#close').show();
-                    if (!$('#index').is(':visible')) {
-                      $('#index').show();
-                    }
-                    $(event.target).addClass('current');
-                  });
-              }
-              return false;
             });
 
             $('a.email-subscription-link').click(function(event) {
@@ -314,18 +293,6 @@
              // random
              $(document).bind('keydown', 'r', function() {
                 $('#random').click();
-                return false;
-             });
-
-             // browse tracks (all)
-             $(document).bind('keydown', 'p', function() {
-                $('.index-toggle-all').click();
-                return false;
-             });
-
-             // browse tracks (all)
-             $(document).bind('keydown', 'c', function() {
-                $('.index-toggle-contributor').click();
                 return false;
              });
 
