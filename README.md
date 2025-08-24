@@ -1,4 +1,42 @@
-# Musique Approximative
+# Musique Approximative - Site Web
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+- Docker Desktop installé et en cours d'exécution
+- Fichier `/etc/hosts` configuré avec :
+  ```
+  127.0.0.1 www.musiqueapproximative.test
+  ```
+
+### Démarrage automatique
+```bash
+./start-dev.sh
+```
+
+### Arrêt
+```bash
+./stop-dev.sh
+```
+
+### Accès à l'application
+- **Direct** : http://localhost:8001
+- **Via Nginx** : http://localhost:8080
+- **Nom de domaine** : http://www.musiqueapproximative.test:8080
+
+### Commandes utiles
+```bash
+# Vider le cache Symfony
+docker-compose exec php php symfony cache:clear
+
+# Voir les logs
+docker-compose logs -f
+
+# Accéder au container PHP
+docker-compose exec php bash
+```
+
+## 📁 Structure du projet
 
 ## Développement
 

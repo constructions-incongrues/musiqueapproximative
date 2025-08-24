@@ -21,3 +21,12 @@ services:
     volumes:
       - ./src:/usr/local/src
       - ./etc/${PROFILE-musiqueapproximative.localhost}/.env:/usr/local/src/.env
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php

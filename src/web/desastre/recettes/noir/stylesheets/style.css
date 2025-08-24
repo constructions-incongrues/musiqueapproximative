@@ -45,3 +45,29 @@ section .content{
 .grid-90,.grid-100, .content, article p,article h1.hide-on-mobile,article h2.hide-on-mobile,article p a:hover, .author a{
      background-color: rgb(25, 25, 25);
 }
+
+.content-text h1,
+.descriptif p,
+.jp-duration,
+.jp-current-time{
+  color: white!important;
+}
+
+.content-text h2{
+  color: rgb(157, 157, 157)!important;
+}
+
+.jp-controls li:first-child a{
+  background-color:#fff;
+  color:#000;
+}
+
+.jp-controls li:last-child a{
+  background-color:#000000;
+  color:#fff;
+}
+
+.author,
+.author a{
+  color:#c8c8c8;
+}
