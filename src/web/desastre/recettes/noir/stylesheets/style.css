@@ -71,3 +71,8 @@ section .content{
 .author a{
   color:#c8c8c8;
 }
+
+.nav-l img,
+.nav-r img{
+  filter: invert(1);
+}
