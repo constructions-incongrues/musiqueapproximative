@@ -82,3 +82,15 @@ light:
       title:
         regex: /.*(light|lumière).*/i
 
+mort:
+  javascripts:
+    directories: [mort/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [mort/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      title:
+        regex: /.*(morte?s?|deaths?|dead).*/i
+
