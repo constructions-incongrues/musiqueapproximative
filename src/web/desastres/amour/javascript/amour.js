@@ -1,11 +1,8 @@
-// Exemple d'utilisation des options du desastre
-// Les options sont accessibles via window.DesastreOptions.amour
-// Exemple: window.DesastreOptions.amour.color, window.DesastreOptions.amour.intensity
-console.log('Coeur');
+console.log('[desastres/amour] Loaded');
 
 // Verifier si les options sont disponibles
 if (window.DesastreOptions && window.DesastreOptions.amour) {
-  console.log('Options du desastre amour:', window.DesastreOptions.amour);
+  console.log('[desastres/amour] Options loaded:', window.DesastreOptions.amour);
 }
 
 /*
@@ -30,6 +27,8 @@ coeurDiv.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 238.9
 article.appendChild(amourDiv);
 article.appendChild(coeurDiv);
 
+console.log('[desastres/amour] Creating SVG elements');
+
 anime({
      targets: '.amour svg path',
      strokeDashoffset: [anime.setDashoffset, 0],
@@ -39,6 +38,8 @@ anime({
      direction: 'alternate',
      loop: true
 });
+
+console.log('[desastres/amour] Animation started');
 
 // anime({
 //      targets: '.coeur svg path',

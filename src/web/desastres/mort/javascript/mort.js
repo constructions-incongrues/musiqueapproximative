@@ -1,4 +1,4 @@
-console.log("Mort");
+console.log('[desastres/mort] Loaded');
 
 // Création de la div plateau
 let body = document.querySelector("body");
@@ -13,8 +13,11 @@ newDiv.style.bottom = "0";
 
 body.appendChild(newDiv);
 
+console.log('[desastres/mort] Plateau created at bottom (60vh height)');
+
 // Fonction pour créer les tombes
 function creerTombes() {
+  console.log('[desastres/mort] Starting tomb creation');
   const plateau = document.querySelector(".plateau");
 
   if (plateau) {
@@ -71,12 +74,8 @@ function creerTombes() {
 
         // Gestion des erreurs de chargement d'image
         image.onerror = function () {
-          console.log(`Image cimetiere${index + 1}.png non trouvée`);
+          console.error(`[desastres/mort] ERROR: Image cimetiere${index + 1}.png`);
           this.style.display = "none";
-        };
-
-        image.onload = function () {
-          console.log(`Image cimetiere${index + 1}.png chargée avec succès`);
         };
 
         tombe.appendChild(image);
@@ -87,9 +86,9 @@ function creerTombes() {
       }, index * 800); // Délai de 800ms (0.8 seconde) entre chaque tombe
     });
 
-    console.log("20 divs 'tombe' seront créés sur la grille étalée du plateau");
+    console.log("[desastres/mort] 20 tombs will be created progressively (800ms delay)");
   } else {
-    console.error("La div '.plateau' n'a pas été trouvée");
+    console.error("[desastres/mort] ERROR: .plateau div not found");
   }
 }
 

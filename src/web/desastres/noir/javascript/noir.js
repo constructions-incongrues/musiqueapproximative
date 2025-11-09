@@ -1,9 +1,12 @@
-console.log('noir.js loaded');
+console.log('[desastres/noir] Loaded');
+
 let contentDiv = document.querySelector('.content');
 
 let newDiv = document.createElement('div');
 newDiv.className = 'noir';
 contentDiv.appendChild(newDiv);
+
+console.log('[desastres/noir] Dark overlay created and added to .content');
 
 let body = document.querySelector('body');
 

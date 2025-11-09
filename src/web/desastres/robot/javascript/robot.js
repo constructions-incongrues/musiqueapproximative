@@ -1,5 +1,8 @@
+console.log('[desastres/robot] Loaded');
+
 let robotLetter = document.querySelector('article h2');
 let phrase = robotLetter.textContent;
+console.log('[desastres/robot] Found title:', phrase);
 
 // Utilisation de la méthode replace pour ajouter un span autour de chaque lettre du mot "robot"
 let newPhrase = phrase.replace(/robot/gi, (match) => {
@@ -17,8 +20,10 @@ lettersWrapper.forEach((wrapper, index) => {
      // wrapper.style.backgroundColor = '#29f23f';
 });
 let letters = document.querySelectorAll('h2 .letter');
-// console.log(letters);
+console.log('[desastres/robot] Wrapped', letters.length, 'letters');
+
 window.onload = function() {
+     console.log('[desastres/robot] Starting 3D animations');
      for(let i = 0; i < letters.length; i+=2) {
           letters[i].style.display = 'block';
                letters[i].animate([
@@ -76,6 +81,6 @@ window.onload = function() {
                });
           }, 2000);
      }
-}
 
-// console.log(newPhrase);
+     console.log('[desastres/robot] Animations started');
+}
