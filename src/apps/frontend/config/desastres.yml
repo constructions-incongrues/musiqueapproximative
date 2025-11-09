@@ -44,6 +44,11 @@ regles:
     recettes: [musique]
     probability: 1.0
 
+  # Désastre téléphonique : déclenche si le titre contient "phone" ou "téléphone" ou allo
+  - query: "query.title ~ /.*(phone|t[eé]l[eé]phone|allo).*/i"
+    recettes: [mort, fish, amour, bleu]
+    probability: 1.0
+
 recettes:
   # Recette "bleu"
   # Les assets doivent se trouver dans :
