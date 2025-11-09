@@ -39,15 +39,11 @@ regles:
   - query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
     recettes: [mort]
     probability: 1.0
-  
-  - query: "query.title ~ /.*(musique|music).*/i"
-    recettes: [musique]
-    probability: 1.0
 
   # Désastre téléphonique : déclenche si le titre contient "phone" ou "téléphone" ou allo
   - query: "query.title ~ /.*(phone|t[eé]l[eé]phone|allo).*/i"
-    recettes: [mort, fish, amour, bleu]
-    probability: 1.0
+    recettes: [mamie]
+    probability: 0.3
 
 recettes:
   # Recette "bleu"
@@ -132,9 +128,20 @@ recettes:
       theme: death
       color: "#666666"
 
+  # Recette "mamie"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/mamie/stylesheets/*.css
+  # - web/desastres/mamie/javascript/*.js
+  mamie:
+    enabled: true
+    desastre: mamie
+    options:
+      volume: 0.5
+
+  # Recette "musique"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/musique/stylesheets/*.css
+  # - web/desastres/musique/javascript/*.js
   musique:
     enabled: true
     desastre: musique
-    options:
-      theme: music
-      color: "#000000"
