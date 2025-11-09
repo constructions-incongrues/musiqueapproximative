@@ -50,19 +50,18 @@ regles:
     recettes: [musique]
     probability: 0.7
 
+  # Desastre "spooky" : WHO U GONNA CALL ?
+  - query: "query.title == 'Spooky Mix'"
+    recettes: [spooky]
+    probability: 1.0
+
 recettes:
   # Recette "bleu"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/bleu/stylesheets/*.css
-  # - web/desastres/bleu/javascript/*.js
   bleu:
     enabled: true
     desastre: bleu
 
   # Recette "amour"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/amour/stylesheets/*.css
-  # - web/desastres/amour/javascript/*.js
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.amour.theme
   # - CSS: var(--desastre-amour-theme)
@@ -71,49 +70,31 @@ recettes:
     desastre: amour
 
   # Recette "robot"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/robot/stylesheets/*.css
-  # - web/desastres/robot/javascript/*.js
   robot:
     enabled: true
     desastre: robot
 
   # Recette "fish"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/fish/stylesheets/*.css
-  # - web/desastres/fish/javascript/*.js
   fish:
     enabled: true
     desastre: fish
 
   # Recette "noir"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/noir/stylesheets/*.css
-  # - web/desastres/noir/javascript/*.js
   noir:
     enabled: true
     desastre: noir
 
   # Recette "light"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/light/stylesheets/*.css
-  # - web/desastres/light/javascript/*.js
   light:
     enabled: true
     desastre: light
 
   # Recette "mort"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/mort/stylesheets/*.css
-  # - web/desastres/mort/javascript/*.js
   mort:
     enabled: true
     desastre: mort
 
   # Recette "mamie"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/mamie/stylesheets/*.css
-  # - web/desastres/mamie/javascript/*.js
   mamie:
     enabled: true
     desastre: mamie
@@ -121,9 +102,15 @@ recettes:
       volume: 0.5
 
   # Recette "musique"
-  # Les assets doivent se trouver dans :
-  # - web/desastres/musique/stylesheets/*.css
-  # - web/desastres/musique/javascript/*.js
   musique:
     enabled: true
     desastre: musique
+
+  # Recette "spooky" spécialement pour les chouchouxes
+  spooky:
+    enabled: true
+    desastre: redirect
+    options:
+      url: https://sos.musiqueapproximative.net
+      seconds: 3
+      stopParameter: noredirect
