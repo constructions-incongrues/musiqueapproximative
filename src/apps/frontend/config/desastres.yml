@@ -45,6 +45,11 @@ regles:
     recettes: [mamie]
     probability: 0.3
 
+  # Desastre "musique" : declanche si le titre contient "musique" ou "music"
+  - query: "query.title ~ /.*(musique|music).*/i"
+    recettes: [musique]
+    probability: 1.0
+
 recettes:
   # Recette "bleu"
   # Les assets doivent se trouver dans :
