@@ -43,7 +43,7 @@ regles:
   # Désastre téléphonique : déclenche si le titre contient "phone" ou "téléphone" ou allo
   - query: "query.title ~ /.*(phone|t[eé]l[eé]phone|allo).*/i"
     recettes: [mamie]
-    probability: 0.3
+    probability: 0.5
 
   # Desastre "musique" : declanche si le titre contient "musique" ou "music"
   - query: "query.title ~ /.*(musique|music).*/i"
