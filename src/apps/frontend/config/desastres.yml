@@ -55,6 +55,14 @@ regles:
     recettes: [spooky]
     probability: 1.0
 
+  # Desastres "quickos" : LALALOS !
+  - query: "context.date.month == '12'"
+    recettes: [quickos]
+    probability: 0.1
+  - query: "context.date.month == '12' && (context.date.day == '24' || context.date.day == '25')"
+    recettes: [quickos]
+    probability: 0.5
+
 recettes:
   # Recette "bleu"
   bleu:
@@ -113,4 +121,11 @@ recettes:
     options:
       url: https://sos.musiqueapproximative.net
       seconds: 3
-      stopParameter: noredirect
+
+  # Recette "quickos" pour les fêtes
+  quickos:
+    enabled: true
+    desastre: redirect
+    options:
+      url: https://quickoschantenoel.musiqueapproximative.net/?play=1
+      seconds: 3
