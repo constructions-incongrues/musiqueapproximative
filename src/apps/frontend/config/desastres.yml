@@ -8,37 +8,37 @@ regles:
   # Desastre "bleu" sur le titre ou l'artiste
   - query: "query.title ~ /.*bleu.*/i || query.artist ~ /.*bleu.*/i"
     recettes: [bleu]
-    probability: 1.0
+    probability: 0.7
 
   # Desastre "amour" : declanche si le titre contient "amour" ou "love"
   - query: "query.title ~ /.*(amour|love).*/i"
     recettes: [amour]
-    probability: 1.0
+    probability: 0.7
 
   # Desastre "robot"
   - query: "query.title ~ /.*robot.*/i"
     recettes: [robot]
-    probability: 1.0
+    probability: 0.7
 
   # Desastre "fish" : declanche si le titre contient "fish" ou "poisson"
   - query: "query.title ~ /.*(fish|poisson).*/i"
     recettes: [fish]
-    probability: 1.0
+    probability: 0.7
 
   # Desastre "noir" : declanche si le titre contient "noir" ou "black"
   - query: "query.title ~ /.*(noir|black).*/i"
     recettes: [noir]
-    probability: 1.0
+    probability: 0.7
 
   # Desastre "light" : declanche si le titre contient "light" ou "lumiere"
   - query: "query.title ~ /.*(light|lumiere).*/i"
     recettes: [light]
-    probability: 1.0
+    probability: 0.7
 
   # Desastre "mort" : declanche si le titre contient "mort", "morte", "morts", "death", "deaths" ou "dead"
   - query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
     recettes: [mort]
-    probability: 1.0
+    probability: 0.7
 
   # Désastre téléphonique : déclenche si le titre contient "phone" ou "téléphone" ou allo
   - query: "query.title ~ /.*(phone|t[eé]l[eé]phone|allo).*/i"
@@ -48,7 +48,7 @@ regles:
   # Desastre "musique" : declanche si le titre contient "musique" ou "music"
   - query: "query.title ~ /.*(musique|music).*/i"
     recettes: [musique]
-    probability: 1.0
+    probability: 0.7
 
 recettes:
   # Recette "bleu"
@@ -58,9 +58,6 @@ recettes:
   bleu:
     enabled: true
     desastre: bleu
-    options:
-      theme: blue
-      color: "#0066ff"
 
   # Recette "amour"
   # Les assets doivent se trouver dans :
@@ -72,10 +69,6 @@ recettes:
   amour:
     enabled: true
     desastre: amour
-    options:
-      theme: love
-      color: "#ff0066"
-      intensity: high
 
   # Recette "robot"
   # Les assets doivent se trouver dans :
@@ -84,9 +77,6 @@ recettes:
   robot:
     enabled: true
     desastre: robot
-    options:
-      theme: robot
-      speed: fast
 
   # Recette "fish"
   # Les assets doivent se trouver dans :
@@ -95,9 +85,6 @@ recettes:
   fish:
     enabled: true
     desastre: fish
-    options:
-      theme: fish
-      count: 10
 
   # Recette "noir"
   # Les assets doivent se trouver dans :
@@ -106,9 +93,6 @@ recettes:
   noir:
     enabled: true
     desastre: noir
-    options:
-      theme: black
-      color: "#000000"
 
   # Recette "light"
   # Les assets doivent se trouver dans :
@@ -117,10 +101,6 @@ recettes:
   light:
     enabled: true
     desastre: light
-    options:
-      theme: light
-      color: "#ffffff"
-      brightness: high
 
   # Recette "mort"
   # Les assets doivent se trouver dans :
@@ -129,9 +109,6 @@ recettes:
   mort:
     enabled: true
     desastre: mort
-    options:
-      theme: death
-      color: "#666666"
 
   # Recette "mamie"
   # Les assets doivent se trouver dans :
