@@ -15,28 +15,8 @@ class postActions extends sfActions
 {
   private function getDisaster(sfWebRequest $request, sfWebResponse $response, array $query = [])
   {
-    $gathererUriRoot = '/desastre/recettes';
-
-    $gatherer = new AssetGatherer(sfConfig::get('sf_web_dir').$gathererUriRoot);
-    $gatherer->loadConfiguration(__DIR__.'/../../../config/desastre/recettes.yml');
-
-    $psrRequest = new ServerRequest(
-      $request->getMethod(),
-      $request->getUri(),
-    );
-    $psrRequest = $psrRequest->withQueryParams(array_merge($query, $request->getParameterHolder()->getAll() + $query));
-
-    $gatherer->gatherAssetsForRequest($psrRequest);
-    $disasterIngredients = array_pop($gatherer->getAssets());
-
-    foreach ($disasterIngredients["stylesheets"] as $ingredient) {
-      $ingredientUri = $gathererUriRoot.'/'.implode("/", array_slice(explode("/", $ingredient), -3));
-      $response->addStylesheet($ingredientUri);
-    }
-    foreach ($disasterIngredients["javascripts"] as $ingredient) {
-      $ingredientUri = $gathererUriRoot.'/'.implode("/", array_slice(explode("/", $ingredient), -3));
-      $response->addJavascript($ingredientUri);
-    }
+    $this->getContext()->getConfiguration()->loadHelpers('Desastre');
+    apply_desastre($request, $response, $query);
   }
 
   /**

@@ -1,0 +1,98 @@
+# Configuration des desastres - Musique Approximative
+#
+# Ce fichier definit les regles et les recettes pour le systeme de desastres.
+# Les regles permettent de determiner quand un desastre doit etre applique,
+# et les recettes definissent quels assets (CSS/JS) charger.
+
+regles:
+  # Desastre "bleu" sur le titre
+  - query: "query.title ~ /.*bleu.*/i || query.artist ~ /.*bleu.*/i"
+    recettes: [bleu]
+    probability: 1.0
+
+  # Desastre "amour" : declanche si le titre contient "amour" ou "love"
+  - query: "query.title ~ /.*(amour|love).*/i"
+    recettes: [amour]
+    probability: 1.0
+
+  # Desastre "robot"
+  - query: "query.title ~ /.*robot.*/i"
+    recettes: [robot]
+    probability: 1.0
+
+  # Desastre "fish" : declanche si le titre contient "fish" ou "poisson"
+  - query: "query.title ~ /.*(fish|poisson).*/i"
+    recettes: [fish]
+    probability: 1.0
+
+  # Desastre "noir" : declanche si le titre contient "noir" ou "black"
+  - query: "query.title ~ /.*(noir|black).*/i"
+    recettes: [noir]
+    probability: 1.0
+
+  # Desastre "light" : declanche si le titre contient "light" ou "lumiere"
+  - query: "query.title ~ /.*(light|lumiere).*/i"
+    recettes: [light]
+    probability: 1.0
+
+  # Desastre "mort" : declanche si le titre contient "mort", "morte", "morts", "death", "deaths" ou "dead"
+  - query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
+    recettes: [mort]
+    probability: 1.0
+
+recettes:
+  # Recette "bleu_title"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/bleu_title/stylesheets/*.css
+  # - web/desastres/bleu_title/javascript/*.js
+  bleu:
+    enabled: true
+    desastre: bleu
+
+  # Recette "amour"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/amour/stylesheets/*.css
+  # - web/desastres/amour/javascript/*.js
+  amour:
+    enabled: true
+    desastre: amour
+
+  # Recette "robot"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/robot/stylesheets/*.css
+  # - web/desastres/robot/javascript/*.js
+  robot:
+    enabled: true
+    desastre: robot
+
+  # Recette "fish"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/fish/stylesheets/*.css
+  # - web/desastres/fish/javascript/*.js
+  fish:
+    enabled: true
+    desastre: fish
+
+  # Recette "noir"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/noir/stylesheets/*.css
+  # - web/desastres/noir/javascript/*.js
+  noir:
+    enabled: true
+    desastre: noir
+
+  # Recette "light"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/light/stylesheets/*.css
+  # - web/desastres/light/javascript/*.js
+  light:
+    enabled: true
+    desastre: light
+
+  # Recette "mort"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/mort/stylesheets/*.css
+  # - web/desastres/mort/javascript/*.js
+  mort:
+    enabled: true
+    desastre: mort

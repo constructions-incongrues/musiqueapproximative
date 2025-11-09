@@ -16,7 +16,7 @@ body.appendChild(newDiv);
 // Fonction pour créer les tombes
 function creerTombes() {
   const plateau = document.querySelector(".plateau");
-  
+
   if (plateau) {
     // Configuration de la grille adaptée au viewport avec la nouvelle hauteur
     const viewportWidth = window.innerWidth;
@@ -26,7 +26,7 @@ function creerTombes() {
     const cellSizeX = viewportWidth / gridSizeX;
     const cellSizeY = viewportHeight / gridSizeY;
     const positions = [];
-    
+
     // Génération de positions aléatoires uniques avec plus d'espacement
     for (let i = 0; i < 20; i++) {
       let newPos;
@@ -38,55 +38,55 @@ function creerTombes() {
         };
         attempts++;
         // Éviter les positions trop proches et assurer une meilleure répartition
-      } while (positions.some(pos => 
-        Math.abs(pos.x - newPos.x) < cellSizeX * 2 && 
+      } while (positions.some(pos =>
+        Math.abs(pos.x - newPos.x) < cellSizeX * 2 &&
         Math.abs(pos.y - newPos.y) < cellSizeY * 2
       ) && attempts < 200);
-      
+
       positions.push(newPos);
     }
-    
+
     // Création des tombes une par une avec délai plus long
     positions.forEach((pos, index) => {
       setTimeout(() => {
         const tombe = document.createElement("div");
         tombe.className = "tombe";
         tombe.id = "tombe-" + (index + 1);
-        
+
         // Positionnement aléatoire sur la grille
         tombe.style.position = "absolute";
         tombe.style.left = pos.x + "px";
         tombe.style.top = pos.y + "px";
         tombe.style.width = "120px"; // Taille fixe pour les tombes
         tombe.style.height = "auto";
-        
+
         // Création de l'image avec le chemin correct vers le dossier img
         const image = document.createElement("img");
-        image.src = `/desastre/recettes/mort/img/cimetiere${index + 1}.png`;
+        image.src = `/desastres/mort/img/cimetiere${index + 1}.png`;
         image.alt = `Cimetiere ${index + 1}`;
         image.className = "image-tombe";
         image.style.width = "100%";
         image.style.height = "100%";
         image.style.objectFit = "contain";
-        
+
         // Gestion des erreurs de chargement d'image
         image.onerror = function () {
           console.log(`Image cimetiere${index + 1}.png non trouvée`);
           this.style.display = "none";
         };
-        
+
         image.onload = function () {
           console.log(`Image cimetiere${index + 1}.png chargée avec succès`);
         };
-        
+
         tombe.appendChild(image);
-        
+
         // Ajout du div à la div plateau
         plateau.appendChild(tombe);
-        
+
       }, index * 800); // Délai de 800ms (0.8 seconde) entre chaque tombe
     });
-    
+
     console.log("20 divs 'tombe' seront créés sur la grille étalée du plateau");
   } else {
     console.error("La div '.plateau' n'a pas été trouvée");
@@ -104,16 +104,16 @@ if (document.readyState === 'loading') {
 // Alternative avec une fonction réutilisable
 function creerTombesAvecImages(nombre = 20) {
   const plateau = document.querySelector(".plateau");
-  
+
   if (!plateau) {
     console.error("La div '.plateau' n'a pas été trouvée");
     return;
   }
-  
+
   // Suppression des tombes existantes si nécessaire
   const tombesExistantes = plateau.querySelectorAll(".tombe");
   tombesExistantes.forEach((tombe) => tombe.remove());
-  
+
   // Configuration de la grille adaptée au viewport avec la nouvelle hauteur
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight * 0.6; // 60vh au lieu de 100vh
@@ -122,7 +122,7 @@ function creerTombesAvecImages(nombre = 20) {
   const cellSizeX = viewportWidth / gridSizeX;
   const cellSizeY = viewportHeight / gridSizeY;
   const positions = [];
-  
+
   // Génération de positions aléatoires uniques avec plus d'espacement
   for (let i = 0; i < nombre; i++) {
     let newPos;
@@ -134,14 +134,14 @@ function creerTombesAvecImages(nombre = 20) {
       };
       attempts++;
       // Éviter les positions trop proches et assurer une meilleure répartition
-    } while (positions.some(pos => 
-      Math.abs(pos.x - newPos.x) < cellSizeX * 2 && 
+    } while (positions.some(pos =>
+      Math.abs(pos.x - newPos.x) < cellSizeX * 2 &&
       Math.abs(pos.y - newPos.y) < cellSizeY * 2
     ) && attempts < 200);
-    
+
     positions.push(newPos);
   }
-  
+
   // Création des tombes une par une avec délai plus long
   positions.forEach((pos, index) => {
     setTimeout(() => {
@@ -149,14 +149,14 @@ function creerTombesAvecImages(nombre = 20) {
       tombe.className = "tombe";
       tombe.id = "tombe-" + (index + 1);
       tombe.setAttribute("data-index", index + 1);
-      
+
       // Positionnement aléatoire sur la grille
       tombe.style.position = "absolute";
       tombe.style.left = pos.x + "px";
       tombe.style.top = pos.y + "px";
       tombe.style.width = "120px"; // Taille fixe pour les tombes
       tombe.style.height = "auto";
-      
+
       // Création de l'image avec le chemin correct vers le dossier img
       const image = document.createElement("img");
       image.src = `/desastre/recettes/mort/img/cimetiere${index + 1}.png`;
@@ -165,24 +165,24 @@ function creerTombesAvecImages(nombre = 20) {
       image.style.width = "100%";
       image.style.height = "100%";
       image.style.objectFit = "contain";
-      
+
       // Gestion des erreurs de chargement d'image
       image.onerror = function () {
         console.log(`Image cimetiere${index + 1}.png non trouvée`);
         this.style.display = "none";
       };
-      
+
       image.onload = function () {
         console.log(`Image cimetiere${index + 1}.png chargée avec succès`);
       };
-      
+
       tombe.appendChild(image);
-      
+
       // Ajout du div à la div plateau
       plateau.appendChild(tombe);
-      
+
     }, index * 800); // Délai de 800ms (0.8 seconde) entre chaque tombe
   });
-  
+
   console.log(`${nombre} divs 'tombe' seront créés sur la grille étalée du plateau`);
 }
