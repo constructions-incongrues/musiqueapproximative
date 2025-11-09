@@ -87,16 +87,16 @@ class sfDesastreManager
         if (mt_rand() / mt_getrandmax() <= $probability) {
           // Ajouter les recettes associees
           if (isset($regle['recettes']) && is_array($regle['recettes'])) {
-            // Selectionner une recette au hasard parmi celles proposees
-            $recetteName = $regle['recettes'][array_rand($regle['recettes'])];
+            // Appliquer toutes les recettes listees
+            foreach ($regle['recettes'] as $recetteName) {
+              if (isset($this->config['recettes'][$recetteName])) {
+                $recette = $this->config['recettes'][$recetteName];
 
-            if (isset($this->config['recettes'][$recetteName])) {
-              $recette = $this->config['recettes'][$recetteName];
-
-              // Verifier si la recette est activee
-              if (!isset($recette['enabled']) || $recette['enabled'] === true) {
-                $recette['name'] = $recetteName;
-                $selectedRecettes[] = $recette;
+                // Verifier si la recette est activee
+                if (!isset($recette['enabled']) || $recette['enabled'] === true) {
+                  $recette['name'] = $recetteName;
+                  $selectedRecettes[] = $recette;
+                }
               }
             }
           }
