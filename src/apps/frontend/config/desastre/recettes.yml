@@ -94,3 +94,14 @@ mort:
       title:
         regex: /.*(morte?s?|deaths?|dead).*/i
 
+musique:
+  javascripts:
+    directories: [musique/javascript]
+    extensions: [js]
+  stylesheets:
+    directories: [musique/stylesheets]
+    extensions: [css]
+  rules:
+    query:
+      title:
+        regex: /.*(musique|music).*/i
