@@ -5,7 +5,7 @@
 # et les recettes definissent quels assets (CSS/JS) charger.
 
 regles:
-  # Desastre "bleu" sur le titre
+  # Desastre "bleu" sur le titre ou l'artiste
   - query: "query.title ~ /.*bleu.*/i || query.artist ~ /.*bleu.*/i"
     recettes: [bleu]
     probability: 1.0
@@ -41,10 +41,10 @@ regles:
     probability: 1.0
 
 recettes:
-  # Recette "bleu_title"
+  # Recette "bleu"
   # Les assets doivent se trouver dans :
-  # - web/desastres/bleu_title/stylesheets/*.css
-  # - web/desastres/bleu_title/javascript/*.js
+  # - web/desastres/bleu/stylesheets/*.css
+  # - web/desastres/bleu/javascript/*.js
   bleu:
     enabled: true
     desastre: bleu
