@@ -105,7 +105,10 @@ recettes:
   # Recette "mort"
   mort:
     enabled: true
-    desastre: mort
+    desastre: postillons
+    options:
+      imageFolder: /desastres/postillons/img/cimetiere
+      imageBaseName: cimetiere
 
   # Recette "mamie"
   mamie:
