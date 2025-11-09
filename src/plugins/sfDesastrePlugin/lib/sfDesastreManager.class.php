@@ -228,12 +228,14 @@ class sfDesastreManager
 
   /**
    * Trouve les assets (JS/CSS) pour un desastre donne
+   * Les fichiers sont tries par ordre alphabetique naturel
+   * (ex: 01-base.js, 02-animations.js, 10-effects.js)
    *
    * @param string $fsRoot Racine du systeme de fichiers
    * @param string $desastreName Nom du desastre
    * @param string $assetType Type d'asset (javascript, stylesheets)
    * @param array $extensions Extensions a rechercher
-   * @return array Tableau de chemins de fichiers
+   * @return array Tableau de chemins de fichiers tries
    */
   protected function findAssets($fsRoot, $desastreName, $assetType, array $extensions)
   {
@@ -245,6 +247,9 @@ class sfDesastreManager
     }
 
     $files = scandir($dir);
+
+    // Filtrer les fichiers valides
+    $validFiles = array();
     foreach ($files as $file) {
       $filePath = $dir . '/' . $file;
 
@@ -254,8 +259,16 @@ class sfDesastreManager
 
       $ext = pathinfo($file, PATHINFO_EXTENSION);
       if (in_array($ext, $extensions)) {
-        $assets[] = $filePath;
+        $validFiles[] = $file;
       }
+    }
+
+    // Trier par ordre alphabetique naturel (gere correctement 01, 02, 10, etc.)
+    natsort($validFiles);
+
+    // Creer les chemins complets
+    foreach ($validFiles as $file) {
+      $assets[] = $dir . '/' . $file;
     }
 
     return $assets;
