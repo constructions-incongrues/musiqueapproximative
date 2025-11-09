@@ -233,6 +233,27 @@ web/
 
 Le plugin détectera automatiquement tous les fichiers `.css` et `.js` dans ces dossiers.
 
+### Ordre de chargement des assets
+
+Les fichiers sont chargés par **ordre alphabétique naturel**. Pour contrôler l'ordre de chargement, utilisez des préfixes numériques :
+
+```
+web/
+└── desastres/
+    └── robot/
+        ├── stylesheets/
+        │   ├── 01-base.css        # Chargé en premier
+        │   ├── 02-animations.css  # Chargé en second
+        │   └── 03-theme.css       # Chargé en dernier
+        └── javascript/
+            ├── 01-config.js       # Chargé en premier
+            ├── 02-core.js         # Chargé en second
+            ├── 03-animations.js   # Chargé en troisième
+            └── 10-effects.js      # Chargé en dernier
+```
+
+**Note** : Le tri naturel (`natsort`) gère correctement les nombres, donc `10-effects.js` sera chargé après `02-core.js` (et non entre `01` et `02`).
+
 ## Options des desastres
 
 Les options definies dans la configuration YAML sont automatiquement injectees dans le HTML et accessibles de deux facons :
