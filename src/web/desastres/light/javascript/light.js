@@ -1,3 +1,5 @@
+console.log('[desastres/light] Loaded');
+
 let contenDiv = document.querySelector(".content");
 
 let newDiv = document.createElement("div");
@@ -10,6 +12,8 @@ newDiv3.className = "light";
 contenDiv.appendChild(newDiv);
 contenDiv.appendChild(newDiv2);
 contenDiv.appendChild(newDiv3);
+
+console.log('[desastres/light] Created 3 light rays');
 
 let light = document.querySelectorAll(".light");
 light.forEach((el, index) => {
@@ -29,3 +33,5 @@ light.forEach((el, index) => {
     }
   );
 });
+
+console.log('[desastres/light] Animations started');

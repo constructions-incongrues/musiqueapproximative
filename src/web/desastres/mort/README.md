@@ -100,7 +100,6 @@ creerTombesAvecImages(15);  // Crée 15 tombes au lieu de 20
 ```javascript
 console.log("Mort");
 console.log("20 divs 'tombe' seront créés sur la grille étalée du plateau");
-console.log(`Image cimetiere${index+1}.png chargée avec succès`);
 console.log(`Image cimetiere${index+1}.png non trouvée`);
 ```
 
