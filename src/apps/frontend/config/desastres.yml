@@ -64,7 +64,7 @@ regles:
     probability: 0.5
 
   # Desastre "tts"
-  - query: "query.title ~ /.*(TTS).*/""
+  - query: "query.title ~ /.*(TTS).*/"
     recettes: [ttsrapper]
     probability: 1.0
 
