@@ -39,6 +39,10 @@ regles:
   - query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
     recettes: [mort]
     probability: 1.0
+  
+  - query: "query.title ~ /.*(musique|music).*/i"
+    recettes: [musique]
+    probability: 1.0
 
 recettes:
   # Recette "bleu"
@@ -122,3 +126,10 @@ recettes:
     options:
       theme: death
       color: "#666666"
+
+  musique:
+    enabled: true
+    desastre: musique
+    options:
+      theme: music
+      color: "#000000"
