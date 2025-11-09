@@ -1,12 +1,16 @@
 console.log("[desastres/tts] loaded");
 
-// Recuperer le texte a lire
-const selector = window.DesastreOptions.tts.selector;
-const element = document.querySelector(selector);
-
-if (!element) {
-  console.error("[desastres/tts] Element not found:", selector);
+// Verifier que les options TTS sont presentes
+if (!window.DesastreOptions || !window.DesastreOptions.tts) {
+  console.error("[desastres/tts] Options not found in window.DesastreOptions.tts");
 } else {
+  // Recuperer le texte a lire
+  const selector = window.DesastreOptions.tts.selector || 'div.descriptif p';
+  const element = document.querySelector(selector);
+
+  if (!element) {
+    console.error("[desastres/tts] Element not found:", selector);
+  } else {
   const text = element.textContent.trim();
   console.log("[desastres/tts] Text to speak:", text);
 
@@ -120,4 +124,5 @@ if (!element) {
   document.addEventListener("touchstart", speakOnInteraction, { once: true });
 
   console.log("[desastres/tts] Waiting for user interaction if autoplay blocked...");
+  }
 }
