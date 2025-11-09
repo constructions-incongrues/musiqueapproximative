@@ -9,8 +9,8 @@
   pointer-events: none;
 }
 
-/* Styles pour les tombes */
-.tombe {
+/* Styles pour les postillons */
+.postillon {
   position: absolute;
   width: 80px; /* Adapté à la nouvelle taille de cellule */
   height: 80px; /* Adapté à la nouvelle taille de cellule */
