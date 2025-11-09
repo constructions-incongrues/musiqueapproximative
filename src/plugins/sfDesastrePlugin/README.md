@@ -35,13 +35,27 @@ class ProjectConfiguration extends sfProjectConfiguration
 }
 ```
 
-3. Créez votre fichier de configuration :
+3. Activez le filtre dans votre `apps/frontend/config/filters.yml` :
+
+```yaml
+rendering: ~
+security:  ~
+
+# Filtre pour injecter les options des desastres dans le HTML
+desastre:
+  class: sfDesastreFilter
+
+cache:     ~
+execution: ~
+```
+
+4. Créez votre fichier de configuration :
 
 ```bash
 cp plugins/sfDesastrePlugin/data/config/desastres.yml.example apps/frontend/config/desastres.yml
 ```
 
-4. Créez la structure de dossiers pour vos assets :
+5. Créez la structure de dossiers pour vos assets :
 
 ```bash
 mkdir -p web/desastres
@@ -218,6 +232,133 @@ web/
 ```
 
 Le plugin détectera automatiquement tous les fichiers `.css` et `.js` dans ces dossiers.
+
+## Options des desastres
+
+Les options definies dans la configuration YAML sont automatiquement injectees dans le HTML et accessibles de deux facons :
+
+### Acces via JavaScript
+
+Les options sont disponibles dans l'objet global `window.DesastreOptions` :
+
+```javascript
+// Exemple : acceder aux options du desastre "amour"
+if (window.DesastreOptions && window.DesastreOptions.amour) {
+  var options = window.DesastreOptions.amour;
+  console.log('Theme:', options.theme);
+  console.log('Color:', options.color);
+}
+
+// Structure de l'objet :
+// window.DesastreOptions = {
+//   "amour": {
+//     "theme": "love",
+//     "color": "red"
+//   },
+//   "robot": {
+//     "theme": "robot",
+//     "speed": "fast"
+//   }
+// }
+```
+
+### Acces via CSS (Custom Properties)
+
+Les options sont aussi injectees comme variables CSS :
+
+```css
+/* Les options deviennent des variables CSS au format --desastre-NOM-CLE */
+
+/* Exemple avec le desastre "amour" ayant l'option color: "red" */
+.heart {
+  background-color: var(--desastre-amour-color);
+  /* Equivalent a: background-color: red; */
+}
+
+/* Exemple avec le desastre "robot" ayant l'option speed: "2s" */
+.robot-animation {
+  animation-duration: var(--desastre-robot-speed);
+  /* Equivalent a: animation-duration: 2s; */
+}
+```
+
+### Exemple complet
+
+Configuration YAML :
+```yaml
+recettes:
+  amour:
+    enabled: true
+    desastre: amour
+    options:
+      color: "#ff0066"
+      intensity: "high"
+      duration: "3s"
+```
+
+JavaScript (`web/desastres/amour/javascript/amour.js`) :
+```javascript
+(function() {
+  var options = window.DesastreOptions.amour;
+
+  // Utiliser les options
+  if (options.intensity === 'high') {
+    // Animation intense
+    createHearts(100);
+  } else {
+    // Animation normale
+    createHearts(20);
+  }
+})();
+```
+
+CSS (`web/desastres/amour/stylesheets/style.css`) :
+```css
+.heart {
+  /* Utiliser la couleur depuis les options */
+  background-color: var(--desastre-amour-color);
+
+  /* Utiliser la duree depuis les options */
+  animation-duration: var(--desastre-amour-duration);
+}
+```
+
+### Avantages de ce systeme
+
+1. **Centralisation** : Toutes les options sont dans le fichier YAML, pas besoin de modifier le JS/CSS
+2. **Reutilisabilite** : Un meme desastre peut avoir differentes configurations selon la recette
+3. **Flexibilite** : Les options sont accessibles cote client (JS et CSS)
+4. **Maintenabilite** : Modification facile sans toucher au code
+
+### Exemple de recettes multiples avec options differentes
+
+```yaml
+regles:
+  # Saint-Valentin : coeurs rouges intenses
+  - query: "context.date.day == '14' && context.date.month == '2'"
+    recettes: [amour_intense]
+
+  # Titre contient "love" : coeurs roses doux
+  - query: "query.title ~ /.*love.*/i"
+    recettes: [amour_doux]
+
+recettes:
+  amour_intense:
+    enabled: true
+    desastre: amour  # Meme dossier d'assets
+    options:
+      color: "#ff0033"
+      intensity: high
+      count: 50
+
+  amour_doux:
+    enabled: true
+    desastre: amour  # Meme dossier d'assets
+    options:
+      color: "#ffb3d9"
+      intensity: low
+      count: 10
+```
 
 ## API
 

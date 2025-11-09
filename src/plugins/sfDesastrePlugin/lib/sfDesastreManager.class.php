@@ -115,8 +115,9 @@ class sfDesastreManager
    * @param array $extraParams Parametres supplementaires (optionnel)
    * @param string $webRoot Chemin racine web (ex: /desastres)
    * @param string $fsRoot Chemin systeme de fichiers racine
+   * @param sfContext $context Contexte Symfony (optionnel)
    */
-  public function applyToRequest(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $webRoot = '/desastres', $fsRoot = null)
+  public function applyToRequest(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $webRoot = '/desastres', $fsRoot = null, sfContext $context = null)
   {
     // Fusionner les parametres de la requete avec les parametres supplementaires
     $allParams = array_merge($request->getParameterHolder()->getAll(), $extraParams);
@@ -126,7 +127,7 @@ class sfDesastreManager
 
     // Appliquer les recettes a la reponse
     if (!empty($recettes)) {
-      $this->applyRecettesToResponse($response, $recettes, $webRoot, $fsRoot);
+      $this->applyRecettesToResponse($response, $recettes, $webRoot, $fsRoot, $context);
     }
   }
 
@@ -137,12 +138,15 @@ class sfDesastreManager
    * @param array $recettes Les recettes a appliquer
    * @param string $webRoot Chemin racine web (ex: /desastre/recettes)
    * @param string $fsRoot Chemin systeme de fichiers racine
+   * @param sfContext $context Contexte Symfony (optionnel)
    */
-  public function applyRecettesToResponse(sfWebResponse $response, array $recettes, $webRoot = '/desastres', $fsRoot = null)
+  public function applyRecettesToResponse(sfWebResponse $response, array $recettes, $webRoot = '/desastres', $fsRoot = null, sfContext $context = null)
   {
     if ($fsRoot === null) {
       $fsRoot = sfConfig::get('sf_web_dir') . $webRoot;
     }
+
+    $allOptions = array();
 
     foreach ($recettes as $recette) {
       if (!isset($recette['desastre'])) {
@@ -150,6 +154,10 @@ class sfDesastreManager
       }
 
       $desastreName = $recette['desastre'];
+      $options = isset($recette['options']) ? $recette['options'] : array();
+
+      // Stocker les options pour injection globale
+      $allOptions[$desastreName] = $options;
 
       // Ajouter les stylesheets
       $stylesheets = $this->findAssets($fsRoot, $desastreName, 'stylesheets', array('css'));
@@ -164,6 +172,57 @@ class sfDesastreManager
         $webPath = $webRoot . '/' . $desastreName . '/javascript/' . basename($javascript);
         $response->addJavascript($webPath);
       }
+    }
+
+    // Injecter les options dans le HTML via un script inline
+    if (!empty($allOptions)) {
+      $this->injectDesastreOptions($response, $allOptions, $context);
+    }
+  }
+
+  /**
+   * Injecte les options des desastres dans le HTML
+   * Les options sont accessibles via :
+   * - JavaScript: window.DesastreOptions
+   * - CSS: variables CSS custom properties --desastre-*
+   *
+   * @param sfWebResponse $response L'objet reponse Symfony
+   * @param array $options Options a injecter
+   * @param sfContext $context Contexte Symfony (optionnel)
+   */
+  protected function injectDesastreOptions(sfWebResponse $response, array $options, sfContext $context = null)
+  {
+    // Creer le code JavaScript pour les options
+    $jsCode = '<script type="text/javascript">' . "\n";
+    $jsCode .= '/* Desastre Options - Auto-generated */' . "\n";
+    $jsCode .= 'window.DesastreOptions = ' . json_encode($options) . ';' . "\n";
+    $jsCode .= '</script>';
+
+    // Creer des variables CSS custom properties
+    $cssVars = array();
+    foreach ($options as $desastreName => $desastreOptions) {
+      foreach ($desastreOptions as $key => $value) {
+        $cssVarName = '--desastre-' . $desastreName . '-' . $key;
+        $cssVars[$cssVarName] = $value;
+      }
+    }
+
+    $cssCode = '';
+    if (!empty($cssVars)) {
+      $cssCode = '<style type="text/css">' . "\n";
+      $cssCode .= '/* Desastre Options - Auto-generated */' . "\n";
+      $cssCode .= ':root {' . "\n";
+      foreach ($cssVars as $varName => $varValue) {
+        $cssCode .= '  ' . $varName . ': ' . $varValue . ';' . "\n";
+      }
+      $cssCode .= '}' . "\n";
+      $cssCode .= '</style>';
+    }
+
+    // Stocker dans les attributs utilisateur du contexte pour injection par le filtre
+    if ($context !== null) {
+      $context->getUser()->setAttribute('desastre_options_js', $jsCode);
+      $context->getUser()->setAttribute('desastre_options_css', $cssCode);
     }
   }
 

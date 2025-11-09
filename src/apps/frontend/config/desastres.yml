@@ -48,14 +48,24 @@ recettes:
   bleu:
     enabled: true
     desastre: bleu
+    options:
+      theme: blue
+      color: "#0066ff"
 
   # Recette "amour"
   # Les assets doivent se trouver dans :
   # - web/desastres/amour/stylesheets/*.css
   # - web/desastres/amour/javascript/*.js
+  # Les options sont accessibles via :
+  # - JavaScript: window.DesastreOptions.amour.theme
+  # - CSS: var(--desastre-amour-theme)
   amour:
     enabled: true
     desastre: amour
+    options:
+      theme: love
+      color: "#ff0066"
+      intensity: high
 
   # Recette "robot"
   # Les assets doivent se trouver dans :
@@ -64,6 +74,9 @@ recettes:
   robot:
     enabled: true
     desastre: robot
+    options:
+      theme: robot
+      speed: fast
 
   # Recette "fish"
   # Les assets doivent se trouver dans :
@@ -72,6 +85,9 @@ recettes:
   fish:
     enabled: true
     desastre: fish
+    options:
+      theme: fish
+      count: 10
 
   # Recette "noir"
   # Les assets doivent se trouver dans :
@@ -80,6 +96,9 @@ recettes:
   noir:
     enabled: true
     desastre: noir
+    options:
+      theme: black
+      color: "#000000"
 
   # Recette "light"
   # Les assets doivent se trouver dans :
@@ -88,6 +107,10 @@ recettes:
   light:
     enabled: true
     desastre: light
+    options:
+      theme: light
+      color: "#ffffff"
+      brightness: high
 
   # Recette "mort"
   # Les assets doivent se trouver dans :
@@ -96,3 +119,6 @@ recettes:
   mort:
     enabled: true
     desastre: mort
+    options:
+      theme: death
+      color: "#666666"

@@ -1,5 +1,12 @@
+// Exemple d'utilisation des options du desastre
+// Les options sont accessibles via window.DesastreOptions.amour
+// Exemple: window.DesastreOptions.amour.color, window.DesastreOptions.amour.intensity
+console.log('Coeur');
 
-console.log('Coeur')
+// Verifier si les options sont disponibles
+if (window.DesastreOptions && window.DesastreOptions.amour) {
+  console.log('Options du desastre amour:', window.DesastreOptions.amour);
+}
 
 /*
  * anime.js v3.2.2

@@ -18,8 +18,9 @@
  * @param sfWebResponse $response La reponse Symfony
  * @param array $extraParams Parametres supplementaires pour l'evaluation des regles (optionnel)
  * @param string $configPath Chemin vers le fichier de configuration (optionnel, par defaut: apps/APP/config/desastres.yml)
+ * @param sfContext $context Contexte Symfony (optionnel, sera recupere automatiquement si non fourni)
  */
-function apply_desastre(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $configPath = null)
+function apply_desastre(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $configPath = null, sfContext $context = null)
 {
   if ($configPath === null) {
     $configPath = sfConfig::get('sf_app_config_dir') . '/desastres.yml';
@@ -29,8 +30,12 @@ function apply_desastre(sfWebRequest $request, sfWebResponse $response, array $e
     return;
   }
 
+  if ($context === null) {
+    $context = sfContext::getInstance();
+  }
+
   $manager = new sfDesastreManager($configPath);
-  $manager->applyToRequest($request, $response, $extraParams);
+  $manager->applyToRequest($request, $response, $extraParams, '/desastres', null, $context);
 }
 
 /**
