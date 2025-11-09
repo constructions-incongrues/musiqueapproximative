@@ -1,0 +1,95 @@
+# Configuration des désastres
+#
+# Ce fichier définit les règles et les recettes pour le système de désastres.
+# Les règles permettent de déterminer quand un désastre doit être appliqué,
+# et les recettes définissent quels assets (CSS/JS) charger.
+#
+# Structure :
+# -----------
+#
+# regles:
+#   - query: "expression de la règle"
+#     recettes: [nom_recette1, nom_recette2]
+#     probability: 0.0 à 1.0 (optionnel, 1.0 par défaut)
+#
+# recettes:
+#   nom_recette:
+#     enabled: true/false
+#     desastre: nom_du_dossier_assets
+#     options:
+#       key: value
+#
+# Syntaxe des règles :
+# -------------------
+#
+# Variables disponibles :
+# - query.* : Paramètres de la requête (query.title, query.artist, etc.)
+# - context.date.* : Date et heure (day, month, year, hour, minute, weekday)
+#
+# Opérateurs :
+# - ~ /pattern/i : Test de regex (i pour insensible à la casse)
+# - ==, !=, >, <, >=, <= : Comparaison
+# - && : ET logique
+# - || : OU logique
+# - () : Groupement
+#
+# Exemples de règles :
+# -------------------
+
+regles:
+  # Désastre "amour" : déclenché si le titre contient "amour" ou "love",
+  # ou si on est le 14 février (Saint-Valentin)
+  - query: "query.title ~ /.*amour.*/i || query.title ~ /.*love.*/i || (context.date.day == '14' && context.date.month == '2')"
+    recettes: [amour_caca, amour_pipi]
+    probability: 0.5
+
+  # Désastre "noel" : déclenché uniquement le 25 décembre
+  - query: "context.date.day == '25' && context.date.month == '12'"
+    recettes: [noel_snow]
+    probability: 1.0
+
+  # Désastre "weekend" : déclenché le samedi (6) et dimanche (7)
+  - query: "context.date.weekday == '6' || context.date.weekday == '7'"
+    recettes: [weekend_party]
+    probability: 0.3
+
+  # Désastre basé sur l'artiste
+  - query: "query.artist ~ /.*beatles.*/i"
+    recettes: [beatles_special]
+
+recettes:
+  # Recette "amour_pipi"
+  # Les assets doivent se trouver dans :
+  # - web/desastres/amour/stylesheets/*.css
+  # - web/desastres/amour/javascript/*.js
+  amour_pipi:
+    enabled: true
+    desastre: amour
+    options:
+      color: yellow
+      text: PIPI
+
+  amour_caca:
+    enabled: true
+    desastre: amour
+    options:
+      color: brown
+      text: CACA
+
+  noel_snow:
+    enabled: true
+    desastre: noel
+    options:
+      effect: snow
+
+  weekend_party:
+    enabled: true
+    desastre: party
+    options:
+      intensity: medium
+
+  beatles_special:
+    enabled: false  # Désactivé par défaut
+    desastre: beatles
+    options:
+      theme: yellow_submarine

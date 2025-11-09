@@ -13,6 +13,7 @@ class ProjectConfiguration extends sfProjectConfiguration
         $this->enablePlugins('sfAdminDashPlugin');
         $this->enablePlugins('sfFeed2Plugin');
         $this->enablePlugins('sfJqueryReloadedPlugin');
+        $this->enablePlugins('sfDesastrePlugin');
 
         // For legacy PEAR packages
         set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/../lib/vendor');
