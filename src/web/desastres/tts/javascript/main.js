@@ -45,8 +45,12 @@ if (!element) {
       console.log("[desastres/tts] Random pitch:", utterance.pitch);
     }
 
+    // Volume: utiliser la valeur configuree ou generer une valeur aleatoire entre 0.3 et 1
     if (window.DesastreOptions.tts.volume !== undefined) {
       utterance.volume = window.DesastreOptions.tts.volume;
+    } else {
+      utterance.volume = 0.3 + Math.random() * 0.7;  // Entre 0.3 et 1
+      console.log("[desastres/tts] Random volume:", utterance.volume);
     }
 
     // Selection d'une voix aleatoire si une liste est fournie
