@@ -83,6 +83,10 @@ regles:
     recettes: [consonnard, voyelliste]
     probability: 0.05
 
+  # Désastre "radioactivite"
+  - query: "query.artist ~ /.*(radioactivite).*/i"
+    recettes: [radioactivite]
+    probability: 1.0
 
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.<recette>.<option>
@@ -386,34 +390,45 @@ recettes:
 
   # Mange-Lettres
   # L'infâme Consonnard
-  consonnard:
+  # consonnard:
+  #   enabled: true
+  #   desastre: mangelettres
+  #   scripts:
+  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+  #   options:
+  #     rate: 0.5
+  #     target: aeiouy
+  #     case: insensitive
+  #     onSplit:
+  #       yPercent: 10
+  #       opacity: 1
+  #       stagger: 0.05
+  #       duration: 15
+  # # Le Voyelliste sournois
+  # voyelliste:
+  #   enabled: true
+  #   desastre: mangelettres
+  #   scripts:
+  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+  #   options:
+  #     rate: 0.5
+  #     target: bcdfghjklmnpqrstvwxz
+  #     case: insensitive
+  #     onSplit:
+  #       yPercent: 10
+  #       opacity: 1
+  #       stagger: 0.05
+  #       duration: 15
+
+  # Recette "radioactivite"
+  radioactivite:
     enabled: true
-    desastre: mangelettres
-    scripts:
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    desastre: radioactivite
     options:
-      rate: 0.5
-      target: aeiouy
-      case: insensitive
-      onSplit:
-        yPercent: 10
-        opacity: 1
-        stagger: 0.05
-        duration: 15
-  # Le Voyelliste sournois
-  voyelliste:
-    enabled: true
-    desastre: mangelettres
-    scripts:
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
-    options:
-      rate: 0.5
-      target: bcdfghjklmnpqrstvwxz
-      case: insensitive
-      onSplit:
-        yPercent: 10
-        opacity: 1
-        stagger: 0.05
-        duration: 15
+      imageFolder: /desastres/radioactivite/img
+      imageBaseName: radioactivite
+      imageExtension: svg
+      imageCount: 1
+      delay: 800
