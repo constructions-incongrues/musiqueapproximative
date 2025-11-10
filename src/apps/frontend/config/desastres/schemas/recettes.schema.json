@@ -1,0 +1,248 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://musiqueapproximative.net/schemas/desastres-recettes.json",
+  "title": "Recettes de désastres - Musique Approximative",
+  "description": "Schéma de validation pour les fichiers de recettes de désastres",
+  "type": "object",
+  "required": ["recettes"],
+  "properties": {
+    "recettes": {
+      "type": "object",
+      "description": "Dictionnaire des recettes (configuration des désastres)",
+      "additionalProperties": {
+        "$ref": "#/definitions/recette"
+      }
+    }
+  },
+  "definitions": {
+    "recette": {
+      "type": "object",
+      "required": ["enabled", "desastre"],
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Active ou désactive cette recette",
+          "default": true
+        },
+        "desastre": {
+          "type": "string",
+          "description": "Type de désastre à appliquer (correspond au nom du dossier dans /desastres/)",
+          "examples": [
+            "bleu",
+            "amour",
+            "tts",
+            "mangelettres",
+            "redirect",
+            "postillons",
+            "kraftwerk"
+          ]
+        },
+        "scripts": {
+          "type": "array",
+          "description": "Scripts JavaScript externes à charger pour ce désastre",
+          "items": {
+            "type": "string",
+            "description": "URL ou chemin du script",
+            "examples": [
+              "https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js",
+              "/desastres/shared/desastre-audio.js",
+              "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"
+            ]
+          }
+        },
+        "options": {
+          "type": "object",
+          "description": "Options spécifiques au désastre (varient selon le type)",
+          "properties": {
+            "selector": {
+              "type": "string",
+              "description": "Sélecteur CSS pour cibler les éléments",
+              "examples": ["div.descriptif p", ".title", "h1, h2"]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL pour les désastres dynamiques (TTS, redirect, etc.)"
+            },
+            "texts": {
+              "type": "array",
+              "description": "Liste de textes pour les désastres TTS",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rate": {
+              "description": "Vitesse (TTS): nombre fixe ou plage [min, max]",
+              "oneOf": [
+                {
+                  "type": "number",
+                  "minimum": 0.1,
+                  "maximum": 10
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 10
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              ],
+              "examples": [1.0, [0.5, 1.5]]
+            },
+            "pitch": {
+              "description": "Hauteur (TTS): nombre fixe ou plage [min, max]",
+              "oneOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 2
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 2
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              ],
+              "examples": [1.0, [0.5, 1.5]]
+            },
+            "volume": {
+              "description": "Volume (TTS, audio): nombre fixe ou plage [min, max]",
+              "oneOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              ],
+              "examples": [0.8, [0.6, 1.0]]
+            },
+            "lang": {
+              "type": "string",
+              "description": "Code de langue BCP 47 (TTS)",
+              "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+              "examples": ["fr-FR", "en-US", "fr-CA"]
+            },
+            "voices": {
+              "type": "array",
+              "description": "Liste de noms de voix (TTS)",
+              "items": {
+                "type": "string"
+              },
+              "examples": [
+                ["Thomas", "Amélie"],
+                ["Mauvaises nouvelles", "Superstar", "Violoncelles"]
+              ]
+            },
+            "imageFolder": {
+              "type": "string",
+              "description": "Dossier contenant les images",
+              "examples": ["/desastres/mort/img"]
+            },
+            "imageBaseName": {
+              "type": "string",
+              "description": "Nom de base des fichiers images",
+              "examples": ["cimetiere", "kraftwerk"]
+            },
+            "imageExtension": {
+              "type": "string",
+              "description": "Extension des fichiers images",
+              "enum": ["png", "jpg", "jpeg", "gif", "svg"]
+            },
+            "imageCount": {
+              "type": "integer",
+              "description": "Nombre d'images disponibles",
+              "minimum": 1
+            },
+            "delay": {
+              "type": "integer",
+              "description": "Délai en millisecondes",
+              "minimum": 0
+            },
+            "seconds": {
+              "type": "integer",
+              "description": "Nombre de secondes (pour redirect)",
+              "minimum": 0
+            },
+            "target": {
+              "type": "string",
+              "description": "Caractères cibles (mangelettres)",
+              "examples": ["aeiouy", "bcdfghjklmnpqrstvwxz"]
+            },
+            "case": {
+              "type": "string",
+              "description": "Sensibilité à la casse",
+              "enum": ["sensitive", "insensitive"]
+            },
+            "tombSize": {
+              "type": "integer",
+              "description": "Taille des tombes en pixels (désastre mort)",
+              "minimum": 1
+            },
+            "split": {
+              "type": "object",
+              "description": "Configuration SplitText (GSAP)"
+            },
+            "tween": {
+              "type": "object",
+              "description": "Configuration animation (GSAP)"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "recettes": {
+        "bleu": {
+          "enabled": true,
+          "desastre": "bleu"
+        },
+        "tts_jinglist": {
+          "enabled": true,
+          "desastre": "tts",
+          "options": {
+            "url": "https://n8n.musiques-incongrues.net/webhook/tts-jingles",
+            "pitch": [0.5, 1.5],
+            "rate": [0.5, 1.0],
+            "volume": 0.7,
+            "lang": "fr-FR",
+            "voices": ["Thomas", "Amélie"]
+          }
+        },
+        "mort": {
+          "enabled": true,
+          "desastre": "postillons",
+          "options": {
+            "imageFolder": "/desastres/mort/img",
+            "imageBaseName": "cimetiere",
+            "imageExtension": "png",
+            "imageCount": 20,
+            "tombSize": 120,
+            "delay": 800
+          }
+        }
+      }
+    }
+  ]
+}

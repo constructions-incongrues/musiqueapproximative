@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://musiqueapproximative.net/schemas/desastres-regles.json",
+  "title": "Règles de désastres - Musique Approximative",
+  "description": "Schéma de validation pour les fichiers de règles de désastres",
+  "type": "object",
+  "required": ["regles"],
+  "properties": {
+    "regles": {
+      "type": "array",
+      "description": "Liste des règles de déclenchement des désastres",
+      "items": {
+        "$ref": "#/definitions/regle"
+      }
+    }
+  },
+  "definitions": {
+    "regle": {
+      "type": "object",
+      "required": ["query", "recettes"],
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Expression de la condition de déclenchement (syntaxe: query.* ou context.*)",
+          "examples": [
+            "query.title ~ /.*bleu.*/i",
+            "query.artist ~ /.*kraftwerk.*/i",
+            "context.date.month == '12'",
+            "query.title ~ /.*love.*/i && context.date.weekday == 6"
+          ]
+        },
+        "recettes": {
+          "type": "array",
+          "description": "Liste des recettes à appliquer quand la règle matche",
+          "items": {
+            "type": "string",
+            "description": "Nom de la recette (doit exister dans les fichiers de recettes)"
+          },
+          "minItems": 1,
+          "examples": [
+            ["bleu"],
+            ["tts_jinglist"],
+            ["consonnard", "voyelliste"]
+          ]
+        },
+        "probability": {
+          "type": "number",
+          "description": "Probabilité d'application de la règle (0.0 à 1.0)",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1.0,
+          "examples": [0.5, 0.7, 1.0]
+        },
+        "trigger": {
+          "type": "string",
+          "description": "Paramètre URL qui force le déclenchement de la règle (ignore query et probability)",
+          "examples": ["jinglist", "debug", "preview"]
+        },
+        "scripts": {
+          "type": "array",
+          "description": "⚠️ DEPRECATED: Les scripts doivent être définis dans les RECETTES, pas dans les règles. Cette propriété est ignorée.",
+          "deprecated": true,
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

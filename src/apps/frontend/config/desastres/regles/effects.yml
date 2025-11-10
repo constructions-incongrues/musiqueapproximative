@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../schemas/regles.schema.json
+
 # Regles pour les desastres a effets visuels/animations
 regles:
   # Désastre "danse"

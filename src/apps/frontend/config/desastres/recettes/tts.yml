@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
 # Recettes TTS (Text-to-Speech)
 recettes:
   # TTS Rapper : lecture du descriptif
@@ -19,7 +21,8 @@ recettes:
       pitch: [0.5, 1.5]
       rate: [0.5, 1]
       volume: 0.7
-      lang: fr-fr
+      lang: fr-FR
       voices: [Mauvaises nouvelles, Superstar, Violoncelles, Trinoïdes, Bouffon, Bulles, Bonnes nouvelles, Bahh, Boing]
       #voices: [Aaron, Albert, Alice, Alva, Amélie, Amira, Anna, Arthur, Carmit, Catherine, Cloches, Damaya, Thomas]
       #voices: [Sandy (français (France)), Rocko (français (France)), Daniel (français (France)), Eddy (français (France)), Flo (français (France)), Grandma (français (France)), Grandpa (français (France)), Shelley (français (France))]]
+

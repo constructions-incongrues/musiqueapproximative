@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://musiqueapproximative.net/schemas/desastres-main.json",
+  "title": "Configuration principale des désastres",
+  "description": "Schéma pour le fichier desastres.yml avec imports",
+  "type": "object",
+  "properties": {
+    "imports": {
+      "type": "object",
+      "description": "Fichiers à importer pour composer la configuration",
+      "properties": {
+        "regles": {
+          "type": "array",
+          "description": "Liste des fichiers de règles à importer",
+          "items": {
+            "type": "string",
+            "description": "Chemin relatif vers un fichier de règles",
+            "pattern": "^desastres/regles/.*\\.yml$",
+            "examples": [
+              "desastres/regles/colors.yml",
+              "desastres/regles/themes.yml"
+            ]
+          }
+        },
+        "recettes": {
+          "type": "array",
+          "description": "Liste des fichiers de recettes à importer",
+          "items": {
+            "type": "string",
+            "description": "Chemin relatif vers un fichier de recettes",
+            "pattern": "^desastres/recettes/.*\\.yml$",
+            "examples": [
+              "desastres/recettes/colors.yml",
+              "desastres/recettes/tts.yml"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "regles": {
+      "type": "array",
+      "description": "Règles définies directement (fusionnées avec les imports)",
+      "default": [],
+      "items": {
+        "type": "object"
+      }
+    },
+    "recettes": {
+      "type": "object",
+      "description": "Recettes définies directement (fusionnées avec les imports)",
+      "default": {},
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "required": ["imports"]
+    },
+    {
+      "required": ["regles", "recettes"]
+    }
+  ],
+  "examples": [
+    {
+      "imports": {
+        "regles": [
+          "desastres/regles/colors.yml",
+          "desastres/regles/themes.yml",
+          "desastres/regles/tts.yml"
+        ],
+        "recettes": [
+          "desastres/recettes/colors.yml",
+          "desastres/recettes/themes.yml",
+          "desastres/recettes/tts.yml"
+        ]
+      },
+      "regles": [],
+      "recettes": {}
+    }
+  ]
+}
