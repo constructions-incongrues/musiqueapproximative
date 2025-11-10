@@ -73,7 +73,8 @@ regles:
   - query: "query.title ~ /.*(TTS).*/"
     recettes: [tts_rapper]
     probability: 1.0
-  - query: "context.date.minute == 0 || context.date.minute == 15 || context.date.minute == 30 || context.date.minute == 45"
+  - query: "query.title ~ /(.*)/"
+  #- query: "context.date.minute == 0 || context.date.minute == 15 || context.date.minute == 30 || context.date.minute == 45"
     recettes: [tts_jinglist]
     probability: 1.0
 
@@ -97,6 +98,7 @@ regles:
     recettes: [kraftwerk]
     probability: 1.0
 
+  # Désastre "sale"
   - query: "query.artist ~ /.*(sale).*/i"
     recettes: [sale]
     probability: 1.0
@@ -187,7 +189,9 @@ recettes:
     enabled: true
     desastre: tts
     options:
-      selector: .title
+      texts:
+        - Vous êtes sur Musique Approximative
+        - Il fait beau n'est-ce pas ?
 
   # Recette "danse"
   danse:

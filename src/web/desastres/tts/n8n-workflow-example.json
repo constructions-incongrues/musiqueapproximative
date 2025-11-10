@@ -1,0 +1,74 @@
+{
+  "name": "TTS Jingles Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tts-jingles",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "tts-jingles"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupérer le contexte envoyé par le désastre TTS\nconst context = $input.item.json.body;\n\n// Log du contexte pour debug\nconsole.log('Context reçu:', context);\n\n// Extraire les informations utiles\nconst date = context.date;\nconst query = context.query || {};\nconst page = context.page;\nconst options = context.options;\n\n// Définir les jingles par période de la journée\nconst jinglesByHour = {\n  morning: [\n    \"Bonjour et bienvenue sur Musique Approximative !\",\n    \"C'est le matin sur Musique Approximative, réveillez-vous en musique !\",\n    \"Bonne journée avec Musique Approximative !\"\n  ],\n  afternoon: [\n    \"Bon après-midi sur Musique Approximative !\",\n    \"L'après-midi continue sur Musique Approximative !\",\n    \"Restez avec nous cet après-midi sur Musique Approximative !\"\n  ],\n  evening: [\n    \"Bonne soirée sur Musique Approximative !\",\n    \"La soirée commence sur Musique Approximative !\",\n    \"Profitez de votre soirée avec Musique Approximative !\"\n  ],\n  night: [\n    \"Bonne nuit avec Musique Approximative !\",\n    \"La nuit musicale sur Musique Approximative !\",\n    \"Musique Approximative vous accompagne cette nuit !\"\n  ]\n};\n\n// Jingles spéciaux pour les heures pile\nconst hourlyJingles = [\n  \"Il est \" + date.hour + \" heures sur Musique Approximative !\",\n  \"Vous écoutez Musique Approximative, il est \" + date.hour + \" heures.\",\n  date.hour + \" heures, vous êtes sur Musique Approximative !\"\n];\n\n// Jingles de quart d'heure\nconst quarterJingles = [\n  \"Vous écoutez Musique Approximative, la radio qui déchire !\",\n  \"Musique Approximative, votre radio préférée !\",\n  \"Restez branchés sur Musique Approximative !\",\n  \"C'est Musique Approximative, la meilleure radio du monde !\",\n  \"Vous êtes sur Musique Approximative, enjoy !\"\n];\n\n// Jingles de week-end\nconst weekendJingles = [\n  \"Bon week-end avec Musique Approximative !\",\n  \"C'est le week-end sur Musique Approximative !\",\n  \"Profitez de votre week-end avec Musique Approximative !\"\n];\n\n// Jingles de décembre / Noël\nconst decemberJingles = [\n  \"Joyeuses fêtes avec Musique Approximative !\",\n  \"Décembre en musique sur Musique Approximative !\",\n  \"Les fêtes de fin d'année sur Musique Approximative !\"\n];\n\n// Déterminer quels jingles utiliser\nlet availableJingles = [];\n\n// Vérifier si c'est décembre\nif (date.month === 12) {\n  availableJingles = availableJingles.concat(decemberJingles);\n}\n\n// Vérifier si c'est le week-end (6 = samedi, 7 = dimanche)\nif (date.weekday === 6 || date.weekday === 7) {\n  availableJingles = availableJingles.concat(weekendJingles);\n}\n\n// Si c'est l'heure pile (minute == 0)\nif (date.minute === 0) {\n  availableJingles = availableJingles.concat(hourlyJingles);\n} else {\n  // Sinon utiliser les jingles de quart d'heure\n  availableJingles = availableJingles.concat(quarterJingles);\n}\n\n// Ajouter les jingles selon l'heure de la journée\nif (date.hour >= 6 && date.hour < 12) {\n  availableJingles = availableJingles.concat(jinglesByHour.morning);\n} else if (date.hour >= 12 && date.hour < 18) {\n  availableJingles = availableJingles.concat(jinglesByHour.afternoon);\n} else if (date.hour >= 18 && date.hour < 22) {\n  availableJingles = availableJingles.concat(jinglesByHour.evening);\n} else {\n  availableJingles = availableJingles.concat(jinglesByHour.night);\n}\n\n// EXEMPLES : Jingles basés sur les informations du morceau (query)\n// Décommentez ces sections pour les activer\n\n// Jingles basés sur l'artiste\n// if (query.artist && query.artist.toLowerCase().includes('beatles')) {\n//   availableJingles = availableJingles.concat([\n//     \"Les Beatles sur Musique Approximative !\",\n//     \"Un classique des Beatles pour vous !\"\n//   ]);\n// }\n\n// Jingles basés sur le titre\n// if (query.title && query.title.toLowerCase().includes('love')) {\n//   availableJingles = availableJingles.concat([\n//     \"De l'amour dans l'air !\",\n//     \"Un titre qui parle d'amour !\"\n//   ]);\n// }\n\n// Jingles basés sur le contributeur\n// if (query.contributor && query.contributor.toLowerCase() === 'john') {\n//   availableJingles = availableJingles.concat([\n//     \"Sélection de John !\",\n//     \"Un morceau choisi par John !\"\n//   ]);\n// }\n\n// Retourner la liste de jingles\nreturn { json: availableJingles };"
+      },
+      "id": "code-node",
+      "name": "Code - Sélection Jingles",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "response-node",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code - Sélection Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Sélection Jingles": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "instanceId": "example"
+  },
+  "id": "tts-jingles-workflow",
+  "tags": []
+}

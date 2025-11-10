@@ -11,7 +11,7 @@ Le désastre est déclenché lorsque le titre de l'émission contient "TTS" (ins
 **Règle :**
 ```yaml
 - query: "query.title ~ /.*(TTS).*/"
-  recettes: [ttsrapper]
+  recettes: [tts_rapper]
   probability: 1.0
 ```
 
@@ -22,16 +22,18 @@ Le désastre est déclenché lorsque le titre de l'émission contient "TTS" (ins
 | Option | Type | Défaut | Description |
 |--------|------|--------|-------------|
 | `selector` | string | `'div.descriptif p'` | Sélecteur CSS de l'élément dont le texte sera lu |
+| `texts` | array | - | Liste de textes parmi lesquels choisir aléatoirement |
+| `url` | string | - | URL qui reçoit le contexte (POST JSON) et retourne un tableau de textes |
 | `lang` | string | Aléatoire (`fr-FR`, `fr-CA`, `fr-BE`, `fr-CH`) | Code de langue BCP 47 |
 | `rate` | number | Aléatoire (0.5-2.0) | Vitesse de lecture (0.1 à 10) |
 | `pitch` | number | Aléatoire (0-2.0) | Hauteur de la voix (0 à 2) |
 | `volume` | number | Aléatoire (0.3-1.0) | Volume (0 à 1) |
-| `voices` | array | - | Liste de noms de voix parmi lesquelles choisir aléatoirement |
+| `voices` | array | Toutes les voix disponibles | Liste de noms de voix parmi lesquelles choisir aléatoirement |
 
 ### Exemple de configuration
 
 ```yaml
-ttsrapper:
+tts_rapper:
   enabled: true
   desastre: tts
   options:
@@ -54,7 +56,102 @@ Sans options spécifiques, le désastre utilisera :
 - Rate, pitch et volume aléatoires
 
 ```yaml
-ttsrapper:
+tts_rapper:
+  enabled: true
+  desastre: tts
+  options:
+    selector: div.descriptif p
+```
+
+## Sources de texte
+
+Le désastre TTS peut obtenir le texte à lire de **3 façons différentes**, avec cet ordre de priorité :
+
+### 1. URL avec contexte (Priorité 1)
+
+L'URL reçoit le contexte complet en POST JSON et retourne un tableau de textes.
+
+**Configuration :**
+```yaml
+tts_jinglist:
+  enabled: true
+  desastre: tts
+  options:
+    url: https://api.example.com/tts/jingles
+```
+
+**Contexte envoyé (POST JSON) :**
+```json
+{
+  "date": {
+    "day": 15,
+    "month": 11,
+    "year": 2025,
+    "hour": 14,
+    "minute": 30,
+    "weekday": 5,
+    "timestamp": 1731679800000
+  },
+  "query": {
+    "title": "Nom du morceau",
+    "artist": "Nom de l'artiste",
+    "contributor": "Nom du contributeur"
+  },
+  "options": {
+    "url": "https://api.example.com/tts/jingles",
+    "selector": ".title"
+  },
+  "allDesastreOptions": {
+    "tts": { /* ... */ }
+  },
+  "page": {
+    "url": "https://musiqueapproximative.net/post/123",
+    "pathname": "/post/123",
+    "title": "Ma Playlist"
+  },
+  "audio": {
+    "duration": 234.5,
+    "currentTime": 0
+  }
+}
+```
+
+**Note** : Les champs `query.title`, `query.artist` et `query.contributor` sont extraits automatiquement depuis le DOM de la page. Ils peuvent être absents si les éléments correspondants ne sont pas trouvés.
+
+**Réponse attendue (JSON) :**
+```json
+[
+  "Première phrase possible",
+  "Deuxième phrase possible",
+  "Troisième phrase possible"
+]
+```
+
+Le désastre choisira une phrase au hasard dans ce tableau.
+
+### 2. Liste de textes (Priorité 2)
+
+Une liste de textes définie directement dans la configuration.
+
+**Configuration :**
+```yaml
+tts_jinglist:
+  enabled: true
+  desastre: tts
+  options:
+    texts:
+      - "Vous écoutez Musique Approximative"
+      - "La radio qui déchire"
+      - "Restez à l'écoute"
+```
+
+### 3. Sélecteur CSS (Priorité 3)
+
+Le texte est extrait d'un élément de la page via un sélecteur CSS.
+
+**Configuration :**
+```yaml
+tts_rapper:
   enabled: true
   desastre: tts
   options:
@@ -64,9 +161,12 @@ ttsrapper:
 ## Fonctionnement
 
 1. **Chargement** : Le script vérifie la présence des options TTS dans `window.DesastreOptions.tts`
-2. **Sélection du texte** : Récupère le texte de l'élément correspondant au sélecteur
+2. **Sélection du texte** :
+   - Si `url` est défini : envoie le contexte et récupère la réponse
+   - Sinon si `texts` est défini : choisit un texte au hasard
+   - Sinon : utilise le sélecteur CSS
 3. **Configuration** : Configure les paramètres de synthèse vocale (lang, rate, pitch, volume, voice)
-4. **Sélection de la voix** : Si une liste de voix est fournie, en choisit une aléatoirement
+4. **Sélection de la voix** : Choisit une voix au hasard (parmi `voices` si défini, sinon parmi toutes les voix)
 5. **Lecture automatique** : Tente de lire automatiquement le texte
 6. **Fallback** : Si l'autoplay est bloqué, attend une interaction utilisateur (click, keydown, touchstart)
 
