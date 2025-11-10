@@ -6,23 +6,25 @@
 # Les regles et recettes sont importees depuis des fichiers modules dans le dossier desastres/
 
 imports:
-  regles:
-    - desastres/regles/colors.yml      # Desastres de couleurs (bleu, noir, light)
-    - desastres/regles/themes.yml      # Desastres thematiques (amour, mort, musique, etc.)
-    - desastres/regles/seasonal.yml    # Desastres saisonniers (spooky, quickos)
-    - desastres/regles/tts.yml         # Desastres TTS (Text-to-Speech)
-    - desastres/regles/effects.yml     # Desastres a effets (danse, splitouine, kraftwerk, sale)
-    - desastres/regles/text.yml        # Desastres de texte (mangelettres)
-
   recettes:
-    - desastres/recettes/colors.yml    # Recettes de couleurs
-    - desastres/recettes/themes.yml    # Recettes thematiques
-    - desastres/recettes/seasonal.yml  # Recettes saisonnieres
-    - desastres/recettes/tts.yml       # Recettes TTS
-    - desastres/recettes/effects.yml   # Recettes d'effets
-    - desastres/recettes/text.yml      # Recettes de texte
+    - desastres/recettes/mamie.yml
+    - desastres/recettes/mangelettres.yml
+    - desastres/recettes/misc.yml
+    - desastres/recettes/postillons.yml
+    - desastres/recettes/redirect.yml
+    - desastres/recettes/slitouine.yml
+    - desastres/recettes/tts.yml
+  regles:
+    - desastres/regles/mamie.yml
+    - desastres/regles/mangelettres.yml
+    - desastres/regles/misc.yml
+    - desastres/regles/postillons.yml
+    - desastres/regles/redirect.yml
+    - desastres/regles/slitouine.yml
+    - desastres/regles/tts.yml
 
 # On peut aussi definir des regles/recettes directement ici
 # Elles seront fusionnees avec les imports
-regles: []
+
 recettes: {}
+regles: []

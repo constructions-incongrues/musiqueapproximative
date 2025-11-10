@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+# À en recouvrir le pare-brise
+recettes:
+  kraftwerk:
+    desastre: kraftwerk
+    enabled: true
+    options:
+      delay: 800
+      imageBaseName: kraftwerk
+      imageCount: 1
+      imageExtension: svg
+      imageFolder: /desastres/kraftwerk/img
+
+  postillons_mort:
+    desastre: postillons
+    enabled: true
+    options:
+      delay: 800
+      imageBaseName: cimetiere
+      imageCount: 20
+      imageExtension: png
+      imageFolder: /desastres/mort/img
+      tombSize: 120
+
+  sale:
+    desastre: sale
+    enabled: true
+    options:
+      delay: 800
+      imageBaseName: sale
+      imageCount: 1
+      imageExtension: svg
+      imageFolder: /desastres/sale/img

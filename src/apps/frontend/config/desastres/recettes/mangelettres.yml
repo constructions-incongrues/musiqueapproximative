@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../schemas/recettes.schema.json
 
-# Recettes pour les desastres de manipulation de texte
+# Recettes pour le désastre "mangelettres"
 recettes:
   # L'infâme Consonnard
   consonnard:

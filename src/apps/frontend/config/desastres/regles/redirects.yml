@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=../schemas/regles.schema.json
+
+# Règles de redirection
+regles:
+  - probability: 1
+    query: query.title == 'Spooky Mix'
+    recettes: [spooky]
+  - probability: 0.1
+    query: context.date.month == '12'
+    recettes: [quickos]
+  - probability: 0.5
+    query: context.date.month == '12' && (context.date.day == '24' || context.date.day == '25')
+    recettes: [quickos]

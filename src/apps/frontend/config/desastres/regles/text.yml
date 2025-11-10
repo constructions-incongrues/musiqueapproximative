@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=../schemas/regles.schema.json
-
-# Regles pour les desastres de manipulation de texte
-regles:
-  # Désastres "mangelettres"
-  - query: "query.title ~ /(.*)/i"
-    recettes: [consonnard, voyelliste]
-    probability: 0.05

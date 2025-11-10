@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+# Recettes pour divers désastres
+recettes:
+  amour:
+    desastre: amour
+    enabled: true
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+  bleu:
+    desastre: bleu
+    enabled: true
+  danse:
+    desastre: danse
+    enabled: true
+  fish:
+    desastre: fish
+    enabled: true
+  light:
+    desastre: light
+    enabled: true
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+  musique:
+    desastre: musique
+    enabled: true
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+  noir:
+    desastre: noir
+    enabled: true
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+  robot:
+    desastre: robot
+    enabled: true

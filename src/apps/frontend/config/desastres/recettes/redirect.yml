@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+# Recettes le désastre "redirect"
+recettes:
+  quickos:
+    desastre: redirect
+    enabled: true
+    options:
+      seconds: 3
+      url: https://quickoschantenoel.musiqueapproximative.net/?play=1
+  spooky:
+    desastre: redirect
+    enabled: true
+    options:
+      seconds: 3
+      url: https://sos.musiqueapproximative.net
