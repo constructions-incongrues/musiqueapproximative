@@ -14,6 +14,8 @@ regles:
   - query: "query.title ~ /.*(amour|love).*/i"
     recettes: [amour]
     probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "robot"
   - query: "query.title ~ /.*robot.*/i"
@@ -29,11 +31,15 @@ regles:
   - query: "query.title ~ /.*(noir|black).*/i"
     recettes: [noir]
     probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "light" : declanche si le titre contient "light" ou "lumiere"
   - query: "query.title ~ /.*(light|lumiere).*/i"
     recettes: [light]
     probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "mort" : declanche si le titre contient "mort", "morte", "morts", "death", "deaths" ou "dead"
   - query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
@@ -63,9 +69,12 @@ regles:
     recettes: [quickos]
     probability: 0.5
 
-  # Desastre "tts"
+  # Desastres "tts"
   - query: "query.title ~ /.*(TTS).*/"
-    recettes: [ttsrapper]
+    recettes: [tts_rapper]
+    probability: 1.0
+  - query: "context.date.minute == 0 || context.date.minute == 15 || context.date.minute == 30 || context.date.minute == 45"
+    recettes: [tts_jinglist]
     probability: 1.0
 
   # Désastre "danse"
@@ -73,7 +82,7 @@ regles:
     recettes: [danse]
     probability: 1.0
 
-  # Désastre "mangelettres"
+  # Désastre "splitouine"
   - query: "query.artist ~ /.*(catani).*/i"
     recettes: [splitouine_titles_matchduration]
     probability: 1.0
@@ -149,6 +158,8 @@ recettes:
   musique:
     enabled: true
     desastre: musique
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Recette "spooky" spécialement pour les chouchouxes
   spooky:
@@ -166,200 +177,17 @@ recettes:
       url: https://quickoschantenoel.musiqueapproximative.net/?play=1
       seconds: 3
 
-  # Recette "ttsrapper"
-  ttsrapper:
+  # Recettes "tts"
+  tts_rapper:
     enabled: true
     desastre: tts
     options:
       selector: div.descriptif p
-      lang: en-US
-      # Liste de voix disponibles : speechSynthesis.getVoices().map(v => v.name);
-      voices:
-        - Thomas
-        - Aaron
-        - Albert
-        - Alice
-        - Alva
-        - Amélie
-        - Amira
-        - Anna
-        - Arthur
-        - Bahh
-        - Boing
-        - Bonnes nouvelles
-        - Bouffon
-        - Bulles
-        - Carmit
-        - Catherine
-        - Cloches
-        - Damayanti
-        - Daniel (anglais (Royaume-Uni))
-        - Daniel (français (France))
-        - Daria
-        - Ellen
-        - Flo (coréen (Corée du Sud))
-        - Flo (portugais (Brésil))
-        - Flo (chinois (Chine continentale))
-        - Flo (chinois (Taïwan))
-        - Fred
-        - Gordon
-        - Grandma (allemand (Allemagne))
-        - Grandma (anglais (Royaume-Uni))
-        - Grandma (anglais (États-Unis))
-        - Grandma (espagnol (Espagne))
-        - Grandma (espagnol (Mexique))
-        - Grandma (finnois (Finlande))
-        - Grandma (français (Canada))
-        - Grandma (français (France))
-        - Grandma (italien (Italie))
-        - Grandma (japonais (Japon))
-        - Grandma (coréen (Corée du Sud))
-        - Grandma (portugais (Brésil))
-        - Grandma (chinois (Chine continentale))
-        - Grandma (chinois (Taïwan))
-        - Grandpa (allemand (Allemagne))
-        - Grandpa (anglais (Royaume-Uni))
-        - Grandpa (anglais (États-Unis))
-        - Grandpa (espagnol (Espagne))
-        - Grandpa (espagnol (Mexique))
-        - Grandpa (finnois (Finlande))
-        - Grandpa (français (Canada))
-        - Grandpa (français (France))
-        - Grandpa (italien (Italie))
-        - Grandpa (japonais (Japon))
-        - Grandpa (coréen (Corée du Sud))
-        - Grandpa (portugais (Brésil))
-        - Grandpa (chinois (Chine continentale))
-        - Grandpa (chinois (Taïwan))
-        - Hattori
-        - Helena
-        - Ioana
-        - Jacques
-        - Joana
-        - Junior
-        - Kanya
-        - Karen
-        - Kathy
-        - Kyoko
-        - Lana
-        - Laura
-        - Lekha
-        - Lesya
-        - Li-Mu
-        - Linh
-        - Luciana
-        - Majed
-        - Marie
-        - Martha
-        - Martin
-        - Mauvaises nouvelles
-        - Meijia
-        - Melina
-        - Milena
-        - Moira
-        - Montse
-        - Mónica
-        - Murmure
-        - Nicky
-        - Nora
-        - O-Ren
-        - Orgue
-        - Paulina
-        - Ralph
-        - Reed (allemand (Allemagne))
-        - Reed (anglais (Royaume-Uni))
-        - Reed (anglais (États-Unis))
-        - Reed (espagnol (Espagne))
-        - Reed (espagnol (Mexique))
-        - Reed (finnois (Finlande))
-        - Reed (français (Canada))
-        - Reed (italien (Italie))
-        - Reed (japonais (Japon))
-        - Reed (coréen (Corée du Sud))
-        - Reed (portugais (Brésil))
-        - Reed (chinois (Chine continentale))
-        - Reed (chinois (Taïwan))
-        - Rishi
-        - Rocko (allemand (Allemagne))
-        - Rocko (anglais (Royaume-Uni))
-        - Rocko (anglais (États-Unis))
-        - Rocko (espagnol (Espagne))
-        - Rocko (espagnol (Mexique))
-        - Rocko (finnois (Finlande))
-        - Rocko (français (Canada))
-        - Rocko (français (France))
-        - Rocko (italien (Italie))
-        - Rocko (japonais (Japon))
-        - Rocko (coréen (Corée du Sud))
-        - Rocko (portugais (Brésil))
-        - Rocko (chinois (Chine continentale))
-        - Rocko (chinois (Taïwan))
-        - Samantha
-        - Sandy (allemand (Allemagne))
-        - Sandy (anglais (Royaume-Uni))
-        - Sandy (anglais (États-Unis))
-        - Sandy (espagnol (Espagne))
-        - Sandy (espagnol (Mexique))
-        - Sandy (finnois (Finlande))
-        - Sandy (français (Canada))
-        - Sandy (français (France))
-        - Sandy (italien (Italie))
-        - Sandy (japonais (Japon))
-        - Sandy (coréen (Corée du Sud))
-        - Sandy (portugais (Brésil))
-        - Sandy (chinois (Chine continentale))
-        - Sandy (chinois (Taïwan))
-        - Sara
-        - Satu
-        - Shelley (allemand (Allemagne))
-        - Shelley (anglais (Royaume-Uni))
-        - Shelley (anglais (États-Unis))
-        - Shelley (espagnol (Espagne))
-        - Shelley (espagnol (Mexique))
-        - Shelley (finnois (Finlande))
-        - Shelley (français (Canada))
-        - Shelley (français (France))
-        - Shelley (italien (Italie))
-        - Shelley (japonais (Japon))
-        - Shelley (coréen (Corée du Sud))
-        - Shelley (portugais (Brésil))
-        - Shelley (chinois (Chine continentale))
-        - Shelley (chinois (Taïwan))
-        - Sinji
-        - Superstar
-        - Tessa
-        - Tina
-        - Tingting
-        - Trinoïdes
-        - Tünde
-        - Violoncelles
-        - Wobble
-        - Xander
-        - Yelda
-        - Yu-shu
-        - Yuna
-        - Zarvox
-        - Zosia
-        - Zuzana
-        - Google Deutsch
-        - Google US English
-        - Google UK English Female
-        - Google UK English Male
-        - Google español
-        - Google español de Estados Unidos
-        - Google français
-        - Google हिन्दी
-        - Google Bahasa Indonesia
-        - Google italiano
-        - Google 日本語
-        - Google 한국의
-        - Google Nederlands
-        - Google polski
-        - Google português do Brasil
-        - Google русский
-        - Google 普通话（中国大陆）
-        - Google 粤語（香港）
-        - Google 國語（臺灣
+  tts_jinglist:
+    enabled: true
+    desastre: tts
+    options:
+      selector: .title
 
   # Recette "danse"
   danse:
@@ -392,40 +220,6 @@ recettes:
           opacity: 0
           ease: elastic
 
-  # Mange-Lettres
-  # L'infâme Consonnard
-  # consonnard:
-  #   enabled: true
-  #   desastre: mangelettres
-  #   scripts:
-  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
-  #   options:
-  #     rate: 0.5
-  #     target: aeiouy
-  #     case: insensitive
-  #     onSplit:
-  #       yPercent: 10
-  #       opacity: 1
-  #       stagger: 0.05
-  #       duration: 15
-  # # Le Voyelliste sournois
-  # voyelliste:
-  #   enabled: true
-  #   desastre: mangelettres
-  #   scripts:
-  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-  #     - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
-  #   options:
-  #     rate: 0.5
-  #     target: bcdfghjklmnpqrstvwxz
-  #     case: insensitive
-  #     onSplit:
-  #       yPercent: 10
-  #       opacity: 1
-  #       stagger: 0.05
-  #       duration: 15
-
   # Recette "radioactivite"
   kraftwerk:
     enabled: true
@@ -447,3 +241,33 @@ recettes:
       imageExtension: svg
       imageCount: 1
       delay: 800
+
+  # Mange-Lettres
+  # L'infâme Consonnard
+  consonnard:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - /desastres/shared/desastre-audio.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      selector: .title
+      rate: 0.7
+      target: aeiouy
+      case: insensitive
+
+  # Le Voyelliste sournois
+  voyelliste:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - /desastres/shared/desastre-audio.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      selector: .title
+      rate: 0.7
+      target: bcdfghjklmnpqrstvwxz
+      case: insensitive
+

@@ -351,6 +351,47 @@ CSS (`web/desastres/amour/stylesheets/style.css`) :
 3. **Flexibilite** : Les options sont accessibles cote client (JS et CSS)
 4. **Maintenabilite** : Modification facile sans toucher au code
 
+## Ressources partagées
+
+### Helper Audio Global (`desastre-audio.js`)
+
+Un script partagé qui expose les informations de l'élément audio (jPlayer ou HTML5 `<audio>`) à tous les désastres via `window.DesastreAudio`.
+
+**Inclure dans une recette** :
+
+```yaml
+recettes:
+  mon_desastre:
+    enabled: true
+    desastre: mon_desastre
+    scripts:
+      - /desastres/shared/desastre-audio.js  # Charger en premier
+      # ... autres scripts
+```
+
+**Utilisation dans votre JavaScript** :
+
+```javascript
+// Attendre que l'audio soit prêt
+window.DesastreAudio.onReady(function(audio) {
+    console.log('Duration:', audio.duration + 's');
+
+    // Synchroniser une animation avec la durée du morceau
+    gsap.to('.element', {
+        opacity: 0,
+        duration: audio.duration
+    });
+});
+```
+
+**API disponible** :
+- `window.DesastreAudio.duration` : Durée en secondes (ou `null`)
+- `window.DesastreAudio.element` : Élément `<audio>` HTML5 (ou `null`)
+- `window.DesastreAudio.isReady` : `true` si les métadonnées sont chargées
+- `window.DesastreAudio.onReady(callback)` : Enregistrer un callback appelé quand l'audio est prêt
+
+Voir la [documentation complète](../../web/desastres/shared/README.md) pour plus de détails.
+
 ### Exemple de recettes multiples avec options differentes
 
 ```yaml
