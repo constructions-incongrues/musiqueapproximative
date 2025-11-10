@@ -80,10 +80,10 @@ regles:
   # Désastres "mangelettres"
   - query: "query.title ~ /(.*)/i"
     recettes: [consonnard]
-    probability: 0.2
+    probability: 0.05
   - query: "query.title ~ /(.*)/i"
     recettes: [voyelliste]
-    probability: 0.1
+    probability: 0.05
 
 
   # Les options sont accessibles via :
@@ -395,14 +395,14 @@ recettes:
       - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
       - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
     options:
-      rate: 0.8
+      rate: 0.5
       target: aeiouy
       case: insensitive
       onSplit:
-        yPercent: 15
-        opacity: 0.8
-        stagger: 0.06
-        duration: 10
+        yPercent: 10
+        opacity: 1
+        stagger: 0.05
+        duration: 15
   # Le Voyelliste sournois
   voyelliste:
     enabled: true
