@@ -80,10 +80,7 @@ regles:
 
   # Désastres "mangelettres"
   - query: "query.title ~ /(.*)/i"
-    recettes: [consonnard]
-    probability: 0.05
-  - query: "query.title ~ /(.*)/i"
-    recettes: [voyelliste]
+    recettes: [consonnard, voyelliste]
     probability: 0.05
 
 

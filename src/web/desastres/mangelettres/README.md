@@ -2,16 +2,16 @@
 
 ## Description
 
-Le désastre "Mange-Lettres" supprime aléatoirement certaines lettres du texte affiché sur la page. Il utilise GSAP SplitText pour décomposer le texte en caractères individuels et applique un filtre personnalisable pour "manger" les lettres spécifiées.
+Le désastre "Mange-Lettres" fait disparaître progressivement certaines lettres du texte affiché sur la page. Il utilise GSAP SplitText pour décomposer le texte en caractères individuels et anime la disparition des lettres ciblées.
 
 ## Fonctionnement
 
 1. Au chargement de la page, le script attend le `DOMContentLoaded`
 2. GSAP SplitText est enregistré comme plugin
-3. Le texte de `.grid-container` est décomposé en caractères individuels
+3. Le texte de `section.content` est décomposé en caractères individuels
 4. Chaque caractère est comparé à la liste des lettres cibles (`target`)
-5. Si un caractère correspond à une lettre cible, il est supprimé avec une probabilité définie par `rate`
-6. Le texte filtré est affiché à la place du texte original
+5. Si un caractère correspond à une lettre cible, il est marqué pour disparition avec une probabilité définie par `rate`
+6. Les lettres marquées disparaissent progressivement avec une animation GSAP (opacity + scale)
 
 ## Dépendances
 
@@ -28,10 +28,12 @@ Ces dépendances doivent être déclarées dans la section `scripts` de la recet
 
 | Option | Type | Défaut | Description |
 |--------|------|--------|-------------|
-| `target` | string | (requis) | Chaîne de caractères contenant les lettres à supprimer (ex: "aeiouy" pour les voyelles) |
-| `rate` | float | 1.0 | Probabilité de suppression (0.0 = jamais, 1.0 = toujours). Permet un échantillonnage aléatoire |
+| `target` | string | (requis) | Chaîne de caractères contenant les lettres à faire disparaître (ex: "aeiouy" pour les voyelles) |
+| `rate` | float | 1.0 | Probabilité de disparition (0.0 = jamais, 1.0 = toujours). Permet un échantillonnage aléatoire |
 | `case` | string | 'insensitive' | Sensibilité à la casse : 'sensitive' ou 'insensitive' |
-| `onSplit` | object | (optionnel) | Configuration de l'animation GSAP à appliquer aux caractères après le split. Voir [Animation avec onSplit](#animation-avec-onsplit) |
+| `duration` | float | 2 | Durée de l'animation de disparition en secondes |
+| `stagger` | float | 0.02 | Délai entre la disparition de chaque lettre en secondes |
+| `onSplit` | object | (optionnel) | Configuration d'une animation GSAP additionnelle à appliquer à tous les caractères. Voir [Animation avec onSplit](#animation-avec-onsplit) |
 
 ### Exemple de configuration dans `desastres.yml`
 
@@ -44,7 +46,7 @@ regles:
 
 # Recettes
 recettes:
-  # L'infâme Consonnard - Supprime les voyelles
+  # L'infâme Consonnard - Fait disparaître les voyelles progressivement
   consonnard:
     enabled: true
     desastre: mangelettres
@@ -55,8 +57,10 @@ recettes:
       rate: 0.8
       target: aeiouy
       case: insensitive
+      duration: 3
+      stagger: 0.05
 
-  # Le Voyelliste sournois - Supprime les consonnes avec animation
+  # Le Voyelliste sournois - Fait disparaître les consonnes avec animation additionnelle
   voyelliste:
     enabled: true
     desastre: mangelettres
@@ -67,6 +71,8 @@ recettes:
       rate: 0.5
       target: bcdfghjklmnpqrstvwxz
       case: insensitive
+      duration: 2
+      stagger: 0.03
       onSplit:
         yPercent: 10
         opacity: 1
@@ -78,23 +84,32 @@ recettes:
 
 ### Consonnard
 
-Supprime les voyelles (a, e, i, o, u, y) avec un taux de 80%.
+Fait disparaître progressivement les voyelles (a, e, i, o, u, y) avec un taux de 80%.
 
-**Effet** : Le texte devient difficile à lire, mais les consonnes permettent encore de deviner les mots.
+**Effet** : Les voyelles s'estompent une par une. Le texte devient difficile à lire, mais les consonnes permettent encore de deviner les mots.
+
+**Paramètres** :
+- Durée : 3 secondes
+- Délai entre lettres : 0.05s (50ms)
 
 **Exemple** :
 - Original : "Musique Approximative"
-- Résultat : "Msq pprxmtv" (environ 80% des voyelles supprimées)
+- Résultat final : "Msq pprxmtv" (environ 80% des voyelles disparues)
 
 ### Voyelliste
 
-Supprime les consonnes avec un taux de 50%.
+Fait disparaître progressivement les consonnes avec un taux de 50%, accompagné d'une animation verticale.
 
-**Effet** : Le texte devient très fragmenté, seules les voyelles restent visibles de manière aléatoire.
+**Effet** : Les consonnes s'estompent et rétrécissent une par une de manière plus rapide. Le texte devient très fragmenté, seules les voyelles restent visibles de manière aléatoire. Une animation additionnelle fait bouger verticalement tous les caractères.
+
+**Paramètres** :
+- Durée de disparition : 2 secondes
+- Délai entre lettres : 0.03s (30ms)
+- Animation additionnelle : mouvement vertical lent (15s)
 
 **Exemple** :
 - Original : "Musique Approximative"
-- Résultat : "uiue oiae" (environ 50% des consonnes supprimées)
+- Résultat final : "uiue oiae" (environ 50% des consonnes disparues)
 
 ## Paramètre `rate` : Échantillonnage aléatoire
 
@@ -123,9 +138,18 @@ Le paramètre `case` définit si la comparaison des caractères est sensible à 
 - Avec `case: 'insensitive'` : "L Bnne est june"
 - Avec `case: 'sensitive'` : "L Bnne est june" (le 'L' majuscule reste)
 
-## Animation avec `onSplit`
+## Animation de disparition (automatique)
 
-Le paramètre `onSplit` (optionnel) permet d'appliquer une animation GSAP aux caractères restants après le filtrage. Il utilise `gsap.from()` pour animer les caractères depuis un état initial vers leur état final.
+Les lettres ciblées disparaissent automatiquement avec une animation GSAP qui combine :
+- **Opacité** : passe de 1 à 0
+- **Timing** : contrôlé par `duration` et `stagger`
+- **Easing** : `power2.in` pour une accélération en fin d'animation
+
+Cette animation est appliquée automatiquement, vous n'avez qu'à configurer `duration` et `stagger`.
+
+## Animation additionnelle avec `onSplit`
+
+Le paramètre `onSplit` (optionnel) permet d'appliquer une animation GSAP **additionnelle** à **tous** les caractères (pas seulement ceux qui disparaissent). Il utilise `gsap.from()` pour animer les caractères depuis un état initial vers leur état final.
 
 ### Structure de l'option `onSplit`
 
@@ -181,10 +205,10 @@ onSplit:
 
 ### Comportement
 
-- Si `onSplit` n'est pas spécifié, aucune animation n'est appliquée (les caractères apparaissent instantanément)
-- L'animation s'applique **uniquement** aux caractères restants après le filtrage (pas aux lettres supprimées)
-- L'animation démarre après que le texte ait été filtré et divisé en caractères
-- Le log `[desastres/mangelettres] Applying onSplit animation` apparaît dans la console si une animation est configurée
+- Si `onSplit` n'est pas spécifié, aucune animation additionnelle n'est appliquée (seule l'animation de disparition est visible)
+- L'animation s'applique à **tous** les caractères (ceux qui restent ET ceux qui vont disparaître)
+- L'animation démarre dès que le texte est divisé en caractères
+- Le log `[desastres/mangelettres] Applying additional onSplit animation` apparaît dans la console si une animation est configurée
 
 ### Propriétés GSAP courantes
 
@@ -206,36 +230,39 @@ Le script génère des logs dans la console pour faciliter le débogage :
 
 ```
 [desastres/mangelettres] Loaded
-[desastres/mangelettres] Original: "Musique Approximative" -> Filtered: "Msq pprxmtv" (rate: 0.8, case: insensitive)
-[desastres/mangelettres] Applying onSplit animation
-[desastres/mangelettres] SplitText initialized with prepareText filter
+[desastres/mangelettres] Analyzing 234 characters
+[desastres/mangelettres] Will remove 45 characters progressively
+[desastres/mangelettres] Applying additional onSplit animation
+[desastres/mangelettres] Disappearance complete
+[desastres/mangelettres] SplitText initialized with progressive disappearance
 ```
 
 Les logs indiquent :
 - Le chargement du script
-- Le texte original avant filtrage et le texte après filtrage
-- Le taux de suppression utilisé (`rate`)
-- Le mode de sensibilité à la casse utilisé
-- Si une animation `onSplit` est appliquée (log optionnel, apparaît uniquement si `onSplit` est configuré)
-- L'initialisation de SplitText
+- Le nombre total de caractères analysés
+- Le nombre de caractères qui vont disparaître
+- Si une animation `onSplit` additionnelle est appliquée (log optionnel)
+- La fin de l'animation de disparition
+- L'initialisation complète
 
 ## Sélecteur cible
 
-Le désastre s'applique sur l'élément `.grid-container`. Si vous souhaitez cibler un autre élément, modifiez le sélecteur dans le fichier `mangelettre.js` :
+Le désastre s'applique sur l'élément `section.content`. Si vous souhaitez cibler un autre élément, modifiez le sélecteur dans le fichier `mangelettre.js` :
 
 ```javascript
-let split = SplitText.create('.votre-selecteur', {
+SplitText.create('.votre-selecteur', {
     // ...
 });
 ```
 
 ## Notes techniques
 
-- Le filtrage est effectué **avant** la création des éléments DOM pour chaque caractère
-- La fonction `prepareText` est appelée par SplitText pour chaque bloc de texte
-- Les caractères non présents dans `target` sont toujours conservés
+- Toutes les lettres sont affichées initialement, puis celles ciblées disparaissent avec une animation
+- L'animation de disparition utilise `gsap.to()` avec `opacity: 0` et `scale: 0`
+- Les caractères non présents dans `target` ne sont jamais affectés
 - Les espaces et la ponctuation sont préservés (sauf s'ils sont explicitement dans `target`)
 - L'algorithme utilise `Math.random()` pour l'échantillonnage aléatoire
+- Le `stagger` crée un effet de cascade : chaque lettre commence à disparaître avec un délai par rapport à la précédente
 
 ## Cas d'usage
 
