@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 return true; // Garde les autres lettres
             }).join('');
 
-            console.log(`[desastres/mangelettres] Original: "${texte}" -> Filtered: "${filteredText}" (rate: ${rate}, case: ${caseSensitive ? 'sensitive' : 'insensitive'})`);
             return filteredText;
         },
         onSplit(self) {
