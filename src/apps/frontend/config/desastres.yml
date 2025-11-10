@@ -68,9 +68,9 @@ regles:
     recettes: [ttsrapper]
     probability: 1.0
 
-  # Désastre "mangelettres"
+  # Désastre "splitouine"
   - query: "query.artist ~ /.*(catani).*/i"
-    recettes: [mange_titles_slow]
+    recettes: [splitouine_titles_matchduration]
     probability: 1.0
 
   # Les options sont accessibles via :
@@ -338,9 +338,9 @@ recettes:
         - Google 粤語（香港）
         - Google 國語（臺灣
 
-  mange_titles_slow:
+  splitouine_titles_matchduration:
     enabled: true
-    desastre: mangelettres
+    desastre: splitouine
     options:
       split:
         selector: p.title, h1, h2
