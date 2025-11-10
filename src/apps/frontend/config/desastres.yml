@@ -83,9 +83,9 @@ regles:
     recettes: [consonnard, voyelliste]
     probability: 0.05
 
-  # Désastre "radioactivite"
-  - query: "query.artist ~ /.*(radioactivite).*/i"
-    recettes: [radioactivite]
+  # Désastre "kraftwerk"
+  - query: "query.artist ~ /.*(kraftwerk).*/i"
+    recettes: [kraftwerk]
     probability: 1.0
 
   # Les options sont accessibles via :
@@ -423,12 +423,12 @@ recettes:
   #       duration: 15
 
   # Recette "radioactivite"
-  radioactivite:
+  kraftwerk:
     enabled: true
-    desastre: radioactivite
+    desastre: kraftwerk
     options:
-      imageFolder: /desastres/radioactivite/img
-      imageBaseName: radioactivite
+      imageFolder: /desastres/kraftwerk/img
+      imageBaseName: kraftwerk
       imageExtension: svg
       imageCount: 1
       delay: 800
