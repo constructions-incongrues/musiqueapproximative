@@ -68,6 +68,7 @@ regles:
     recettes: [ttsrapper]
     probability: 1.0
 
+  # Désastre "danse"
   - query: "query.title ~ /.*(danse).*/i"
     recettes: [danse]
     probability: 1.0
