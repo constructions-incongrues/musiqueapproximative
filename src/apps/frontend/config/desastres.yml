@@ -73,10 +73,14 @@ regles:
     recettes: [splitouine_titles_matchduration]
     probability: 1.0
 
-  # Désastre "mangelettres"
-  - query: "query.artist ~ /.*(kubin).*/i"
+  # Désastres "mangelettres"
+  - query: "query.title ~ /(.*)/i"
+    recettes: [consonnard]
+    probability: 0.2
+  - query: "query.title ~ /(.*)/i"
     recettes: [voyelliste]
-    probability: 1.0
+    probability: 0.1
+
 
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.<recette>.<option>
@@ -385,6 +389,11 @@ recettes:
       rate: 0.8
       target: aeiouy
       case: insensitive
+      onSplit:
+        yPercent: 15
+        opacity: 0.8
+        stagger: 0.06
+        duration: 10
   # Le Voyelliste sournois
   voyelliste:
     enabled: true
@@ -396,3 +405,8 @@ recettes:
       rate: 0.5
       target: bcdfghjklmnpqrstvwxz
       case: insensitive
+      onSplit:
+        yPercent: 10
+        opacity: 1
+        stagger: 0.05
+        duration: 15

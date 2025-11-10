@@ -28,6 +28,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
             console.log(`[desastres/mangelettres] Original: "${texte}" -> Filtered: "${filteredText}" (rate: ${rate}, case: ${caseSensitive ? 'sensitive' : 'insensitive'})`);
             return filteredText;
+        },
+        onSplit(self) {
+            // Vérifier si onSplit est configuré
+            if (window.DesastreOptions.mangelettres && window.DesastreOptions.mangelettres.onSplit) {
+                console.log('[desastres/mangelettres] Applying onSplit animation');
+                return gsap.from(
+                    self.chars,
+                    window.DesastreOptions.mangelettres.onSplit
+                );
+            }
         }
     });
 
