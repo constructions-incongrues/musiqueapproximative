@@ -2,7 +2,7 @@
 
 ## Description
 
-Le désastre "postillons" transforme le bas de la page en cimetière en affichant progressivement 20 pierres tombales positionnées aléatoirement sur une grille. Les images apparaissent une par une avec un délai de 800ms entre chaque, créant un effet de "peuplement" du cimetière.
+Le désastre "postillons" transforme recouvre progressivement la page d'images positionnées aléatoirement sur une grille. Les images apparaissent une par une avec un délai entre chaque, créant un effet de "peuplement".
 
 ## Déclenchement
 
