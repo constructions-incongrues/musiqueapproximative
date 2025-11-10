@@ -14,6 +14,8 @@ regles:
   - query: "query.title ~ /.*(amour|love).*/i"
     recettes: [amour]
     probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "robot"
   - query: "query.title ~ /.*robot.*/i"
@@ -29,11 +31,15 @@ regles:
   - query: "query.title ~ /.*(noir|black).*/i"
     recettes: [noir]
     probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "light" : declanche si le titre contient "light" ou "lumiere"
   - query: "query.title ~ /.*(light|lumiere).*/i"
     recettes: [light]
     probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "mort" : declanche si le titre contient "mort", "morte", "morts", "death", "deaths" ou "dead"
   - query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
@@ -141,6 +147,8 @@ recettes:
   musique:
     enabled: true
     desastre: musique
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Recette "spooky" spécialement pour les chouchouxes
   spooky:
