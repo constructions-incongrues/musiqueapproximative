@@ -189,6 +189,7 @@ recettes:
     enabled: true
     desastre: tts
     options:
+      url: https://n8n.musiques-incongrues.net/webhook-test/tts-jingles
       texts:
         - Vous êtes sur Musique Approximative
         - Il fait beau n'est-ce pas ?
