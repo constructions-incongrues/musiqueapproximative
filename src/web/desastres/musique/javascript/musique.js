@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
           stage.style.width = "100%";
           stage.style.height = "100px";
           stage.style.top = "100px";
+          stage.style.pointerEvents = "none";
           stage.style.margin = "0 auto";
           stage.style.pointerEvents = "none";
           contentDiv.appendChild(stage);
@@ -126,6 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
      svgEl.style.top = "50%";
      svgEl.style.left = "50%";
      svgEl.style.transform = "translate(-50%, -50%)";
+     stage.style.pointerEvents = "none";
+     
      svgEl.style.width = "100%";
      svgEl.style.height = "100%";
 
@@ -143,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
      lettersLayer.style.left = "50%";
      lettersLayer.style.transform = "translate(-50%, -50%)";
      lettersLayer.style.width = "100%";
+     lettersLayer.style.pointerEvents = "none";
      lettersLayer.style.height = "100%";
      lettersLayer.style.pointerEvents = "none";
 
@@ -161,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
           span.style.fontWeight = "700";
           span.style.lineHeight = "1";
           span.style.color = "#000";
+          span.style.pointerEvents = "none";
           span.style.transformOrigin = "center";
           lettersLayer.appendChild(span);
           return { element: span, index };

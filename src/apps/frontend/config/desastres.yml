@@ -90,6 +90,15 @@ regles:
   # Désastres "mangelettres"
   - query: "query.title ~ /(.*)/i"
     recettes: [consonnard, voyelliste]
+    probability: 0.05
+
+  # Désastre "kraftwerk"
+  - query: "query.artist ~ /.*(kraftwerk).*/i"
+    recettes: [kraftwerk]
+    probability: 1.0
+
+  - query: "query.artist ~ /.*(sale).*/i"
+    recettes: [sale]
     probability: 1.0
 
   # Les options sont accessibles via :
@@ -211,6 +220,28 @@ recettes:
           opacity: 0
           ease: elastic
 
+  # Recette "radioactivite"
+  kraftwerk:
+    enabled: true
+    desastre: kraftwerk
+    options:
+      imageFolder: /desastres/kraftwerk/img
+      imageBaseName: kraftwerk
+      imageExtension: svg
+      imageCount: 1
+      delay: 800
+
+  # Recette "sale"
+  sale:
+    enabled: true
+    desastre: sale
+    options:
+      imageFolder: /desastres/sale/img
+      imageBaseName: sale
+      imageExtension: svg
+      imageCount: 1
+      delay: 800
+
   # Mange-Lettres
   # L'infâme Consonnard
   consonnard:
@@ -239,3 +270,4 @@ recettes:
       rate: 0.7
       target: bcdfghjklmnpqrstvwxz
       case: insensitive
+
