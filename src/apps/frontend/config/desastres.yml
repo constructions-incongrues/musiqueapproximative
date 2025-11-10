@@ -68,6 +68,10 @@ regles:
     recettes: [ttsrapper]
     probability: 1.0
 
+  - query: "query.title ~ /.*(danse).*/i"
+    recettes: [danse]
+    probability: 1.0
+
   # Désastre "mangelettres"
   - query: "query.artist ~ /.*(catani).*/i"
     recettes: [mange_titles_slow]
@@ -337,6 +341,11 @@ recettes:
         - Google 普通话（中国大陆）
         - Google 粤語（香港）
         - Google 國語（臺灣
+
+  # Recette "danse"
+  danse:
+    enabled: true
+    desastre: danse
 
   mange_titles_slow:
     enabled: true
