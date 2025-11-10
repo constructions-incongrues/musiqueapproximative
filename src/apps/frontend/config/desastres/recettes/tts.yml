@@ -1,0 +1,25 @@
+# Recettes TTS (Text-to-Speech)
+recettes:
+  # TTS Rapper : lecture du descriptif
+  tts_rapper:
+    enabled: true
+    desastre: tts
+    options:
+      selector: div.descriptif p
+
+  # TTS Jinglist : jingles contextuels depuis n8n
+  tts_jinglist:
+    enabled: true
+    desastre: tts
+    options:
+      url: https://n8n.musiques-incongrues.net/webhook/tts-jingles
+      texts:
+        - Vous êtes sur Musique Approximative
+        - Il fait beau n'est-ce pas ?
+      pitch: [0.5, 1.5]
+      rate: [0.5, 1]
+      volume: 0.7
+      lang: fr-fr
+      voices: [Mauvaises nouvelles, Superstar, Violoncelles, Trinoïdes, Bouffon, Bulles, Bonnes nouvelles, Bahh, Boing]
+      #voices: [Aaron, Albert, Alice, Alva, Amélie, Amira, Anna, Arthur, Carmit, Catherine, Cloches, Damaya, Thomas]
+      #voices: [Sandy (français (France)), Rocko (français (France)), Daniel (français (France)), Eddy (français (France)), Flo (français (France)), Grandma (français (France)), Grandpa (français (France)), Shelley (français (France))]]

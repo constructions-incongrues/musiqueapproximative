@@ -1,0 +1,15 @@
+# Regles pour les desastres saisonniers et speciaux
+regles:
+  # Desastre "spooky" : WHO U GONNA CALL ?
+  - query: "query.title == 'Spooky Mix'"
+    recettes: [spooky]
+    probability: 1.0
+
+  # Desastres "quickos" : LALALOS !
+  - query: "context.date.month == '12'"
+    recettes: [quickos]
+    probability: 0.1
+
+  - query: "context.date.month == '12' && (context.date.day == '24' || context.date.day == '25')"
+    recettes: [quickos]
+    probability: 0.5
