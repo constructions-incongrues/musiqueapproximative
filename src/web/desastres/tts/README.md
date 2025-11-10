@@ -25,12 +25,14 @@ Le désastre est déclenché lorsque le titre de l'émission contient "TTS" (ins
 | `texts` | array | - | Liste de textes parmi lesquels choisir aléatoirement |
 | `url` | string | - | URL qui reçoit le contexte (POST JSON) et retourne un tableau de textes |
 | `lang` | string | Aléatoire (`fr-FR`, `fr-CA`, `fr-BE`, `fr-CH`) | Code de langue BCP 47 |
-| `rate` | number | Aléatoire (0.5-2.0) | Vitesse de lecture (0.1 à 10) |
-| `pitch` | number | Aléatoire (0-2.0) | Hauteur de la voix (0 à 2) |
-| `volume` | number | Aléatoire (0.3-1.0) | Volume (0 à 1) |
+| `rate` | number ou array | Aléatoire (0.5-2.0) | **Nombre** : valeur fixe. **Array** `[min, max]` : valeur aléatoire dans la plage |
+| `pitch` | number ou array | Aléatoire (0-2.0) | **Nombre** : valeur fixe. **Array** `[min, max]` : valeur aléatoire dans la plage |
+| `volume` | number ou array | Aléatoire (0.3-1.0) | **Nombre** : valeur fixe. **Array** `[min, max]` : valeur aléatoire dans la plage |
 | `voices` | array | Toutes les voix disponibles | Liste de noms de voix parmi lesquelles choisir aléatoirement |
 
-### Exemple de configuration
+### Exemples de configuration
+
+#### Configuration avec valeurs fixes
 
 ```yaml
 tts_rapper:
@@ -39,13 +41,52 @@ tts_rapper:
   options:
     selector: div.descriptif p
     lang: en-US
-    rate: 1.0
-    pitch: 1.0
-    volume: 0.8
+    rate: 1.0        # Vitesse fixe normale
+    pitch: 1.0       # Hauteur fixe normale
+    volume: 0.8      # Volume fixe à 80%
     voices:
       - "Google français"
       - "Thomas"
       - "Amélie"
+```
+
+#### Configuration avec plages aléatoires
+
+```yaml
+tts_robot:
+  enabled: true
+  desastre: tts
+  options:
+    selector: div.descriptif p
+    rate: [0.5, 1.5]    # Vitesse aléatoire entre 0.5x et 1.5x
+    pitch: [0.8, 1.2]   # Hauteur aléatoire entre 0.8 et 1.2
+    volume: [0.6, 1.0]  # Volume aléatoire entre 60% et 100%
+```
+
+#### Configuration mixte
+
+```yaml
+tts_chipmunk:
+  enabled: true
+  desastre: tts
+  options:
+    selector: div.descriptif p
+    rate: [1.5, 2.0]    # Vitesse rapide aléatoire
+    pitch: 2.0          # Hauteur très aiguë fixe
+    volume: 0.9         # Volume fixe à 90%
+```
+
+#### Configuration extrême
+
+```yaml
+tts_slowmo:
+  enabled: true
+  desastre: tts
+  options:
+    selector: div.descriptif p
+    rate: [0.1, 0.5]    # Très lent
+    pitch: [0, 0.5]     # Très grave
+    volume: [0.8, 1.0]  # Fort
 ```
 
 ### Configuration minimale
@@ -53,7 +94,7 @@ tts_rapper:
 Sans options spécifiques, le désastre utilisera :
 - Sélecteur par défaut : `div.descriptif p`
 - Langue aléatoire parmi les variantes françaises
-- Rate, pitch et volume aléatoires
+- Rate, pitch et volume aléatoires dans les plages par défaut
 
 ```yaml
 tts_rapper:

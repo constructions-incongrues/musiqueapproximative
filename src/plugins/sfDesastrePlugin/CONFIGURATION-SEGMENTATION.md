@@ -1,0 +1,393 @@
+# Segmentation de la configuration des désastres
+
+## Problème
+
+Le fichier `desastres.yml` devient volumineux (284 lignes) et difficile à maintenir :
+- 19 règles
+- 15+ recettes
+- Mélange de règles et recettes
+- Difficile de retrouver une configuration spécifique
+
+## Solution proposée
+
+### Architecture modulaire avec imports
+
+```
+config/
+├── desastres.yml                    # Point d'entrée principal
+└── desastres/
+    ├── regles/
+    │   ├── colors.yml              # bleu, noir, light, rouge
+    │   ├── themes.yml              # amour, mort, musique, phone
+    │   ├── seasonal.yml            # quickos (Noël), spooky
+    │   ├── tts.yml                 # TTS rapper, TTS jinglist
+    │   ├── effects.yml             # danse, splitouine
+    │   └── text.yml                # mangelettres (consonnard, voyelliste)
+    └── recettes/
+        ├── colors.yml              # Recettes visuelles de couleurs
+        ├── themes.yml              # Recettes thématiques
+        ├── seasonal.yml            # Recettes saisonnières
+        ├── tts.yml                 # Recettes TTS
+        ├── effects.yml             # Recettes d'effets (danse, kraftwerk, sale)
+        └── text.yml                # Recettes de manipulation de texte
+```
+
+## Implémentation
+
+### Approche 1 : Extension du sfDesastreManager (RECOMMANDÉ)
+
+Ajouter le support des imports YAML dans `sfDesastreManager.class.php`.
+
+#### Syntaxe du fichier principal
+
+**config/desastres.yml** :
+```yaml
+# Point d'entree principal - Musique Approximative
+# Les regles et recettes sont importees depuis des fichiers externes
+
+imports:
+  regles:
+    - desastres/regles/colors.yml
+    - desastres/regles/themes.yml
+    - desastres/regles/seasonal.yml
+    - desastres/regles/tts.yml
+    - desastres/regles/effects.yml
+    - desastres/regles/text.yml
+  recettes:
+    - desastres/recettes/colors.yml
+    - desastres/recettes/themes.yml
+    - desastres/recettes/seasonal.yml
+    - desastres/recettes/tts.yml
+    - desastres/recettes/effects.yml
+    - desastres/recettes/text.yml
+
+# On peut aussi definir des regles/recettes directement ici
+# Elles seront fusionnees avec les imports
+regles: []
+recettes: {}
+```
+
+#### Code d'implémentation
+
+**src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php** :
+
+```php
+public function loadConfig($configPath)
+{
+  if (!file_exists($configPath)) {
+    throw new sfException(sprintf('Le fichier de configuration "%s" n\'existe pas.', $configPath));
+  }
+
+  $config = sfYaml::load($configPath);
+
+  // Traiter les imports si presents
+  if (isset($config['imports'])) {
+    $config = $this->processImports($config, dirname($configPath));
+  }
+
+  $this->config = $config;
+  return $this;
+}
+
+/**
+ * Traite les imports de fichiers YAML
+ *
+ * @param array $config Configuration avec imports
+ * @param string $baseDir Repertoire de base pour les chemins relatifs
+ * @return array Configuration fusionnee
+ */
+protected function processImports(array $config, $baseDir)
+{
+  $imports = isset($config['imports']) ? $config['imports'] : array();
+  unset($config['imports']);
+
+  // Initialiser les tableaux si non definis
+  if (!isset($config['regles'])) {
+    $config['regles'] = array();
+  }
+  if (!isset($config['recettes'])) {
+    $config['recettes'] = array();
+  }
+
+  // Importer les regles
+  if (isset($imports['regles']) && is_array($imports['regles'])) {
+    foreach ($imports['regles'] as $importPath) {
+      $fullPath = $baseDir . '/' . $importPath;
+      if (file_exists($fullPath)) {
+        $imported = sfYaml::load($fullPath);
+        if (isset($imported['regles']) && is_array($imported['regles'])) {
+          $config['regles'] = array_merge($config['regles'], $imported['regles']);
+        }
+      } else {
+        // Log warning mais ne pas echouer
+        error_log(sprintf('[sfDesastreManager] WARNING: Import file not found: %s', $fullPath));
+      }
+    }
+  }
+
+  // Importer les recettes
+  if (isset($imports['recettes']) && is_array($imports['recettes'])) {
+    foreach ($imports['recettes'] as $importPath) {
+      $fullPath = $baseDir . '/' . $importPath;
+      if (file_exists($fullPath)) {
+        $imported = sfYaml::load($fullPath);
+        if (isset($imported['recettes']) && is_array($imported['recettes'])) {
+          // Fusionner les recettes (les cles sont les noms)
+          $config['recettes'] = array_merge($config['recettes'], $imported['recettes']);
+        }
+      } else {
+        error_log(sprintf('[sfDesastreManager] WARNING: Import file not found: %s', $fullPath));
+      }
+    }
+  }
+
+  return $config;
+}
+```
+
+### Approche 2 : Script de build (ALTERNATIF)
+
+Si vous ne voulez pas modifier le plugin, créez un script qui fusionne les fichiers.
+
+**bin/build-desastres-config.php** :
+```php
+#!/usr/bin/env php
+<?php
+
+require_once dirname(__FILE__) . '/../config/ProjectConfiguration.class.php';
+
+$baseDir = dirname(__FILE__) . '/../src/apps/frontend/config';
+$sourceDir = $baseDir . '/desastres';
+$outputFile = $baseDir . '/desastres.generated.yml';
+
+// Charger tous les fichiers de regles
+$regles = array();
+$reglesFiles = glob($sourceDir . '/regles/*.yml');
+foreach ($reglesFiles as $file) {
+  $config = sfYaml::load($file);
+  if (isset($config['regles']) && is_array($config['regles'])) {
+    $regles = array_merge($regles, $config['regles']);
+  }
+}
+
+// Charger tous les fichiers de recettes
+$recettes = array();
+$recettesFiles = glob($sourceDir . '/recettes/*.yml');
+foreach ($recettesFiles as $file) {
+  $config = sfYaml::load($file);
+  if (isset($config['recettes']) && is_array($config['recettes'])) {
+    $recettes = array_merge($recettes, $config['recettes']);
+  }
+}
+
+// Generer le fichier final
+$output = array(
+  'regles' => $regles,
+  'recettes' => $recettes
+);
+
+file_put_contents($outputFile, sfYaml::dump($output, 10));
+echo "Configuration generated: $outputFile\n";
+```
+
+Puis dans votre code, chargez `desastres.generated.yml` au lieu de `desastres.yml`.
+
+### Approche 3 : Glob pattern (SIMPLE & RAPIDE)
+
+Modification minimale du manager pour charger automatiquement tous les fichiers d'un dossier.
+
+**src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php** :
+
+```php
+/**
+ * Charge la configuration depuis un repertoire contenant plusieurs fichiers YAML
+ *
+ * @param string $configDir Chemin vers le repertoire
+ * @return sfDesastreManager Instance courante pour chainage
+ */
+public function loadConfigDir($configDir)
+{
+  if (!is_dir($configDir)) {
+    throw new sfException(sprintf('Le repertoire "%s" n\'existe pas.', $configDir));
+  }
+
+  $config = array('regles' => array(), 'recettes' => array());
+
+  // Charger les regles
+  $reglesDir = $configDir . '/regles';
+  if (is_dir($reglesDir)) {
+    foreach (glob($reglesDir . '/*.yml') as $file) {
+      $imported = sfYaml::load($file);
+      if (isset($imported['regles']) && is_array($imported['regles'])) {
+        $config['regles'] = array_merge($config['regles'], $imported['regles']);
+      }
+    }
+  }
+
+  // Charger les recettes
+  $recettesDir = $configDir . '/recettes';
+  if (is_dir($recettesDir)) {
+    foreach (glob($recettesDir . '/*.yml') as $file) {
+      $imported = sfYaml::load($file);
+      if (isset($imported['recettes']) && is_array($imported['recettes'])) {
+        $config['recettes'] = array_merge($config['recettes'], $imported['recettes']);
+      }
+    }
+  }
+
+  $this->config = $config;
+  return $this;
+}
+```
+
+**Utilisation** :
+```php
+// Au lieu de :
+$manager->loadConfig('/path/to/desastres.yml');
+
+// Utiliser :
+$manager->loadConfigDir('/path/to/desastres');
+```
+
+## Structure des fichiers segmentés
+
+### Exemple : desastres/regles/colors.yml
+
+```yaml
+# Regles pour les desastres de couleurs
+regles:
+  # Desastre "bleu"
+  - query: "query.title ~ /.*bleu.*/i || query.artist ~ /.*bleu.*/i"
+    recettes: [bleu]
+    probability: 0.7
+
+  # Desastre "noir"
+  - query: "query.title ~ /.*(noir|black).*/i"
+    recettes: [noir]
+    probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+
+  # Desastre "light"
+  - query: "query.title ~ /.*(light|lumiere).*/i"
+    recettes: [light]
+    probability: 0.7
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+```
+
+### Exemple : desastres/recettes/tts.yml
+
+```yaml
+# Recettes TTS (Text-to-Speech)
+recettes:
+  tts_rapper:
+    enabled: true
+    desastre: tts
+    options:
+      selector: div.descriptif p
+
+  tts_jinglist:
+    enabled: true
+    desastre: tts
+    options:
+      url: https://n8n.musiques-incongrues.net/webhook/tts-jingles
+      texts:
+        - Vous êtes sur Musique Approximative
+        - Il fait beau n'est-ce pas ?
+      pitch: [0.5, 1.5]
+      rate: [0.5, 1]
+      volume: 0.7
+      lang: fr-fr
+      voices: [Mauvaises nouvelles, Superstar, Violoncelles]
+```
+
+## Avantages
+
+✅ **Organisation claire** - Chaque catégorie dans son fichier
+✅ **Maintenance facile** - Modifications ciblées
+✅ **Collaboration** - Moins de conflits Git
+✅ **Réutilisabilité** - Import de fichiers dans différents environnements
+✅ **Testabilité** - Test de catégories individuellement
+✅ **Documentation** - Chaque fichier peut avoir ses propres commentaires
+
+## Migration progressive
+
+### Étape 1 : Créer la structure
+
+```bash
+cd src/apps/frontend/config
+mkdir -p desastres/regles desastres/recettes
+```
+
+### Étape 2 : Extraire les règles
+
+Créer `desastres/regles/colors.yml`, `tts.yml`, etc. avec les règles correspondantes.
+
+### Étape 3 : Extraire les recettes
+
+Créer `desastres/recettes/colors.yml`, `tts.yml`, etc. avec les recettes correspondantes.
+
+### Étape 4 : Modifier le fichier principal
+
+Remplacer le contenu de `desastres.yml` par la version avec imports.
+
+### Étape 5 : Implémenter le loader
+
+Choisir une approche (1, 2 ou 3) et l'implémenter.
+
+### Étape 6 : Tester
+
+```bash
+# Vérifier que les désastres fonctionnent toujours
+# Comparer l'ancienne et la nouvelle configuration
+```
+
+## Rétrocompatibilité
+
+Pour garder la compatibilité, le manager doit :
+
+1. Détecter automatiquement le format (fichier unique vs imports)
+2. Si pas d'imports, charger normalement
+3. Si imports présents, fusionner les fichiers
+
+```php
+public function loadConfig($configPath)
+{
+  if (!file_exists($configPath)) {
+    throw new sfException(sprintf('Le fichier de configuration "%s" n\'existe pas.', $configPath));
+  }
+
+  $config = sfYaml::load($configPath);
+
+  // Si imports presents, traiter
+  if (isset($config['imports'])) {
+    $config = $this->processImports($config, dirname($configPath));
+  }
+
+  // Sinon, utiliser tel quel (rétrocompatible)
+
+  $this->config = $config;
+  return $this;
+}
+```
+
+## Recommandation finale
+
+🎯 **Approche recommandée : Approche 1 (Imports dans le manager)**
+
+**Pourquoi ?**
+- Flexible : On peut mélanger imports et définitions directes
+- Pas de rebuild nécessaire
+- Rétrocompatible
+- Maintenable à long terme
+
+**Plan d'action :**
+1. Implémenter `processImports()` dans sfDesastreManager
+2. Créer la structure de dossiers
+3. Migrer progressivement les règles et recettes
+4. Tester
+
+---
+
+**Prochaines étapes** : Voulez-vous que j'implémente l'approche 1 ?

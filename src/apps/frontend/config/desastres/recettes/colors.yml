@@ -1,0 +1,16 @@
+# Recettes pour les desastres de couleurs
+recettes:
+  # Recette "bleu"
+  bleu:
+    enabled: true
+    desastre: bleu
+
+  # Recette "noir"
+  noir:
+    enabled: true
+    desastre: noir
+
+  # Recette "light"
+  light:
+    enabled: true
+    desastre: light

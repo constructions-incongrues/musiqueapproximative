@@ -1,0 +1,21 @@
+# Regles pour les desastres a effets visuels/animations
+regles:
+  # Désastre "danse"
+  - query: "query.title ~ /.*(danse).*/i"
+    recettes: [danse]
+    probability: 1.0
+
+  # Désastre "splitouine" pour Catani
+  - query: "query.artist ~ /.*(catani).*/i"
+    recettes: [splitouine_titles_matchduration]
+    probability: 1.0
+
+  # Désastre "kraftwerk"
+  - query: "query.artist ~ /.*(kraftwerk).*/i"
+    recettes: [kraftwerk]
+    probability: 1.0
+
+  # Désastre "sale"
+  - query: "query.artist ~ /.*(sale).*/i"
+    recettes: [sale]
+    probability: 1.0

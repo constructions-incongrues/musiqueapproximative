@@ -88,6 +88,7 @@ if (!window.DesastreOptions || !window.DesastreOptions.tts) {
         }
         const data = await response.json();
 
+
         if (Array.isArray(data) && data.length > 0) {
           const randomText = data[Math.floor(Math.random() * data.length)];
           console.log("[desastres/tts] Text selected from URL (", data.length, "options):", randomText.substring(0, 100) + (randomText.length > 100 ? "..." : ""));
@@ -124,6 +125,26 @@ if (!window.DesastreOptions || !window.DesastreOptions.tts) {
     return text;
   }
 
+  // Fonction helper pour obtenir une valeur depuis une config qui peut etre un nombre ou un tableau [min, max]
+  function getValueOrRandom(configValue, defaultMin, defaultMax) {
+    if (configValue === undefined) {
+      // Pas de config : utiliser les valeurs par defaut
+      return defaultMin + Math.random() * (defaultMax - defaultMin);
+    } else if (Array.isArray(configValue) && configValue.length >= 2) {
+      // Config est un tableau [min, max] : valeur aleatoire dans cette plage
+      const min = configValue[0];
+      const max = configValue[configValue.length - 1];
+      return min + Math.random() * (max - min);
+    } else if (typeof configValue === 'number') {
+      // Config est un nombre : utiliser cette valeur exacte
+      return configValue;
+    } else {
+      // Config invalide : utiliser les valeurs par defaut
+      console.warn("[desastres/tts] WARNING: Invalid config value, using default random range");
+      return defaultMin + Math.random() * (defaultMax - defaultMin);
+    }
+  }
+
   // Fonction pour lancer la synthese vocale
   async function speakText() {
     const text = await getText();
@@ -147,31 +168,34 @@ if (!window.DesastreOptions || !window.DesastreOptions.tts) {
       console.log("[desastres/tts] Using random lang:", utterance.lang);
     }
 
-    // Rate: utiliser la valeur configuree ou generer une valeur aleatoire entre 0.5 et 2
-    if (window.DesastreOptions.tts.rate !== undefined) {
-      utterance.rate = window.DesastreOptions.tts.rate;
+    // Rate: nombre fixe ou plage [min, max]
+    utterance.rate = getValueOrRandom(window.DesastreOptions.tts.rate, 0.5, 2);
+    if (Array.isArray(window.DesastreOptions.tts.rate)) {
+      console.log("[desastres/tts] Using random rate from range", window.DesastreOptions.tts.rate, ":", utterance.rate.toFixed(2));
+    } else if (window.DesastreOptions.tts.rate !== undefined) {
       console.log("[desastres/tts] Using configured rate:", utterance.rate);
     } else {
-      utterance.rate = 0.5 + Math.random() * 1.5;  // Entre 0.5 et 2
-      console.log("[desastres/tts] Using random rate:", utterance.rate.toFixed(2));
+      console.log("[desastres/tts] Using default random rate:", utterance.rate.toFixed(2));
     }
 
-    // Pitch: utiliser la valeur configuree ou generer une valeur aleatoire entre 0 et 2
-    if (window.DesastreOptions.tts.pitch !== undefined) {
-      utterance.pitch = window.DesastreOptions.tts.pitch;
+    // Pitch: nombre fixe ou plage [min, max]
+    utterance.pitch = getValueOrRandom(window.DesastreOptions.tts.pitch, 0, 2);
+    if (Array.isArray(window.DesastreOptions.tts.pitch)) {
+      console.log("[desastres/tts] Using random pitch from range", window.DesastreOptions.tts.pitch, ":", utterance.pitch.toFixed(2));
+    } else if (window.DesastreOptions.tts.pitch !== undefined) {
       console.log("[desastres/tts] Using configured pitch:", utterance.pitch);
     } else {
-      utterance.pitch = Math.random() * 2;  // Entre 0 et 2
-      console.log("[desastres/tts] Using random pitch:", utterance.pitch.toFixed(2));
+      console.log("[desastres/tts] Using default random pitch:", utterance.pitch.toFixed(2));
     }
 
-    // Volume: utiliser la valeur configuree ou generer une valeur aleatoire entre 0.3 et 1
-    if (window.DesastreOptions.tts.volume !== undefined) {
-      utterance.volume = window.DesastreOptions.tts.volume;
+    // Volume: nombre fixe ou plage [min, max]
+    utterance.volume = getValueOrRandom(window.DesastreOptions.tts.volume, 0.3, 1);
+    if (Array.isArray(window.DesastreOptions.tts.volume)) {
+      console.log("[desastres/tts] Using random volume from range", window.DesastreOptions.tts.volume, ":", utterance.volume.toFixed(2));
+    } else if (window.DesastreOptions.tts.volume !== undefined) {
       console.log("[desastres/tts] Using configured volume:", utterance.volume);
     } else {
-      utterance.volume = 0.3 + Math.random() * 0.7;  // Entre 0.3 et 1
-      console.log("[desastres/tts] Using random volume:", utterance.volume.toFixed(2));
+      console.log("[desastres/tts] Using default random volume:", utterance.volume.toFixed(2));
     }
 
     // Selection d'une voix aleatoire
