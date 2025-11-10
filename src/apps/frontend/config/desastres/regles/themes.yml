@@ -4,8 +4,6 @@ regles:
   - query: "query.title ~ /.*(amour|love).*/i"
     recettes: [amour]
     probability: 0.7
-    scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "robot"
   - query: "query.title ~ /.*robot.*/i"

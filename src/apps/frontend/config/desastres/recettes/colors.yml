@@ -9,8 +9,12 @@ recettes:
   noir:
     enabled: true
     desastre: noir
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Recette "light"
   light:
     enabled: true
     desastre: light
+    scripts:
+      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js

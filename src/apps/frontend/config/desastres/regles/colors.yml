@@ -9,12 +9,8 @@ regles:
   - query: "query.title ~ /.*(noir|black).*/i"
     recettes: [noir]
     probability: 0.7
-    scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
 
   # Desastre "light" : declanche si le titre contient "light" ou "lumiere"
   - query: "query.title ~ /.*(light|lumiere).*/i"
     recettes: [light]
     probability: 0.7
-    scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
