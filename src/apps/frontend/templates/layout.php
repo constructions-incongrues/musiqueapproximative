@@ -183,7 +183,7 @@
                 supplied: 'mp3',
                 errorAlerts: false,
                 warningAlerts: false,
-                preload: 'auto',
+                preload: 'metadata',
                 ready: function (event) {
                     $(this).jPlayer("setMedia", {
                         mp3: window.trackUrl
