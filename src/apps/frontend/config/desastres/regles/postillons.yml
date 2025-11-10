@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=../schemas/regles.schema.json
+
+# Règles en vrac
+regles:
+  - probability: 0.7
+    query: query.title ~ /.*(morte?s?|deaths?|dead).*/i
+    recettes: [postillons_mort]
+  - probability: 1
+    query: query.artist ~ /.*(kraftwerk).*/i
+    recettes: [kraftwerk]
+  - probability: 1
+    query: query.artist ~ /.*(sale).*/i
+    recettes: [sale]

@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+# Recette pour le désastreux animateur "splitouine"
+recettes:
+  splitouine_titles_matchduration:
+    desastre: splitouine
+    enabled: true
+    options:
+      split:
+        configuration:
+          autoSplit: false
+          mask: lines
+          type: words, lines, chars
+          wordDelimiter: ' '
+          wordsClass: word
+        selector: p.title, h1, h2
+      tween:
+        audio:
+          id: jp_audio_0
+          matchDuration: true
+        configuration:
+          ease: elastic
+          opacity: 0
+          rotation: 90
+          'y': 100
+        type: chars
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js

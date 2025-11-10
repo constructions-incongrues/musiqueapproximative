@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+# Recettes pour les Désastres à Mamie
+recettes:
+  mamie_allo:
+    desastre: mamie
+    enabled: true
+    options:
+      volume: 0.5

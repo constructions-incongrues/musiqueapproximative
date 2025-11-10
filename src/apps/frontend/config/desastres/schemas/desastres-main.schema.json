@@ -55,12 +55,15 @@
       }
     }
   },
-  "oneOf": [
+  "anyOf": [
     {
       "required": ["imports"]
     },
     {
-      "required": ["regles", "recettes"]
+      "required": ["regles"]
+    },
+    {
+      "required": ["recettes"]
     }
   ],
   "examples": [
