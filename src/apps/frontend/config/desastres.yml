@@ -68,7 +68,11 @@ regles:
     recettes: [ttsrapper]
     probability: 1.0
 
-  # Désastre "splitouine"
+  - query: "query.title ~ /.*(danse).*/i"
+    recettes: [danse]
+    probability: 1.0
+
+  # Désastre "mangelettres"
   - query: "query.artist ~ /.*(catani).*/i"
     recettes: [splitouine_titles_matchduration]
     probability: 1.0
@@ -350,6 +354,11 @@ recettes:
         - Google 普通话（中国大陆）
         - Google 粤語（香港）
         - Google 國語（臺灣
+
+  # Recette "danse"
+  danse:
+    enabled: true
+    desastre: danse
 
   splitouine_titles_matchduration:
     enabled: true
