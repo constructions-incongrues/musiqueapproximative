@@ -68,6 +68,11 @@ regles:
     recettes: [ttsrapper]
     probability: 1.0
 
+  # Désastre "mangelettres"
+  - query: "query.artist ~ /.*(catani).*/i"
+    recettes: [mange_titles_slow]
+    probability: 1.0
+
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.<recette>.<option>
   # - CSS: var(--desastre-<recette>-<option>)
@@ -332,3 +337,26 @@ recettes:
         - Google 普通话（中国大陆）
         - Google 粤語（香港）
         - Google 國語（臺灣
+
+  mange_titles_slow:
+    enabled: true
+    desastre: mangelettres
+    options:
+      split:
+        selector: p.title, h1, h2
+        configuration:
+          type: words, lines, chars
+          mask: lines
+          autoSplit: false
+          wordDelimiter: " "
+          wordsClass: word
+      tween:
+        type: chars
+        audio:
+          id: 'jp_audio_0'
+          matchDuration: true
+        configuration:
+          y: 100
+          rotation: 90
+          opacity: 0
+          ease: elastic
