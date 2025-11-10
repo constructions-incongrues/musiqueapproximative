@@ -1,3 +1,128 @@
-.content{
-     background: #fff;
- }
+.title {
+    animation: danse 2s infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1s;
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+    animation-duration: 1s;
+}
+
+.content-text {
+
+    h1,
+    h2 {
+        animation: danse 2s infinite;
+        animation-timing-function: ease-in-out;
+        animation-delay: 1.5s;
+        animation-fill-mode: both;
+        animation-direction: alternate reverse;
+        animation-iteration-count: infinite;
+        animation-play-state: running;
+        animation-duration: 1s;
+    }
+
+}
+
+header {
+    animation: danse-2 0.4s infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+    animation-duration: 1s;
+}
+
+.grid-25:has(li) {
+    li:nth-child(even) {
+        animation: danse 0.4s infinite;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0.5s;
+        animation-fill-mode: both;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+        animation-play-state: running;
+        animation-duration: 1s;
+    }
+
+    li:nth-child(odd) {
+        animation: danse-3 0.4s infinite;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0.5s;
+        animation-fill-mode: both;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+        animation-play-state: running;
+        animation-duration: 1s;
+    }
+}
+
+@keyframes danse {
+    0% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+
+    100% {
+        transform: rotate(-5deg);
+    }
+}
+
+@keyframes danse-3 {
+    0% {
+        transform: rotate(5deg);
+    }
+
+    50% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(5deg);
+    }
+}
+
+@keyframes danse-2 {
+    0% {
+        transform: rotate(-1deg);
+    }
+
+    50% {
+        transform: rotate(1deg);
+    }
+
+    100% {
+        transform: rotate(-1deg);
+    }
+}
+
+h1 {
+    background-color: transparent !important;
+    animation: danse-4 0.8s infinite;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+}
+
+@keyframes danse-4 {
+    0% {
+        transform: translateY(-10px);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
