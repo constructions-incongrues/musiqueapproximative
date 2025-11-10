@@ -74,8 +74,17 @@ regles:
 
   # Désastre "mangelettres"
   - query: "query.artist ~ /.*(catani).*/i"
-    recettes: [mange_titles_slow]
+    recettes: [splitouine_titles_matchduration]
     probability: 1.0
+
+  # Désastres "mangelettres"
+  - query: "query.title ~ /(.*)/i"
+    recettes: [consonnard]
+    probability: 0.2
+  - query: "query.title ~ /(.*)/i"
+    recettes: [voyelliste]
+    probability: 0.1
+
 
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.<recette>.<option>
@@ -114,10 +123,14 @@ recettes:
   # Recette "mort"
   mort:
     enabled: true
-    desastre: postillons
+    desastre: mort
     options:
-      imageFolder: /desastres/postillons/img/cimetiere
+      imageFolder: /desastres/mort/img
       imageBaseName: cimetiere
+      imageExtension: png
+      imageCount: 20
+      tombSize: 120
+      delay: 800
 
   # Recette "mamie"
   mamie:
@@ -347,9 +360,12 @@ recettes:
     enabled: true
     desastre: danse
 
-  mange_titles_slow:
+  splitouine_titles_matchduration:
     enabled: true
-    desastre: mangelettres
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    desastre: splitouine
     options:
       split:
         selector: p.title, h1, h2
@@ -369,3 +385,37 @@ recettes:
           rotation: 90
           opacity: 0
           ease: elastic
+
+  # Mange-Lettres
+  # L'infâme Consonnard
+  consonnard:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      rate: 0.8
+      target: aeiouy
+      case: insensitive
+      onSplit:
+        yPercent: 15
+        opacity: 0.8
+        stagger: 0.06
+        duration: 10
+  # Le Voyelliste sournois
+  voyelliste:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      rate: 0.5
+      target: bcdfghjklmnpqrstvwxz
+      case: insensitive
+      onSplit:
+        yPercent: 10
+        opacity: 1
+        stagger: 0.05
+        duration: 15

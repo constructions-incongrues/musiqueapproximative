@@ -159,6 +159,13 @@ class sfDesastreManager
       // Stocker les options pour injection globale
       $allOptions[$desastreName] = $options;
 
+      // Ajouter les scripts externes si definis dans la recette
+      if (isset($recette['scripts']) && is_array($recette['scripts'])) {
+        foreach ($recette['scripts'] as $script) {
+          $response->addJavascript($script);
+        }
+      }
+
       // Ajouter les stylesheets
       $stylesheets = $this->findAssets($fsRoot, $desastreName, 'stylesheets', array('css'));
       foreach ($stylesheets as $stylesheet) {
