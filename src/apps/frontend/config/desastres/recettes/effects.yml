@@ -1,0 +1,55 @@
+# Recettes pour les desastres a effets visuels/animations
+recettes:
+  # Recette "danse"
+  danse:
+    enabled: true
+    desastre: danse
+
+  # Recette "splitouine" avec animation GSAP
+  splitouine_titles_matchduration:
+    enabled: true
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    desastre: splitouine
+    options:
+      split:
+        selector: p.title, h1, h2
+        configuration:
+          type: words, lines, chars
+          mask: lines
+          autoSplit: false
+          wordDelimiter: " "
+          wordsClass: word
+      tween:
+        type: chars
+        audio:
+          id: 'jp_audio_0'
+          matchDuration: true
+        configuration:
+          y: 100
+          rotation: 90
+          opacity: 0
+          ease: elastic
+
+  # Recette "kraftwerk" (radioactivite)
+  kraftwerk:
+    enabled: true
+    desastre: kraftwerk
+    options:
+      imageFolder: /desastres/kraftwerk/img
+      imageBaseName: kraftwerk
+      imageExtension: svg
+      imageCount: 1
+      delay: 800
+
+  # Recette "sale"
+  sale:
+    enabled: true
+    desastre: sale
+    options:
+      imageFolder: /desastres/sale/img
+      imageBaseName: sale
+      imageExtension: svg
+      imageCount: 1
+      delay: 800

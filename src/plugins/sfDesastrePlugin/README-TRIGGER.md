@@ -1,0 +1,280 @@
+# Paramètre `trigger` pour les règles de désastres
+
+## Description
+
+Le paramètre `trigger` permet de **forcer le déclenchement d'une règle de désastre** via un paramètre d'URL, **indépendamment de la condition `query` et de la `probability`**.
+
+## Utilisation
+
+### Configuration dans desastres.yml
+
+```yaml
+regles:
+  - query: "query.title ~ /(.*)/"
+    recettes: [tts_jinglist]
+    probability: 1.0
+    trigger: jinglist  # ← Nouveau paramètre
+```
+
+### Déclenchement
+
+Lorsqu'un utilisateur accède à une URL contenant le paramètre `jinglist` :
+
+```
+https://musiqueapproximative.net/post/12345?jinglist
+https://musiqueapproximative.net/post/12345?jinglist=1
+https://musiqueapproximative.net/post/12345?jinglist=true
+```
+
+→ La règle sera **déclenchée systématiquement**, peu importe :
+- ✅ La condition `query` (ignorée)
+- ✅ La `probability` (ignorée)
+
+### Sans le paramètre trigger
+
+Sans le paramètre dans l'URL :
+
+```
+https://musiqueapproximative.net/post/12345
+```
+
+→ La règle fonctionne **normalement** :
+- ✅ Évaluation de la condition `query`
+- ✅ Respect de la `probability`
+
+## Comportement
+
+| Paramètre URL | Condition `query` | Probability | Résultat |
+|---------------|-------------------|-------------|----------|
+| ❌ Absent | ✅ Match | 70% | 70% de chance de déclencher |
+| ❌ Absent | ❌ No match | 70% | Pas de déclenchement |
+| ✅ Présent | ❌ No match | 70% | **Déclenchement garanti** |
+| ✅ Présent | ✅ Match | 70% | **Déclenchement garanti** |
+
+## Exemples d'usage
+
+### 1. TTS Jingles à la demande
+
+```yaml
+regles:
+  - query: "query.title ~ /(.*)/"
+    recettes: [tts_jinglist]
+    probability: 0.1  # Seulement 10% du temps normalement
+    trigger: jinglist
+```
+
+**Usage** :
+- URL normale : 10% de chance d'avoir un jingle
+- URL avec `?jinglist` : 100% de chance d'avoir un jingle
+
+### 2. Mode debug pour les désastres
+
+```yaml
+regles:
+  - query: "query.title ~ /.*bleu.*/i"
+    recettes: [bleu]
+    probability: 0.7
+    trigger: debug_bleu
+```
+
+**Usage** :
+- Test en développement : `?debug_bleu` force le désastre
+- Production : Fonctionne avec les règles normales
+
+### 3. Easter eggs activables
+
+```yaml
+regles:
+  - query: "query.title == 'Secret Song'"
+    recettes: [easter_egg]
+    probability: 1.0
+    trigger: reveal
+```
+
+**Usage** :
+- Normalement : Seulement sur "Secret Song"
+- Avec `?reveal` : Sur toutes les pages
+
+### 4. Tests A/B
+
+```yaml
+regles:
+  - query: "query.title ~ /(.*)/"
+    recettes: [new_feature]
+    probability: 0.5  # 50% des utilisateurs
+    trigger: force_feature
+```
+
+**Usage** :
+- QA : `?force_feature` pour tester la nouvelle fonctionnalité
+- Utilisateurs : 50% reçoivent la fonctionnalité aléatoirement
+
+## Implémentation technique
+
+### Flux de traitement
+
+```php
+// Dans sfDesastreManager::findRecettes()
+
+foreach ($regles as $regle) {
+  // 1. Vérifier si un trigger est défini
+  if (isset($regle['trigger'])) {
+    $triggerParam = $regle['trigger'];
+
+    // 2. Vérifier si le paramètre existe dans l'URL
+    if (isset($query[$triggerParam])) {
+      // → DÉCLENCHEMENT GARANTI
+      applyRecettes($regle['recettes']);
+      continue;
+    }
+  }
+
+  // 3. Sinon, évaluation normale
+  if (evaluate($regle['query'])) {
+    if (random() <= $regle['probability']) {
+      applyRecettes($regle['recettes']);
+    }
+  }
+}
+```
+
+### Code source
+
+Voir : [sfDesastreManager.class.php:82-127](../lib/sfDesastreManager.class.php#L82-L127)
+
+## Valeur du paramètre
+
+Le système vérifie **uniquement la présence** du paramètre dans l'URL.
+
+La **valeur** du paramètre n'a **pas d'importance** :
+
+```php
+?jinglist       // ✅ Déclenche
+?jinglist=1     // ✅ Déclenche
+?jinglist=true  // ✅ Déclenche
+?jinglist=false // ✅ Déclenche (présent = déclenché)
+?jinglist=0     // ✅ Déclenche (présent = déclenché)
+```
+
+Pour vérifier la valeur, utilisez la condition `query` :
+
+```yaml
+- query: "query.jinglist == 'special'"
+  trigger: jinglist
+  recettes: [tts_special]
+```
+
+## Cas d'usage avancés
+
+### Combinaison avec plusieurs recettes
+
+```yaml
+regles:
+  # Désastre principal
+  - query: "query.title ~ /.*music.*/i"
+    recettes: [music_basic, music_animations]
+    probability: 0.8
+    trigger: force_music
+```
+
+Avec `?force_music`, **toutes** les recettes sont appliquées : `music_basic` + `music_animations`
+
+### Plusieurs triggers différents
+
+```yaml
+regles:
+  - query: "query.title ~ /.*bleu.*/i"
+    recettes: [bleu]
+    trigger: bleu
+
+  - query: "query.title ~ /.*rouge.*/i"
+    recettes: [rouge]
+    trigger: rouge
+```
+
+**Usage** :
+- `?bleu` → Force le désastre bleu
+- `?rouge` → Force le désastre rouge
+- `?bleu&rouge` → Force les deux désastres
+
+### Trigger avec condition fallback
+
+```yaml
+regles:
+  # Version premium avec trigger
+  - query: "query.premium == 'true'"
+    recettes: [premium_tts]
+    trigger: premium
+
+  # Version normale
+  - query: "query.title ~ /(.*)/"
+    recettes: [basic_tts]
+    probability: 0.1
+```
+
+## Compatibilité
+
+✅ Compatible avec toutes les versions existantes du plugin
+✅ Rétrocompatible : Les règles sans `trigger` fonctionnent normalement
+✅ Compatible avec tous les types de recettes
+
+## Sécurité
+
+⚠️ **Attention** : Les triggers sont publics et peuvent être découverts par les utilisateurs.
+
+Si vous souhaitez protéger un trigger :
+
+```yaml
+regles:
+  - query: "query.admin_token == 'secret_value_here'"
+    recettes: [admin_panel]
+    trigger: admin_mode
+    probability: 1.0
+```
+
+Ainsi, même avec `?admin_mode`, la condition `query.admin_token` doit être validée.
+
+## Débogage
+
+### Logs PHP
+
+Le manager n'ajoute pas de logs par défaut. Pour débuguer :
+
+```php
+// Dans sfDesastreManager.class.php, ligne 96
+if ($triggerMatch) {
+  error_log("Trigger '{$triggerParam}' matched for rule: " . print_r($regle, true));
+  $shouldApply = true;
+}
+```
+
+### JavaScript Console
+
+Côté client, vérifiez les désastres chargés :
+
+```javascript
+// Dans la console du navigateur
+console.log(window.DesastreOptions);
+```
+
+### Test curl
+
+```bash
+# Sans trigger
+curl "https://ma.net/post/12345" | grep -i "desastre"
+
+# Avec trigger
+curl "https://ma.net/post/12345?jinglist" | grep -i "desastre"
+```
+
+## Changelog
+
+### Version 1.1.0 (2025-11-10)
+- ✨ Ajout du paramètre `trigger` pour forcer le déclenchement des règles
+- ✨ Bypass de la condition `query` et de la `probability` quand le trigger est présent
+- 📝 Documentation complète du système de triggers
+
+---
+
+**Auteur** : Musique Approximative
+**Licence** : Voir LICENSE du plugin
