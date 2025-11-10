@@ -88,6 +88,10 @@ regles:
     recettes: [kraftwerk]
     probability: 1.0
 
+  - query: "query.artist ~ /.*(sale).*/i"
+    recettes: [sale]
+    probability: 1.0
+
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.<recette>.<option>
   # - CSS: var(--desastre-<recette>-<option>)
@@ -429,6 +433,17 @@ recettes:
     options:
       imageFolder: /desastres/kraftwerk/img
       imageBaseName: kraftwerk
+      imageExtension: svg
+      imageCount: 1
+      delay: 800
+
+  # Recette "sale"
+  sale:
+    enabled: true
+    desastre: sale
+    options:
+      imageFolder: /desastres/sale/img
+      imageBaseName: sale
       imageExtension: svg
       imageCount: 1
       delay: 800
