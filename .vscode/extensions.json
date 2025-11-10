@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "ms-vscode-remote.remote-containers",
-        "bmewburn.vscode-intelephense-client"
+        "bmewburn.vscode-intelephense-client",
+        "redhat.vscode-yaml"
     ]
 }

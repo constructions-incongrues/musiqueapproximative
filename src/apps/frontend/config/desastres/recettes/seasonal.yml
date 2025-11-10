@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
 # Recettes pour les desastres saisonniers et speciaux
 recettes:
   # Recette "spooky" spécialement pour les chouchouxes
