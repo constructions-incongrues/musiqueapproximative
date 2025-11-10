@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     console.log("[desastres/mangelettres] Loaded");
     gsap.registerPlugin(SplitText)
 
-    SplitText.create('div.grid-container', {
+    SplitText.create('section.content', {
         "type": "chars",
         "mask": "chars",
-        "autoSplit": false,
+        "autoSplit": true,
         "charsClass": "char++",
         "prepareText": (texte, el) => {
             const target = window.DesastreOptions.mangelettres.target;
