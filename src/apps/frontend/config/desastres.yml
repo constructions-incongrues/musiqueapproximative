@@ -73,6 +73,11 @@ regles:
     recettes: [splitouine_titles_matchduration]
     probability: 1.0
 
+  # Désastre "mangelettres"
+  - query: "query.artist ~ /.*(kubin).*/i"
+    recettes: [voyelliste]
+    probability: 1.0
+
   # Les options sont accessibles via :
   # - JavaScript: window.DesastreOptions.<recette>.<option>
   # - CSS: var(--desastre-<recette>-<option>)
@@ -110,10 +115,14 @@ recettes:
   # Recette "mort"
   mort:
     enabled: true
-    desastre: postillons
+    desastre: mort
     options:
-      imageFolder: /desastres/postillons/img/cimetiere
+      imageFolder: /desastres/mort/img
       imageBaseName: cimetiere
+      imageExtension: png
+      imageCount: 20
+      tombSize: 120
+      delay: 800
 
   # Recette "mamie"
   mamie:
@@ -340,6 +349,9 @@ recettes:
 
   splitouine_titles_matchduration:
     enabled: true
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
     desastre: splitouine
     options:
       split:
@@ -360,3 +372,27 @@ recettes:
           rotation: 90
           opacity: 0
           ease: elastic
+
+  # Mange-Lettres
+  # L'infâme Consonnard
+  consonnard:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      rate: 0.8
+      target: aeiouy
+      case: insensitive
+  # Le Voyelliste sournois
+  voyelliste:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      rate: 0.5
+      target: bcdfghjklmnpqrstvwxz
+      case: insensitive
