@@ -23,14 +23,16 @@ class sfDesastreManager
   public function __construct($config = null)
   {
     if (is_string($config) && file_exists($config)) {
-      $this->config = sfYaml::load($config);
+      // Charger via loadConfig pour traiter les imports
+      $this->ruleEngine = new sfDesastreRuleEngine();
+      $this->loadConfig($config);
     } elseif (is_array($config)) {
       $this->config = $config;
+      $this->ruleEngine = new sfDesastreRuleEngine();
     } else {
       $this->config = array('regles' => array(), 'recettes' => array());
+      $this->ruleEngine = new sfDesastreRuleEngine();
     }
-
-    $this->ruleEngine = new sfDesastreRuleEngine();
   }
 
   /**
@@ -45,8 +47,70 @@ class sfDesastreManager
       throw new sfException(sprintf('Le fichier de configuration "%s" n\'existe pas.', $configPath));
     }
 
-    $this->config = sfYaml::load($configPath);
+    $config = sfYaml::load($configPath);
+
+    // Traiter les imports si presents
+    if (isset($config['imports'])) {
+      $config = $this->processImports($config, dirname($configPath));
+    }
+
+    $this->config = $config;
     return $this;
+  }
+
+  /**
+   * Traite les imports de fichiers YAML
+   *
+   * @param array $config Configuration avec imports
+   * @param string $baseDir Repertoire de base pour les chemins relatifs
+   * @return array Configuration fusionnee
+   */
+  protected function processImports(array $config, $baseDir)
+  {
+    $imports = isset($config['imports']) ? $config['imports'] : array();
+    unset($config['imports']);
+
+    // Initialiser les tableaux si non definis
+    if (!isset($config['regles'])) {
+      $config['regles'] = array();
+    }
+    if (!isset($config['recettes'])) {
+      $config['recettes'] = array();
+    }
+
+    // Importer les regles
+    if (isset($imports['regles']) && is_array($imports['regles'])) {
+      foreach ($imports['regles'] as $importPath) {
+        $fullPath = $baseDir . '/' . $importPath;
+        if (file_exists($fullPath)) {
+          $imported = sfYaml::load($fullPath);
+          if (isset($imported['regles']) && is_array($imported['regles'])) {
+            $config['regles'] = array_merge($config['regles'], $imported['regles']);
+          }
+        } else {
+          // Log warning mais ne pas echouer
+          error_log(sprintf('[sfDesastreManager] WARNING: Import file not found: %s', $fullPath));
+        }
+      }
+    }
+
+    // Importer les recettes
+    if (isset($imports['recettes']) && is_array($imports['recettes'])) {
+      foreach ($imports['recettes'] as $importPath) {
+        $fullPath = $baseDir . '/' . $importPath;
+        if (file_exists($fullPath)) {
+          $imported = sfYaml::load($fullPath);
+          if (isset($imported['recettes']) && is_array($imported['recettes'])) {
+            // Fusionner les recettes (les cles sont les noms)
+            $config['recettes'] = array_merge($config['recettes'], $imported['recettes']);
+          }
+        } else {
+          error_log(sprintf('[sfDesastreManager] WARNING: Import file not found: %s', $fullPath));
+        }
+      }
+    }
+
+    return $config;
   }
 
   /**
@@ -79,24 +143,47 @@ class sfDesastreManager
         continue;
       }
 
-      // Evaluer la regle
-      if ($this->ruleEngine->evaluate($regle['query'])) {
-        // Verifier la probabilite si definie
-        $probability = isset($regle['probability']) ? (float) $regle['probability'] : 1.0;
+      // Verifier si un parametre trigger est defini et present dans l'URL
+      $triggerMatch = false;
+      if (isset($regle['trigger'])) {
+        $triggerParam = $regle['trigger'];
+        // Le trigger matche si le parametre existe dans la query, quelque soit sa valeur
+        if (isset($query[$triggerParam])) {
+          $triggerMatch = true;
+        }
+      }
 
-        if (mt_rand() / mt_getrandmax() <= $probability) {
-          // Ajouter les recettes associees
-          if (isset($regle['recettes']) && is_array($regle['recettes'])) {
-            // Appliquer toutes les recettes listees
-            foreach ($regle['recettes'] as $recetteName) {
-              if (isset($this->config['recettes'][$recetteName])) {
-                $recette = $this->config['recettes'][$recetteName];
+      // Si le trigger matche, on applique la regle systematiquement
+      // Sinon, on evalue la regle normalement avec query + probability
+      $shouldApply = false;
 
-                // Verifier si la recette est activee
-                if (!isset($recette['enabled']) || $recette['enabled'] === true) {
-                  $recette['name'] = $recetteName;
-                  $selectedRecettes[] = $recette;
-                }
+      if ($triggerMatch) {
+        // Trigger present : application systematique
+        $shouldApply = true;
+      } else {
+        // Pas de trigger ou trigger absent : evaluation normale
+        if ($this->ruleEngine->evaluate($regle['query'])) {
+          // Verifier la probabilite si definie
+          $probability = isset($regle['probability']) ? (float) $regle['probability'] : 1.0;
+
+          if (mt_rand() / mt_getrandmax() <= $probability) {
+            $shouldApply = true;
+          }
+        }
+      }
+
+      if ($shouldApply) {
+        // Ajouter les recettes associees
+        if (isset($regle['recettes']) && is_array($regle['recettes'])) {
+          // Appliquer toutes les recettes listees
+          foreach ($regle['recettes'] as $recetteName) {
+            if (isset($this->config['recettes'][$recetteName])) {
+              $recette = $this->config['recettes'][$recetteName];
+
+              // Verifier si la recette est activee
+              if (!isset($recette['enabled']) || $recette['enabled'] === true) {
+                $recette['name'] = $recetteName;
+                $selectedRecettes[] = $recette;
               }
             }
           }

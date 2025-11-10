@@ -1,0 +1,753 @@
+{
+  "name": "TTS Jingles Webhook (Sans Code)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tts-jingles-no-code",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "date_hour",
+              "name": "hour",
+              "value": "={{ $json.body.date.hour }}",
+              "type": "number"
+            },
+            {
+              "id": "date_minute",
+              "name": "minute",
+              "value": "={{ $json.body.date.minute }}",
+              "type": "number"
+            },
+            {
+              "id": "date_month",
+              "name": "month",
+              "value": "={{ $json.body.date.month }}",
+              "type": "number"
+            },
+            {
+              "id": "date_weekday",
+              "name": "weekday",
+              "value": "={{ $json.body.date.weekday }}",
+              "type": "number"
+            },
+            {
+              "id": "query_title",
+              "name": "title",
+              "value": "={{ $json.body.query.title || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "query_artist",
+              "name": "artist",
+              "value": "={{ $json.body.query.artist || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-context",
+      "name": "Extract Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is_morning",
+              "leftValue": "={{ $json.hour }}",
+              "rightValue": 12,
+              "operator": {
+                "type": "number",
+                "operation": "lt",
+                "rightType": "any"
+              }
+            },
+            {
+              "id": "after_6am",
+              "leftValue": "={{ $json.hour }}",
+              "rightValue": 6,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "switch-time-of-day",
+      "name": "Switch Time of Day",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "jingle1",
+              "name": "jingles",
+              "value": "=[\"Bonjour et bienvenue sur Musique Approximative !\", \"C'est le matin sur Musique Approximative, réveillez-vous en musique !\", \"Bonne journée avec Musique Approximative !\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-morning-jingles",
+      "name": "Morning Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is_afternoon",
+              "leftValue": "={{ $json.hour }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "after_noon",
+              "leftValue": "={{ $json.hour }}",
+              "rightValue": 12,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "switch-afternoon",
+      "name": "Switch Afternoon",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "jingle1",
+              "name": "jingles",
+              "value": "=[\"Bon après-midi sur Musique Approximative !\", \"L'après-midi continue sur Musique Approximative !\", \"Restez avec nous cet après-midi sur Musique Approximative !\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-afternoon-jingles",
+      "name": "Afternoon Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is_evening",
+              "leftValue": "={{ $json.hour }}",
+              "rightValue": 22,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "after_6pm",
+              "leftValue": "={{ $json.hour }}",
+              "rightValue": 18,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "switch-evening",
+      "name": "Switch Evening",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [650, 500]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "jingle1",
+              "name": "jingles",
+              "value": "=[\"Bonne soirée sur Musique Approximative !\", \"La soirée commence sur Musique Approximative !\", \"Profitez de votre soirée avec Musique Approximative !\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-evening-jingles",
+      "name": "Evening Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "jingle1",
+              "name": "jingles",
+              "value": "=[\"Bonne nuit avec Musique Approximative !\", \"La nuit musicale sur Musique Approximative !\", \"Musique Approximative vous accompagne cette nuit !\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-night-jingles",
+      "name": "Night Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [850, 500]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "merge-all-jingles",
+      "name": "Merge All",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1050, 350]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is_hour_zero",
+              "leftValue": "={{ $json.minute }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "if-hourly",
+      "name": "IF Hour:00",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [1250, 250]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "add_hourly",
+              "name": "jingles",
+              "value": "={{ $json.jingles.concat([\"Il est \" + $json.hour + \" heures sur Musique Approximative !\", \"Vous écoutez Musique Approximative, il est \" + $json.hour + \" heures.\", $json.hour + \" heures, vous êtes sur Musique Approximative !\"]) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "add-hourly-jingles",
+      "name": "Add Hourly Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1450, 200]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "add_quarter",
+              "name": "jingles",
+              "value": "={{ $json.jingles.concat([\"Vous écoutez Musique Approximative, la radio qui déchire !\", \"Musique Approximative, votre radio préférée !\", \"Restez branchés sur Musique Approximative !\", \"C'est Musique Approximative, la meilleure radio du monde !\", \"Vous êtes sur Musique Approximative, enjoy !\"]) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "add-quarter-jingles",
+      "name": "Add Quarter Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1450, 300]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "merge-hourly",
+      "name": "Merge Hourly",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1650, 250]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is_weekend",
+              "leftValue": "={{ $json.weekday }}",
+              "rightValue": 6,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "if-weekend",
+      "name": "IF Weekend",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [1850, 250]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "add_weekend",
+              "name": "jingles",
+              "value": "={{ $json.jingles.concat([\"Bon week-end avec Musique Approximative !\", \"C'est le week-end sur Musique Approximative !\", \"Profitez de votre week-end avec Musique Approximative !\"]) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "add-weekend-jingles",
+      "name": "Add Weekend Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2050, 200]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "merge-weekend",
+      "name": "Merge Weekend",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2250, 250]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is_december",
+              "leftValue": "={{ $json.month }}",
+              "rightValue": 12,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "if-december",
+      "name": "IF December",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [2450, 250]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "add_december",
+              "name": "jingles",
+              "value": "={{ $json.jingles.concat([\"Joyeuses fêtes avec Musique Approximative !\", \"Décembre en musique sur Musique Approximative !\", \"Les fêtes de fin d'année sur Musique Approximative !\"]) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "add-december-jingles",
+      "name": "Add December Jingles",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2650, 200]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "merge-december",
+      "name": "Merge December",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2850, 250]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.jingles }}"
+      },
+      "id": "response-node",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [3050, 250]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Context": {
+      "main": [
+        [
+          {
+            "node": "Switch Time of Day",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch Afternoon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch Evening",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Time of Day": {
+      "main": [
+        [
+          {
+            "node": "Morning Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Night Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Afternoon": {
+      "main": [
+        [
+          {
+            "node": "Afternoon Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Evening": {
+      "main": [
+        [
+          {
+            "node": "Evening Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Morning Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Afternoon Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evening Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Night Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All": {
+      "main": [
+        [
+          {
+            "node": "IF Hour:00",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Hour:00": {
+      "main": [
+        [
+          {
+            "node": "Add Hourly Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Quarter Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Hourly Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge Hourly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Quarter Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge Hourly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Hourly": {
+      "main": [
+        [
+          {
+            "node": "IF Weekend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Weekend": {
+      "main": [
+        [
+          {
+            "node": "Add Weekend Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Weekend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Weekend Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge Weekend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Weekend": {
+      "main": [
+        [
+          {
+            "node": "IF December",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF December": {
+      "main": [
+        [
+          {
+            "node": "Add December Jingles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge December",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add December Jingles": {
+      "main": [
+        [
+          {
+            "node": "Merge December",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge December": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCreatedBy": "Claude Code",
+    "instanceId": "musique-approximative"
+  },
+  "id": "tts-jingles-workflow-no-code",
+  "tags": ["tts", "jingles", "no-code"]
+}

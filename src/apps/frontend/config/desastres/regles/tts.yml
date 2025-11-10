@@ -1,0 +1,12 @@
+# Regles pour les desastres TTS (Text-to-Speech)
+regles:
+  # TTS pour les titres contenant "TTS"
+  - query: "query.title ~ /.*(TTS).*/"
+    recettes: [tts_rapper]
+    probability: 1.0
+
+  # TTS jingles aux quarts d'heure
+  - query: "context.date.minute == 0 || context.date.minute == 15 || context.date.minute == 30 || context.date.minute == 45"
+    recettes: [tts_jinglist]
+    probability: 0.1
+    trigger: jinglist

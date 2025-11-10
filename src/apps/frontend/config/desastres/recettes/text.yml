@@ -1,0 +1,29 @@
+# Recettes pour les desastres de manipulation de texte
+recettes:
+  # L'infâme Consonnard
+  consonnard:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - /desastres/shared/desastre-audio.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      selector: .title
+      rate: 0.7
+      target: aeiouy
+      case: insensitive
+
+  # Le Voyelliste sournois
+  voyelliste:
+    enabled: true
+    desastre: mangelettres
+    scripts:
+      - /desastres/shared/desastre-audio.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+    options:
+      selector: .title
+      rate: 0.7
+      target: bcdfghjklmnpqrstvwxz
+      case: insensitive

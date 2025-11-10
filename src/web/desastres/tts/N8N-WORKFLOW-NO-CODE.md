@@ -1,0 +1,338 @@
+# Workflow n8n SANS CODE pour le désastre TTS
+
+Ce workflow remplace **complètement** le node de code JavaScript par des nodes natifs n8n.
+
+## Fichier
+
+- **[n8n-workflow-no-code.json](./n8n-workflow-no-code.json)** : Workflow n8n sans code, prêt à importer
+
+## Avantages du workflow sans code
+
+✅ **Pas de code JavaScript** - uniquement des nodes natifs n8n
+✅ **Visual & Debug** - chaque étape est visible graphiquement
+✅ **Facile à modifier** - modifiez les jingles directement dans les nodes
+✅ **Aucune connaissance en programmation requise**
+✅ **Performances identiques** à la version avec code
+
+## Architecture du workflow
+
+```
+[Webhook]
+    ↓
+[Extract Context] ← Extrait hour, minute, month, weekday, title, artist
+    ↓
+    ├─→ [Switch Time of Day] → [Morning Jingles] ──┐
+    ├─→ [Switch Afternoon] → [Afternoon Jingles] ──┤
+    ├─→ [Switch Evening] → [Evening Jingles] ──────┤
+    └─→ (fallback) → [Night Jingles] ──────────────┘
+                                                    ↓
+                                            [Merge All]
+                                                    ↓
+                                            [IF Hour:00?]
+                                            ↓           ↓
+                                    [Hourly] ou [Quarter]
+                                                    ↓
+                                            [Merge Hourly]
+                                                    ↓
+                                            [IF Weekend?]
+                                            ↓           ↓
+                                    [Weekend]    (skip)
+                                                    ↓
+                                            [Merge Weekend]
+                                                    ↓
+                                            [IF December?]
+                                            ↓           ↓
+                                    [December]   (skip)
+                                                    ↓
+                                            [Merge December]
+                                                    ↓
+                                        [Respond to Webhook]
+```
+
+## Détail des nodes
+
+### 1. **Webhook** (n8n-nodes-base.webhook)
+- Reçoit les données POST sur `/tts-jingles-no-code`
+- Pas de configuration spéciale requise
+
+### 2. **Extract Context** (n8n-nodes-base.set)
+Extrait les données importantes du contexte :
+- `hour` : L'heure (0-23)
+- `minute` : Les minutes (0-59)
+- `month` : Le mois (1-12)
+- `weekday` : Le jour de la semaine (1-7)
+- `title` : Le titre du morceau
+- `artist` : L'artiste
+
+### 3. **Switch Time of Day** (n8n-nodes-base.switch)
+Condition : `hour >= 6 AND hour < 12`
+- ✅ TRUE → Morning Jingles
+- ❌ FALSE → Night Jingles (fallback)
+
+### 4. **Switch Afternoon** (n8n-nodes-base.switch)
+Condition : `hour >= 12 AND hour < 18`
+- ✅ TRUE → Afternoon Jingles
+- ❌ FALSE → (skip)
+
+### 5. **Switch Evening** (n8n-nodes-base.switch)
+Condition : `hour >= 18 AND hour < 22`
+- ✅ TRUE → Evening Jingles
+- ❌ FALSE → (skip)
+
+### 6-9. **Jingles Sets** (n8n-nodes-base.set)
+Définit les tableaux de jingles pour chaque période :
+- **Morning** : "Bonjour...", "C'est le matin..."
+- **Afternoon** : "Bon après-midi...", "L'après-midi continue..."
+- **Evening** : "Bonne soirée...", "La soirée commence..."
+- **Night** : "Bonne nuit...", "La nuit musicale..."
+
+### 10. **Merge All** (n8n-nodes-base.merge)
+Fusionne tous les jingles de période en un seul tableau
+
+### 11. **IF Hour:00** (n8n-nodes-base.if)
+Condition : `minute == 0`
+- ✅ TRUE → Add Hourly Jingles ("Il est X heures...")
+- ❌ FALSE → Add Quarter Jingles ("Vous écoutez MA...")
+
+### 12-13. **Add Hourly/Quarter Jingles** (n8n-nodes-base.set)
+Ajoute des jingles supplémentaires au tableau existant avec `concat()`
+
+### 14. **Merge Hourly** (n8n-nodes-base.merge)
+Fusionne les jingles hourly ou quarter
+
+### 15. **IF Weekend** (n8n-nodes-base.if)
+Condition : `weekday >= 6` (samedi = 6, dimanche = 7)
+- ✅ TRUE → Add Weekend Jingles
+- ❌ FALSE → Skip
+
+### 16. **Add Weekend Jingles** (n8n-nodes-base.set)
+Ajoute "Bon week-end...", "C'est le week-end..."
+
+### 17. **Merge Weekend** (n8n-nodes-base.merge)
+Fusionne avec ou sans les jingles weekend
+
+### 18. **IF December** (n8n-nodes-base.if)
+Condition : `month == 12`
+- ✅ TRUE → Add December Jingles
+- ❌ FALSE → Skip
+
+### 19. **Add December Jingles** (n8n-nodes-base.set)
+Ajoute "Joyeuses fêtes...", "Décembre en musique..."
+
+### 20. **Merge December** (n8n-nodes-base.merge)
+Fusionne avec ou sans les jingles de décembre
+
+### 21. **Respond to Webhook** (n8n-nodes-base.respondToWebhook)
+Retourne le tableau `jingles` en JSON
+
+## Installation
+
+### 1. Importer le workflow
+
+1. Ouvrez n8n
+2. Menu **Workflows** → **Import from File**
+3. Sélectionnez `n8n-workflow-no-code.json`
+4. Le workflow "TTS Jingles Webhook (Sans Code)" sera importé
+
+### 2. Activer le workflow
+
+1. Ouvrez le workflow
+2. Cliquez sur le node **Webhook** pour voir l'URL
+3. Notez l'URL : `https://votre-n8n.com/webhook/tts-jingles-no-code`
+4. Activez avec le bouton **Active** en haut à droite
+
+### 3. Configurer dans desastres.yml
+
+```yaml
+tts_jinglist:
+  enabled: true
+  desastre: tts
+  options:
+    url: https://votre-n8n.com/webhook/tts-jingles-no-code
+```
+
+## Personnalisation
+
+### Modifier les jingles
+
+Pour changer les jingles, éditez directement les nodes **Set** :
+
+1. Double-cliquez sur un node (ex: "Morning Jingles")
+2. Modifiez la valeur du champ `jingles`
+3. Les jingles sont au format JSON array :
+
+```json
+["Jingle 1", "Jingle 2", "Jingle 3"]
+```
+
+### Ajouter une nouvelle condition
+
+**Exemple : Jingles spéciaux pour les Beatles**
+
+1. **Ajoutez un node IF** après "Merge December" :
+   - Condition : `{{ $json.artist.toLowerCase().includes('beatles') }}`
+
+2. **Ajoutez un node Set** pour les jingles Beatles :
+   ```json
+   {{ $json.jingles.concat(["Les Beatles sur MA !", "Un classique des Beatles !"]) }}
+   ```
+
+3. **Ajoutez un node Merge** pour fusionner
+
+4. **Connectez** : Merge December → IF Beatles → Add Beatles → Merge Beatles → Respond
+
+### Ajouter des jingles basés sur le titre
+
+**Exemple : Jingles "love"**
+
+Dupliquez le pattern Weekend/December :
+
+1. Node **IF** : `{{ $json.title.toLowerCase().includes('love') }}`
+2. Node **Set** : Jingles sur l'amour
+3. Node **Merge** : Fusion
+4. Connectez dans la chaîne
+
+## Test du workflow
+
+### Avec curl
+
+```bash
+curl -X POST https://votre-n8n.com/webhook/tts-jingles-no-code \
+  -H "Content-Type: application/json" \
+  -d '{
+    "body": {
+      "date": {
+        "hour": 14,
+        "minute": 0,
+        "month": 12,
+        "weekday": 6
+      },
+      "query": {
+        "title": "Love Song",
+        "artist": "The Beatles"
+      }
+    }
+  }'
+```
+
+### Résultat attendu
+
+```json
+[
+  "Bon après-midi sur Musique Approximative !",
+  "L'après-midi continue sur Musique Approximative !",
+  "Restez avec nous cet après-midi sur Musique Approximative !",
+  "Il est 14 heures sur Musique Approximative !",
+  "Vous écoutez Musique Approximative, il est 14 heures.",
+  "14 heures, vous êtes sur Musique Approximative !",
+  "Bon week-end avec Musique Approximative !",
+  "C'est le week-end sur Musique Approximative !",
+  "Profitez de votre week-end avec Musique Approximative !",
+  "Joyeuses fêtes avec Musique Approximative !",
+  "Décembre en musique sur Musique Approximative !",
+  "Les fêtes de fin d'année sur Musique Approximative !"
+]
+```
+
+## Débogage
+
+### Voir les données à chaque étape
+
+1. Dans n8n, cliquez sur **Execute Workflow**
+2. Entrez des données de test dans le Webhook
+3. Cliquez sur chaque node pour voir les données entrantes/sortantes
+
+### Logs d'exécution
+
+1. Menu **Executions** en haut à droite
+2. Cliquez sur une exécution
+3. Voyez le parcours complet des données
+
+### Debug dans le navigateur
+
+Le désastre TTS logge toutes ses actions :
+
+```
+[desastres/tts] Fetching text from URL: https://...
+[desastres/tts] Text selected from URL (12 options): Bon après-midi...
+```
+
+## Comparaison avec la version Code
+
+| Critère | Avec Code | Sans Code |
+|---------|-----------|-----------|
+| **Facilité** | ⚠️ Requiert JS | ✅ Visual |
+| **Debug** | ⚠️ Console logs | ✅ Visuel par node |
+| **Modification** | ⚠️ Éditer code | ✅ Éditer nodes |
+| **Complexité** | 1 gros node | 21 petits nodes |
+| **Performance** | ✅ Rapide | ✅ Rapide |
+| **Extensibilité** | ✅ Très flexible | ⚠️ Ajout de nodes |
+
+## Limitations
+
+1. **Plus de nodes** : 21 nodes vs 1 node de code
+2. **Workflow plus large** : Prend plus d'espace visuel
+3. **Logique complexe** : Certaines opérations sont plus simples en code
+
+## Quand utiliser cette version ?
+
+✅ **Utilisez la version SANS CODE si :**
+- Vous ne connaissez pas JavaScript
+- Vous voulez débugger visuellement
+- Vous préférez l'interface graphique
+- Vous voulez partager avec des non-développeurs
+
+⚠️ **Utilisez la version AVEC CODE si :**
+- Vous êtes à l'aise en JavaScript
+- Vous avez besoin de logique très complexe
+- Vous voulez un workflow compact
+- Vous avez besoin d'opérations avancées (regex, parsing...)
+
+## Support & Documentation
+
+- [Documentation n8n](https://docs.n8n.io/)
+- [Node Set](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/)
+- [Node IF](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.if/)
+- [Node Switch](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.switch/)
+- [Node Merge](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.merge/)
+- [Expressions n8n](https://docs.n8n.io/code/expressions/)
+
+## Exemples d'extensions
+
+### Ajouter des jingles pour un artiste spécifique
+
+Après le node "Merge December", ajoutez :
+
+1. **IF Artist Check**
+   - Condition : `{{ $json.artist.toLowerCase().includes('kraftwerk') }}`
+
+2. **Add Artist Jingles**
+   - Value : `{{ $json.jingles.concat(["Kraftwerk sur MA !", "Les pionniers de l'électro !"]) }}`
+
+3. **Merge Artist**
+
+4. Connectez : Merge December → IF Artist → Add Artist → Merge Artist → Respond
+
+### Ajouter des jingles basés sur la durée
+
+1. Modifiez **Extract Context** pour ajouter :
+   - `duration` : `{{ $json.body.audio.duration }}`
+
+2. Ajoutez après Merge Artist :
+   - **IF Long Track** : `{{ $json.duration > 300 }}`
+   - **Add Long Track Jingles** : `["Un long morceau pour vous !"]`
+   - **Merge Long Track**
+
+### Jingles pour événements spéciaux
+
+1. **IF New Year**
+   - Condition : `{{ $json.month == 1 && $json.day == 1 }}`
+
+2. **Add New Year Jingles**
+   - Jingles : `["Bonne année avec MA !"]`
+
+3. **Merge Event**
+
+---
+
+**Créé avec ❤️ pour Musique Approximative**
