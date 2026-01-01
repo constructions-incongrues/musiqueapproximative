@@ -181,18 +181,18 @@ background-color:#AAA;color:#000;
 #jp_container_1 .jp-volume-bar {
   display: block !important;
   position: absolute !important;
-  top: 25px !important;
+  top: 22px !important;
   left: 0 !important;
   width: 100% !important;
-  height: 6px !important;
-  background-color: #333 !important; /* Slightly darker gray for better visibility */
+  height: 25px !important;
+  background-color: #AAA !important;
   cursor: pointer !important;
   z-index: 1000 !important;
 }
 #jp_container_1 .jp-volume-bar-value {
   display: block !important;
   background-color: #000 !important;
-  height: 6px !important;
+  height: 25px !important;
   width: 0; /* Let jPlayer control this */
 }
 
