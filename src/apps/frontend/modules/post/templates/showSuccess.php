@@ -33,6 +33,16 @@ Parcourir :
 </script>
 
 <?php if (sfConfig::get('app_theme', 'musiqueapproximative') == 'musiqueapproximative'): ?>
+  <?php $glitchUrl = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(25, 100)) ?>
+  <script>
+    (function() {
+      var img = new Image();
+      img.onload = function() { document.body.classList.add('glitch-active'); };
+      img.onerror = function() { document.body.classList.add('glitch-error'); };
+      img.src = '<?php echo $glitchUrl ?>';
+    })();
+  </script>
+
 <style>
   @keyframes glitch-flash {
     0%   { opacity: 0; }
@@ -60,28 +70,16 @@ Parcourir :
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: transparent !important;
+    background-color: #fff !important;
     overflow-x: hidden;
   }
 
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(25, 100)) ?>');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    z-index: -1;
-    opacity: 0;
-    animation: glitch-flash 2s ease-out forwards;
+  /* Only run animation if glitch is active */
+  body.glitch-active {
+    background-color: transparent !important;
   }
 
-  body::after {
+  body.glitch-active::after {
     content: "";
     position: fixed;
     top: 0;
@@ -91,6 +89,32 @@ Parcourir :
     background-color: #fff;
     z-index: -2;
     animation: content-reveal 2s ease-out forwards;
+  }
+
+  body.glitch-active::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('<?php echo $glitchUrl ?>');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -1;
+    opacity: 0;
+    animation: glitch-flash 2s ease-out forwards;
+  }
+
+  /* Default/Error state: plain white background */
+  body.glitch-error {
+    background-color: #fff !important;
+  }
+  body.glitch-error::before,
+  body.glitch-error::after {
+    display: none !important;
   }
 
   .grid-container {
@@ -112,7 +136,8 @@ Parcourir :
   /* Header part noir - Full width */
   header {
     position: relative;
-    background-color: transparent !important;
+    background-color: #000 !important;
+    z-index: 100;
   }
 
   header::before {
@@ -123,7 +148,7 @@ Parcourir :
     transform: translateX(-50%);
     width: 100vw;
     height: 100%;
-    background-color: #000;
+    background-color: #000 !important;
     z-index: -1;
   }
 
