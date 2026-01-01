@@ -26,7 +26,7 @@
     <![endif]-->
     <link type="text/css" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/skin/ma2/ma.css" rel="stylesheet">
 
-    <link type="text/css" href="<?php echo sprintf('%s/%s/main.css', $sf_request->getRelativeUrlRoot(), sfConfig::get('app_theme')) ?>" rel="stylesheet">
+    <link type="text/css" href="<?php echo sprintf('%s/theme/%s/main.css', $sf_request->getRelativeUrlRoot(), sfConfig::get('app_theme', 'musiqueapproximative')) ?>" rel="stylesheet">
 
     <?php include_http_metas() ?>
   <?php foreach ($sf_context->getResponse()->getMetas() as $name => $content): ?>
