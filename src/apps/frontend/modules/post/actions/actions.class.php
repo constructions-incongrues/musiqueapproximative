@@ -195,6 +195,14 @@ class postActions extends sfActions
       'language'      => 'fr'
     ));
 
+    // Feed logo
+    $feedImage = new sfFeedImage();
+    $feedImage->setFavicon(sprintf('%s/favicon.ico', $request->getUriPrefix()));
+    $feedImage->setImage(sprintf('%s/images/glitched_logo.png', $request->getUriPrefix()));
+    $feedImage->setTitle(sfConfig::get('app_title'));
+    $feedImage->setLink(sfConfig::get('app_url_root'));
+    $feed->setImage($feedImage);
+
     $posts = Doctrine_Core::getTable('Post')->getOnlinePosts($request->getParameter('contributor'), $request->getParameter('count', 50));
     foreach ($posts as $post)
     {
@@ -214,6 +222,14 @@ class postActions extends sfActions
         $file_size = strlen(file_get_contents(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename));
       }
 
+      // Glitch logo ?
+      $is_glitch_active = (rand(1, sfConfig::get('app_glitch_divisor', 10)) == 1);
+      if (sfConfig::get('app_theme') == 'musiqueapproximative' && $is_glitch_active) {
+        $urlImg = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(0, 100), $request->getUriPrefix());
+      } else {
+        $urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
+      }
+
       $item = new sfFeedItem();
       $item->initialize(array(
         'title'       => sprintf('%s - %s', $post->track_author, $post->track_title),
@@ -221,7 +237,7 @@ class postActions extends sfActions
         'authorName'  => $post->getContributorDisplayName(),
         'pubDate'     => $publish_timestamp,
         'uniqueId'    => $post->slug,
-        'description' => sprintf("%s<p><small>Contribué par %s</small></p>", Markdown($post->body), $post->getContributorDisplayName())
+        'description' => sprintf('<p><a href="%s"><img src="%s" border="0" /></a></p>%s<p><small>Contribué par %s</small></p>', $this->getController()->genUrl('@post_show?slug='.$post->slug, true), $urlImg, Markdown($post->body), $post->getContributorDisplayName())
       ));
       $enclosure = new sfFeedEnclosure();
       $enclosure->initialize(array(
