@@ -33,7 +33,7 @@ Parcourir :
 </script>
 
 <?php if (sfConfig::get('app_theme', 'musiqueapproximative') == 'musiqueapproximative'): ?>
-  <?php $glitchUrl = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(25, 100)) ?>
+  <?php $glitchUrl = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(0, 100)) ?>
   <script>
     (function() {
       var img = new Image();
@@ -156,12 +156,12 @@ Parcourir :
   header p, 
   header a, 
   header input {
-    color: #fff !important;
+    color: black !important;
     background-color: white !important;
   }
 
   header input.search {
-    border-bottom: 1px solid #fff !important;
+    border-bottom: 1px solid black !important;
   }
 
   /* Footer part noir - Full width */
@@ -208,7 +208,7 @@ Parcourir :
 <?php if ($post_previous): ?>
         <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
  <?php endif; ?>
-      </p>
+      </p>x
     </div>
 
     <div class="nav-l grid-5 hide-on-desktop">
