@@ -157,7 +157,7 @@ Parcourir :
   header a, 
   header input {
     color: #fff !important;
-    background-color: transparent !important;
+    background-color: white !important;
   }
 
   header input.search {
