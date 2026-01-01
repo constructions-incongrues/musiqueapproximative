@@ -34,6 +34,28 @@ Parcourir :
 
 <?php if (sfConfig::get('app_theme', 'musiqueapproximative') == 'musiqueapproximative'): ?>
 <style>
+  @keyframes glitch-flash {
+    0%   { opacity: 0; }
+    5%   { opacity: 1; }
+    10%  { opacity: 0; }
+    15%  { opacity: 1; }
+    20%  { opacity: 0; }
+    25%  { opacity: 1; }
+    30%  { opacity: 0.2; }
+    35%  { opacity: 1; }
+    40%  { opacity: 0.1; }
+    45%  { opacity: 0.8; }
+    50%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes content-reveal {
+    0%   { background-color: transparent; }
+    45%  { background-color: transparent; }
+    50%  { background-color: #fff; }
+    100% { background-color: #fff; }
+  }
+
   html, body {
     height: 100%;
     margin: 0;
