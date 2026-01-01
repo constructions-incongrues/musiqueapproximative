@@ -129,7 +129,9 @@ Parcourir :
   section.content h1,
   section.content h2,
   section.content p,
-  section.content div {
+  section.content .nav-l,
+  section.content .nav-r,
+  section.content #skin-loader {
     background: transparent !important;
   }
 
