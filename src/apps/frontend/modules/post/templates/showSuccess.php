@@ -50,8 +50,8 @@ Parcourir :
   }
 
   @keyframes content-reveal {
-    0%   { background-color: transparent; }
-    45%  { background-color: transparent; }
+    0%   { background-color: #000; }
+    45%  { background-color: #000; }
     50%  { background-color: #fff; }
     100% { background-color: #fff; }
   }
@@ -60,12 +60,36 @@ Parcourir :
     height: 100%;
     margin: 0;
     padding: 0;
-    background-image: url('<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(25, 100)) ?>') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
-    background-color: #000 !important;
+    background-color: transparent !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(25, 100)) ?>');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -1;
+    opacity: 0;
+    animation: glitch-flash 2s ease-out forwards;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: -2;
+    animation: content-reveal 2s ease-out forwards;
   }
 
   .grid-container,
