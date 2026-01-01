@@ -121,8 +121,7 @@ padding: 4px 4px 2px 4px;}
 background-color:#AAA;color:#000;
 }
 .jp-play,
-.jp-pause,
-{
+.jp-pause {
   z-index: 1;
   outline: none;
   width: 30px;
@@ -176,6 +175,23 @@ background-color:#AAA;color:#000;
     height:29px;
     top:-16px;
 }
+
+/* VOLUME BAR
+----------------------------------------------- */
+.jp-volume-bar {
+  position: absolute;
+  top: 14px;
+  width: 100%;
+  height: 2px;
+  background-color: #AAA;
+  cursor: pointer;
+  z-index: 1000;
+}
+.jp-volume-bar-value {
+  background-color: #000;
+  height: 2px;
+}
+
 
 /* TIME HOLDER
 ----------------------------------------------- */

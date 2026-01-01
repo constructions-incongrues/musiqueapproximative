@@ -178,6 +178,7 @@
 //<![CDATA[
         $(document).ready(function(){
             $('#jquery_jplayer_1').jPlayer({
+                cssSelectorAncestor: '#jp_container_1',
                 swfPath: '<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player',
                 solution: 'html, flash',
                 supplied: 'mp3',
