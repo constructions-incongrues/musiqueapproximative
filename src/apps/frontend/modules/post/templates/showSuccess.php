@@ -156,12 +156,12 @@ Parcourir :
   header p, 
   header a, 
   header input {
-    color: black !important;
-    background-color: white !important;
+    color: #fff !important;
+    background-color: transparent !important;
   }
 
   header input.search {
-    border-bottom: 1px solid black !important;
+    border-bottom: 1px solid #fff !important;
   }
 
   /* Footer part noir - Full width */
