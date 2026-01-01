@@ -3,42 +3,42 @@
 
 prod:
   .settings:
-    no_script_name:         true
-    logging_enabled:        false
-    cache:                  true
+    no_script_name: true
+    logging_enabled: false
+    cache: true
 
 cache:
   .settings:
-    cache:                  true
-    web_debug:              true
+    cache: true
+    web_debug: true
 
 dev:
   .settings:
-    error_reporting:        <?php echo (E_ALL | E_STRICT)."\n" ?>
-    web_debug:              true
-    cache:                  false
-    no_script_name:         false
-    etag:                   false
+    error_reporting: <?php echo (E_ALL | E_STRICT)."\n" ?>
+    web_debug: true
+    cache: false
+    no_script_name: false
+    etag: false
 
 test:
   .settings:
-    error_reporting:        <?php echo ((E_ALL | E_STRICT) ^ E_NOTICE)."\n" ?>
-    cache:                  false
-    web_debug:              false
-    no_script_name:         false
-    etag:                   false
+    error_reporting: <?php echo ((E_ALL | E_STRICT) ^ E_NOTICE)."\n" ?>
+    cache: false
+    web_debug: false
+    no_script_name: false
+    etag: false
 
 all:
   .settings:
     # Form security secret (CSRF protection)
-    csrf_secret:            2b68e0fa24d7eeedc55b2b7f3712074a3f967edd
+    csrf_secret: 2b68e0fa24d7eeedc55b2b7f3712074a3f967edd
 
     # Output escaping settings
-    escaping_strategy:      true
-    escaping_method:        ESC_SPECIALCHARS
+    escaping_strategy: true
+    escaping_method: ESC_SPECIALCHARS
 
     # Enable the database manager
-    use_database:           true
+    use_database: true
 
     # Set default culture to french
     default_culture: fr_FR
