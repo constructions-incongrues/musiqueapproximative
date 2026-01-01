@@ -32,14 +32,30 @@ Parcourir :
   window.trackUrl = '<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>';
 </script>
 
-<?php if (sfConfig::get('app_theme') == 'musiqueapproximative'): ?>
+<?php if (sfConfig::get('app_theme', 'musiqueapproximative') == 'musiqueapproximative'): ?>
 <style>
-  section.content {
-    background-image: url('<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(25, 100), $sf_request->getUriPrefix()) ?>');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: url('<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=https://www.musiqueapproximative.net/images/logo_500.png', $post->id, rand(25, 100)) ?>') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    background-color: #000 !important;
+  }
+
+  .grid-container,
+  section.content, 
+  section.content article, 
+  section.content .content-text,
+  section.content .descriptif,
+  section.content h1,
+  section.content h2,
+  section.content p,
+  section.content div {
+    background: transparent !important;
   }
 </style>
 <?php endif; ?>
