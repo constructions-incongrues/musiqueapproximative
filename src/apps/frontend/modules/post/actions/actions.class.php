@@ -234,11 +234,7 @@ class postActions extends sfActions
   public function executeRandom(sfWebRequest $request)
   {
     $post = Doctrine_Core::getTable('Post')->getRandomPost($request->getParameterHolder()->getAll());
-
-    sfConfig::set('sf_web_debug', false);
-
-    // Pass data to view
-    $this->post = $post;
+    return $this->renderJsonPost($post);
   }
 
   /**
@@ -250,21 +246,24 @@ class postActions extends sfActions
   public function executeNext(sfWebRequest $request)
   {
     $post = Doctrine_Core::getTable('Post')->getNextPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
-
-    sfConfig::set('sf_web_debug', false);
-
-    // Pass data to view
-    $this->post = $post;
+    return $this->renderJsonPost($post);
   }
 
   public function executePrev(sfWebRequest $request)
   {
     $post = Doctrine_Core::getTable('Post')->getPreviousPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+    return $this->renderJsonPost($post);
+  }
 
+  protected function renderJsonPost($post)
+  {
+    $this->getResponse()->setContentType('application/json');
+    $data = array(
+      'url'   => $this->getController()->genUrl('@post_show?slug='.$post->slug),
+      'title' => sprintf('%s - %s', $post->track_author, $post->track_title)
+    );
     sfConfig::set('sf_web_debug', false);
-
-    // Pass data to view
-    $this->post = $post;
+    return $this->renderText(json_encode($data));
   }
 
   public function executeOembed(sfWebRequest $request)
