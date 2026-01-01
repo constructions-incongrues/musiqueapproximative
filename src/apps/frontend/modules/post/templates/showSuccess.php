@@ -61,6 +61,7 @@ Parcourir :
     margin: 0;
     padding: 0;
     background-color: transparent !important;
+    overflow-x: hidden;
   }
 
   body::before {
@@ -92,7 +93,11 @@ Parcourir :
     animation: content-reveal 2s ease-out forwards;
   }
 
-  .grid-container,
+  .grid-container {
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
   section.content, 
   section.content article, 
   section.content .content-text,
@@ -102,6 +107,41 @@ Parcourir :
   section.content p,
   section.content div {
     background: transparent !important;
+  }
+
+  /* Footer part noir - Full width */
+  .infos {
+    position: relative;
+    background-color: transparent !important;
+  }
+
+  .infos::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 5000px; /* High enough to cover everything below */
+    background-color: #000;
+    z-index: -1;
+  }
+
+  .infos, 
+  .contributors,
+  .infos .title,
+  .contributors h1,
+  .contributors h2,
+  .contributors p,
+  .contributors a,
+  .contributors li {
+    color: #fff !important;
+    background-color: transparent !important;
+  }
+
+  .contributors a:hover {
+    background-color: #fff !important;
+    color: #000 !important;
   }
 </style>
 <?php endif; ?>
