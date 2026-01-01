@@ -32,6 +32,18 @@ Parcourir :
   window.trackUrl = '<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>';
 </script>
 
+<?php if (sfConfig::get('app_theme') == 'musiqueapproximative'): ?>
+<style>
+  section.content {
+    background-image: url('<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(25, 100), $sf_request->getUriPrefix()) ?>');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+<?php endif; ?>
+
 <section class="content">
   <article class="grid-100">
     <div class="nav-l grid-5 hide-on-mobile">
@@ -67,11 +79,7 @@ Parcourir :
           <?php echo $post->track_title ?>
       </h2>
 
-      <?php if (sfConfig::get('app_theme') == 'musiqueapproximative'): ?>
-      <div class="glitch-logo" style="text-align: center; margin: 20px 0;">
-        <img src="<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(25, 100), $sf_request->getUriPrefix()) ?>" alt="Logo glitché" style="max-width: 300px; height: auto;" />
-      </div>
-      <?php endif; ?>
+
 
       <div class="descriptif">
         <?php echo Markdown($post->body) ?>
