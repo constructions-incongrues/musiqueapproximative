@@ -152,7 +152,6 @@ Parcourir :
     z-index: -1;
   }
 
-  header, 
   header p, 
   header a, 
   header input {
