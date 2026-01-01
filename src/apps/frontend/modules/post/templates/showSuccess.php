@@ -109,6 +109,36 @@ Parcourir :
     background: transparent !important;
   }
 
+  /* Header part noir - Full width */
+  header {
+    position: relative;
+    background-color: transparent !important;
+  }
+
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background-color: #000;
+    z-index: -1;
+  }
+
+  header, 
+  header p, 
+  header a, 
+  header input {
+    color: #fff !important;
+    background-color: transparent !important;
+  }
+
+  header input.search {
+    border-bottom: 1px solid #fff !important;
+  }
+
   /* Footer part noir - Full width */
   .infos {
     position: relative;
