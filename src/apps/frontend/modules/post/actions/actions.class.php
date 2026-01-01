@@ -55,7 +55,11 @@ class postActions extends sfActions
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
-    if (sfConfig::get('app_theme') == 'musiqueapproximative') {
+
+    // Glitch logo ?
+    $this->is_glitch_active = (rand(1, sfConfig::get('app_glitch_divisor', 10)) == 1);
+
+    if (sfConfig::get('app_theme') == 'musiqueapproximative' && $this->is_glitch_active) {
       $urlImg = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(0, 100), $request->getUriPrefix());
     } else {
       $urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
