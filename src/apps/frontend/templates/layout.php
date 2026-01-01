@@ -215,10 +215,10 @@
               }
               var urlRandom = window.script_name + '/posts/random?current=' + current_post_id + '&' + queryCommon;
               $.get(urlRandom, {}, function(data) {
-                $('.nav-l a').attr('href', data + '?' + queryCommon);
+                $('.nav-l a').attr('href', data.url + '?' + queryCommon).attr('title', data.title);
               });
               $.get(urlRandom, {}, function(data) {
-                $('.nav-r a').attr('href', data + '?' + queryCommon);
+                $('.nav-r a').attr('href', data.url + '?' + queryCommon).attr('title', data.title);
               });
             } else {
               $('#random').addClass('not');
@@ -237,10 +237,10 @@
                   }
                   var urlRandom = window.script_name + '/posts/random?current=' + current_post_id + '&' + queryCommon;
                   $.get(urlRandom, {}, function(data) {
-                    $('.nav-l a').attr('href', data + '?' + queryCommon);
+                    $('.nav-l a').attr('href', data.url + '?' + queryCommon).attr('title', data.title);
                   });
                   $.get(urlRandom, {}, function(data) {
-                    $('.nav-r a').attr('href', data + '?' + queryCommon);
+                    $('.nav-r a').attr('href', data.url + '?' + queryCommon).attr('title', data.title);
                   });
                 } else {
                   $(this).addClass('not');
@@ -252,16 +252,12 @@
                   $.get(
                     window.script_name + '/posts/prev?current=' + current_post_id + '&' + queryCommon,
                     {}, function(data) {
-                      $('.nav-l a').attr(
-                        'href',
-                        data + '?' + queryCommon);
+                      $('.nav-l a').attr('href', data.url + '?' + queryCommon).attr('title', data.title);
                     });
                   $.get(
                     window.script_name + '/posts/next?current=' + current_post_id + '&' + queryCommon,
                     {}, function(data) {
-                      $('.nav-r a').attr(
-                        'href',
-                        data + '?' + queryCommon);
+                      $('.nav-r a').attr('href', data.url + '?' + queryCommon).attr('title', data.title);
                     });
 
                 }
