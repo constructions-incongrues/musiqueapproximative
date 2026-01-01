@@ -152,7 +152,7 @@
                             Musique Approximative est développé par <a href="http://www.constructions-incongrues.net">Constructions Incongrues</a> et est hébergé par <a href="http://www.pastis-hosting.net">Pastis Hosting</a>. Le code source du projet est <a href="https://github.com/constructions-incongrues/net.musiqueapproximative.www">distribué</a> sous licence <a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU AGPLv3</a>.
                         </p>
                         <p>
-                            <br />Le <a href="https://gliche.constructions-incongrues.net/glitch?url=<?php echo $sf_request->getUriPrefix().$sf_request->getRelativeUrlRoot().'/images/logo.png?seed='. rand(1, 10000000) . '&amount=75'?>">logo</a> a été créé par <a href="http://iris.ledrome.com/">Iris Veverka</a>.
+                            <br />Le <a href="https://gliche.constructions-incongrues.net/glitch?amount=75url=<?php echo $sf_request->getUriPrefix().$sf_request->getRelativeUrlRoot().'/images/logo.png?seed='. rand(1, 10000000) . '&amount=75'?>">logo</a> a été créé par <a href="http://iris.ledrome.com/">Iris Veverka</a>.
                         </p>
                         <h2>
                             Aidez-nous !
