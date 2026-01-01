@@ -67,6 +67,12 @@ Parcourir :
           <?php echo $post->track_title ?>
       </h2>
 
+      <?php if (sfConfig::get('app_theme') == 'musiqueapproximative'): ?>
+      <div class="glitch-logo" style="text-align: center; margin: 20px 0;">
+        <img src="<?php echo sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(25, 100), $sf_request->getUriPrefix()) ?>" alt="Logo glitché" style="max-width: 300px; height: auto;" />
+      </div>
+      <?php endif; ?>
+
       <div class="descriptif">
         <?php echo Markdown($post->body) ?>
       </div>
