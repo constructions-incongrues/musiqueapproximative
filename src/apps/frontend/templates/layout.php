@@ -182,6 +182,7 @@
                 swfPath: '<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player',
                 solution: 'html, flash',
                 supplied: 'mp3',
+                volume: 0.8,
                 errorAlerts: false,
                 warningAlerts: false,
                 preload: 'metadata',
