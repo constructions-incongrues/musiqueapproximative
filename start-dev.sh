@@ -9,7 +9,7 @@ if ! docker info >/dev/null 2>&1; then
 fi
 
 # Vérifier que le fichier .env existe
-if [ ! -f "etc/musiqueapproximative.localhost/.env" ]; then
+if [[ ! -f "etc/musiqueapproximative.localhost/.env" ]]; then
 	echo "📝 Création du fichier de configuration .env..."
 	mkdir -p etc/musiqueapproximative.localhost
 	cat >etc/musiqueapproximative.localhost/.env <<EOF
