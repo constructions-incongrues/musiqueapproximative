@@ -1,14 +1,9 @@
 name: Auto Rebase
 
 on:
-  # Déclencher sur les pushs vers main
-  push:
-    branches:
-      - main
-      - master
-  
-  # Permettre le déclenchement manuel
-  workflow_dispatch:
+  # Déclencher sur les commentaires dans les PRs
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: write
@@ -18,6 +13,10 @@ jobs:
   auto-rebase:
     name: Rebase automatique des PRs
     runs-on: ubuntu-latest
+    # Ne s'exécute que si c'est un commentaire sur une PR contenant /rebase
+    if: >
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, '/rebase')
     
     steps:
       - name: Checkout du code
