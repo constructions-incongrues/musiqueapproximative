@@ -6,7 +6,27 @@
 
 version: 2
 updates:
- - package-ecosystem: "devcontainers"
-   directory: "/"
-   schedule:
-     interval: weekly
+  # Dev containers
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  # Dépendances Composer (PHP)
+  - package-ecosystem: "composer"
+    directory: "/src"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  # Dockerfile
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
