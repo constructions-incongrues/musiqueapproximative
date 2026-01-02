@@ -1,3 +1,32 @@
+# Changelog
+
+## [1.4.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.3.0...v1.4.0) (2026-01-02)
+
+
+### Fonctionnalités
+
+* Implement major and minor version alias tag creation, restrict CI to the main branch, and add the `v` branch to Antora playbook sources. ([43f899d](https://github.com/constructions-incongrues/musiqueapproximative/commit/43f899d6a5fbb2e5e9f5c94c2d9a726387e83f19))
+
+
+### Documentation
+
+* add inscription guide and enhance main documentation index with CI badges and participation links. ([670bf4c](https://github.com/constructions-incongrues/musiqueapproximative/commit/670bf4c7e9729211b7e99285b1778ee4f8e8b911))
+* add link to "Anatomie d'un Désastre" documentation page ([ddd3195](https://github.com/constructions-incongrues/musiqueapproximative/commit/ddd3195feaa4c27a26aa3fb500f87c741fad1ea4))
+* Add question mark to 'Désastre' navigation link in documentation. ([722439f](https://github.com/constructions-incongrues/musiqueapproximative/commit/722439f637c75db6ba041bd284459c16a036984a))
+* adjust introductory question wording in main page. ([52be7e8](https://github.com/constructions-incongrues/musiqueapproximative/commit/52be7e8e72efdd776f2546ae84cf76ea99d81275))
+* remove all previous changelog entries ([0d3cf1c](https://github.com/constructions-incongrues/musiqueapproximative/commit/0d3cf1cc7b204088e2e953911bee245ac309f4e2))
+* remove Antora navigation file ([855d5ea](https://github.com/constructions-incongrues/musiqueapproximative/commit/855d5ea3df496b572307fd859cd57868ee8b09b6))
+* remove GitHub repository link from index page ([babe4ea](https://github.com/constructions-incongrues/musiqueapproximative/commit/babe4eaa615742216bd6d3cb1eca4362afce31ad))
+* simplify Antora TOC configuration and enhance desastres documentation with demo links. ([1733533](https://github.com/constructions-incongrues/musiqueapproximative/commit/17335333e2c713b494cfe2f4142fd9e3376e0c64))
+* update "Les Désastres" page title ([b536c09](https://github.com/constructions-incongrues/musiqueapproximative/commit/b536c09ec979dd479d5360956ab97c17fb6d8303))
+* update documentation navigation links, renaming 'Contribution' and moving 'Désastres' entry ([131af95](https://github.com/constructions-incongrues/musiqueapproximative/commit/131af95a6522d023182540dd5998c0f797644a6b))
+* update documentation title and example server port ([6505798](https://github.com/constructions-incongrues/musiqueapproximative/commit/650579803eb2f93797a11481cbbea11d28ae0681))
+
+
+### Styles
+
+* Refine player skin layout, spacing, and time display for improved visual consistency. ([a5544e2](https://github.com/constructions-incongrues/musiqueapproximative/commit/a5544e2aa9112cdea07252d229a96f8336867911))
+
 ## Changelog
 
 [Releases](https://github.com/constructions-incongrues/musiqueapproximative/releases)
