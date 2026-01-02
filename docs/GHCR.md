@@ -1,0 +1,164 @@
+# Utilisation de GitHub Container Registry (GHCR)
+
+## Vue d'ensemble
+
+Le projet est configuré pour publier automatiquement les images Docker vers GitHub Container Registry (GHCR) lors de chaque push vers les branches principales.
+
+## Configuration
+
+### Workflow CI
+
+Le workflow `.github/workflows/ci.yml` inclut un job `docker-build` qui :
+
+1. **Se connecte à GHCR** avec le token GitHub automatique
+2. **Extrait les métadonnées** pour le tagging automatique
+3. **Build l'image Docker** avec cache optimisé
+4. **Pousse l'image** vers GHCR (sauf pour les PRs)
+
+### Permissions
+
+Le workflow a les permissions suivantes :
+- `contents: read` - Lire le code du dépôt
+- `packages: write` - Écrire dans le registry de packages
+
+## Tags automatiques
+
+Les images sont taguées automatiquement selon le contexte :
+
+| Événement | Tag | Exemple |
+|-----------|-----|---------|
+| Push sur branche | `branch-name` | `main`, `develop` |
+| Pull Request | `pr-123` | `pr-42` |
+| Tag semver | `version`, `major.minor`, `major` | `1.2.3`, `1.2`, `1` |
+| Commit SHA | `branch-sha` | `main-abc1234` |
+| Branche par défaut | `latest` | `latest` |
+
+## Utilisation des images
+
+### Pull d'une image
+
+```bash
+# Image latest (branche main)
+docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:latest
+
+# Image d'une branche spécifique
+docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:develop
+
+# Image d'une version spécifique
+docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:1.2.3
+
+# Image d'un commit spécifique
+docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:main-abc1234
+```
+
+### Utilisation dans docker-compose
+
+```yaml
+services:
+  app:
+    image: ghcr.io/constructions-incongrues/net.musiqueapproximative.www:latest
+    # ... reste de la configuration
+```
+
+### Authentification (si le dépôt est privé)
+
+```bash
+# Se connecter à GHCR
+echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+
+# Ou avec un Personal Access Token
+echo $PAT | docker login ghcr.io -u USERNAME --password-stdin
+```
+
+## Visibilité des packages
+
+Par défaut, les packages GHCR héritent de la visibilité du dépôt :
+- Dépôt public → Package public
+- Dépôt privé → Package privé
+
+Pour changer la visibilité :
+1. Aller sur https://github.com/orgs/constructions-incongrues/packages
+2. Sélectionner le package
+3. Package settings → Change visibility
+
+## Cache des builds
+
+Le workflow utilise le cache GitHub Actions pour accélérer les builds :
+- `cache-from: type=gha` - Utilise le cache existant
+- `cache-to: type=gha,mode=max` - Sauvegarde le cache maximum
+
+Cela réduit significativement le temps de build pour les builds suivants.
+
+## Workflow de publication
+
+```mermaid
+graph LR
+    A[Push vers main] --> B[Trigger CI]
+    B --> C[Build Docker]
+    C --> D[Login GHCR]
+    D --> E[Extract Metadata]
+    E --> F[Build Image]
+    F --> G[Push to GHCR]
+    G --> H[Tag: latest, main, sha]
+```
+
+## Nettoyage des anciennes images
+
+Pour éviter l'accumulation d'images, vous pouvez :
+
+1. **Manuellement** : Supprimer les anciennes versions via l'interface GitHub
+2. **Automatiquement** : Ajouter une GitHub Action pour nettoyer les anciennes images
+
+Exemple de workflow de nettoyage (optionnel) :
+
+```yaml
+name: Cleanup old images
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Chaque dimanche à minuit
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/delete-package-versions@v4
+        with:
+          package-name: 'net.musiqueapproximative.www'
+          package-type: 'container'
+          min-versions-to-keep: 10
+          delete-only-untagged-versions: 'true'
+```
+
+## Vérification
+
+Après un push, vérifiez que l'image a été publiée :
+
+1. Aller sur https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www
+2. Vérifier les tags disponibles
+3. Vérifier la date de dernière publication
+
+## Troubleshooting
+
+### Erreur de permission
+
+Si vous obtenez une erreur de permission :
+- Vérifier que `packages: write` est bien dans les permissions du workflow
+- Vérifier que le token GitHub a les permissions nécessaires
+
+### Image non publiée sur PR
+
+C'est normal ! Les images ne sont pas publiées pour les PRs pour économiser l'espace de stockage. Elles sont seulement buildées pour vérifier qu'il n'y a pas d'erreurs.
+
+### Cache non utilisé
+
+Si le cache n'est pas utilisé :
+- Vérifier que les builds précédents ont réussi
+- Le cache est partagé entre les branches du même dépôt
+- Le cache expire après 7 jours d'inactivité
+
+---
+
+**Registry** : `ghcr.io`  
+**Image** : `ghcr.io/constructions-incongrues/net.musiqueapproximative.www`  
+**Visibilité** : Hérite du dépôt

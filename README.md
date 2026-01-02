@@ -5,7 +5,8 @@
 
 > C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
 
-📖 **[Guide de contribution](CONTRIBUTING.md)** - Comment contribuer au projet
+📖 **[Guide de contribution](CONTRIBUTING.md)** - Comment contribuer au projet  
+🐳 **[Images Docker](docs/GHCR.md)** - Utilisation des images GHCR
 
 ## 🚀 Démarrage rapide
 
