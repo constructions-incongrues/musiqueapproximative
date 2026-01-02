@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    tags: ['*']
+    tags: [v*]
   pull_request:
     branches: [main]
 
@@ -124,7 +124,9 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/}
           MAJOR=$(echo $VERSION | cut -d. -f1)
           MINOR=$(echo $VERSION | cut -d. -f1,2)
-          echo "Creating/Updating tags $MAJOR and $MINOR for $VERSION"
+          PATCH=$(echo $VERSION | cut -d. -f1,2,3)
+          echo "Creating/Updating tags $MAJOR, $MINOR and $PATCH for $VERSION"
           git tag -f $MAJOR $GITHUB_SHA
           git tag -f $MINOR $GITHUB_SHA
-          git push origin $MAJOR $MINOR --force
+          git tag -f $PATCH $GITHUB_SHA
+          git push origin $MAJOR $MINOR $PATCH --force
