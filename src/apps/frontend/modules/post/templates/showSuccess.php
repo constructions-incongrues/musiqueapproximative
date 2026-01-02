@@ -253,9 +253,6 @@ Parcourir :
                           <div class="jp-play-bar"></div>
                       </div>
                   </div>
-                  <div class="jp-volume-bar">
-                      <div class="jp-volume-bar-value"></div>
-                  </div>
                   <ul class="jp-controls">
                       <li>
                           <a href="javascript:;" class="jp-play" tabindex="1">play</a>
@@ -271,6 +268,9 @@ Parcourir :
 <?php endif; ?>
                       </li>
                   </ul>
+                  <div class="jp-volume-bar">
+                      <div class="jp-volume-bar-value"></div>
+                  </div>
                   <div class="jp-time-holder hide-on-mobile">
                       <div class="jp-duration"></div>
                       <div class="jp-current-time"></div>
