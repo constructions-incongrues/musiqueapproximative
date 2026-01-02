@@ -1,4 +1,4 @@
-= Documentation Musique Approximative
+= Documentation
 :description: Guide pour contribuer à la documentation du projet
 :toclevels: 2
 
@@ -63,14 +63,14 @@ antora antora-playbook.yml
 [source,bash]
 ----
 # Avec un serveur HTTP simple
-npx http-server build/site -p 8000
+npx http-server build/site -p 8001
 
 # Ou avec Python
 cd build/site
-python3 -m http.server 8000
+python3 -m http.server 8001
 ----
 
-Puis ouvrir http://localhost:8000
+Puis ouvrir http://localhost:8001
 
 == ✍️ Contribuer à la documentation
 
