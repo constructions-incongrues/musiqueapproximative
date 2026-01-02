@@ -1,0 +1,99 @@
+= Architecture du projet
+:description: Vue d'ensemble de l'architecture technique
+
+== Stack technique
+
+=== Backend
+
+* **Framework** : Symfony 1.5
+* **Langage** : PHP 7.4+
+* **ORM** : Doctrine
+* **Base de données** : MySQL/MariaDB
+
+=== Frontend
+
+* **HTML/CSS** : Vanilla CSS avec support des thèmes
+* **JavaScript** : jQuery pour la compatibilité
+* **Lecteur audio** : Player personnalisé
+
+=== Infrastructure
+
+* **Conteneurisation** : Docker & Docker Compose
+* **Serveur web** : Nginx
+* **CI/CD** : GitHub Actions
+* **Registry** : GitHub Container Registry (GHCR)
+
+== Structure des répertoires
+
+[source]
+----
+musiqueapproximative/
+├── .github/              # Configuration GitHub Actions
+│   ├── workflows/        # Workflows CI/CD
+│   └── settings.yml      # Configuration du dépôt
+├── docs/                 # Documentation Antora
+│   ├── modules/
+│   └── antora.yml
+├── src/                  # Code source de l'application
+│   ├── apps/            # Applications Symfony
+│   ├── cache/           # Cache de l'application
+│   ├── config/          # Configuration
+│   ├── data/            # Données et fixtures
+│   ├── lib/             # Bibliothèques
+│   ├── log/             # Logs
+│   ├── plugins/         # Plugins Symfony
+│   └── web/             # Fichiers publics
+├── var/                  # Données variables
+├── Dockerfile            # Image Docker
+├── docker-compose.yml    # Configuration Docker Compose
+└── Makefile             # Commandes de build
+----
+
+== Composants principaux
+
+=== Application Symfony
+
+L'application est basée sur Symfony 1.5 avec deux applications :
+
+* **frontend** : Interface publique
+* **backend** : Interface d'administration
+
+=== Base de données
+
+Schéma principal :
+
+* **tracks** : Pistes audio
+* **users** : Utilisateurs
+* **playlists** : Playlists quotidiennes
+* **comments** : Commentaires
+
+=== Système de thèmes
+
+Le site supporte plusieurs thèmes visuels configurables par l'utilisateur.
+
+== Flux de données
+
+[source]
+----
+Utilisateur → Nginx → PHP-FPM → Symfony → Doctrine → MySQL
+                                    ↓
+                              Fichiers statiques
+----
+
+== Sécurité
+
+* Authentification utilisateur via Symfony Guard
+* Protection CSRF sur les formulaires
+* Validation des entrées utilisateur
+* Échappement des sorties
+
+== Performance
+
+* Cache Symfony pour les templates et la configuration
+* Cache HTTP via Nginx
+* Optimisation des requêtes avec Doctrine
+* Compression gzip des assets
+
+== Déploiement
+
+Voir xref:deploiement.adoc[Guide de déploiement] pour plus de détails.

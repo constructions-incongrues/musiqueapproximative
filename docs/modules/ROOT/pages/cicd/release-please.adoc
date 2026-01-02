@@ -1,0 +1,234 @@
+= Release Please
+:description: Gestion automatisée des releases avec Release Please
+
+== Qu'est-ce que Release Please ?
+
+https://github.com/googleapis/release-please[Release Please] est un outil qui automatise la gestion des versions et des changelogs en se basant sur les Conventional Commits.
+
+== Fonctionnement
+
+=== 1. Commits conventionnels
+
+Chaque commit doit suivre le format Conventional Commits :
+
+[source]
+----
+<type>(<scope>): <description>
+----
+
+Types reconnus :
+
+* `feat` : Nouvelle fonctionnalité (MINOR)
+* `fix` : Correction de bug (PATCH)
+* `feat!` ou `BREAKING CHANGE` : Breaking change (MAJOR)
+* `docs`, `style`, `refactor`, `perf`, `test`, `chore` : Pas de bump de version
+
+=== 2. Création automatique de PR
+
+Quand des commits sont poussés sur `main`, Release Please :
+
+1. Analyse les commits depuis la dernière release
+2. Détermine le nouveau numéro de version (Semantic Versioning)
+3. Génère le CHANGELOG
+4. Crée ou met à jour une PR de release
+
+=== 3. Publication de la release
+
+Quand la PR de release est mergée :
+
+1. Un tag Git est créé
+2. Une release GitHub est publiée
+3. Le CHANGELOG est mis à jour dans le dépôt
+
+== Configuration
+
+=== Workflow GitHub Actions
+
+**Fichier** : `.github/workflows/release-please.yml`
+
+[source,yaml]
+----
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+----
+
+=== Configuration Release Please
+
+**Fichier** : `.release-please-config.json`
+
+[source,json]
+----
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "constructions-incongrues/musiqueapproximative",
+      "changelog-sections": [
+        {"type": "feat", "section": "Fonctionnalités", "hidden": false},
+        {"type": "fix", "section": "Corrections de bugs", "hidden": false},
+        {"type": "docs", "section": "Documentation", "hidden": false},
+        {"type": "style", "section": "Styles", "hidden": false},
+        {"type": "refactor", "section": "Refactoring", "hidden": false},
+        {"type": "perf", "section": "Performance", "hidden": false},
+        {"type": "test", "section": "Tests", "hidden": false},
+        {"type": "chore", "section": "Maintenance", "hidden": false}
+      ]
+    }
+  }
+}
+----
+
+=== Manifest de version
+
+**Fichier** : `.release-please-manifest.json`
+
+[source,json]
+----
+{
+  ".": "0.8.0"
+}
+----
+
+Ce fichier est automatiquement mis à jour par Release Please.
+
+== Utilisation
+
+=== Workflow standard
+
+1. **Développer** : Créer une branche et développer
+2. **Commiter** : Utiliser Conventional Commits
++
+[source,bash]
+----
+git commit -m "feat: ajout du support des thèmes sombres"
+----
+
+3. **Merger** : Créer une PR et la merger dans `main`
+4. **Attendre** : Release Please crée automatiquement une PR de release
+5. **Publier** : Merger la PR de release pour publier
+
+=== Exemple de PR de release
+
+Release Please crée une PR avec :
+
+* **Titre** : `chore(main): release 1.2.0`
+* **Description** : Changelog complet
+* **Fichiers modifiés** :
+** `CHANGELOG.md` : Mis à jour
+** `.release-please-manifest.json` : Nouvelle version
+
+=== Breaking changes
+
+Pour indiquer un breaking change :
+
+[source,bash]
+----
+# Option 1 : Utiliser !
+git commit -m "feat!: migration vers PHP 8.0"
+
+# Option 2 : Utiliser BREAKING CHANGE dans le footer
+git commit -m "feat: migration vers PHP 8.0
+
+BREAKING CHANGE: PHP 7.4 n'est plus supporté"
+----
+
+Cela créera une release MAJOR (ex: 1.0.0 → 2.0.0).
+
+== Sections du CHANGELOG
+
+Les sections sont personnalisées en français :
+
+[cols="1,2"]
+|===
+|Type |Section dans le CHANGELOG
+
+|`feat`
+|Fonctionnalités
+
+|`fix`
+|Corrections de bugs
+
+|`docs`
+|Documentation
+
+|`style`
+|Styles
+
+|`refactor`
+|Refactoring
+
+|`perf`
+|Performance
+
+|`test`
+|Tests
+
+|`chore`
+|Maintenance
+|===
+
+== Versioning sémantique
+
+Le projet suit https://semver.org/[Semantic Versioning] :
+
+* **MAJOR** (X.0.0) : Breaking changes
+* **MINOR** (0.X.0) : Nouvelles fonctionnalités
+* **PATCH** (0.0.X) : Corrections de bugs
+
+.Exemples
+[cols="2,1,3"]
+|===
+|Commit |Bump |Exemple
+
+|`fix: correction du lecteur`
+|PATCH
+|1.0.0 → 1.0.1
+
+|`feat: ajout des playlists`
+|MINOR
+|1.0.0 → 1.1.0
+
+|`feat!: migration PHP 8`
+|MAJOR
+|1.0.0 → 2.0.0
+|===
+
+== Troubleshooting
+
+=== La PR de release n'est pas créée
+
+* Vérifier que les commits utilisent Conventional Commits
+* Vérifier que le workflow a les bonnes permissions
+* Consulter les logs du workflow
+
+=== Version incorrecte
+
+* Vérifier `.release-please-manifest.json`
+* Vérifier les types de commits
+* Vérifier s'il y a des breaking changes
+
+=== CHANGELOG non généré
+
+* Vérifier `.release-please-config.json`
+* Vérifier que les sections sont bien configurées
+* Relancer le workflow manuellement
+
+== Ressources
+
+* https://github.com/googleapis/release-please[Documentation officielle]
+* https://www.conventionalcommits.org/[Conventional Commits]
+* https://semver.org/[Semantic Versioning]

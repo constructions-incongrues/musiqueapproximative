@@ -1,0 +1,6 @@
+name: ROOT
+title: Musique Approximative
+version: main
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc

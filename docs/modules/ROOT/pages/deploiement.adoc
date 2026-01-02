@@ -1,0 +1,149 @@
+= Déploiement
+:description: Guide de déploiement de l'application
+
+== Déploiement avec Docker
+
+=== Prérequis
+
+* Docker et Docker Compose installés
+* Accès au serveur de production
+* Variables d'environnement configurées
+
+=== Utilisation de l'image GHCR
+
+[source,bash]
+----
+# Pull de l'image depuis GHCR
+docker pull ghcr.io/constructions-incongrues/musiqueapproximative:latest
+
+# Démarrage avec docker-compose
+docker-compose up -d
+----
+
+=== Configuration de production
+
+Créer un fichier `.env` avec les variables nécessaires :
+
+[source,env]
+----
+DATABASE_URL=mysql://user:password@host:3306/database
+APP_ENV=prod
+APP_DEBUG=false
+----
+
+== Déploiement manuel
+
+=== Publication d'une nouvelle version
+
+[source,bash]
+----
+VERSION=<VERSION>
+git hf release start ${VERSION}
+git hf release finish ${VERSION}
+----
+
+=== Déploiement vers le serveur
+
+[source,bash]
+----
+VERSION=<VERSION>
+git checkout ${VERSION}
+ant configure build deploy -Dprofile=pastishosting
+----
+
+== Vérifications post-déploiement
+
+Après le déploiement, vérifier :
+
+1. **Application accessible** : Tester l'URL de production
+2. **Base de données** : Vérifier la connexion
+3. **Logs** : Consulter les logs pour détecter les erreurs
+4. **Performance** : Vérifier les temps de réponse
+
+[source,bash]
+----
+# Vérifier les logs
+docker-compose logs -f
+
+# Vérifier l'état des conteneurs
+docker-compose ps
+
+# Tester la connexion à la base de données
+docker-compose exec php php symfony doctrine:check-schema
+----
+
+== Rollback
+
+En cas de problème, revenir à la version précédente :
+
+[source,bash]
+----
+# Avec Docker
+docker-compose down
+docker pull ghcr.io/constructions-incongrues/musiqueapproximative:previous-tag
+docker-compose up -d
+
+# Avec Git
+git checkout <previous-version>
+ant configure build deploy -Dprofile=pastishosting
+----
+
+== Monitoring
+
+=== Logs
+
+Les logs sont disponibles dans :
+
+* **Application** : `src/log/`
+* **Docker** : `docker-compose logs`
+* **Nginx** : Logs du conteneur nginx
+
+=== Métriques
+
+Surveiller :
+
+* Utilisation CPU/RAM
+* Temps de réponse
+* Erreurs 5xx
+* Espace disque
+
+== Sauvegarde
+
+=== Base de données
+
+[source,bash]
+----
+# Backup
+docker-compose exec db mysqldump -u root -p database > backup.sql
+
+# Restore
+docker-compose exec -T db mysql -u root -p database < backup.sql
+----
+
+=== Fichiers
+
+Sauvegarder régulièrement :
+
+* `src/web/tracks/` - Fichiers audio
+* `src/web/avatars/` - Avatars utilisateurs
+* `src/data/` - Données de configuration
+
+== Troubleshooting
+
+=== L'application ne démarre pas
+
+1. Vérifier les logs : `docker-compose logs`
+2. Vérifier la configuration : `.env` et `docker-compose.yml`
+3. Vérifier les permissions des fichiers
+
+=== Erreurs de base de données
+
+1. Vérifier la connexion : `docker-compose exec php php symfony doctrine:check-schema`
+2. Vérifier les migrations : État de la base de données
+3. Restaurer depuis un backup si nécessaire
+
+=== Performance dégradée
+
+1. Vider le cache : `docker-compose exec php php symfony cache:clear`
+2. Vérifier les ressources système
+3. Analyser les slow queries

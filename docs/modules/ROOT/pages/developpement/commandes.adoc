@@ -1,0 +1,202 @@
+= Commandes utiles
+:description: Commandes fréquemment utilisées pour le développement
+
+== Docker
+
+=== Gestion des conteneurs
+
+[source,bash]
+----
+# Démarrer l'application
+docker-compose up -d
+
+# Arrêter l'application
+docker-compose down
+
+# Voir les logs
+docker-compose logs -f
+
+# Voir les logs d'un service spécifique
+docker-compose logs -f php
+
+# Redémarrer un service
+docker-compose restart php
+
+# Reconstruire les images
+docker-compose build
+
+# Reconstruire sans cache
+docker-compose build --no-cache
+----
+
+=== Accès aux conteneurs
+
+[source,bash]
+----
+# Accéder au conteneur PHP
+docker-compose exec php bash
+
+# Accéder au conteneur MySQL
+docker-compose exec db mysql -u root -p
+
+# Exécuter une commande dans le conteneur
+docker-compose exec php php symfony cache:clear
+----
+
+== Symfony
+
+=== Cache
+
+[source,bash]
+----
+# Vider le cache
+docker-compose exec php php symfony cache:clear
+
+# Vider le cache en production
+docker-compose exec php php symfony cache:clear --env=prod
+----
+
+=== Base de données
+
+[source,bash]
+----
+# Vérifier le schéma
+docker-compose exec php php symfony doctrine:check-schema
+
+# Générer les modèles
+docker-compose exec php php symfony doctrine:build-model
+
+# Générer les formulaires
+docker-compose exec php php symfony doctrine:build-forms
+
+# Charger les fixtures
+docker-compose exec php php symfony doctrine:data-load
+----
+
+=== Tâches
+
+[source,bash]
+----
+# Lister les tâches disponibles
+docker-compose exec php php symfony list
+
+# Exécuter une tâche
+docker-compose exec php php symfony <task-name>
+----
+
+== Git
+
+=== Workflow de développement
+
+[source,bash]
+----
+# Créer une branche
+git checkout -b feat/ma-fonctionnalite
+
+# Commiter avec Conventional Commits
+git commit -m "feat: description de la fonctionnalité"
+
+# Pousser la branche
+git push origin feat/ma-fonctionnalite
+
+# Mettre à jour depuis main
+git checkout main
+git pull --rebase
+git checkout feat/ma-fonctionnalite
+git rebase main
+----
+
+=== Gestion des releases
+
+[source,bash]
+----
+# Voir les tags
+git tag
+
+# Créer un tag
+git tag -a v1.0.0 -m "Version 1.0.0"
+
+# Pousser les tags
+git push --tags
+----
+
+== Tests
+
+=== Vérification de la syntaxe
+
+[source,bash]
+----
+# Vérifier la syntaxe PHP
+find src -name "*.php" -exec php -l {} \;
+
+# Vérifier un fichier spécifique
+php -l src/apps/frontend/modules/home/actions/actions.class.php
+----
+
+=== Tests fonctionnels
+
+[source,bash]
+----
+# Exécuter les tests
+docker-compose exec php php symfony test:functional
+
+# Exécuter les tests unitaires
+docker-compose exec php php symfony test:unit
+----
+
+== Maintenance
+
+=== Nettoyage
+
+[source,bash]
+----
+# Nettoyer les logs
+rm -rf src/log/*.log
+
+# Nettoyer le cache
+rm -rf src/cache/*
+
+# Nettoyer les conteneurs Docker arrêtés
+docker system prune
+
+# Nettoyer les images non utilisées
+docker image prune -a
+----
+
+=== Permissions
+
+[source,bash]
+----
+# Corriger les permissions du cache
+chmod -R 777 src/cache
+
+# Corriger les permissions des logs
+chmod -R 777 src/log
+----
+
+== Debugging
+
+=== Logs
+
+[source,bash]
+----
+# Voir les logs Symfony
+tail -f src/log/frontend_dev.log
+
+# Voir les logs d'erreur
+tail -f src/log/error.log
+
+# Voir les logs Nginx
+docker-compose logs nginx
+----
+
+=== Variables d'environnement
+
+[source,bash]
+----
+# Afficher les variables d'environnement
+docker-compose exec php env
+
+# Afficher la configuration PHP
+docker-compose exec php php -i
+----
