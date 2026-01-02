@@ -4,7 +4,5 @@ link:https://github.com/constructions-incongrues/net.musiqueapproximative.www/ac
 link:https://github.com/constructions-incongrues/net.musiqueapproximative.www/actions/workflows/release-please.yml[image:https://github.com/constructions-incongrues/net.musiqueapproximative.www/actions/workflows/release-please.yml/badge.svg[Release Please]]
 link:https://github.com/constructions-incongrues/net.musiqueapproximative.www/actions/workflows/lint.yml[image:https://github.com/constructions-incongrues/net.musiqueapproximative.www/actions/workflows/lint.yml/badge.svg[Super Linter]]
 
-'''
-
 * https://constructions-incongrues.github.io/musiqueapproximative[Documentation]
 * https://www.musiqueapproximative.net[musiqueapproximative.net]
