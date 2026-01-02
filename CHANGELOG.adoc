@@ -1,3 +1,43 @@
+# Changelog
+
+## [1.3.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.2.0...v1.3.0) (2026-01-02)
+
+
+### Fonctionnalités
+
+* add Trivy security scanning workflow to GitHub Actions ([ce6bc04](https://github.com/constructions-incongrues/musiqueapproximative/commit/ce6bc04c8e68c2dd7376805cbe3937453ecd1ed8))
+* configure main branch protection in settings.yml and update README documentation link format ([7cfd958](https://github.com/constructions-incongrues/musiqueapproximative/commit/7cfd95820098a8d4b22b227ef9b46d23d1a88a33))
+* Introduce volume sliding control and adjust player button CSS. ([eb10ce3](https://github.com/constructions-incongrues/musiqueapproximative/commit/eb10ce367eb387726b67305fe52ea9b67e3a9f0e))
+
+
+### Corrections de bugs
+
+* Adjust player interface height and volume/time display layout. ([9e91003](https://github.com/constructions-incongrues/musiqueapproximative/commit/9e91003c38772ac3879d589a3027f526eae8feec))
+
+
+### Documentation
+
+* adjust blank lines in AsciiDoc source blocks for improved formatting. ([3d42ccd](https://github.com/constructions-incongrues/musiqueapproximative/commit/3d42ccd2c65743d2a5c62572e18fe102e37fa300))
+* improve documentation link readability in README.md ([268c9d9](https://github.com/constructions-incongrues/musiqueapproximative/commit/268c9d96fcb940ca6a0c4d727236a9b80dda7a75))
+* remove custom domain and `/etc/hosts` configuration from local development guide and script. ([29dc46b](https://github.com/constructions-incongrues/musiqueapproximative/commit/29dc46bf889063b27b27841792a2d3f03d14a43d))
+* remove introductory description and badges heading, and update documentation link description ([d4fad99](https://github.com/constructions-incongrues/musiqueapproximative/commit/d4fad99e39a16b32d558927e1ce07f0a111e8f49))
+* reorder project description and add dedicated sections for badges and documentation in README. ([dbec2e2](https://github.com/constructions-incongrues/musiqueapproximative/commit/dbec2e2b8852a86d2aa25b3faf1d69850065fc92))
+* update AsciiDoc link syntax in index page ([7befacb](https://github.com/constructions-incongrues/musiqueapproximative/commit/7befacb928da8c9a9b0c141d446ba51b015377e5))
+* update AsciiDoc link syntax in root index page ([f267819](https://github.com/constructions-incongrues/musiqueapproximative/commit/f267819edbbde367b303fab57a4f3b924b642515))
+* update linter workflow badge link and text ([86123be](https://github.com/constructions-incongrues/musiqueapproximative/commit/86123be91b1f61e198b5844766fb65313ff36eb8))
+
+
+### Styles
+
+* Adjust media player time rail and total width/position and add progress animation. ([dedfbed](https://github.com/constructions-incongrues/musiqueapproximative/commit/dedfbede471dea875ea8d9b8a0c1b5f73ed2bfda))
+* reformat CSS rules for improved readability. ([881f0d0](https://github.com/constructions-incongrues/musiqueapproximative/commit/881f0d03b38e4b8d124738a9c6252bc4e009f2d5))
+
+
+### Refactoring
+
+* convert all Markdown documentation files to AsciiDoc format ([67fd1fe](https://github.com/constructions-incongrues/musiqueapproximative/commit/67fd1fea1e159d3622322cda3b90d8ee58853500))
+* rename super-linter workflow to lint and update documentation with new links and a lint status badge. ([9f263c3](https://github.com/constructions-incongrues/musiqueapproximative/commit/9f263c37aa51bcce0dcd1e02179f56587058aba7))
+
 = Changelog
 
 == https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.1.0...v1.2.0[1.2.0] (2026-01-02)
