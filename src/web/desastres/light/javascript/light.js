@@ -1,4 +1,4 @@
-console.log('[desastres/light] Loaded');
+console.log("[desastres/light] Loaded");
 
 let contenDiv = document.querySelector(".content");
 
@@ -13,7 +13,7 @@ contenDiv.appendChild(newDiv);
 contenDiv.appendChild(newDiv2);
 contenDiv.appendChild(newDiv3);
 
-console.log('[desastres/light] Created 3 light rays');
+console.log("[desastres/light] Created 3 light rays");
 
 let light = document.querySelectorAll(".light");
 light.forEach((el, index) => {
@@ -30,8 +30,8 @@ light.forEach((el, index) => {
       fill: "forwards",
       direction: "normal",
       easing: "ease-in-out",
-    }
+    },
   );
 });
 
-console.log('[desastres/light] Animations started');
+console.log("[desastres/light] Animations started");

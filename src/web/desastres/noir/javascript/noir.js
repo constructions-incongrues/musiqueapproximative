@@ -1,14 +1,14 @@
-console.log('[desastres/noir] Loaded');
+console.log("[desastres/noir] Loaded");
 
-let contentDiv = document.querySelector('.content');
+let contentDiv = document.querySelector(".content");
 
-let newDiv = document.createElement('div');
-newDiv.className = 'noir';
+let newDiv = document.createElement("div");
+newDiv.className = "noir";
 contentDiv.appendChild(newDiv);
 
-console.log('[desastres/noir] Dark overlay created and added to .content');
+console.log("[desastres/noir] Dark overlay created and added to .content");
 
-let body = document.querySelector('body');
+let body = document.querySelector("body");
 
 // let newDiv2 = document.createElement('div');
 // newDiv2.className = 'overlay-hue';

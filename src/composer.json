@@ -1,18 +1,18 @@
 {
-    "name": "constructions-incongrues/musique-approximative",
-    "description": "C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.",
-    "license": "AGPL-3.0-or-later",
-    "authors": [
-        {
-            "name": "Constructions Incongrues",
-            "email": "tristan@constructions-incongrues.net"
-        }
-    ],
-    "require": {
-        "lexpress/doctrine1": "1.3.*",
-        "lexpress/symfony1": "1.5.*",
-        "nyholm/psr7": "^1.8",
-        "php": "^7.4",
-        "symfony/process": "^5.4"
+  "name": "constructions-incongrues/musique-approximative",
+  "description": "C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.",
+  "license": "AGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Constructions Incongrues",
+      "email": "tristan@constructions-incongrues.net"
     }
+  ],
+  "require": {
+    "lexpress/doctrine1": "1.3.*",
+    "lexpress/symfony1": "1.5.*",
+    "nyholm/psr7": "^1.8",
+    "php": "^7.4",
+    "symfony/process": "^5.4"
+  }
 }
