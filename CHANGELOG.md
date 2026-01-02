@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v0.6.0...v0.7.0) (2026-01-02)
+
+
+### Features
+
+* add project description and author information to composer.json ([7d37dca](https://github.com/constructions-incongrues/musiqueapproximative/commit/7d37dca02be9ea343570eaf402fe9b4ad5ba83b0))
+
 ## [0.6.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v0.5.0...v0.6.0) (2026-01-02)
 
 
