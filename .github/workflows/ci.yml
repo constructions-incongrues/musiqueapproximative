@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   validate:
     name: Validation du code
@@ -43,7 +47,7 @@ jobs:
           cd src
           composer install --prefer-dist --no-progress
 
-      - name: Vérifier la syntaxe PHP
+      - name: Check PHP syntax
         run: |
           find src -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
 
