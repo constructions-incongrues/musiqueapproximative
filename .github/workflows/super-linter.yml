@@ -52,3 +52,17 @@ jobs:
           
           # Filter regex for files to exclude
           FILTER_REGEX_EXCLUDE: .*/(vendor|node_modules|build|var|web/swf)/.*
+  
+  asciidoc-lint:
+    name: Validation AsciiDoc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v6
+
+      - name: Installer Asciidoctor
+        run: sudo apt-get install -y asciidoctor
+
+      - name: Valider les fichiers AsciiDoc
+        run: |
+          find docs -name "*.adoc" -exec asciidoctor --failure-level WARNING -o /dev/null {} +
