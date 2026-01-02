@@ -1,5 +1,5 @@
 site:
-  title: Documentation Incongrue
+  title: Constructions Documentaires
   url: https://constructions-incongrues.github.io/musiqueapproximative
   start_page: ROOT::index.adoc
 
@@ -7,7 +7,7 @@ content:
   sources:
     - url: .
       branches: [main, v1.0.*]
-      worktrees: false
+      worktrees: true
       start_path: docs
 
 ui:
