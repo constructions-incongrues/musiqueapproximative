@@ -1,67 +1,43 @@
-name: Security Scan
+name: Trivy
 
 on:
   push:
-    branches: [main, master, develop]
+    branches: [ main ]
   pull_request:
-    branches: [main, master, develop]
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
   schedule:
-    - cron: 0 23 * * 0 # 00:00 CET/CEST Monday
-env:
-  TZ: Europe/Paris
+    - cron: 39 2 * * 3
+
 permissions:
   contents: read
-  security-events: write # Required for uploading SARIF results
 
 jobs:
-  trivy:
-    name: Trivy Scan
+  build:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    name: Build
     runs-on: ubuntu-latest
-    env:
-      TRIVY_DISABLE_VEX_NOTICE: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Trivy vulnerability scanner (FS)
-        uses: aquasecurity/trivy-action@0.33.1
+      - name: Build an image from Dockerfile
+        run: |
+          docker build -t docker.io/constructions-incongrues/musiqueapproximative:${{ github.sha }} .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
-          scan-type: fs
-          scan-ref: .
-          format: sarif
+          image-ref: docker.io/constructions-incongrues/musiqueapproximative:${{ github.sha }}
+          format: template
+          template: '@/contrib/sarif.tpl'
           output: trivy-results.sarif
-          severity: CRITICAL
+          severity: CRITICAL,HIGH
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif
-
-      - name: Build Docker image for scanning
-        run: docker build -t musiqueapproximative:scan .
-
-      - name: Run Trivy vulnerability scanner (Image)
-        uses: aquasecurity/trivy-action@0.33.1
-        with:
-          image-ref: musiqueapproximative:scan
-          format: table
-          exit-code: 1 # Fail on critical
-          severity: CRITICAL
-          ignore-unfixed: true
-
-      - name: Run Trivy vulnerability scanner (Image)
-        uses: aquasecurity/trivy-action@0.33.1
-        with:
-          image-ref: musiqueapproximative:scan
-          format: table
-          exit-code: 0 # Fail on critical
-          severity: HIGH
-          ignore-unfixed: true
-
-      - name: Run Trivy vulnerability scanner (Config)
-        uses: aquasecurity/trivy-action@0.33.1
-        with:
-          scan-type: config
-          hide-progress: false
-          format: table
-          severity: CRITICAL, HIGH
