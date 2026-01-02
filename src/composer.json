@@ -1,4 +1,6 @@
 {
+    "name": "constructions-incongrues/musique-approximative",
+    "license": "AGPLv3",
     "require": {
         "lexpress/doctrine1": "1.3.*",
         "lexpress/symfony1": "1.5.*",
