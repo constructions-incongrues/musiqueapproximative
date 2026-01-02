@@ -2,7 +2,7 @@
 
 image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/security.yml/badge.svg[Security Scan,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/security.yml]
 image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg[CI Status,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml]
-image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/lint.yml/badge.svg[Lint,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/lint.yml]
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/pr.yml/badge.svg[Lint,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/pr.yml]
 image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg[Release Please,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml]
 
 * https://constructions-incongrues.github.io/musiqueapproximative[Documentation]
