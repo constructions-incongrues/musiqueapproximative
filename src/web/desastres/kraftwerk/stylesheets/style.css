@@ -1,57 +1,62 @@
-.content{
-    position: relative;
-     *{
-        background-color: yellow;
-    }
+.content {
+  position: relative;
+  * {
+    background-color: yellow;
+  }
 }
 
-.content-text{
-    position: relative;
-    background-color: yellow;
+.content-text {
+  position: relative;
+  background-color: yellow;
 
-    h1,h2,.descriptif p, p, span,.author a{
-        background-color: yellow;
-    }
+  h1,
+  h2,
+  .descriptif p,
+  p,
+  span,
+  .author a {
+    background-color: yellow;
+  }
 }
 
 .content-text::before,
-.content-text::after{
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    z-index: 1000;
-    width: 100%;
-    max-width: 300px;
-    height: 100%;
-    max-height: 300px;
-    background: url('../img/radioactivite.svg') no-repeat center center;
-    mix-blend-mode: multiply;
-    animation: kraftwerk 1s infinite;
-    animation-timing-function: ease-in-out;
-    animation-delay: 1s;
-    animation-fill-mode: both;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    animation-play-state: running;
-    animation-duration: 1s;
+.content-text::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  max-height: 300px;
+  background: url("../img/radioactivite.svg") no-repeat center center;
+  mix-blend-mode: multiply;
+  animation: kraftwerk 1s infinite;
+  animation-timing-function: ease-in-out;
+  animation-delay: 1s;
+  animation-fill-mode: both;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+  animation-duration: 1s;
 }
 
-.content-text::before{
-    left: 0;
+.content-text::before {
+  left: 0;
 }
 
-.content-text::after{
-    right: 0;
+.content-text::after {
+  right: 0;
 }
 
 @keyframes kraftwerk {
-    0% {
-        opacity: 0;
-        filter: blur(10px);
-    }
-    100% {
-        opacity: 1;
-        filter: blur(0px);
-    }
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
 }

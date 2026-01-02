@@ -40,8 +40,6 @@
   transition-duration: 0.15s;
 }
 
-
-
 /* GENERAL
 ----------------------------------------------- */
 
@@ -60,7 +58,6 @@
   font-family: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans L", sans-serif;
   color: #fff;
   line-height: 1.6;
-
 }
 
 .jp-audio a {
@@ -81,29 +78,24 @@
 /* CONTROLS
 ----------------------------------------------- */
 
-
-
-@media all and (max-width:800px) {
+@media all and (max-width: 800px) {
   .jp-controls {
     text-align: left;
   }
 }
 
-@media all and (min-width:800px) {
+@media all and (min-width: 800px) {
   .jp-controls {
     text-align: center;
   }
 }
 
 .jp-controls {
-
-
   list-style-type: none;
   padding: 30px 0 0 0;
 
   z-index: 100;
 }
-
 
 .jp-controls:after {
   content: " ";
@@ -112,24 +104,19 @@
   left: 30px;
   width: 0;
   height: 30px;
-
 }
 
 .jp-controls ul {
   display: inline;
-
 }
 
 .jp-controls li {
   display: inline;
-
-
-
 }
 
 .jp-controls a {
-  color: #FFF;
-  font-family: 'Rambla', sans-serif;
+  color: #fff;
+  font-family: "Rambla", sans-serif;
   font-size: 13px;
   font-size: 1.3rem;
   text-transform: uppercase;
@@ -150,7 +137,7 @@
 
 .jp-controls a:hover,
 .jp-controls a.not {
-  background-color: #AAA;
+  background-color: #aaa;
   color: #000;
 }
 
@@ -160,8 +147,6 @@
   outline: none;
   background-repeat: no-repeat;
 }
-
-
 
 /* PROGRESS BAR
 ----------------------------------------------- */
@@ -173,14 +158,12 @@
   margin-left: 0;
   margin-right: 0;
   width: 100%;
-
 }
 
 .jp-seek-bar,
 .jp-play-bar {
   width: 0px;
   height: 5px;
-
 }
 
 .jp-seek-bar {
@@ -199,9 +182,8 @@
   top: -16px;
   left: -1px;
 
-  background-color: #AAA;
+  background-color: #aaa;
   height: 29px;
-
 }
 
 .jp-play-bar {
@@ -221,7 +203,7 @@
   margin: 0 auto !important;
   width: 100px !important;
   height: 8px !important;
-  background-color: #AAA !important;
+  background-color: #aaa !important;
   cursor: pointer !important;
   z-index: 1000 !important;
 }
@@ -233,17 +215,16 @@
   width: 0;
 }
 
-
 /* TIME HOLDER
 ----------------------------------------------- */
 .jp-time-holder {
   background: #fff;
-  font-family: 'Rambla', sans-serif;
+  font-family: "Rambla", sans-serif;
   position: relative;
   font-size: 1.5em;
   top: -37px;
   left: 0;
-  color: #FFF;
+  color: #fff;
   display: block;
   width: 100%;
   height: 29px;
@@ -260,16 +241,13 @@
 
 .jp-duration:before {
   content: "/";
-
 }
 
 .jp-duration {
-
   float: right;
   display: inline;
   text-align: right;
   color: #000;
-
 }
 
 /* CSS3 ANIMATINS

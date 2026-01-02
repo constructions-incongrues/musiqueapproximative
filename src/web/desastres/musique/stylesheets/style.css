@@ -1,63 +1,63 @@
-.content{
-     position: relative;
-     width: 100%;
-     height: 100%;
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
 
-     .rangee{
-          position: absolute;
-          display: flex;
-          justify-content: space-between;
-          flex-direction: column;
-          width: 100%;
-          height: 100px;
-     }
+  .rangee {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    height: 100px;
+  }
 
-     .rangee:nth-child(2){
-          top: 20%;
-     }
+  .rangee:nth-child(2) {
+    top: 20%;
+  }
 
-     .rangee:nth-child(3){
-          top: 50%;
-     }
+  .rangee:nth-child(3) {
+    top: 50%;
+  }
 
-     .rangee:last-child{
-          bottom: 0%;
-     }
+  .rangee:last-child {
+    bottom: 0%;
+  }
 
-     .ligne{
-          position: relative;
-          width: 100%;
-          /* margin-bottom: calc(100px / 4); */
-          border: 1px solid #0000005d;
-     }
+  .ligne {
+    position: relative;
+    width: 100%;
+    /* margin-bottom: calc(100px / 4); */
+    border: 1px solid #0000005d;
+  }
 
-     .tempo{
-          position: absolute;
-          bottom: 0;
-          height: 100%;
-          display: flex;
-          justify-content: space-around;
-          width: 100%;
-          box-sizing: border-box;
-     }
+  .tempo {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-     .mesure{
-          position: relative;
-          bottom: 0;
-          height: 100%;
-          width: 1px;
-          border: 1px solid #0000005d;
-     }
+  .mesure {
+    position: relative;
+    bottom: 0;
+    height: 100%;
+    width: 1px;
+    border: 1px solid #0000005d;
+  }
 
-     .mesure:first-child{
-          margin-left: 30px;
-     }
+  .mesure:first-child {
+    margin-left: 30px;
+  }
 }
 
-#musique-lettres-stage{
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
+#musique-lettres-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }

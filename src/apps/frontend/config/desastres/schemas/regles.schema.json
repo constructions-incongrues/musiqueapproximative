@@ -37,11 +37,7 @@
             "description": "Nom de la recette (doit exister dans les fichiers de recettes)"
           },
           "minItems": 1,
-          "examples": [
-            ["bleu"],
-            ["tts_jinglist"],
-            ["consonnard", "voyelliste"]
-          ]
+          "examples": [["bleu"], ["tts_jinglist"], ["consonnard", "voyelliste"]]
         },
         "probability": {
           "type": "number",

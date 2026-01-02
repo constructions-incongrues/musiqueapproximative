@@ -21,26 +21,46 @@
 }
 
 .push-5,
-.pull-5, .push-10,
-.pull-10, .push-15,
-.pull-15, .push-20,
-.pull-20, .push-25,
-.pull-25, .push-30,
-.pull-30, .push-35,
-.pull-35, .push-40,
-.pull-40, .push-45,
-.pull-45, .push-50,
-.pull-50, .push-55,
-.pull-55, .push-60,
-.pull-60, .push-65,
-.pull-65, .push-70,
-.pull-70, .push-75,
-.pull-75, .push-80,
-.pull-80, .push-85,
-.pull-85, .push-90,
-.pull-90, .push-95,
-.pull-95, .push-33,
-.pull-33, .push-66,
+.pull-5,
+.push-10,
+.pull-10,
+.push-15,
+.pull-15,
+.push-20,
+.pull-20,
+.push-25,
+.pull-25,
+.push-30,
+.pull-30,
+.push-35,
+.pull-35,
+.push-40,
+.pull-40,
+.push-45,
+.pull-45,
+.push-50,
+.pull-50,
+.push-55,
+.pull-55,
+.push-60,
+.pull-60,
+.push-65,
+.pull-65,
+.push-70,
+.pull-70,
+.push-75,
+.pull-75,
+.push-80,
+.pull-80,
+.push-85,
+.pull-85,
+.push-90,
+.pull-90,
+.push-95,
+.pull-95,
+.push-33,
+.pull-33,
+.push-66,
 .pull-66 {
   position: relative;
 }
@@ -53,7 +73,17 @@
   float: right;
   width: 5%;
   /* <IE7> */
-  *width: expression(Math.floor(0.05 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.05 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -68,14 +98,34 @@
 .push-5 {
   right: 5%;
   /* <IE7> */
-  *right: expression(Math.floor(0.05 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.05 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-5 {
   right: -5%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.05 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.05 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -83,7 +133,17 @@
   float: right;
   width: 10%;
   /* <IE7> */
-  *width: expression(Math.floor(0.1 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.1 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -98,14 +158,34 @@
 .push-10 {
   right: 10%;
   /* <IE7> */
-  *right: expression(Math.floor(0.1 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.1 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-10 {
   right: -10%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.1 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.1 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -113,7 +193,17 @@
   float: right;
   width: 15%;
   /* <IE7> */
-  *width: expression(Math.floor(0.15 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.15 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -128,14 +218,34 @@
 .push-15 {
   right: 15%;
   /* <IE7> */
-  *right: expression(Math.floor(0.15 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.15 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-15 {
   right: -15%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.15 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.15 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -143,7 +253,17 @@
   float: right;
   width: 20%;
   /* <IE7> */
-  *width: expression(Math.floor(0.2 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.2 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -158,14 +278,34 @@
 .push-20 {
   right: 20%;
   /* <IE7> */
-  *right: expression(Math.floor(0.2 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.2 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-20 {
   right: -20%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.2 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.2 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -173,7 +313,17 @@
   float: right;
   width: 25%;
   /* <IE7> */
-  *width: expression(Math.floor(0.25 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.25 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -188,14 +338,34 @@
 .push-25 {
   right: 25%;
   /* <IE7> */
-  *right: expression(Math.floor(0.25 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.25 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-25 {
   right: -25%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.25 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.25 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -203,7 +373,17 @@
   float: right;
   width: 30%;
   /* <IE7> */
-  *width: expression(Math.floor(0.3 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.3 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -218,14 +398,34 @@
 .push-30 {
   right: 30%;
   /* <IE7> */
-  *right: expression(Math.floor(0.3 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.3 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-30 {
   right: -30%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.3 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.3 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -233,7 +433,17 @@
   float: right;
   width: 35%;
   /* <IE7> */
-  *width: expression(Math.floor(0.35 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.35 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -248,14 +458,34 @@
 .push-35 {
   right: 35%;
   /* <IE7> */
-  *right: expression(Math.floor(0.35 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.35 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-35 {
   right: -35%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.35 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.35 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -263,7 +493,17 @@
   float: right;
   width: 40%;
   /* <IE7> */
-  *width: expression(Math.floor(0.4 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.4 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -278,14 +518,34 @@
 .push-40 {
   right: 40%;
   /* <IE7> */
-  *right: expression(Math.floor(0.4 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.4 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-40 {
   right: -40%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.4 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.4 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -293,7 +553,17 @@
   float: right;
   width: 45%;
   /* <IE7> */
-  *width: expression(Math.floor(0.45 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.45 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -308,14 +578,34 @@
 .push-45 {
   right: 45%;
   /* <IE7> */
-  *right: expression(Math.floor(0.45 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.45 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-45 {
   right: -45%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.45 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.45 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -323,7 +613,17 @@
   float: right;
   width: 50%;
   /* <IE7> */
-  *width: expression(Math.floor(0.5 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.5 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -338,14 +638,34 @@
 .push-50 {
   right: 50%;
   /* <IE7> */
-  *right: expression(Math.floor(0.5 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.5 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-50 {
   right: -50%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.5 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.5 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -353,7 +673,17 @@
   float: right;
   width: 55%;
   /* <IE7> */
-  *width: expression(Math.floor(0.55 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.55 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -368,14 +698,34 @@
 .push-55 {
   right: 55%;
   /* <IE7> */
-  *right: expression(Math.floor(0.55 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.55 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-55 {
   right: -55%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.55 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.55 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -383,7 +733,17 @@
   float: right;
   width: 60%;
   /* <IE7> */
-  *width: expression(Math.floor(0.6 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.6 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -398,14 +758,34 @@
 .push-60 {
   right: 60%;
   /* <IE7> */
-  *right: expression(Math.floor(0.6 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.6 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-60 {
   right: -60%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.6 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.6 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -413,7 +793,17 @@
   float: right;
   width: 65%;
   /* <IE7> */
-  *width: expression(Math.floor(0.65 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.65 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -428,14 +818,34 @@
 .push-65 {
   right: 65%;
   /* <IE7> */
-  *right: expression(Math.floor(0.65 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.65 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-65 {
   right: -65%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.65 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.65 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -443,7 +853,17 @@
   float: right;
   width: 70%;
   /* <IE7> */
-  *width: expression(Math.floor(0.7 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.7 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -458,14 +878,34 @@
 .push-70 {
   right: 70%;
   /* <IE7> */
-  *right: expression(Math.floor(0.7 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.7 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-70 {
   right: -70%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.7 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.7 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -473,7 +913,17 @@
   float: right;
   width: 75%;
   /* <IE7> */
-  *width: expression(Math.floor(0.75 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.75 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -488,14 +938,34 @@
 .push-75 {
   right: 75%;
   /* <IE7> */
-  *right: expression(Math.floor(0.75 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.75 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-75 {
   right: -75%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.75 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.75 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -503,7 +973,17 @@
   float: right;
   width: 80%;
   /* <IE7> */
-  *width: expression(Math.floor(0.8 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.8 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -518,14 +998,34 @@
 .push-80 {
   right: 80%;
   /* <IE7> */
-  *right: expression(Math.floor(0.8 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.8 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-80 {
   right: -80%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.8 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.8 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -533,7 +1033,17 @@
   float: right;
   width: 85%;
   /* <IE7> */
-  *width: expression(Math.floor(0.85 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.85 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -548,14 +1058,34 @@
 .push-85 {
   right: 85%;
   /* <IE7> */
-  *right: expression(Math.floor(0.85 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.85 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-85 {
   right: -85%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.85 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.85 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -563,7 +1093,17 @@
   float: right;
   width: 90%;
   /* <IE7> */
-  *width: expression(Math.floor(0.9 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.9 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -578,14 +1118,34 @@
 .push-90 {
   right: 90%;
   /* <IE7> */
-  *right: expression(Math.floor(0.9 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.9 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-90 {
   right: -90%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.9 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.9 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -593,7 +1153,17 @@
   float: right;
   width: 95%;
   /* <IE7> */
-  *width: expression(Math.floor(0.95 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.95 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -608,14 +1178,34 @@
 .push-95 {
   right: 95%;
   /* <IE7> */
-  *right: expression(Math.floor(0.95 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.95 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-95 {
   right: -95%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.95 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.95 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -623,7 +1213,17 @@
   float: right;
   width: 33.33333%;
   /* <IE7> */
-  *width: expression(Math.floor(0.33333 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.33333 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -638,14 +1238,34 @@
 .push-33 {
   right: 33.33333%;
   /* <IE7> */
-  *right: expression(Math.floor(0.33333 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.33333 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-33 {
   right: -33.33333%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.33333 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.33333 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -653,7 +1273,17 @@
   float: right;
   width: 66.66667%;
   /* <IE7> */
-  *width: expression(Math.floor(0.66667 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *width: expression(
+    Math.floor(
+        0.66667 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
@@ -668,14 +1298,34 @@
 .push-66 {
   right: 66.66667%;
   /* <IE7> */
-  *right: expression(Math.floor(0.66667 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        0.66667 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
 .pull-66 {
   right: -66.66667%;
   /* <IE7> */
-  *right: expression(Math.floor(-0.66667 * (this.parentNode.offsetWidth - parseFloat(this.parentNode.currentStyle.paddingLeft) - parseFloat(this.parentNode.currentStyle.paddingRight))) + "px");
+  *right: expression(
+    Math.floor(
+        -0.66667 *
+          (
+            this.parentNode.offsetWidth -
+              parseFloat(this.parentNode.currentStyle.paddingLeft) -
+              parseFloat(this.parentNode.currentStyle.paddingRight)
+          )
+      ) +
+      "px"
+  );
   /* </IE7> */
 }
 
