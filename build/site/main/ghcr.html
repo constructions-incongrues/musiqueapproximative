@@ -1,305 +1,483 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Utilisation de GitHub Container Registry (GHCR) :: Musique Approximative</title>
-    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/ghcr.html">
-    <meta name="description" content="Guide d'utilisation du GitHub Container Registry pour le projet">
-    <meta name="generator" content="Antora 3.1.14">
-    <link rel="stylesheet" href="../_/css/site.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      Utilisation de GitHub Container Registry (GHCR) :: Musique Approximative
+    </title>
+    <link
+      rel="canonical"
+      href="https://constructions-incongrues.github.io/musiqueapproximative/main/ghcr.html"
+    />
+    <meta
+      name="description"
+      content="Guide d'utilisation du GitHub Container Registry pour le projet"
+    />
+    <meta name="generator" content="Antora 3.1.14" />
+    <link rel="stylesheet" href="../_/css/site.css" />
   </head>
   <body class="article">
-<header class="header">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
-      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
+    <header class="header">
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <a
+            class="navbar-item"
+            href="https://constructions-incongrues.github.io/musiqueapproximative"
+            >Musique Approximative</a
+          >
+          <button
+            class="navbar-burger"
+            aria-controls="topbar-nav"
+            aria-expanded="false"
+            aria-label="Toggle main menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item" href="#">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Products</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Product A</a>
+                <a class="navbar-item" href="#">Product B</a>
+                <a class="navbar-item" href="#">Product C</a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Services</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Service A</a>
+                <a class="navbar-item" href="#">Service B</a>
+                <a class="navbar-item" href="#">Service C</a>
+              </div>
+            </div>
+            <div class="navbar-item">
+              <span class="control">
+                <a class="button is-primary" href="#">Download</a>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
+      </nav>
+    </header>
+    <div class="body">
+      <div class="nav-container" data-component="ROOT" data-version="main">
+        <aside class="nav">
+          <div class="panels">
+            <div class="nav-panel-menu is-active" data-panel="menu">
+              <nav class="nav-menu">
+                <button
+                  class="nav-menu-toggle"
+                  aria-label="Toggle expand/collapse all"
+                  style="display: none"
+                ></button>
+                <h3 class="title">
+                  <a href="index.html">Musique Approximative</a>
+                </h3>
+                <ul class="nav-list">
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Documentation</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="index.html">Accueil</a>
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="guide-demarrage.html"
+                          >Guide de démarrage</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="contribution.html"
+                          >Contribution</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Technique</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="architecture.html"
+                          >Architecture</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="desastres.html"
+                          >Les Désastres</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="docker.html"
+                          >Docker &amp; GHCR</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="deploiement.html"
+                          >Déploiement</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Développement</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a
+                          class="nav-link"
+                          href="developpement/environnement.html"
+                          >Environnement de développement</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="developpement/commandes.html"
+                          >Commandes utiles</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="developpement/tests.html"
+                          >Tests</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">CI/CD</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/github-actions.html"
+                          >GitHub Actions</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/release-please.html"
+                          >Release Please</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/dependabot.html"
+                          >Dependabot</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="nav-panel-explore" data-panel="explore">
+              <div class="context">
+                <span class="title">Musique Approximative</span>
+                <span class="version">main</span>
+              </div>
+              <ul class="components">
+                <li class="component is-current">
+                  <div class="title">
+                    <a href="index.html">Musique Approximative</a>
+                  </div>
+                  <ul class="versions">
+                    <li class="version is-current is-latest">
+                      <a href="index.html">main</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
+        </aside>
       </div>
-    </div>
-  </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="ROOT" data-version="main">
-  <aside class="nav">
-    <div class="panels">
-<div class="nav-panel-menu is-active" data-panel="menu">
-  <nav class="nav-menu">
-    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="index.html">Musique Approximative</a></h3>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Documentation</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="index.html">Accueil</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="guide-demarrage.html">Guide de démarrage</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="contribution.html">Contribution</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Technique</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="architecture.html">Architecture</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="desastres.html">Les Désastres</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="docker.html">Docker &amp; GHCR</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deploiement.html">Déploiement</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Développement</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/environnement.html">Environnement de développement</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/commandes.html">Commandes utiles</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/tests.html">Tests</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">CI/CD</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/github-actions.html">GitHub Actions</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/release-please.html">Release Please</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/dependabot.html">Dependabot</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </nav>
-</div>
-<div class="nav-panel-explore" data-panel="explore">
-  <div class="context">
-    <span class="title">Musique Approximative</span>
-    <span class="version">main</span>
-  </div>
-  <ul class="components">
-    <li class="component is-current">
-      <div class="title"><a href="index.html">Musique Approximative</a></div>
-      <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">main</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
-    </div>
-  </aside>
-</div>
-<main class="article">
-<div class="toolbar" role="navigation">
-<button class="nav-toggle"></button>
-  <a href="index.html" class="home-link"></a>
-<nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Musique Approximative</a></li>
-    <li><a href="ghcr.html">Utilisation de GitHub Container Registry (GHCR)</a></li>
-  </ul>
-</nav>
-<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/ghcr.adoc">Edit this Page</a></div>
-</div>
-  <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
-  <div class="toc-menu"></div>
-</aside>
-<article class="doc">
-<h1 class="page">Utilisation de GitHub Container Registry (GHCR)</h1>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_vue_densemble">Vue d&#8217;ensemble</a></li>
-<li><a href="#_configuration">Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_workflow_ci">Workflow CI</a></li>
-<li><a href="#_permissions">Permissions</a></li>
-</ul>
-</li>
-<li><a href="#_tags_automatiques">Tags automatiques</a></li>
-<li><a href="#_utilisation_des_images">Utilisation des images</a>
-<ul class="sectlevel2">
-<li><a href="#_pull_dune_image">Pull d&#8217;une image</a></li>
-<li><a href="#_utilisation_dans_docker_compose">Utilisation dans docker-compose</a></li>
-<li><a href="#_authentification_si_le_dépôt_est_privé">Authentification (si le dépôt est privé)</a></li>
-</ul>
-</li>
-<li><a href="#_visibilité_des_packages">Visibilité des packages</a></li>
-<li><a href="#_cache_des_builds">Cache des builds</a></li>
-<li><a href="#_workflow_de_publication">Workflow de publication</a></li>
-<li><a href="#_nettoyage_des_anciennes_images">Nettoyage des anciennes images</a></li>
-<li><a href="#_vérification">Vérification</a></li>
-<li><a href="#_troubleshooting">Troubleshooting</a>
-<ul class="sectlevel2">
-<li><a href="#_erreur_de_permission">Erreur de permission</a></li>
-<li><a href="#_image_non_publiée_sur_pr">Image non publiée sur PR</a></li>
-<li><a href="#_cache_non_utilisé">Cache non utilisé</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="sect1">
-<h2 id="_vue_densemble"><a class="anchor" href="#_vue_densemble"></a>Vue d&#8217;ensemble</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Le projet est configuré pour publier automatiquement les images Docker vers GitHub Container Registry (GHCR) lors de chaque push vers les branches principales.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_workflow_ci"><a class="anchor" href="#_workflow_ci"></a>Workflow CI</h3>
-<div class="paragraph">
-<p>Le workflow <code>.github/workflows/ci.yml</code> inclut un job <code>docker-build</code> qui :</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Se connecte à GHCR</strong> avec le token GitHub automatique</p>
-</li>
-<li>
-<p><strong>Extrait les métadonnées</strong> pour le tagging automatique</p>
-</li>
-<li>
-<p><strong>Build l&#8217;image Docker</strong> avec cache optimisé</p>
-</li>
-<li>
-<p><strong>Pousse l&#8217;image</strong> vers GHCR (sauf pour les PRs)</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_permissions"><a class="anchor" href="#_permissions"></a>Permissions</h3>
-<div class="paragraph">
-<p>Le workflow a les permissions suivantes :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>contents: read</code> - Lire le code du dépôt</p>
-</li>
-<li>
-<p><code>packages: write</code> - Écrire dans le registry de packages</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_tags_automatiques"><a class="anchor" href="#_tags_automatiques"></a>Tags automatiques</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Les images sont taguées automatiquement selon le contexte :</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Événement</th>
-<th class="tableblock halign-left valign-top">Tag</th>
-<th class="tableblock halign-left valign-top">Exemple</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Push sur branche</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>branch-name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>main</code>, <code>develop</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Pull Request</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pr-123</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pr-42</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Tag semver</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>version</code>, <code>major.minor</code>, <code>major</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1.2.3</code>, <code>1.2</code>, <code>1</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Commit SHA</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>branch-sha</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>main-abc1234</code></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Branche par défaut</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>latest</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>latest</code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_utilisation_des_images"><a class="anchor" href="#_utilisation_des_images"></a>Utilisation des images</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_pull_dune_image"><a class="anchor" href="#_pull_dune_image"></a>Pull d&#8217;une image</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Image latest (branche main)
+      <main class="article">
+        <div class="toolbar" role="navigation">
+          <button class="nav-toggle"></button>
+          <a href="index.html" class="home-link"></a>
+          <nav class="breadcrumbs" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="index.html">Musique Approximative</a></li>
+              <li>
+                <a href="ghcr.html"
+                  >Utilisation de GitHub Container Registry (GHCR)</a
+                >
+              </li>
+            </ul>
+          </nav>
+          <div class="edit-this-page">
+            <a
+              href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/ghcr.adoc"
+              >Edit this Page</a
+            >
+          </div>
+        </div>
+        <div class="content">
+          <aside class="toc sidebar" data-title="Contents" data-levels="2">
+            <div class="toc-menu"></div>
+          </aside>
+          <article class="doc">
+            <h1 class="page">
+              Utilisation de GitHub Container Registry (GHCR)
+            </h1>
+            <div id="toc" class="toc">
+              <div id="toctitle">Table of Contents</div>
+              <ul class="sectlevel1">
+                <li><a href="#_vue_densemble">Vue d&#8217;ensemble</a></li>
+                <li>
+                  <a href="#_configuration">Configuration</a>
+                  <ul class="sectlevel2">
+                    <li><a href="#_workflow_ci">Workflow CI</a></li>
+                    <li><a href="#_permissions">Permissions</a></li>
+                  </ul>
+                </li>
+                <li><a href="#_tags_automatiques">Tags automatiques</a></li>
+                <li>
+                  <a href="#_utilisation_des_images">Utilisation des images</a>
+                  <ul class="sectlevel2">
+                    <li>
+                      <a href="#_pull_dune_image">Pull d&#8217;une image</a>
+                    </li>
+                    <li>
+                      <a href="#_utilisation_dans_docker_compose"
+                        >Utilisation dans docker-compose</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#_authentification_si_le_dépôt_est_privé"
+                        >Authentification (si le dépôt est privé)</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#_visibilité_des_packages"
+                    >Visibilité des packages</a
+                  >
+                </li>
+                <li><a href="#_cache_des_builds">Cache des builds</a></li>
+                <li>
+                  <a href="#_workflow_de_publication"
+                    >Workflow de publication</a
+                  >
+                </li>
+                <li>
+                  <a href="#_nettoyage_des_anciennes_images"
+                    >Nettoyage des anciennes images</a
+                  >
+                </li>
+                <li><a href="#_vérification">Vérification</a></li>
+                <li>
+                  <a href="#_troubleshooting">Troubleshooting</a>
+                  <ul class="sectlevel2">
+                    <li>
+                      <a href="#_erreur_de_permission">Erreur de permission</a>
+                    </li>
+                    <li>
+                      <a href="#_image_non_publiée_sur_pr"
+                        >Image non publiée sur PR</a
+                      >
+                    </li>
+                    <li><a href="#_cache_non_utilisé">Cache non utilisé</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="sect1">
+              <h2 id="_vue_densemble">
+                <a class="anchor" href="#_vue_densemble"></a>Vue
+                d&#8217;ensemble
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Le projet est configuré pour publier automatiquement les
+                    images Docker vers GitHub Container Registry (GHCR) lors de
+                    chaque push vers les branches principales.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_configuration">
+                <a class="anchor" href="#_configuration"></a>Configuration
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_workflow_ci">
+                    <a class="anchor" href="#_workflow_ci"></a>Workflow CI
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      Le workflow <code>.github/workflows/ci.yml</code> inclut
+                      un job <code>docker-build</code> qui :
+                    </p>
+                  </div>
+                  <div class="olist arabic">
+                    <ol class="arabic">
+                      <li>
+                        <p>
+                          <strong>Se connecte à GHCR</strong> avec le token
+                          GitHub automatique
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Extrait les métadonnées</strong> pour le
+                          tagging automatique
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Build l&#8217;image Docker</strong> avec cache
+                          optimisé
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Pousse l&#8217;image</strong> vers GHCR (sauf
+                          pour les PRs)
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_permissions">
+                    <a class="anchor" href="#_permissions"></a>Permissions
+                  </h3>
+                  <div class="paragraph">
+                    <p>Le workflow a les permissions suivantes :</p>
+                  </div>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p>
+                          <code>contents: read</code> - Lire le code du dépôt
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <code>packages: write</code> - Écrire dans le registry
+                          de packages
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_tags_automatiques">
+                <a class="anchor" href="#_tags_automatiques"></a>Tags
+                automatiques
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Les images sont taguées automatiquement selon le contexte :
+                  </p>
+                </div>
+                <table class="tableblock frame-all grid-all stretch">
+                  <colgroup>
+                    <col style="width: 33.3333%" />
+                    <col style="width: 33.3333%" />
+                    <col style="width: 33.3334%" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th class="tableblock halign-left valign-top">
+                        Événement
+                      </th>
+                      <th class="tableblock halign-left valign-top">Tag</th>
+                      <th class="tableblock halign-left valign-top">Exemple</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">Push sur branche</p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>branch-name</code></p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">
+                          <code>main</code>, <code>develop</code>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">Pull Request</p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>pr-123</code></p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>pr-42</code></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">Tag semver</p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">
+                          <code>version</code>, <code>major.minor</code>,
+                          <code>major</code>
+                        </p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">
+                          <code>1.2.3</code>, <code>1.2</code>, <code>1</code>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">Commit SHA</p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>branch-sha</code></p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>main-abc1234</code></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock">Branche par défaut</p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>latest</code></p>
+                      </td>
+                      <td class="tableblock halign-left valign-top">
+                        <p class="tableblock"><code>latest</code></p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_utilisation_des_images">
+                <a class="anchor" href="#_utilisation_des_images"></a
+                >Utilisation des images
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_pull_dune_image">
+                    <a class="anchor" href="#_pull_dune_image"></a>Pull
+                    d&#8217;une image
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Image latest (branche main)
 docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:latest
 
 # Image d'une branche spécifique
@@ -310,121 +488,184 @@ docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:1.2.3
 
 # Image d'un commit spécifique
 docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:main-abc1234</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_utilisation_dans_docker_compose"><a class="anchor" href="#_utilisation_dans_docker_compose"></a>Utilisation dans docker-compose</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">services:
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_utilisation_dans_docker_compose">
+                    <a
+                      class="anchor"
+                      href="#_utilisation_dans_docker_compose"
+                    ></a
+                    >Utilisation dans docker-compose
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-yaml hljs" data-lang="yaml">services:
   app:
     image: ghcr.io/constructions-incongrues/net.musiqueapproximative.www:latest
     # ... reste de la configuration</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_authentification_si_le_dépôt_est_privé"><a class="anchor" href="#_authentification_si_le_dépôt_est_privé"></a>Authentification (si le dépôt est privé)</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Se connecter à GHCR
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_authentification_si_le_dépôt_est_privé">
+                    <a
+                      class="anchor"
+                      href="#_authentification_si_le_dépôt_est_privé"
+                    ></a
+                    >Authentification (si le dépôt est privé)
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Se connecter à GHCR
 echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 
 # Ou avec un Personal Access Token
 echo $PAT | docker login ghcr.io -u USERNAME --password-stdin</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_visibilité_des_packages"><a class="anchor" href="#_visibilité_des_packages"></a>Visibilité des packages</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Par défaut, les packages GHCR héritent de la visibilité du dépôt :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Dépôt public → Package public</p>
-</li>
-<li>
-<p>Dépôt privé → Package privé</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Pour changer la visibilité :</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Aller sur <a href="https://github.com/orgs/constructions-incongrues/packages" class="bare">https://github.com/orgs/constructions-incongrues/packages</a></p>
-</li>
-<li>
-<p>Sélectionner le package</p>
-</li>
-<li>
-<p>Package settings → Change visibility</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_cache_des_builds"><a class="anchor" href="#_cache_des_builds"></a>Cache des builds</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Le workflow utilise le cache GitHub Actions pour accélérer les builds :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>cache-from: type=gha</code> - Utilise le cache existant</p>
-</li>
-<li>
-<p><code>cache-to: type=gha,mode=max</code> - Sauvegarde le cache maximum</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Cela réduit significativement le temps de build pour les builds suivants.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_workflow_de_publication"><a class="anchor" href="#_workflow_de_publication"></a>Workflow de publication</h2>
-<div class="sectionbody">
-<div class="imageblock kroki">
-<div class="content">
-<img src="_images/diag-68ece082e3a271d80367c9fcba92f773e99ebf69.svg" alt="Diagram">
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_nettoyage_des_anciennes_images"><a class="anchor" href="#_nettoyage_des_anciennes_images"></a>Nettoyage des anciennes images</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Pour éviter l&#8217;accumulation d&#8217;images, vous pouvez :</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Manuellement</strong> : Supprimer les anciennes versions via l&#8217;interface GitHub</p>
-</li>
-<li>
-<p><strong>Automatiquement</strong> : Ajouter une GitHub Action pour nettoyer les anciennes images</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Exemple de workflow de nettoyage (optionnel) :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">name: Cleanup old images
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_visibilité_des_packages">
+                <a class="anchor" href="#_visibilité_des_packages"></a
+                >Visibilité des packages
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Par défaut, les packages GHCR héritent de la visibilité du
+                    dépôt :
+                  </p>
+                </div>
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>Dépôt public → Package public</p>
+                    </li>
+                    <li>
+                      <p>Dépôt privé → Package privé</p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="paragraph">
+                  <p>Pour changer la visibilité :</p>
+                </div>
+                <div class="olist arabic">
+                  <ol class="arabic">
+                    <li>
+                      <p>
+                        Aller sur
+                        <a
+                          href="https://github.com/orgs/constructions-incongrues/packages"
+                          class="bare"
+                          >https://github.com/orgs/constructions-incongrues/packages</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>Sélectionner le package</p>
+                    </li>
+                    <li>
+                      <p>Package settings → Change visibility</p>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_cache_des_builds">
+                <a class="anchor" href="#_cache_des_builds"></a>Cache des builds
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Le workflow utilise le cache GitHub Actions pour accélérer
+                    les builds :
+                  </p>
+                </div>
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>
+                        <code>cache-from: type=gha</code> - Utilise le cache
+                        existant
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <code>cache-to: type=gha,mode=max</code> - Sauvegarde le
+                        cache maximum
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="paragraph">
+                  <p>
+                    Cela réduit significativement le temps de build pour les
+                    builds suivants.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_workflow_de_publication">
+                <a class="anchor" href="#_workflow_de_publication"></a>Workflow
+                de publication
+              </h2>
+              <div class="sectionbody">
+                <div class="imageblock kroki">
+                  <div class="content">
+                    <img
+                      src="_images/diag-68ece082e3a271d80367c9fcba92f773e99ebf69.svg"
+                      alt="Diagram"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_nettoyage_des_anciennes_images">
+                <a class="anchor" href="#_nettoyage_des_anciennes_images"></a
+                >Nettoyage des anciennes images
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Pour éviter l&#8217;accumulation d&#8217;images, vous pouvez
+                    :
+                  </p>
+                </div>
+                <div class="olist arabic">
+                  <ol class="arabic">
+                    <li>
+                      <p>
+                        <strong>Manuellement</strong> : Supprimer les anciennes
+                        versions via l&#8217;interface GitHub
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <strong>Automatiquement</strong> : Ajouter une GitHub
+                        Action pour nettoyer les anciennes images
+                      </p>
+                    </li>
+                  </ol>
+                </div>
+                <div class="paragraph">
+                  <p>Exemple de workflow de nettoyage (optionnel) :</p>
+                </div>
+                <div class="listingblock">
+                  <div class="content">
+                    <pre
+                      class="highlightjs highlight"
+                    ><code class="language-yaml hljs" data-lang="yaml">name: Cleanup old images
 
 on:
   schedule:
@@ -440,92 +681,139 @@ jobs:
           package-type: 'container'
           min-versions-to-keep: 10
           delete-only-untagged-versions: 'true'</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_vérification"><a class="anchor" href="#_vérification"></a>Vérification</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Après un push, vérifiez que l&#8217;image a été publiée :</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Aller sur <a href="https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www" class="bare">https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www</a></p>
-</li>
-<li>
-<p>Vérifier les tags disponibles</p>
-</li>
-<li>
-<p>Vérifier la date de dernière publication</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_troubleshooting"><a class="anchor" href="#_troubleshooting"></a>Troubleshooting</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_erreur_de_permission"><a class="anchor" href="#_erreur_de_permission"></a>Erreur de permission</h3>
-<div class="paragraph">
-<p>Si vous obtenez une erreur de permission :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Vérifier que <code>packages: write</code> est bien dans les permissions du workflow</p>
-</li>
-<li>
-<p>Vérifier que le token GitHub a les permissions nécessaires</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_image_non_publiée_sur_pr"><a class="anchor" href="#_image_non_publiée_sur_pr"></a>Image non publiée sur PR</h3>
-<div class="paragraph">
-<p>C&#8217;est normal ! Les images ne sont pas publiées pour les PRs pour économiser l&#8217;espace de stockage. Elles sont seulement buildées pour vérifier qu&#8217;il n&#8217;y a pas d&#8217;erreurs.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_cache_non_utilisé"><a class="anchor" href="#_cache_non_utilisé"></a>Cache non utilisé</h3>
-<div class="paragraph">
-<p>Si le cache n&#8217;est pas utilisé :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Vérifier que les builds précédents ont réussi</p>
-</li>
-<li>
-<p>Le cache est partagé entre les branches du même dépôt</p>
-</li>
-<li>
-<p>Le cache expire après 7 jours d&#8217;inactivité</p>
-</li>
-</ul>
-</div>
-<hr>
-<div class="paragraph">
-<p><strong>Registry</strong> : <code>ghcr.io</code><br>
-<strong>Image</strong> : <code>ghcr.io/constructions-incongrues/net.musiqueapproximative.www</code><br>
-<strong>Visibilité</strong> : Hérite du dépôt</p>
-</div>
-</div>
-</div>
-</div>
-</article>
-  </div>
-</main>
-</div>
-<footer class="footer">
-  <p>This page was built using the Antora default UI.</p>
-  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
-</footer>
-<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
-<script async src="../_/js/vendor/highlight.js"></script>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_vérification">
+                <a class="anchor" href="#_vérification"></a>Vérification
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Après un push, vérifiez que l&#8217;image a été publiée :
+                  </p>
+                </div>
+                <div class="olist arabic">
+                  <ol class="arabic">
+                    <li>
+                      <p>
+                        Aller sur
+                        <a
+                          href="https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www"
+                          class="bare"
+                          >https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>Vérifier les tags disponibles</p>
+                    </li>
+                    <li>
+                      <p>Vérifier la date de dernière publication</p>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_troubleshooting">
+                <a class="anchor" href="#_troubleshooting"></a>Troubleshooting
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_erreur_de_permission">
+                    <a class="anchor" href="#_erreur_de_permission"></a>Erreur
+                    de permission
+                  </h3>
+                  <div class="paragraph">
+                    <p>Si vous obtenez une erreur de permission :</p>
+                  </div>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p>
+                          Vérifier que <code>packages: write</code> est bien
+                          dans les permissions du workflow
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          Vérifier que le token GitHub a les permissions
+                          nécessaires
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_image_non_publiée_sur_pr">
+                    <a class="anchor" href="#_image_non_publiée_sur_pr"></a
+                    >Image non publiée sur PR
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      C&#8217;est normal ! Les images ne sont pas publiées pour
+                      les PRs pour économiser l&#8217;espace de stockage. Elles
+                      sont seulement buildées pour vérifier qu&#8217;il
+                      n&#8217;y a pas d&#8217;erreurs.
+                    </p>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_cache_non_utilisé">
+                    <a class="anchor" href="#_cache_non_utilisé"></a>Cache non
+                    utilisé
+                  </h3>
+                  <div class="paragraph">
+                    <p>Si le cache n&#8217;est pas utilisé :</p>
+                  </div>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p>Vérifier que les builds précédents ont réussi</p>
+                      </li>
+                      <li>
+                        <p>
+                          Le cache est partagé entre les branches du même dépôt
+                        </p>
+                      </li>
+                      <li>
+                        <p>Le cache expire après 7 jours d&#8217;inactivité</p>
+                      </li>
+                    </ul>
+                  </div>
+                  <hr />
+                  <div class="paragraph">
+                    <p>
+                      <strong>Registry</strong> : <code>ghcr.io</code><br />
+                      <strong>Image</strong> :
+                      <code
+                        >ghcr.io/constructions-incongrues/net.musiqueapproximative.www</code
+                      ><br />
+                      <strong>Visibilité</strong> : Hérite du dépôt
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+    <footer class="footer">
+      <p>This page was built using the Antora default UI.</p>
+      <p>
+        The source code for this UI is licensed under the terms of the MPL-2.0
+        license.
+      </p>
+    </footer>
+    <script
+      id="site-script"
+      src="../_/js/site.js"
+      data-ui-root-path="../_"
+    ></script>
+    <script async src="../_/js/vendor/highlight.js"></script>
   </body>
 </html>

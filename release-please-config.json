@@ -5,14 +5,14 @@
       "release-type": "php",
       "changelog-path": "CHANGELOG.adoc",
       "changelog-sections": [
-        {"type": "feat", "section": "Fonctionnalités", "hidden": false},
-        {"type": "fix", "section": "Corrections de bugs", "hidden": false},
-        {"type": "docs", "section": "Documentation", "hidden": false},
-        {"type": "style", "section": "Styles", "hidden": false},
-        {"type": "refactor", "section": "Refactoring", "hidden": false},
-        {"type": "perf", "section": "Performance", "hidden": false},
-        {"type": "test", "section": "Tests", "hidden": false},
-        {"type": "chore", "section": "Maintenance", "hidden": true}
+        { "type": "feat", "section": "Fonctionnalités", "hidden": false },
+        { "type": "fix", "section": "Corrections de bugs", "hidden": false },
+        { "type": "docs", "section": "Documentation", "hidden": false },
+        { "type": "style", "section": "Styles", "hidden": false },
+        { "type": "refactor", "section": "Refactoring", "hidden": false },
+        { "type": "perf", "section": "Performance", "hidden": false },
+        { "type": "test", "section": "Tests", "hidden": false },
+        { "type": "chore", "section": "Maintenance", "hidden": true }
       ]
     }
   }

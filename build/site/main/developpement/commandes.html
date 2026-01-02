@@ -1,174 +1,229 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Commandes utiles :: Musique Approximative</title>
-    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/developpement/commandes.html">
-    <meta name="description" content="Commandes fréquemment utilisées pour le développement">
-    <meta name="generator" content="Antora 3.1.14">
-    <link rel="stylesheet" href="../../_/css/site.css">
+    <link
+      rel="canonical"
+      href="https://constructions-incongrues.github.io/musiqueapproximative/main/developpement/commandes.html"
+    />
+    <meta
+      name="description"
+      content="Commandes fréquemment utilisées pour le développement"
+    />
+    <meta name="generator" content="Antora 3.1.14" />
+    <link rel="stylesheet" href="../../_/css/site.css" />
   </head>
   <body class="article">
-<header class="header">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
-      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
+    <header class="header">
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <a
+            class="navbar-item"
+            href="https://constructions-incongrues.github.io/musiqueapproximative"
+            >Musique Approximative</a
+          >
+          <button
+            class="navbar-burger"
+            aria-controls="topbar-nav"
+            aria-expanded="false"
+            aria-label="Toggle main menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item" href="#">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Products</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Product A</a>
+                <a class="navbar-item" href="#">Product B</a>
+                <a class="navbar-item" href="#">Product C</a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Services</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Service A</a>
+                <a class="navbar-item" href="#">Service B</a>
+                <a class="navbar-item" href="#">Service C</a>
+              </div>
+            </div>
+            <div class="navbar-item">
+              <span class="control">
+                <a class="button is-primary" href="#">Download</a>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
+      </nav>
+    </header>
+    <div class="body">
+      <div class="nav-container" data-component="ROOT" data-version="main">
+        <aside class="nav">
+          <div class="panels">
+            <div class="nav-panel-menu is-active" data-panel="menu">
+              <nav class="nav-menu">
+                <button
+                  class="nav-menu-toggle"
+                  aria-label="Toggle expand/collapse all"
+                  style="display: none"
+                ></button>
+                <h3 class="title">
+                  <a href="../index.html">Musique Approximative</a>
+                </h3>
+                <ul class="nav-list">
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Documentation</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../index.html">Accueil</a>
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../guide-demarrage.html"
+                          >Guide de démarrage</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../contribution.html"
+                          >Contribution</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Technique</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../architecture.html"
+                          >Architecture</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../desastres.html"
+                          >Les Désastres</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../docker.html"
+                          >Docker &amp; GHCR</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../deploiement.html"
+                          >Déploiement</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Développement</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="environnement.html"
+                          >Environnement de développement</a
+                        >
+                      </li>
+                      <li class="nav-item is-current-page" data-depth="1">
+                        <a class="nav-link" href="commandes.html"
+                          >Commandes utiles</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="tests.html">Tests</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">CI/CD</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../cicd/github-actions.html"
+                          >GitHub Actions</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../cicd/release-please.html"
+                          >Release Please</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../cicd/dependabot.html"
+                          >Dependabot</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="nav-panel-explore" data-panel="explore">
+              <div class="context">
+                <span class="title">Musique Approximative</span>
+                <span class="version">main</span>
+              </div>
+              <ul class="components">
+                <li class="component is-current">
+                  <div class="title">
+                    <a href="../index.html">Musique Approximative</a>
+                  </div>
+                  <ul class="versions">
+                    <li class="version is-current is-latest">
+                      <a href="../index.html">main</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
+        </aside>
       </div>
-    </div>
-  </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="ROOT" data-version="main">
-  <aside class="nav">
-    <div class="panels">
-<div class="nav-panel-menu is-active" data-panel="menu">
-  <nav class="nav-menu">
-    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="../index.html">Musique Approximative</a></h3>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Documentation</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../index.html">Accueil</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../guide-demarrage.html">Guide de démarrage</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../contribution.html">Contribution</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Technique</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../architecture.html">Architecture</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../desastres.html">Les Désastres</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../docker.html">Docker &amp; GHCR</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../deploiement.html">Déploiement</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Développement</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="environnement.html">Environnement de développement</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="commandes.html">Commandes utiles</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="tests.html">Tests</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">CI/CD</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../cicd/github-actions.html">GitHub Actions</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../cicd/release-please.html">Release Please</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../cicd/dependabot.html">Dependabot</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </nav>
-</div>
-<div class="nav-panel-explore" data-panel="explore">
-  <div class="context">
-    <span class="title">Musique Approximative</span>
-    <span class="version">main</span>
-  </div>
-  <ul class="components">
-    <li class="component is-current">
-      <div class="title"><a href="../index.html">Musique Approximative</a></div>
-      <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="../index.html">main</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
-    </div>
-  </aside>
-</div>
-<main class="article">
-<div class="toolbar" role="navigation">
-<button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
-<nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="../index.html">Musique Approximative</a></li>
-    <li>Développement</li>
-    <li><a href="commandes.html">Commandes utiles</a></li>
-  </ul>
-</nav>
-<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/developpement/commandes.adoc">Edit this Page</a></div>
-</div>
-  <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
-  <div class="toc-menu"></div>
-</aside>
-<article class="doc">
-<h1 class="page">Commandes utiles</h1>
-<div class="sect1">
-<h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_gestion_des_conteneurs"><a class="anchor" href="#_gestion_des_conteneurs"></a>Gestion des conteneurs</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Démarrer l'application
+      <main class="article">
+        <div class="toolbar" role="navigation">
+          <button class="nav-toggle"></button>
+          <a href="../index.html" class="home-link"></a>
+          <nav class="breadcrumbs" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="../index.html">Musique Approximative</a></li>
+              <li>Développement</li>
+              <li><a href="commandes.html">Commandes utiles</a></li>
+            </ul>
+          </nav>
+          <div class="edit-this-page">
+            <a
+              href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/developpement/commandes.adoc"
+              >Edit this Page</a
+            >
+          </div>
+        </div>
+        <div class="content">
+          <aside class="toc sidebar" data-title="Contents" data-levels="2">
+            <div class="toc-menu"></div>
+          </aside>
+          <article class="doc">
+            <h1 class="page">Commandes utiles</h1>
+            <div class="sect1">
+              <h2 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_gestion_des_conteneurs">
+                    <a class="anchor" href="#_gestion_des_conteneurs"></a
+                    >Gestion des conteneurs
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Démarrer l'application
 docker-compose up -d
 
 # Arrêter l'application
@@ -188,14 +243,19 @@ docker-compose build
 
 # Reconstruire sans cache
 docker-compose build --no-cache</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_accès_aux_conteneurs"><a class="anchor" href="#_accès_aux_conteneurs"></a>Accès aux conteneurs</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Accéder au conteneur PHP
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_accès_aux_conteneurs">
+                    <a class="anchor" href="#_accès_aux_conteneurs"></a>Accès
+                    aux conteneurs
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Accéder au conteneur PHP
 docker-compose exec php bash
 
 # Accéder au conteneur MySQL
@@ -203,31 +263,42 @@ docker-compose exec db mysql -u root -p
 
 # Exécuter une commande dans le conteneur
 docker-compose exec php php symfony cache:clear</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_symfony"><a class="anchor" href="#_symfony"></a>Symfony</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_cache"><a class="anchor" href="#_cache"></a>Cache</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Vider le cache
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_symfony">
+                <a class="anchor" href="#_symfony"></a>Symfony
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_cache">
+                    <a class="anchor" href="#_cache"></a>Cache
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Vider le cache
 docker-compose exec php php symfony cache:clear
 
 # Vider le cache en production
 docker-compose exec php php symfony cache:clear --env=prod</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_base_de_données"><a class="anchor" href="#_base_de_données"></a>Base de données</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Vérifier le schéma
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_base_de_données">
+                    <a class="anchor" href="#_base_de_données"></a>Base de
+                    données
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Vérifier le schéma
 docker-compose exec php php symfony doctrine:check-schema
 
 # Générer les modèles
@@ -238,31 +309,40 @@ docker-compose exec php php symfony doctrine:build-forms
 
 # Charger les fixtures
 docker-compose exec php php symfony doctrine:data-load</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_tâches"><a class="anchor" href="#_tâches"></a>Tâches</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Lister les tâches disponibles
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_tâches">
+                    <a class="anchor" href="#_tâches"></a>Tâches
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Lister les tâches disponibles
 docker-compose exec php php symfony list
 
 # Exécuter une tâche
 docker-compose exec php php symfony &lt;task-name&gt;</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_git"><a class="anchor" href="#_git"></a>Git</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_workflow_de_développement"><a class="anchor" href="#_workflow_de_développement"></a>Workflow de développement</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Créer une branche
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_git"><a class="anchor" href="#_git"></a>Git</h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_workflow_de_développement">
+                    <a class="anchor" href="#_workflow_de_développement"></a
+                    >Workflow de développement
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Créer une branche
 git checkout -b feat/ma-fonctionnalite
 
 # Commiter avec Conventional Commits
@@ -276,14 +356,19 @@ git checkout main
 git pull --rebase
 git checkout feat/ma-fonctionnalite
 git rebase main</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_gestion_des_releases"><a class="anchor" href="#_gestion_des_releases"></a>Gestion des releases</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Voir les tags
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_gestion_des_releases">
+                    <a class="anchor" href="#_gestion_des_releases"></a>Gestion
+                    des releases
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Voir les tags
 git tag
 
 # Créer un tag
@@ -291,48 +376,64 @@ git tag -a v1.0.0 -m "Version 1.0.0"
 
 # Pousser les tags
 git push --tags</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_tests"><a class="anchor" href="#_tests"></a>Tests</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_vérification_de_la_syntaxe"><a class="anchor" href="#_vérification_de_la_syntaxe"></a>Vérification de la syntaxe</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Vérifier la syntaxe PHP
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_tests"><a class="anchor" href="#_tests"></a>Tests</h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_vérification_de_la_syntaxe">
+                    <a class="anchor" href="#_vérification_de_la_syntaxe"></a
+                    >Vérification de la syntaxe
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Vérifier la syntaxe PHP
 find src -name "*.php" -exec php -l {} \;
 
 # Vérifier un fichier spécifique
 php -l src/apps/frontend/modules/home/actions/actions.class.php</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_tests_fonctionnels"><a class="anchor" href="#_tests_fonctionnels"></a>Tests fonctionnels</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Exécuter les tests
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_tests_fonctionnels">
+                    <a class="anchor" href="#_tests_fonctionnels"></a>Tests
+                    fonctionnels
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Exécuter les tests
 docker-compose exec php php symfony test:functional
 
 # Exécuter les tests unitaires
 docker-compose exec php php symfony test:unit</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_maintenance"><a class="anchor" href="#_maintenance"></a>Maintenance</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_nettoyage"><a class="anchor" href="#_nettoyage"></a>Nettoyage</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Nettoyer les logs
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_maintenance">
+                <a class="anchor" href="#_maintenance"></a>Maintenance
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_nettoyage">
+                    <a class="anchor" href="#_nettoyage"></a>Nettoyage
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Nettoyer les logs
 rm -rf src/log/*.log
 
 # Nettoyer le cache
@@ -343,31 +444,39 @@ docker system prune
 
 # Nettoyer les images non utilisées
 docker image prune -a</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_permissions"><a class="anchor" href="#_permissions"></a>Permissions</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Corriger les permissions du cache
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_permissions">
+                    <a class="anchor" href="#_permissions"></a>Permissions
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Corriger les permissions du cache
 chmod -R 777 src/cache
 
 # Corriger les permissions des logs
 chmod -R 777 src/log</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_debugging"><a class="anchor" href="#_debugging"></a>Debugging</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_logs"><a class="anchor" href="#_logs"></a>Logs</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Voir les logs Symfony
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_debugging">
+                <a class="anchor" href="#_debugging"></a>Debugging
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_logs"><a class="anchor" href="#_logs"></a>Logs</h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Voir les logs Symfony
 tail -f src/log/frontend_dev.log
 
 # Voir les logs d'erreur
@@ -375,32 +484,44 @@ tail -f src/log/error.log
 
 # Voir les logs Nginx
 docker-compose logs nginx</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_variables_denvironnement"><a class="anchor" href="#_variables_denvironnement"></a>Variables d&#8217;environnement</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Afficher les variables d'environnement
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_variables_denvironnement">
+                    <a class="anchor" href="#_variables_denvironnement"></a
+                    >Variables d&#8217;environnement
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Afficher les variables d'environnement
 docker-compose exec php env
 
 # Afficher la configuration PHP
 docker-compose exec php php -i</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</article>
-  </div>
-</main>
-</div>
-<footer class="footer">
-  <p>This page was built using the Antora default UI.</p>
-  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
-</footer>
-<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+    <footer class="footer">
+      <p>This page was built using the Antora default UI.</p>
+      <p>
+        The source code for this UI is licensed under the terms of the MPL-2.0
+        license.
+      </p>
+    </footer>
+    <script
+      id="site-script"
+      src="../../_/js/site.js"
+      data-ui-root-path="../../_"
+    ></script>
+    <script async src="../../_/js/vendor/highlight.js"></script>
   </body>
 </html>

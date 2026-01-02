@@ -1,6 +1,4 @@
 {
-    "conventionalCommits.scopes": [
-        "devcontainer"
-    ],
-    "makefile.configureOnOpen": false
+  "conventionalCommits.scopes": ["devcontainer"],
+  "makefile.configureOnOpen": false
 }

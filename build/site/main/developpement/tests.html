@@ -1,218 +1,289 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Tests :: Musique Approximative</title>
-    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/developpement/tests.html">
-    <meta name="description" content="Guide des tests pour le projet">
-    <meta name="generator" content="Antora 3.1.14">
-    <link rel="stylesheet" href="../../_/css/site.css">
+    <link
+      rel="canonical"
+      href="https://constructions-incongrues.github.io/musiqueapproximative/main/developpement/tests.html"
+    />
+    <meta name="description" content="Guide des tests pour le projet" />
+    <meta name="generator" content="Antora 3.1.14" />
+    <link rel="stylesheet" href="../../_/css/site.css" />
   </head>
   <body class="article">
-<header class="header">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
-      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
+    <header class="header">
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <a
+            class="navbar-item"
+            href="https://constructions-incongrues.github.io/musiqueapproximative"
+            >Musique Approximative</a
+          >
+          <button
+            class="navbar-burger"
+            aria-controls="topbar-nav"
+            aria-expanded="false"
+            aria-label="Toggle main menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item" href="#">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Products</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Product A</a>
+                <a class="navbar-item" href="#">Product B</a>
+                <a class="navbar-item" href="#">Product C</a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Services</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Service A</a>
+                <a class="navbar-item" href="#">Service B</a>
+                <a class="navbar-item" href="#">Service C</a>
+              </div>
+            </div>
+            <div class="navbar-item">
+              <span class="control">
+                <a class="button is-primary" href="#">Download</a>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
+      </nav>
+    </header>
+    <div class="body">
+      <div class="nav-container" data-component="ROOT" data-version="main">
+        <aside class="nav">
+          <div class="panels">
+            <div class="nav-panel-menu is-active" data-panel="menu">
+              <nav class="nav-menu">
+                <button
+                  class="nav-menu-toggle"
+                  aria-label="Toggle expand/collapse all"
+                  style="display: none"
+                ></button>
+                <h3 class="title">
+                  <a href="../index.html">Musique Approximative</a>
+                </h3>
+                <ul class="nav-list">
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Documentation</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../index.html">Accueil</a>
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../guide-demarrage.html"
+                          >Guide de démarrage</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../contribution.html"
+                          >Contribution</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Technique</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../architecture.html"
+                          >Architecture</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../desastres.html"
+                          >Les Désastres</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../docker.html"
+                          >Docker &amp; GHCR</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../deploiement.html"
+                          >Déploiement</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Développement</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="environnement.html"
+                          >Environnement de développement</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="commandes.html"
+                          >Commandes utiles</a
+                        >
+                      </li>
+                      <li class="nav-item is-current-page" data-depth="1">
+                        <a class="nav-link" href="tests.html">Tests</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">CI/CD</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../cicd/github-actions.html"
+                          >GitHub Actions</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../cicd/release-please.html"
+                          >Release Please</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="../cicd/dependabot.html"
+                          >Dependabot</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="nav-panel-explore" data-panel="explore">
+              <div class="context">
+                <span class="title">Musique Approximative</span>
+                <span class="version">main</span>
+              </div>
+              <ul class="components">
+                <li class="component is-current">
+                  <div class="title">
+                    <a href="../index.html">Musique Approximative</a>
+                  </div>
+                  <ul class="versions">
+                    <li class="version is-current is-latest">
+                      <a href="../index.html">main</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
+        </aside>
       </div>
-    </div>
-  </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="ROOT" data-version="main">
-  <aside class="nav">
-    <div class="panels">
-<div class="nav-panel-menu is-active" data-panel="menu">
-  <nav class="nav-menu">
-    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="../index.html">Musique Approximative</a></h3>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Documentation</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../index.html">Accueil</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../guide-demarrage.html">Guide de démarrage</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../contribution.html">Contribution</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Technique</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../architecture.html">Architecture</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../desastres.html">Les Désastres</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../docker.html">Docker &amp; GHCR</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../deploiement.html">Déploiement</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Développement</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="environnement.html">Environnement de développement</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="commandes.html">Commandes utiles</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="tests.html">Tests</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">CI/CD</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../cicd/github-actions.html">GitHub Actions</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../cicd/release-please.html">Release Please</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../cicd/dependabot.html">Dependabot</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </nav>
-</div>
-<div class="nav-panel-explore" data-panel="explore">
-  <div class="context">
-    <span class="title">Musique Approximative</span>
-    <span class="version">main</span>
-  </div>
-  <ul class="components">
-    <li class="component is-current">
-      <div class="title"><a href="../index.html">Musique Approximative</a></div>
-      <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="../index.html">main</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
-    </div>
-  </aside>
-</div>
-<main class="article">
-<div class="toolbar" role="navigation">
-<button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
-<nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="../index.html">Musique Approximative</a></li>
-    <li>Développement</li>
-    <li><a href="tests.html">Tests</a></li>
-  </ul>
-</nav>
-<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/developpement/tests.adoc">Edit this Page</a></div>
-</div>
-  <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
-  <div class="toc-menu"></div>
-</aside>
-<article class="doc">
-<h1 class="page">Tests</h1>
-<div class="sect1">
-<h2 id="_types_de_tests"><a class="anchor" href="#_types_de_tests"></a>Types de tests</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Le projet utilise plusieurs types de tests :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Tests de syntaxe</strong> : Validation PHP</p>
-</li>
-<li>
-<p><strong>Tests fonctionnels</strong> : Tests Symfony</p>
-</li>
-<li>
-<p><strong>Tests d&#8217;intégration</strong> : Tests Docker</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_tests_de_syntaxe"><a class="anchor" href="#_tests_de_syntaxe"></a>Tests de syntaxe</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_validation_php"><a class="anchor" href="#_validation_php"></a>Validation PHP</h3>
-<div class="paragraph">
-<p>Vérifier que tous les fichiers PHP sont syntaxiquement corrects :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Tous les fichiers
+      <main class="article">
+        <div class="toolbar" role="navigation">
+          <button class="nav-toggle"></button>
+          <a href="../index.html" class="home-link"></a>
+          <nav class="breadcrumbs" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="../index.html">Musique Approximative</a></li>
+              <li>Développement</li>
+              <li><a href="tests.html">Tests</a></li>
+            </ul>
+          </nav>
+          <div class="edit-this-page">
+            <a
+              href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/developpement/tests.adoc"
+              >Edit this Page</a
+            >
+          </div>
+        </div>
+        <div class="content">
+          <aside class="toc sidebar" data-title="Contents" data-levels="2">
+            <div class="toc-menu"></div>
+          </aside>
+          <article class="doc">
+            <h1 class="page">Tests</h1>
+            <div class="sect1">
+              <h2 id="_types_de_tests">
+                <a class="anchor" href="#_types_de_tests"></a>Types de tests
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>Le projet utilise plusieurs types de tests :</p>
+                </div>
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p><strong>Tests de syntaxe</strong> : Validation PHP</p>
+                    </li>
+                    <li>
+                      <p><strong>Tests fonctionnels</strong> : Tests Symfony</p>
+                    </li>
+                    <li>
+                      <p>
+                        <strong>Tests d&#8217;intégration</strong> : Tests
+                        Docker
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_tests_de_syntaxe">
+                <a class="anchor" href="#_tests_de_syntaxe"></a>Tests de syntaxe
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_validation_php">
+                    <a class="anchor" href="#_validation_php"></a>Validation PHP
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      Vérifier que tous les fichiers PHP sont syntaxiquement
+                      corrects :
+                    </p>
+                  </div>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Tous les fichiers
 find src -name "*.php" -exec php -l {} \;
 
 # Un fichier spécifique
 php -l src/apps/frontend/modules/home/actions/actions.class.php</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Cette commande est exécutée automatiquement dans le workflow CI.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_tests_fonctionnels"><a class="anchor" href="#_tests_fonctionnels"></a>Tests fonctionnels</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_tests_symfony"><a class="anchor" href="#_tests_symfony"></a>Tests Symfony</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Exécuter tous les tests
+                    </div>
+                  </div>
+                  <div class="paragraph">
+                    <p>
+                      Cette commande est exécutée automatiquement dans le
+                      workflow CI.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_tests_fonctionnels">
+                <a class="anchor" href="#_tests_fonctionnels"></a>Tests
+                fonctionnels
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_tests_symfony">
+                    <a class="anchor" href="#_tests_symfony"></a>Tests Symfony
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Exécuter tous les tests
 docker-compose exec php php symfony test:all
 
 # Tests fonctionnels uniquement
@@ -220,17 +291,24 @@ docker-compose exec php php symfony test:functional
 
 # Tests unitaires uniquement
 docker-compose exec php php symfony test:unit</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_écrire_un_test"><a class="anchor" href="#_écrire_un_test"></a>Écrire un test</h3>
-<div class="paragraph">
-<p>Créer un fichier de test dans <code>src/test/functional/</code> :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-php hljs" data-lang="php">&lt;?php
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_écrire_un_test">
+                    <a class="anchor" href="#_écrire_un_test"></a>Écrire un test
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      Créer un fichier de test dans
+                      <code>src/test/functional/</code> :
+                    </p>
+                  </div>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-php hljs" data-lang="php">&lt;?php
 
 include(dirname(__FILE__).'/../bootstrap/functional.php');
 
@@ -247,19 +325,26 @@ $browser-&gt;
     checkElement('body', '!/This is a temporary page/')-&gt;
   end()
 ;</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_tests_docker"><a class="anchor" href="#_tests_docker"></a>Tests Docker</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_build_de_limage"><a class="anchor" href="#_build_de_limage"></a>Build de l&#8217;image</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Build
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_tests_docker">
+                <a class="anchor" href="#_tests_docker"></a>Tests Docker
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_build_de_limage">
+                    <a class="anchor" href="#_build_de_limage"></a>Build de
+                    l&#8217;image
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Build
 docker-compose build
 
 # Build sans cache
@@ -267,14 +352,19 @@ docker-compose build --no-cache
 
 # Build d'un service spécifique
 docker-compose build php</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_tests_de_démarrage"><a class="anchor" href="#_tests_de_démarrage"></a>Tests de démarrage</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Démarrer les services
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_tests_de_démarrage">
+                    <a class="anchor" href="#_tests_de_démarrage"></a>Tests de
+                    démarrage
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Démarrer les services
 docker-compose up -d
 
 # Vérifier l'état
@@ -285,31 +375,43 @@ docker-compose logs
 
 # Tester l'accès HTTP
 curl -I http://localhost:8080</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_tests_dintégration"><a class="anchor" href="#_tests_dintégration"></a>Tests d&#8217;intégration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_base_de_données"><a class="anchor" href="#_base_de_données"></a>Base de données</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Vérifier la connexion
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_tests_dintégration">
+                <a class="anchor" href="#_tests_dintégration"></a>Tests
+                d&#8217;intégration
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_base_de_données">
+                    <a class="anchor" href="#_base_de_données"></a>Base de
+                    données
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Vérifier la connexion
 docker-compose exec php php symfony doctrine:check-schema
 
 # Tester une requête
 docker-compose exec db mysql -u root -proot -e "SHOW DATABASES;"</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_services"><a class="anchor" href="#_services"></a>Services</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Tester PHP-FPM
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_services">
+                    <a class="anchor" href="#_services"></a>Services
+                  </h3>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-bash hljs" data-lang="bash"># Tester PHP-FPM
 docker-compose exec php php -v
 
 # Tester Nginx
@@ -317,25 +419,32 @@ docker-compose exec nginx nginx -t
 
 # Tester MySQL
 docker-compose exec db mysqladmin -u root -proot ping</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_cicd"><a class="anchor" href="#_cicd"></a>CI/CD</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_github_actions"><a class="anchor" href="#_github_actions"></a>GitHub Actions</h3>
-<div class="paragraph">
-<p>Les tests sont exécutés automatiquement sur chaque push et pull request.</p>
-</div>
-<div class="paragraph">
-<p>Workflow : <code>.github/workflows/ci.yml</code></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">jobs:
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_cicd"><a class="anchor" href="#_cicd"></a>CI/CD</h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_github_actions">
+                    <a class="anchor" href="#_github_actions"></a>GitHub Actions
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      Les tests sont exécutés automatiquement sur chaque push et
+                      pull request.
+                    </p>
+                  </div>
+                  <div class="paragraph">
+                    <p>Workflow : <code>.github/workflows/ci.yml</code></p>
+                  </div>
+                  <div class="listingblock">
+                    <div class="content">
+                      <pre
+                        class="highlightjs highlight"
+                      ><code class="language-yaml hljs" data-lang="yaml">jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
@@ -349,166 +458,258 @@ docker-compose exec db mysqladmin -u root -proot ping</code></pre>
       - uses: actions/checkout@v4
       - name: Build Docker image
         run: docker-compose build</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_voir_les_résultats"><a class="anchor" href="#_voir_les_résultats"></a>Voir les résultats</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Aller sur <a href="https://github.com/constructions-incongrues/musiqueapproximative/actions" class="bare">https://github.com/constructions-incongrues/musiqueapproximative/actions</a></p>
-</li>
-<li>
-<p>Sélectionner un workflow run</p>
-</li>
-<li>
-<p>Voir les logs des tests</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_couverture_de_code"><a class="anchor" href="#_couverture_de_code"></a>Couverture de code</h2>
-<div class="sectionbody">
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-La couverture de code n&#8217;est pas encore configurée pour ce projet.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Pour l&#8217;ajouter, installer PHPUnit avec Xdebug :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Dans le Dockerfile
+                    </div>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_voir_les_résultats">
+                    <a class="anchor" href="#_voir_les_résultats"></a>Voir les
+                    résultats
+                  </h3>
+                  <div class="olist arabic">
+                    <ol class="arabic">
+                      <li>
+                        <p>
+                          Aller sur
+                          <a
+                            href="https://github.com/constructions-incongrues/musiqueapproximative/actions"
+                            class="bare"
+                            >https://github.com/constructions-incongrues/musiqueapproximative/actions</a
+                          >
+                        </p>
+                      </li>
+                      <li>
+                        <p>Sélectionner un workflow run</p>
+                      </li>
+                      <li>
+                        <p>Voir les logs des tests</p>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_couverture_de_code">
+                <a class="anchor" href="#_couverture_de_code"></a>Couverture de
+                code
+              </h2>
+              <div class="sectionbody">
+                <div class="admonitionblock note">
+                  <table>
+                    <tr>
+                      <td class="icon">
+                        <i class="fa icon-note" title="Note"></i>
+                      </td>
+                      <td class="content">
+                        La couverture de code n&#8217;est pas encore configurée
+                        pour ce projet.
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="paragraph">
+                  <p>Pour l&#8217;ajouter, installer PHPUnit avec Xdebug :</p>
+                </div>
+                <div class="listingblock">
+                  <div class="content">
+                    <pre
+                      class="highlightjs highlight"
+                    ><code class="language-bash hljs" data-lang="bash"># Dans le Dockerfile
 RUN pecl install xdebug &amp;&amp; docker-php-ext-enable xdebug
 
 # Générer le rapport
 phpunit --coverage-html coverage/</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_bonnes_pratiques"><a class="anchor" href="#_bonnes_pratiques"></a>Bonnes pratiques</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_avant_de_commiter"><a class="anchor" href="#_avant_de_commiter"></a>Avant de commiter</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Vérifier la syntaxe</strong> : <code>find src -name "*.php" -exec php -l {} \;</code></p>
-</li>
-<li>
-<p><strong>Tester localement</strong> : Vérifier que l&#8217;application fonctionne</p>
-</li>
-<li>
-<p><strong>Vérifier Docker</strong> : <code>docker-compose build</code></p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_avant_de_merger"><a class="anchor" href="#_avant_de_merger"></a>Avant de merger</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>CI passant</strong> : Vérifier que tous les tests CI sont verts</p>
-</li>
-<li>
-<p><strong>Review</strong> : Faire reviewer le code</p>
-</li>
-<li>
-<p><strong>Tests manuels</strong> : Tester les nouvelles fonctionnalités</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_debugging_des_tests"><a class="anchor" href="#_debugging_des_tests"></a>Debugging des tests</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_tests_qui_échouent"><a class="anchor" href="#_tests_qui_échouent"></a>Tests qui échouent</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Lire les logs</strong> : Comprendre l&#8217;erreur</p>
-</li>
-<li>
-<p><strong>Reproduire localement</strong> : Exécuter le test en local</p>
-</li>
-<li>
-<p><strong>Debugger</strong> : Utiliser <code>var_dump()</code> ou Xdebug</p>
-</li>
-<li>
-<p><strong>Corriger</strong> : Fixer le problème</p>
-</li>
-<li>
-<p><strong>Re-tester</strong> : Vérifier que ça fonctionne</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_tests_lents"><a class="anchor" href="#_tests_lents"></a>Tests lents</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Profiler</strong> : Identifier les goulots d&#8217;étranglement</p>
-</li>
-<li>
-<p><strong>Optimiser</strong> : Améliorer les requêtes SQL</p>
-</li>
-<li>
-<p><strong>Cacher</strong> : Utiliser le cache Symfony</p>
-</li>
-<li>
-<p><strong>Paralléliser</strong> : Exécuter les tests en parallèle</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_ressources"><a class="anchor" href="#_ressources"></a>Ressources</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://symfony.com/legacy/doc/gentle-introduction/1_4/en/15-Unit-and-Functional-Testing">Tests Symfony 1.4</a></p>
-</li>
-<li>
-<p><a href="https://docs.docker.com/compose/">Docker Compose</a></p>
-</li>
-<li>
-<p><a href="https://docs.github.com/en/actions">GitHub Actions</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</article>
-  </div>
-</main>
-</div>
-<footer class="footer">
-  <p>This page was built using the Antora default UI.</p>
-  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
-</footer>
-<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_bonnes_pratiques">
+                <a class="anchor" href="#_bonnes_pratiques"></a>Bonnes pratiques
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_avant_de_commiter">
+                    <a class="anchor" href="#_avant_de_commiter"></a>Avant de
+                    commiter
+                  </h3>
+                  <div class="olist arabic">
+                    <ol class="arabic">
+                      <li>
+                        <p>
+                          <strong>Vérifier la syntaxe</strong> :
+                          <code>find src -name "*.php" -exec php -l {} \;</code>
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Tester localement</strong> : Vérifier que
+                          l&#8217;application fonctionne
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Vérifier Docker</strong> :
+                          <code>docker-compose build</code>
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_avant_de_merger">
+                    <a class="anchor" href="#_avant_de_merger"></a>Avant de
+                    merger
+                  </h3>
+                  <div class="olist arabic">
+                    <ol class="arabic">
+                      <li>
+                        <p>
+                          <strong>CI passant</strong> : Vérifier que tous les
+                          tests CI sont verts
+                        </p>
+                      </li>
+                      <li>
+                        <p><strong>Review</strong> : Faire reviewer le code</p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Tests manuels</strong> : Tester les nouvelles
+                          fonctionnalités
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_debugging_des_tests">
+                <a class="anchor" href="#_debugging_des_tests"></a>Debugging des
+                tests
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_tests_qui_échouent">
+                    <a class="anchor" href="#_tests_qui_échouent"></a>Tests qui
+                    échouent
+                  </h3>
+                  <div class="olist arabic">
+                    <ol class="arabic">
+                      <li>
+                        <p>
+                          <strong>Lire les logs</strong> : Comprendre
+                          l&#8217;erreur
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Reproduire localement</strong> : Exécuter le
+                          test en local
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Debugger</strong> : Utiliser
+                          <code>var_dump()</code> ou Xdebug
+                        </p>
+                      </li>
+                      <li>
+                        <p><strong>Corriger</strong> : Fixer le problème</p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Re-tester</strong> : Vérifier que ça
+                          fonctionne
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_tests_lents">
+                    <a class="anchor" href="#_tests_lents"></a>Tests lents
+                  </h3>
+                  <div class="olist arabic">
+                    <ol class="arabic">
+                      <li>
+                        <p>
+                          <strong>Profiler</strong> : Identifier les goulots
+                          d&#8217;étranglement
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Optimiser</strong> : Améliorer les requêtes
+                          SQL
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Cacher</strong> : Utiliser le cache Symfony
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Paralléliser</strong> : Exécuter les tests en
+                          parallèle
+                        </p>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_ressources">
+                <a class="anchor" href="#_ressources"></a>Ressources
+              </h2>
+              <div class="sectionbody">
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>
+                        <a
+                          href="https://symfony.com/legacy/doc/gentle-introduction/1_4/en/15-Unit-and-Functional-Testing"
+                          >Tests Symfony 1.4</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a href="https://docs.docker.com/compose/"
+                          >Docker Compose</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a href="https://docs.github.com/en/actions"
+                          >GitHub Actions</a
+                        >
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+    <footer class="footer">
+      <p>This page was built using the Antora default UI.</p>
+      <p>
+        The source code for this UI is licensed under the terms of the MPL-2.0
+        license.
+      </p>
+    </footer>
+    <script
+      id="site-script"
+      src="../../_/js/site.js"
+      data-ui-root-path="../../_"
+    ></script>
+    <script async src="../../_/js/vendor/highlight.js"></script>
   </body>
 </html>
