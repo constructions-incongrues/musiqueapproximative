@@ -1,0 +1,24 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        with:
+          # Type de release (php pour composer)
+          release-type: simple
+          # Fichier de version à mettre à jour
+          package-name: musiqueapproximative
+          # Générer le changelog
+          changelog-types: '[{"type":"feat","section":"Fonctionnalités","hidden":false},{"type":"fix","section":"Corrections de bugs","hidden":false},{"type":"docs","section":"Documentation","hidden":false},{"type":"style","section":"Styles","hidden":false},{"type":"refactor","section":"Refactoring","hidden":false},{"type":"perf","section":"Performance","hidden":false},{"type":"test","section":"Tests","hidden":false},{"type":"chore","section":"Maintenance","hidden":false}]'

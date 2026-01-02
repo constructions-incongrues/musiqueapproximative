@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  validate:
+    name: Validation du code
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql
+          coverage: none
+
+      - name: Valider composer.json
+        run: |
+          cd src
+          composer validate --strict
+
+      - name: Cache des dépendances Composer
+        uses: actions/cache@v3
+        with:
+          path: src/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('src/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Installer les dépendances
+        run: |
+          cd src
+          composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Vérifier la syntaxe PHP
+        run: |
+          find src -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
+
+  docker-build:
+    name: Build Docker
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build de l'image Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: musiqueapproximative:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
