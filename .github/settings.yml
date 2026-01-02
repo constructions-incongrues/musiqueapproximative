@@ -3,7 +3,7 @@
 # Pour appliquer cette configuration automatiquement
 
 repository:
-  name: net.musiqueapproximative.www
+  name: musiqueapproximative
   description: "Site web de Musique Approximative - Playlist quotidienne anarchique de mélomanes fêlé⋅e⋅s"
   homepage: https://www.musiqueapproximative.net
   topics: music, playlist, symfony, php, docker, glitch-art
