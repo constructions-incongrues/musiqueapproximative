@@ -16,3 +16,10 @@ ui:
 
 output:
   dir: ./build/site
+
+asciidoc:
+  extensions:
+    - asciidoctor-kroki
+  attributes:
+    kroki-fetch-diagram: true
+    kroki-server-url: https://kroki.io

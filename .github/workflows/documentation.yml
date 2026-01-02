@@ -32,8 +32,8 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Install Antora
-        run: npm install -g @antora/cli@latest @antora/site-generator@latest
+      - name: Install Antora and extensions
+        run: npm install -g @antora/cli@latest @antora/site-generator@latest asciidoctor-kroki
       
       - name: Generate documentation site
         run: antora antora-playbook.yml
