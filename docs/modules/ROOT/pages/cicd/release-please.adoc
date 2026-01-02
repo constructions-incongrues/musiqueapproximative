@@ -128,7 +128,7 @@ Release Please crée une PR avec :
 * **Titre** : `chore(main): release 1.2.0`
 * **Description** : Changelog complet
 * **Fichiers modifiés** :
-** `CHANGELOG.md` : Mis à jour
+** `CHANGELOG.adoc` : Mis à jour
 ** `.release-please-manifest.json` : Nouvelle version
 
 === Breaking changes

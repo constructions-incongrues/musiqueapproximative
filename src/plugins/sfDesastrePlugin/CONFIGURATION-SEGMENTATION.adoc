@@ -1,18 +1,19 @@
-# Segmentation de la configuration des désastres
+= Segmentation de la configuration des désastres
 
-## Problème
+== Problème
 
 Le fichier `desastres.yml` devient volumineux (284 lignes) et difficile à maintenir :
-- 19 règles
-- 15+ recettes
-- Mélange de règles et recettes
-- Difficile de retrouver une configuration spécifique
 
-## Solution proposée
+* 19 règles
+* 15+ recettes
+* Mélange de règles et recettes
+* Difficile de retrouver une configuration spécifique
 
-### Architecture modulaire avec imports
+== Solution proposée
 
-```
+=== Architecture modulaire avec imports
+
+----
 config/
 ├── desastres.yml                    # Point d'entrée principal
 └── desastres/
@@ -30,18 +31,20 @@ config/
         ├── tts.yml                 # Recettes TTS
         ├── effects.yml             # Recettes d'effets (danse, kraftwerk, sale)
         └── text.yml                # Recettes de manipulation de texte
-```
+----
 
-## Implémentation
+== Implémentation
 
-### Approche 1 : Extension du sfDesastreManager (RECOMMANDÉ)
+=== Approche 1 : Extension du sfDesastreManager (RECOMMANDÉ)
 
 Ajouter le support des imports YAML dans `sfDesastreManager.class.php`.
 
-#### Syntaxe du fichier principal
+==== Syntaxe du fichier principal
 
-**config/desastres.yml** :
-```yaml
+*config/desastres.yml* :
+
+[,yaml]
+----
 # Point d'entree principal - Musique Approximative
 # Les regles et recettes sont importees depuis des fichiers externes
 
@@ -65,13 +68,14 @@ imports:
 # Elles seront fusionnees avec les imports
 regles: []
 recettes: {}
-```
+----
 
-#### Code d'implémentation
+==== Code d'implémentation
 
-**src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php** :
+*src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php* :
 
-```php
+[,php]
+----
 public function loadConfig($configPath)
 {
   if (!file_exists($configPath)) {
@@ -143,14 +147,16 @@ protected function processImports(array $config, $baseDir)
 
   return $config;
 }
-```
+----
 
-### Approche 2 : Script de build (ALTERNATIF)
+=== Approche 2 : Script de build (ALTERNATIF)
 
 Si vous ne voulez pas modifier le plugin, créez un script qui fusionne les fichiers.
 
-**bin/build-desastres-config.php** :
-```php
+*bin/build-desastres-config.php* :
+
+[,php]
+----
 #!/usr/bin/env php
 <?php
 
@@ -188,17 +194,18 @@ $output = array(
 
 file_put_contents($outputFile, sfYaml::dump($output, 10));
 echo "Configuration generated: $outputFile\n";
-```
+----
 
 Puis dans votre code, chargez `desastres.generated.yml` au lieu de `desastres.yml`.
 
-### Approche 3 : Glob pattern (SIMPLE & RAPIDE)
+=== Approche 3 : Glob pattern (SIMPLE & RAPIDE)
 
 Modification minimale du manager pour charger automatiquement tous les fichiers d'un dossier.
 
-**src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php** :
+*src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php* :
 
-```php
+[,php]
+----
 /**
  * Charge la configuration depuis un repertoire contenant plusieurs fichiers YAML
  *
@@ -238,22 +245,25 @@ public function loadConfigDir($configDir)
   $this->config = $config;
   return $this;
 }
-```
+----
 
-**Utilisation** :
-```php
+*Utilisation* :
+
+[,php]
+----
 // Au lieu de :
 $manager->loadConfig('/path/to/desastres.yml');
 
 // Utiliser :
 $manager->loadConfigDir('/path/to/desastres');
-```
+----
 
-## Structure des fichiers segmentés
+== Structure des fichiers segmentés
 
-### Exemple : desastres/regles/colors.yml
+=== Exemple : desastres/regles/colors.yml
 
-```yaml
+[,yaml]
+----
 # Regles pour les desastres de couleurs
 regles:
   # Desastre "bleu"
@@ -274,11 +284,12 @@ regles:
     probability: 0.7
     scripts:
       - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
-```
+----
 
-### Exemple : desastres/recettes/tts.yml
+=== Exemple : desastres/recettes/tts.yml
 
-```yaml
+[,yaml]
+----
 # Recettes TTS (Text-to-Speech)
 recettes:
   tts_rapper:
@@ -300,58 +311,61 @@ recettes:
       volume: 0.7
       lang: fr-fr
       voices: [Mauvaises nouvelles, Superstar, Violoncelles]
-```
+----
 
-## Avantages
+== Avantages
 
-✅ **Organisation claire** - Chaque catégorie dans son fichier
-✅ **Maintenance facile** - Modifications ciblées
-✅ **Collaboration** - Moins de conflits Git
-✅ **Réutilisabilité** - Import de fichiers dans différents environnements
-✅ **Testabilité** - Test de catégories individuellement
-✅ **Documentation** - Chaque fichier peut avoir ses propres commentaires
+✅ *Organisation claire* - Chaque catégorie dans son fichier
+✅ *Maintenance facile* - Modifications ciblées
+✅ *Collaboration* - Moins de conflits Git
+✅ *Réutilisabilité* - Import de fichiers dans différents environnements
+✅ *Testabilité* - Test de catégories individuellement
+✅ *Documentation* - Chaque fichier peut avoir ses propres commentaires
 
-## Migration progressive
+== Migration progressive
 
-### Étape 1 : Créer la structure
+=== Étape 1 : Créer la structure
 
-```bash
+[,bash]
+----
 cd src/apps/frontend/config
 mkdir -p desastres/regles desastres/recettes
-```
+----
 
-### Étape 2 : Extraire les règles
+=== Étape 2 : Extraire les règles
 
 Créer `desastres/regles/colors.yml`, `tts.yml`, etc. avec les règles correspondantes.
 
-### Étape 3 : Extraire les recettes
+=== Étape 3 : Extraire les recettes
 
 Créer `desastres/recettes/colors.yml`, `tts.yml`, etc. avec les recettes correspondantes.
 
-### Étape 4 : Modifier le fichier principal
+=== Étape 4 : Modifier le fichier principal
 
 Remplacer le contenu de `desastres.yml` par la version avec imports.
 
-### Étape 5 : Implémenter le loader
+=== Étape 5 : Implémenter le loader
 
 Choisir une approche (1, 2 ou 3) et l'implémenter.
 
-### Étape 6 : Tester
+=== Étape 6 : Tester
 
-```bash
+[,bash]
+----
 # Vérifier que les désastres fonctionnent toujours
 # Comparer l'ancienne et la nouvelle configuration
-```
+----
 
-## Rétrocompatibilité
+== Rétrocompatibilité
 
 Pour garder la compatibilité, le manager doit :
 
-1. Détecter automatiquement le format (fichier unique vs imports)
-2. Si pas d'imports, charger normalement
-3. Si imports présents, fusionner les fichiers
+. Détecter automatiquement le format (fichier unique vs imports)
+. Si pas d'imports, charger normalement
+. Si imports présents, fusionner les fichiers
 
-```php
+[,php]
+----
 public function loadConfig($configPath)
 {
   if (!file_exists($configPath)) {
@@ -370,24 +384,26 @@ public function loadConfig($configPath)
   $this->config = $config;
   return $this;
 }
-```
+----
 
-## Recommandation finale
+== Recommandation finale
 
-🎯 **Approche recommandée : Approche 1 (Imports dans le manager)**
+🎯 *Approche recommandée : Approche 1 (Imports dans le manager)*
 
-**Pourquoi ?**
-- Flexible : On peut mélanger imports et définitions directes
-- Pas de rebuild nécessaire
-- Rétrocompatible
-- Maintenable à long terme
+*Pourquoi ?*
 
-**Plan d'action :**
-1. Implémenter `processImports()` dans sfDesastreManager
-2. Créer la structure de dossiers
-3. Migrer progressivement les règles et recettes
-4. Tester
+* Flexible : On peut mélanger imports et définitions directes
+* Pas de rebuild nécessaire
+* Rétrocompatible
+* Maintenable à long terme
 
----
+*Plan d'action :*
 
-**Prochaines étapes** : Voulez-vous que j'implémente l'approche 1 ?
+. Implémenter `processImports()` dans sfDesastreManager
+. Créer la structure de dossiers
+. Migrer progressivement les règles et recettes
+. Tester
+
+'''
+
+*Prochaines étapes* : Voulez-vous que j'implémente l'approche 1 ?
