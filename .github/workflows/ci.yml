@@ -38,7 +38,7 @@ jobs:
       - name: Installer les dépendances
         run: |
           cd src
-          composer install --prefer-dist --no-progress --no-suggest
+          composer install --prefer-dist --no-progress
 
       - name: Vérifier la syntaxe PHP
         run: |
