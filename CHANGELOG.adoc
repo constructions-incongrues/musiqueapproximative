@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.4.1...v1.5.0) (2026-01-02)
+
+
+### Fonctionnalités
+
+* configure GitHub repository details, issue labels, and main branch protection rules ([fea71a1](https://github.com/constructions-incongrues/musiqueapproximative/commit/fea71a17e78845fde38fe12519d541b6737ed8b9))
+
+
+### Documentation
+
+* update Antora generated site, configuration files, and development environment settings ([96a72b6](https://github.com/constructions-incongrues/musiqueapproximative/commit/96a72b6bfb468cc1d7f13928858aba39941b0aaf))
+
 ## [1.4.1](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.4.0...v1.4.1) (2026-01-02)
 
 
