@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/constructions-incongrues/musiqueapproximative-v1.0.0...constructions-incongrues/musiqueapproximative-v1.1.0) (2026-01-02)
+
+
+### Fonctionnalités
+
+* add AsciiDoctor VS Code extension recommendation ([fb73391](https://github.com/constructions-incongrues/musiqueapproximative/commit/fb73391256be8978f91e707bc694deb53599af97))
+
+
+### Documentation
+
+* mise en place de la documentation Antora avec GitHub Pages ([4c4b523](https://github.com/constructions-incongrues/musiqueapproximative/commit/4c4b523920970a7ed05c7b8c46c8ea97b47d0b97))
+
+
+### Maintenance
+
+* update repomix output [skip ci] ([f7641fb](https://github.com/constructions-incongrues/musiqueapproximative/commit/f7641fb36481c8f463f0c8968a918aa12b077f2d))
+
 ## 1.0.0 (2026-01-02)
 
 
