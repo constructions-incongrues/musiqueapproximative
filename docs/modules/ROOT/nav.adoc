@@ -17,4 +17,4 @@
 .CI/CD
 * xref:cicd/github-actions.adoc[GitHub Actions]
 * xref:cicd/release-please.adoc[Release Please]
-* xref:cicd/dependabot.adoc[Dependabot]
+* xref:cicd/renovate.adoc[Renovate]
