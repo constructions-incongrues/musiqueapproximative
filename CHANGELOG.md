@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v0.7.0...v0.8.0) (2026-01-02)
+
+
+### Features
+
+* upgrade to PHP 8.4, integrate GitHub Container Registry with new documentation, and add an auto-rebase workflow. ([e3ee773](https://github.com/constructions-incongrues/musiqueapproximative/commit/e3ee7736b5a745ccf57e7da333459152f672d4e0))
+
+
+### Bug Fixes
+
+* update GitHub repository link and refine CSS animation timing. ([aab4593](https://github.com/constructions-incongrues/musiqueapproximative/commit/aab4593c4a1b3dc825ee32343f262175186a0795))
+
 ## [0.7.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v0.6.0...v0.7.0) (2026-01-02)
 
 
