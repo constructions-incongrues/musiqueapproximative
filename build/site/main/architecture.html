@@ -1,231 +1,312 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Architecture du projet :: Musique Approximative</title>
-    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/architecture.html">
-    <meta name="description" content="Vue d'ensemble de l'architecture technique">
-    <meta name="generator" content="Antora 3.1.14">
-    <link rel="stylesheet" href="../_/css/site.css">
+    <link
+      rel="canonical"
+      href="https://constructions-incongrues.github.io/musiqueapproximative/main/architecture.html"
+    />
+    <meta
+      name="description"
+      content="Vue d'ensemble de l'architecture technique"
+    />
+    <meta name="generator" content="Antora 3.1.14" />
+    <link rel="stylesheet" href="../_/css/site.css" />
   </head>
   <body class="article">
-<header class="header">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
-      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
+    <header class="header">
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <a
+            class="navbar-item"
+            href="https://constructions-incongrues.github.io/musiqueapproximative"
+            >Musique Approximative</a
+          >
+          <button
+            class="navbar-burger"
+            aria-controls="topbar-nav"
+            aria-expanded="false"
+            aria-label="Toggle main menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item" href="#">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Products</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Product A</a>
+                <a class="navbar-item" href="#">Product B</a>
+                <a class="navbar-item" href="#">Product C</a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Services</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Service A</a>
+                <a class="navbar-item" href="#">Service B</a>
+                <a class="navbar-item" href="#">Service C</a>
+              </div>
+            </div>
+            <div class="navbar-item">
+              <span class="control">
+                <a class="button is-primary" href="#">Download</a>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
+      </nav>
+    </header>
+    <div class="body">
+      <div class="nav-container" data-component="ROOT" data-version="main">
+        <aside class="nav">
+          <div class="panels">
+            <div class="nav-panel-menu is-active" data-panel="menu">
+              <nav class="nav-menu">
+                <button
+                  class="nav-menu-toggle"
+                  aria-label="Toggle expand/collapse all"
+                  style="display: none"
+                ></button>
+                <h3 class="title">
+                  <a href="index.html">Musique Approximative</a>
+                </h3>
+                <ul class="nav-list">
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Documentation</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="index.html">Accueil</a>
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="guide-demarrage.html"
+                          >Guide de démarrage</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="contribution.html"
+                          >Contribution</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Technique</span>
+                    <ul class="nav-list">
+                      <li class="nav-item is-current-page" data-depth="1">
+                        <a class="nav-link" href="architecture.html"
+                          >Architecture</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="desastres.html"
+                          >Les Désastres</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="docker.html"
+                          >Docker &amp; GHCR</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="deploiement.html"
+                          >Déploiement</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Développement</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a
+                          class="nav-link"
+                          href="developpement/environnement.html"
+                          >Environnement de développement</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="developpement/commandes.html"
+                          >Commandes utiles</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="developpement/tests.html"
+                          >Tests</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">CI/CD</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/github-actions.html"
+                          >GitHub Actions</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/release-please.html"
+                          >Release Please</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/dependabot.html"
+                          >Dependabot</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="nav-panel-explore" data-panel="explore">
+              <div class="context">
+                <span class="title">Musique Approximative</span>
+                <span class="version">main</span>
+              </div>
+              <ul class="components">
+                <li class="component is-current">
+                  <div class="title">
+                    <a href="index.html">Musique Approximative</a>
+                  </div>
+                  <ul class="versions">
+                    <li class="version is-current is-latest">
+                      <a href="index.html">main</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
+        </aside>
       </div>
-    </div>
-  </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="ROOT" data-version="main">
-  <aside class="nav">
-    <div class="panels">
-<div class="nav-panel-menu is-active" data-panel="menu">
-  <nav class="nav-menu">
-    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="index.html">Musique Approximative</a></h3>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Documentation</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="index.html">Accueil</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="guide-demarrage.html">Guide de démarrage</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="contribution.html">Contribution</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Technique</span>
-<ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="architecture.html">Architecture</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="desastres.html">Les Désastres</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="docker.html">Docker &amp; GHCR</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deploiement.html">Déploiement</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Développement</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/environnement.html">Environnement de développement</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/commandes.html">Commandes utiles</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/tests.html">Tests</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">CI/CD</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/github-actions.html">GitHub Actions</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/release-please.html">Release Please</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/dependabot.html">Dependabot</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </nav>
-</div>
-<div class="nav-panel-explore" data-panel="explore">
-  <div class="context">
-    <span class="title">Musique Approximative</span>
-    <span class="version">main</span>
-  </div>
-  <ul class="components">
-    <li class="component is-current">
-      <div class="title"><a href="index.html">Musique Approximative</a></div>
-      <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">main</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
-    </div>
-  </aside>
-</div>
-<main class="article">
-<div class="toolbar" role="navigation">
-<button class="nav-toggle"></button>
-  <a href="index.html" class="home-link"></a>
-<nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Musique Approximative</a></li>
-    <li>Technique</li>
-    <li><a href="architecture.html">Architecture</a></li>
-  </ul>
-</nav>
-<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/architecture.adoc">Edit this Page</a></div>
-</div>
-  <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
-  <div class="toc-menu"></div>
-</aside>
-<article class="doc">
-<h1 class="page">Architecture du projet</h1>
-<div class="sect1">
-<h2 id="_stack_technique"><a class="anchor" href="#_stack_technique"></a>Stack technique</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_backend"><a class="anchor" href="#_backend"></a>Backend</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Framework</strong> : Symfony 1.5</p>
-</li>
-<li>
-<p><strong>Langage</strong> : PHP 7.4+</p>
-</li>
-<li>
-<p><strong>ORM</strong> : Doctrine</p>
-</li>
-<li>
-<p><strong>Base de données</strong> : MySQL/MariaDB</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_frontend"><a class="anchor" href="#_frontend"></a>Frontend</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>HTML/CSS</strong> : Vanilla CSS avec support des thèmes</p>
-</li>
-<li>
-<p><strong>JavaScript</strong> : jQuery pour la compatibilité</p>
-</li>
-<li>
-<p><strong>Lecteur audio</strong> : Player personnalisé</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_infrastructure"><a class="anchor" href="#_infrastructure"></a>Infrastructure</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Conteneurisation</strong> : Docker &amp; Docker Compose</p>
-</li>
-<li>
-<p><strong>Serveur web</strong> : Nginx</p>
-</li>
-<li>
-<p><strong>CI/CD</strong> : GitHub Actions</p>
-</li>
-<li>
-<p><strong>Registry</strong> : GitHub Container Registry (GHCR)</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_structure_des_répertoires"><a class="anchor" href="#_structure_des_répertoires"></a>Structure des répertoires</h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">musiqueapproximative/
+      <main class="article">
+        <div class="toolbar" role="navigation">
+          <button class="nav-toggle"></button>
+          <a href="index.html" class="home-link"></a>
+          <nav class="breadcrumbs" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="index.html">Musique Approximative</a></li>
+              <li>Technique</li>
+              <li><a href="architecture.html">Architecture</a></li>
+            </ul>
+          </nav>
+          <div class="edit-this-page">
+            <a
+              href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/architecture.adoc"
+              >Edit this Page</a
+            >
+          </div>
+        </div>
+        <div class="content">
+          <aside class="toc sidebar" data-title="Contents" data-levels="2">
+            <div class="toc-menu"></div>
+          </aside>
+          <article class="doc">
+            <h1 class="page">Architecture du projet</h1>
+            <div class="sect1">
+              <h2 id="_stack_technique">
+                <a class="anchor" href="#_stack_technique"></a>Stack technique
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_backend">
+                    <a class="anchor" href="#_backend"></a>Backend
+                  </h3>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p><strong>Framework</strong> : Symfony 1.5</p>
+                      </li>
+                      <li>
+                        <p><strong>Langage</strong> : PHP 7.4+</p>
+                      </li>
+                      <li>
+                        <p><strong>ORM</strong> : Doctrine</p>
+                      </li>
+                      <li>
+                        <p><strong>Base de données</strong> : MySQL/MariaDB</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_frontend">
+                    <a class="anchor" href="#_frontend"></a>Frontend
+                  </h3>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p>
+                          <strong>HTML/CSS</strong> : Vanilla CSS avec support
+                          des thèmes
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>JavaScript</strong> : jQuery pour la
+                          compatibilité
+                        </p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Lecteur audio</strong> : Player personnalisé
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_infrastructure">
+                    <a class="anchor" href="#_infrastructure"></a>Infrastructure
+                  </h3>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p>
+                          <strong>Conteneurisation</strong> : Docker &amp;
+                          Docker Compose
+                        </p>
+                      </li>
+                      <li>
+                        <p><strong>Serveur web</strong> : Nginx</p>
+                      </li>
+                      <li>
+                        <p><strong>CI/CD</strong> : GitHub Actions</p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>Registry</strong> : GitHub Container Registry
+                          (GHCR)
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_structure_des_répertoires">
+                <a class="anchor" href="#_structure_des_répertoires"></a
+                >Structure des répertoires
+              </h2>
+              <div class="sectionbody">
+                <div class="listingblock">
+                  <div class="content">
+                    <pre
+                      class="highlightjs highlight"
+                    ><code class="language-none hljs">musiqueapproximative/
 ├── .github/              # Configuration GitHub Actions
 │   ├── workflows/        # Workflows CI/CD
 │   └── settings.yml      # Configuration du dépôt
@@ -245,130 +326,178 @@
 ├── Dockerfile            # Image Docker
 ├── docker-compose.yml    # Configuration Docker Compose
 └── Makefile             # Commandes de build</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_composants_principaux"><a class="anchor" href="#_composants_principaux"></a>Composants principaux</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_application_symfony"><a class="anchor" href="#_application_symfony"></a>Application Symfony</h3>
-<div class="paragraph">
-<p>L&#8217;application est basée sur Symfony 1.5 avec deux applications :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>frontend</strong> : Interface publique</p>
-</li>
-<li>
-<p><strong>backend</strong> : Interface d&#8217;administration</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_base_de_données"><a class="anchor" href="#_base_de_données"></a>Base de données</h3>
-<div class="paragraph">
-<p>Schéma principal :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>tracks</strong> : Pistes audio</p>
-</li>
-<li>
-<p><strong>users</strong> : Utilisateurs</p>
-</li>
-<li>
-<p><strong>playlists</strong> : Playlists quotidiennes</p>
-</li>
-<li>
-<p><strong>comments</strong> : Commentaires</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_système_de_thèmes"><a class="anchor" href="#_système_de_thèmes"></a>Système de thèmes</h3>
-<div class="paragraph">
-<p>Le site supporte plusieurs thèmes visuels configurables par l&#8217;utilisateur.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_flux_de_données"><a class="anchor" href="#_flux_de_données"></a>Flux de données</h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">Utilisateur → Nginx → PHP-FPM → Symfony → Doctrine → MySQL
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_composants_principaux">
+                <a class="anchor" href="#_composants_principaux"></a>Composants
+                principaux
+              </h2>
+              <div class="sectionbody">
+                <div class="sect2">
+                  <h3 id="_application_symfony">
+                    <a class="anchor" href="#_application_symfony"></a
+                    >Application Symfony
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      L&#8217;application est basée sur Symfony 1.5 avec deux
+                      applications :
+                    </p>
+                  </div>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p><strong>frontend</strong> : Interface publique</p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>backend</strong> : Interface
+                          d&#8217;administration
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_base_de_données">
+                    <a class="anchor" href="#_base_de_données"></a>Base de
+                    données
+                  </h3>
+                  <div class="paragraph">
+                    <p>Schéma principal :</p>
+                  </div>
+                  <div class="ulist">
+                    <ul>
+                      <li>
+                        <p><strong>tracks</strong> : Pistes audio</p>
+                      </li>
+                      <li>
+                        <p><strong>users</strong> : Utilisateurs</p>
+                      </li>
+                      <li>
+                        <p>
+                          <strong>playlists</strong> : Playlists quotidiennes
+                        </p>
+                      </li>
+                      <li>
+                        <p><strong>comments</strong> : Commentaires</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sect2">
+                  <h3 id="_système_de_thèmes">
+                    <a class="anchor" href="#_système_de_thèmes"></a>Système de
+                    thèmes
+                  </h3>
+                  <div class="paragraph">
+                    <p>
+                      Le site supporte plusieurs thèmes visuels configurables
+                      par l&#8217;utilisateur.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_flux_de_données">
+                <a class="anchor" href="#_flux_de_données"></a>Flux de données
+              </h2>
+              <div class="sectionbody">
+                <div class="listingblock">
+                  <div class="content">
+                    <pre
+                      class="highlightjs highlight"
+                    ><code class="language-none hljs">Utilisateur → Nginx → PHP-FPM → Symfony → Doctrine → MySQL
                                     ↓
                               Fichiers statiques</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_sécurité"><a class="anchor" href="#_sécurité"></a>Sécurité</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Authentification utilisateur via Symfony Guard</p>
-</li>
-<li>
-<p>Protection CSRF sur les formulaires</p>
-</li>
-<li>
-<p>Validation des entrées utilisateur</p>
-</li>
-<li>
-<p>Échappement des sorties</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_performance"><a class="anchor" href="#_performance"></a>Performance</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Cache Symfony pour les templates et la configuration</p>
-</li>
-<li>
-<p>Cache HTTP via Nginx</p>
-</li>
-<li>
-<p>Optimisation des requêtes avec Doctrine</p>
-</li>
-<li>
-<p>Compression gzip des assets</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_déploiement"><a class="anchor" href="#_déploiement"></a>Déploiement</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Voir <a href="deploiement.html" class="xref page">Guide de déploiement</a> pour plus de détails.</p>
-</div>
-</div>
-</div>
-</article>
-  </div>
-</main>
-</div>
-<footer class="footer">
-  <p>This page was built using the Antora default UI.</p>
-  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
-</footer>
-<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
-<script async src="../_/js/vendor/highlight.js"></script>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_sécurité">
+                <a class="anchor" href="#_sécurité"></a>Sécurité
+              </h2>
+              <div class="sectionbody">
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>Authentification utilisateur via Symfony Guard</p>
+                    </li>
+                    <li>
+                      <p>Protection CSRF sur les formulaires</p>
+                    </li>
+                    <li>
+                      <p>Validation des entrées utilisateur</p>
+                    </li>
+                    <li>
+                      <p>Échappement des sorties</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_performance">
+                <a class="anchor" href="#_performance"></a>Performance
+              </h2>
+              <div class="sectionbody">
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>
+                        Cache Symfony pour les templates et la configuration
+                      </p>
+                    </li>
+                    <li>
+                      <p>Cache HTTP via Nginx</p>
+                    </li>
+                    <li>
+                      <p>Optimisation des requêtes avec Doctrine</p>
+                    </li>
+                    <li>
+                      <p>Compression gzip des assets</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_déploiement">
+                <a class="anchor" href="#_déploiement"></a>Déploiement
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    Voir
+                    <a href="deploiement.html" class="xref page"
+                      >Guide de déploiement</a
+                    >
+                    pour plus de détails.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+    <footer class="footer">
+      <p>This page was built using the Antora default UI.</p>
+      <p>
+        The source code for this UI is licensed under the terms of the MPL-2.0
+        license.
+      </p>
+    </footer>
+    <script
+      id="site-script"
+      src="../_/js/site.js"
+      data-ui-root-path="../_"
+    ></script>
+    <script async src="../_/js/vendor/highlight.js"></script>
   </body>
 </html>

@@ -1,237 +1,367 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Musique Approximative - Documentation :: Musique Approximative</title>
-    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/index.html">
-    <meta name="generator" content="Antora 3.1.14">
-    <link rel="stylesheet" href="../_/css/site.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      Musique Approximative - Documentation :: Musique Approximative
+    </title>
+    <link
+      rel="canonical"
+      href="https://constructions-incongrues.github.io/musiqueapproximative/main/index.html"
+    />
+    <meta name="generator" content="Antora 3.1.14" />
+    <link rel="stylesheet" href="../_/css/site.css" />
   </head>
   <body class="article">
-<header class="header">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
-      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <div id="topbar-nav" class="navbar-menu">
-      <div class="navbar-end">
-        <a class="navbar-item" href="#">Home</a>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Products</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Product A</a>
-            <a class="navbar-item" href="#">Product B</a>
-            <a class="navbar-item" href="#">Product C</a>
+    <header class="header">
+      <nav class="navbar">
+        <div class="navbar-brand">
+          <a
+            class="navbar-item"
+            href="https://constructions-incongrues.github.io/musiqueapproximative"
+            >Musique Approximative</a
+          >
+          <button
+            class="navbar-burger"
+            aria-controls="topbar-nav"
+            aria-expanded="false"
+            aria-label="Toggle main menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div id="topbar-nav" class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item" href="#">Home</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Products</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Product A</a>
+                <a class="navbar-item" href="#">Product B</a>
+                <a class="navbar-item" href="#">Product C</a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link" href="#">Services</a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="#">Service A</a>
+                <a class="navbar-item" href="#">Service B</a>
+                <a class="navbar-item" href="#">Service C</a>
+              </div>
+            </div>
+            <div class="navbar-item">
+              <span class="control">
+                <a class="button is-primary" href="#">Download</a>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" href="#">Services</a>
-          <div class="navbar-dropdown">
-            <a class="navbar-item" href="#">Service A</a>
-            <a class="navbar-item" href="#">Service B</a>
-            <a class="navbar-item" href="#">Service C</a>
+      </nav>
+    </header>
+    <div class="body">
+      <div class="nav-container" data-component="ROOT" data-version="main">
+        <aside class="nav">
+          <div class="panels">
+            <div class="nav-panel-menu is-active" data-panel="menu">
+              <nav class="nav-menu">
+                <button
+                  class="nav-menu-toggle"
+                  aria-label="Toggle expand/collapse all"
+                  style="display: none"
+                ></button>
+                <h3 class="title">
+                  <a href="index.html">Musique Approximative</a>
+                </h3>
+                <ul class="nav-list">
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Documentation</span>
+                    <ul class="nav-list">
+                      <li class="nav-item is-current-page" data-depth="1">
+                        <a class="nav-link" href="index.html">Accueil</a>
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="guide-demarrage.html"
+                          >Guide de démarrage</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="contribution.html"
+                          >Contribution</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Technique</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="architecture.html"
+                          >Architecture</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="desastres.html"
+                          >Les Désastres</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="docker.html"
+                          >Docker &amp; GHCR</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="deploiement.html"
+                          >Déploiement</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">Développement</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a
+                          class="nav-link"
+                          href="developpement/environnement.html"
+                          >Environnement de développement</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="developpement/commandes.html"
+                          >Commandes utiles</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="developpement/tests.html"
+                          >Tests</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item" data-depth="0">
+                    <button class="nav-item-toggle"></button>
+                    <span class="nav-text">CI/CD</span>
+                    <ul class="nav-list">
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/github-actions.html"
+                          >GitHub Actions</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/release-please.html"
+                          >Release Please</a
+                        >
+                      </li>
+                      <li class="nav-item" data-depth="1">
+                        <a class="nav-link" href="cicd/dependabot.html"
+                          >Dependabot</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="nav-panel-explore" data-panel="explore">
+              <div class="context">
+                <span class="title">Musique Approximative</span>
+                <span class="version">main</span>
+              </div>
+              <ul class="components">
+                <li class="component is-current">
+                  <div class="title">
+                    <a href="index.html">Musique Approximative</a>
+                  </div>
+                  <ul class="versions">
+                    <li class="version is-current is-latest">
+                      <a href="index.html">main</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="navbar-item">
-          <span class="control">
-            <a class="button is-primary" href="#">Download</a>
-          </span>
-        </div>
+        </aside>
       </div>
+      <main class="article">
+        <div class="toolbar" role="navigation">
+          <button class="nav-toggle"></button>
+          <a href="index.html" class="home-link is-current"></a>
+          <nav class="breadcrumbs" aria-label="breadcrumbs">
+            <ul>
+              <li><a href="index.html">Musique Approximative</a></li>
+              <li>Documentation</li>
+              <li><a href="index.html">Accueil</a></li>
+            </ul>
+          </nav>
+          <div class="edit-this-page">
+            <a
+              href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/index.adoc"
+              >Edit this Page</a
+            >
+          </div>
+        </div>
+        <div class="content">
+          <aside class="toc sidebar" data-title="Contents" data-levels="2">
+            <div class="toc-menu"></div>
+          </aside>
+          <article class="doc">
+            <h1 class="page">Musique Approximative - Documentation</h1>
+            <div id="preamble">
+              <div class="sectionbody">
+                <div class="paragraph lead">
+                  <p>
+                    Bienvenue dans la documentation du projet Musique
+                    Approximative.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_quest_ce_que_musique_approximative">
+                <a
+                  class="anchor"
+                  href="#_quest_ce_que_musique_approximative"
+                ></a
+                >Qu&#8217;est-ce que Musique Approximative ?
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    C&#8217;est l&#8217;exutoire anarchique d&#8217;une bande de
+                    mélomanes fêlé⋅e⋅s. C&#8217;est une playlist infernale
+                    alimentée chaque jour par les obsessions et les découvertes
+                    de chacun⋅e. C&#8217;est [Musique Approximative](<a
+                      href="https://www.musiqueapproximative.net"
+                      class="bare"
+                      >https://www.musiqueapproximative.net</a
+                    >).
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_navigation_rapide">
+                <a class="anchor" href="#_navigation_rapide"></a>Navigation
+                rapide
+              </h2>
+              <div class="sectionbody">
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>
+                        <a href="guide-demarrage.html" class="xref page"
+                          >Guide de démarrage rapide</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a href="contribution.html" class="xref page"
+                          >Guide de contribution</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a href="architecture.html" class="xref page"
+                          >Architecture du projet</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a href="deploiement.html" class="xref page"
+                          >Déploiement</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a href="docker.html" class="xref page"
+                          >Utilisation de Docker</a
+                        >
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_liens_utiles">
+                <a class="anchor" href="#_liens_utiles"></a>Liens utiles
+              </h2>
+              <div class="sectionbody">
+                <div class="ulist">
+                  <ul>
+                    <li>
+                      <p>
+                        <a href="https://www.musiqueapproximative.net"
+                          >Site web</a
+                        >
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <a
+                          href="https://github.com/constructions-incongrues/musiqueapproximative"
+                          >Dépôt GitHub</a
+                        >
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="sect1">
+              <h2 id="_statut_du_projet">
+                <a class="anchor" href="#_statut_du_projet"></a>Statut du projet
+              </h2>
+              <div class="sectionbody">
+                <div class="paragraph">
+                  <p>
+                    <span class="image"
+                      ><a
+                        class="image"
+                        href="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml"
+                        ><img
+                          src="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg"
+                          alt="CI Status" /></a
+                    ></span>
+                    <span class="image"
+                      ><a
+                        class="image"
+                        href="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml"
+                        ><img
+                          src="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg"
+                          alt="Release Please" /></a
+                    ></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
     </div>
-  </nav>
-</header>
-<div class="body">
-<div class="nav-container" data-component="ROOT" data-version="main">
-  <aside class="nav">
-    <div class="panels">
-<div class="nav-panel-menu is-active" data-panel="menu">
-  <nav class="nav-menu">
-    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
-    <h3 class="title"><a href="index.html">Musique Approximative</a></h3>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Documentation</span>
-<ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="index.html">Accueil</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="guide-demarrage.html">Guide de démarrage</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="contribution.html">Contribution</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Technique</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="architecture.html">Architecture</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="desastres.html">Les Désastres</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="docker.html">Docker &amp; GHCR</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="deploiement.html">Déploiement</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Développement</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/environnement.html">Environnement de développement</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/commandes.html">Commandes utiles</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="developpement/tests.html">Tests</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">CI/CD</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/github-actions.html">GitHub Actions</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/release-please.html">Release Please</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cicd/dependabot.html">Dependabot</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </nav>
-</div>
-<div class="nav-panel-explore" data-panel="explore">
-  <div class="context">
-    <span class="title">Musique Approximative</span>
-    <span class="version">main</span>
-  </div>
-  <ul class="components">
-    <li class="component is-current">
-      <div class="title"><a href="index.html">Musique Approximative</a></div>
-      <ul class="versions">
-        <li class="version is-current is-latest">
-          <a href="index.html">main</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
-    </div>
-  </aside>
-</div>
-<main class="article">
-<div class="toolbar" role="navigation">
-<button class="nav-toggle"></button>
-  <a href="index.html" class="home-link is-current"></a>
-<nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Musique Approximative</a></li>
-    <li>Documentation</li>
-    <li><a href="index.html">Accueil</a></li>
-  </ul>
-</nav>
-<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
-</div>
-  <div class="content">
-<aside class="toc sidebar" data-title="Contents" data-levels="2">
-  <div class="toc-menu"></div>
-</aside>
-<article class="doc">
-<h1 class="page">Musique Approximative - Documentation</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph lead">
-<p>Bienvenue dans la documentation du projet Musique Approximative.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_quest_ce_que_musique_approximative"><a class="anchor" href="#_quest_ce_que_musique_approximative"></a>Qu&#8217;est-ce que Musique Approximative ?</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>C&#8217;est l&#8217;exutoire anarchique d&#8217;une bande de mélomanes fêlé⋅e⋅s. C&#8217;est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. C&#8217;est [Musique Approximative](<a href="https://www.musiqueapproximative.net" class="bare">https://www.musiqueapproximative.net</a>).</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_navigation_rapide"><a class="anchor" href="#_navigation_rapide"></a>Navigation rapide</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="guide-demarrage.html" class="xref page">Guide de démarrage rapide</a></p>
-</li>
-<li>
-<p><a href="contribution.html" class="xref page">Guide de contribution</a></p>
-</li>
-<li>
-<p><a href="architecture.html" class="xref page">Architecture du projet</a></p>
-</li>
-<li>
-<p><a href="deploiement.html" class="xref page">Déploiement</a></p>
-</li>
-<li>
-<p><a href="docker.html" class="xref page">Utilisation de Docker</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_liens_utiles"><a class="anchor" href="#_liens_utiles"></a>Liens utiles</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://www.musiqueapproximative.net">Site web</a></p>
-</li>
-<li>
-<p><a href="https://github.com/constructions-incongrues/musiqueapproximative">Dépôt GitHub</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_statut_du_projet"><a class="anchor" href="#_statut_du_projet"></a>Statut du projet</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><span class="image"><a class="image" href="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml"><img src="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a></span>
-<span class="image"><a class="image" href="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml"><img src="https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg" alt="Release Please"></a></span></p>
-</div>
-</div>
-</div>
-</article>
-  </div>
-</main>
-</div>
-<footer class="footer">
-  <p>This page was built using the Antora default UI.</p>
-  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
-</footer>
-<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
-<script async src="../_/js/vendor/highlight.js"></script>
+    <footer class="footer">
+      <p>This page was built using the Antora default UI.</p>
+      <p>
+        The source code for this UI is licensed under the terms of the MPL-2.0
+        license.
+      </p>
+    </footer>
+    <script
+      id="site-script"
+      src="../_/js/site.js"
+      data-ui-root-path="../_"
+    ></script>
+    <script async src="../_/js/vendor/highlight.js"></script>
   </body>
 </html>

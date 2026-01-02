@@ -3,22 +3,22 @@
 echo "🚀 Démarrage de l'environnement de développement Musique Approximative..."
 
 # Vérifier que Docker est en cours d'exécution
-if ! docker info > /dev/null 2>&1; then
-    echo "❌ Docker n'est pas en cours d'exécution. Veuillez démarrer Docker Desktop."
-    exit 1
+if ! docker info >/dev/null 2>&1; then
+	echo "❌ Docker n'est pas en cours d'exécution. Veuillez démarrer Docker Desktop."
+	exit 1
 fi
 
 # Vérifier que le fichier .env existe
 if [ ! -f "etc/musiqueapproximative.localhost/.env" ]; then
-    echo "📝 Création du fichier de configuration .env..."
-    mkdir -p etc/musiqueapproximative.localhost
-    cat > etc/musiqueapproximative.localhost/.env << EOF
+	echo "📝 Création du fichier de configuration .env..."
+	mkdir -p etc/musiqueapproximative.localhost
+	cat >etc/musiqueapproximative.localhost/.env <<EOF
 DATABASE_HOST=db
 DATABASE_NAME=musiqueapproximative
 DATABASE_USER=root
 DATABASE_PASSWORD=root
 EOF
-    echo "✅ Fichier .env créé avec succès"
+	echo "✅ Fichier .env créé avec succès"
 fi
 
 # Démarrer les services
