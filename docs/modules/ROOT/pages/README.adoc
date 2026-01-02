@@ -82,7 +82,7 @@ La documentation utilise https://asciidoc.org/[AsciiDoc], un format de markup pl
 === Syntaxe de base
 
 [source,asciidoc]
-----
+-----
 = Titre de la page
 :description: Description de la page
 
@@ -95,6 +95,7 @@ Paragraphe de texte.
 [source,bash]
 ----
 # Bloc de code
+
 echo "Hello"
 ----
 
@@ -113,7 +114,7 @@ echo "Hello"
 xref:autre-page.adoc[Lien vers une autre page]
 
 https://example.com[Lien externe]
-----
+-----
 
 === Ajouter une page
 
