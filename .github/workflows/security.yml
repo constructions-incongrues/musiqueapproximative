@@ -2,11 +2,11 @@ name: Security Scan
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   schedule:
-    - cron: '0 0 * * 1' # Run weekly on Monday
+    - cron: "0 0 * * 1" # Run weekly on Monday
 
 permissions:
   contents: read
@@ -25,16 +25,16 @@ jobs:
       - name: Run Trivy vulnerability scanner (FS)
         uses: aquasecurity/trivy-action@0.33.1
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL'
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: trivy-results.sarif
 
       - name: Build Docker image for scanning
         run: docker build -t musiqueapproximative:scan .
@@ -42,25 +42,25 @@ jobs:
       - name: Run Trivy vulnerability scanner (Image)
         uses: aquasecurity/trivy-action@0.33.1
         with:
-          image-ref: 'musiqueapproximative:scan'
-          format: 'table'
-          exit-code: '0' # Fail on critical
-          severity: 'CRITICAL'
+          image-ref: musiqueapproximative:scan
+          format: table
+          exit-code: 1 # Fail on critical
+          severity: CRITICAL
           ignore-unfixed: true
 
       - name: Run Trivy vulnerability scanner (Image)
         uses: aquasecurity/trivy-action@0.33.1
         with:
-          image-ref: 'musiqueapproximative:scan'
-          format: 'table'
-          exit-code: '1' # Fail on critical
-          severity: 'HIGH'
+          image-ref: musiqueapproximative:scan
+          format: table
+          exit-code: 0 # Fail on critical
+          severity: HIGH
           ignore-unfixed: true
 
       - name: Run Trivy vulnerability scanner (Config)
         uses: aquasecurity/trivy-action@0.33.1
         with:
-          scan-type: 'config'
+          scan-type: config
           hide-progress: false
-          format: 'table'
-          severity: 'CRITICAL, HIGH'
+          format: table
+          severity: CRITICAL, HIGH
