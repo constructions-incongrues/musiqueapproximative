@@ -5,9 +5,10 @@ Bienvenue dans la documentation du projet Musique Approximative.
 
 == Qu'est-ce que Musique Approximative ?
 
-C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. 
-
-C'est "Musique Approximative":https://www.musiqueapproximative.net.
+[quote]
+____
+C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
+____
 
 == Navigation rapide
 
@@ -16,13 +17,16 @@ C'est "Musique Approximative":https://www.musiqueapproximative.net.
 * xref:architecture.adoc[Architecture du projet]
 * xref:deploiement.adoc[Déploiement]
 * xref:docker.adoc[Utilisation de Docker]
+* https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
+* https://github.com/constructions-incongrues/musiqueapproximative/releases[Changelog]
 
 == Liens utiles
 
-* "Musique Approximative":https://www.musiqueapproximative.net
-* "Dépôt GitHub":https://github.com/constructions-incongrues/musiqueapproximative
+* https://www.musiqueapproximative.net[Musique Approximative]
+* https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
 
 == Statut du projet
 
 image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg[CI Status,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml]
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/super-linter.yml/badge.svg[Lint Status,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/super-linter.yml]
 image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg[Release Please,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml]
