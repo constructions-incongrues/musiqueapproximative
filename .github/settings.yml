@@ -7,12 +7,14 @@ repository:
   description: "Site web de Musique Approximative - Playlist quotidienne anarchique de mélomanes fêlé⋅e⋅s"
   homepage: https://www.musiqueapproximative.net
   topics:
+    - agenda
+    - art
+    - glitch
     - musique
-    - playlist
-    - symfony
     - php
-    - docker
-    - art-glitch
+    - playlist
+    - radio
+    - symfony
 
   private: false
   has_issues: true
@@ -95,23 +97,3 @@ labels:
   - name: "dependencies"
     color: "0366d6"
     description: "Mise à jour de dépendances"
-
-# Protection des branches
-branches:
-  - name: main
-    protection:
-      required_pull_request_reviews:
-        required_approving_review_count: 1
-        dismiss_stale_reviews: true
-        require_code_owner_reviews: false
-
-      required_status_checks:
-        strict: true
-        contexts:
-          - "Validation du code"
-          - "Build Docker"
-
-      enforce_admins: false
-      required_linear_history: true
-      allow_force_pushes: false
-      allow_deletions: false
