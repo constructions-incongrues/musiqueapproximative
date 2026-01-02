@@ -1,32 +1,33 @@
-= Musique Approximative - Documentation
+= Documentation
+
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/security.yml/badge.svg[Security Scan,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/security.yml]
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg[CI Status,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml]
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/lint.yml/badge.svg[Lint,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/lint.yml]
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg[Release Please,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml]
+
 
 [.lead]
-Bienvenue dans la documentation du projet Musique Approximative.
-
-== Qu'est-ce que Musique Approximative ?
+Qu'est-ce que https://www.musiqueapproximative.net[Musique Approximative] ?
 
 [quote]
 ____
 C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
 ____
 
-== Navigation rapide
+---
 
+== Comment participer ?
+* xref:inscription.adoc[En intégrant le conventicule des mélomanes fêlé⋅e⋅s]
+* xref:desastres.adoc[En concevant un Désastre]
+* xref:contribution.adoc[En contribuant au développement logiciel]
+
+== Documentation technique
 * xref:guide-demarrage.adoc[Guide de démarrage rapide]
-* xref:contribution.adoc[Guide de contribution]
 * xref:architecture.adoc[Architecture du projet]
 * xref:deploiement.adoc[Déploiement]
 * xref:docker.adoc[Utilisation de Docker]
-* https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
-* https://github.com/constructions-incongrues/musiqueapproximative/releases[Changelog]
-
-== Liens utiles
-
-* https://www.musiqueapproximative.net[Musique Approximative]
-* https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
 
 == Statut du projet
+* https://github.com/constructions-incongrues/musiqueapproximative/releases[Journal des versions]
 
-image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg[CI Status,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml]
-image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/lint.yml/badge.svg[Lint,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/lint.yml]
-image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg[Release Please,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml]
+* https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
