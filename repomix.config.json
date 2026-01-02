@@ -1,0 +1,35 @@
+{
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml",
+    "headerText": "Musique Approximative - Repository Pack",
+    "instructionFilePath": "",
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "topFilesLength": 10,
+    "showLineNumbers": true
+  },
+  "include": [
+    "**/*"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "**/node_modules/**",
+      "**/vendor/**",
+      "**/cache/**",
+      "**/log/**",
+      "**/*.log",
+      "**/repomix-output.*",
+      "**/.git/**",
+      "**/var/**",
+      "**/src/web/tracks/**",
+      "**/src/web/avatars/*.png",
+      "**/src/web/avatars/*.mp4"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}
