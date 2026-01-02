@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Release Please :: Musique Approximative</title>
+    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/cicd/release-please.html">
+    <meta name="description" content="Gestion automatisée des releases avec Release Please">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Musique Approximative</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Accueil</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../guide-demarrage.html">Guide de démarrage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../contribution.html">Contribution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Technique</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../architecture.html">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../desastres.html">Les Désastres</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../docker.html">Docker &amp; GHCR</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../deploiement.html">Déploiement</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Développement</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/environnement.html">Environnement de développement</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/commandes.html">Commandes utiles</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/tests.html">Tests</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">CI/CD</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="github-actions.html">GitHub Actions</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="release-please.html">Release Please</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="dependabot.html">Dependabot</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Musique Approximative</span>
+    <span class="version">main</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../index.html">Musique Approximative</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">main</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Musique Approximative</a></li>
+    <li>CI/CD</li>
+    <li><a href="release-please.html">Release Please</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/cicd/release-please.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Release Please</h1>
+<div class="sect1">
+<h2 id="_quest_ce_que_release_please"><a class="anchor" href="#_quest_ce_que_release_please"></a>Qu&#8217;est-ce que Release Please ?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/googleapis/release-please">Release Please</a> est un outil qui automatise la gestion des versions et des changelogs en se basant sur les Conventional Commits.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fonctionnement"><a class="anchor" href="#_fonctionnement"></a>Fonctionnement</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_commits_conventionnels"><a class="anchor" href="#_1_commits_conventionnels"></a>1. Commits conventionnels</h3>
+<div class="paragraph">
+<p>Chaque commit doit suivre le format Conventional Commits :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">&lt;type&gt;(&lt;scope&gt;): &lt;description&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Types reconnus :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>feat</code> : Nouvelle fonctionnalité (MINOR)</p>
+</li>
+<li>
+<p><code>fix</code> : Correction de bug (PATCH)</p>
+</li>
+<li>
+<p><code>feat!</code> ou <code>BREAKING CHANGE</code> : Breaking change (MAJOR)</p>
+</li>
+<li>
+<p><code>docs</code>, <code>style</code>, <code>refactor</code>, <code>perf</code>, <code>test</code>, <code>chore</code> : Pas de bump de version</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_création_automatique_de_pr"><a class="anchor" href="#_2_création_automatique_de_pr"></a>2. Création automatique de PR</h3>
+<div class="paragraph">
+<p>Quand des commits sont poussés sur <code>main</code>, Release Please :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Analyse les commits depuis la dernière release</p>
+</li>
+<li>
+<p>Détermine le nouveau numéro de version (Semantic Versioning)</p>
+</li>
+<li>
+<p>Génère le CHANGELOG</p>
+</li>
+<li>
+<p>Crée ou met à jour une PR de release</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_publication_de_la_release"><a class="anchor" href="#_3_publication_de_la_release"></a>3. Publication de la release</h3>
+<div class="paragraph">
+<p>Quand la PR de release est mergée :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Un tag Git est créé</p>
+</li>
+<li>
+<p>Une release GitHub est publiée</p>
+</li>
+<li>
+<p>Le CHANGELOG est mis à jour dans le dépôt</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_workflow_github_actions"><a class="anchor" href="#_workflow_github_actions"></a>Workflow GitHub Actions</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.github/workflows/release-please.yml</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_release_please"><a class="anchor" href="#_configuration_release_please"></a>Configuration Release Please</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.release-please-config.json</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "constructions-incongrues/musiqueapproximative",
+      "changelog-sections": [
+        {"type": "feat", "section": "Fonctionnalités", "hidden": false},
+        {"type": "fix", "section": "Corrections de bugs", "hidden": false},
+        {"type": "docs", "section": "Documentation", "hidden": false},
+        {"type": "style", "section": "Styles", "hidden": false},
+        {"type": "refactor", "section": "Refactoring", "hidden": false},
+        {"type": "perf", "section": "Performance", "hidden": false},
+        {"type": "test", "section": "Tests", "hidden": false},
+        {"type": "chore", "section": "Maintenance", "hidden": false}
+      ]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manifest_de_version"><a class="anchor" href="#_manifest_de_version"></a>Manifest de version</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.release-please-manifest.json</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  ".": "0.8.0"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ce fichier est automatiquement mis à jour par Release Please.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_utilisation"><a class="anchor" href="#_utilisation"></a>Utilisation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_workflow_standard"><a class="anchor" href="#_workflow_standard"></a>Workflow standard</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Développer</strong> : Créer une branche et développer</p>
+</li>
+<li>
+<p><strong>Commiter</strong> : Utiliser Conventional Commits</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git commit -m "feat: ajout du support des thèmes sombres"</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Merger</strong> : Créer une PR et la merger dans <code>main</code></p>
+</li>
+<li>
+<p><strong>Attendre</strong> : Release Please crée automatiquement une PR de release</p>
+</li>
+<li>
+<p><strong>Publier</strong> : Merger la PR de release pour publier</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exemple_de_pr_de_release"><a class="anchor" href="#_exemple_de_pr_de_release"></a>Exemple de PR de release</h3>
+<div class="paragraph">
+<p>Release Please crée une PR avec :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Titre</strong> : <code>chore(main): release 1.2.0</code></p>
+</li>
+<li>
+<p><strong>Description</strong> : Changelog complet</p>
+</li>
+<li>
+<p><strong>Fichiers modifiés</strong> :</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CHANGELOG.md</code> : Mis à jour</p>
+</li>
+<li>
+<p><code>.release-please-manifest.json</code> : Nouvelle version</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_breaking_changes"><a class="anchor" href="#_breaking_changes"></a>Breaking changes</h3>
+<div class="paragraph">
+<p>Pour indiquer un breaking change :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Option 1 : Utiliser !
+git commit -m "feat!: migration vers PHP 8.0"
+
+# Option 2 : Utiliser BREAKING CHANGE dans le footer
+git commit -m "feat: migration vers PHP 8.0
+
+BREAKING CHANGE: PHP 7.4 n'est plus supporté"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cela créera une release MAJOR (ex: 1.0.0 → 2.0.0).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sections_du_changelog"><a class="anchor" href="#_sections_du_changelog"></a>Sections du CHANGELOG</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les sections sont personnalisées en français :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Section dans le CHANGELOG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>feat</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fonctionnalités</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Corrections de bugs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>docs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Documentation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>style</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Styles</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refactor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Refactoring</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>perf</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Performance</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>test</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>chore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maintenance</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_versioning_sémantique"><a class="anchor" href="#_versioning_sémantique"></a>Versioning sémantique</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Le projet suit <a href="https://semver.org/">Semantic Versioning</a> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>MAJOR</strong> (X.0.0) : Breaking changes</p>
+</li>
+<li>
+<p><strong>MINOR</strong> (0.X.0) : Nouvelles fonctionnalités</p>
+</li>
+<li>
+<p><strong>PATCH</strong> (0.0.X) : Corrections de bugs</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Exemples</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 16.6666%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Commit</th>
+<th class="tableblock halign-left valign-top">Bump</th>
+<th class="tableblock halign-left valign-top">Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fix: correction du lecteur</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PATCH</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.0.0 → 1.0.1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>feat: ajout des playlists</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MINOR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.0.0 → 1.1.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>feat!: migration PHP 8</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MAJOR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.0.0 → 2.0.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting"><a class="anchor" href="#_troubleshooting"></a>Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_la_pr_de_release_nest_pas_créée"><a class="anchor" href="#_la_pr_de_release_nest_pas_créée"></a>La PR de release n&#8217;est pas créée</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Vérifier que les commits utilisent Conventional Commits</p>
+</li>
+<li>
+<p>Vérifier que le workflow a les bonnes permissions</p>
+</li>
+<li>
+<p>Consulter les logs du workflow</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version_incorrecte"><a class="anchor" href="#_version_incorrecte"></a>Version incorrecte</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Vérifier <code>.release-please-manifest.json</code></p>
+</li>
+<li>
+<p>Vérifier les types de commits</p>
+</li>
+<li>
+<p>Vérifier s&#8217;il y a des breaking changes</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_changelog_non_généré"><a class="anchor" href="#_changelog_non_généré"></a>CHANGELOG non généré</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Vérifier <code>.release-please-config.json</code></p>
+</li>
+<li>
+<p>Vérifier que les sections sont bien configurées</p>
+</li>
+<li>
+<p>Relancer le workflow manuellement</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ressources"><a class="anchor" href="#_ressources"></a>Ressources</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/googleapis/release-please">Documentation officielle</a></p>
+</li>
+<li>
+<p><a href="https://www.conventionalcommits.org/">Conventional Commits</a></p>
+</li>
+<li>
+<p><a href="https://semver.org/">Semantic Versioning</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

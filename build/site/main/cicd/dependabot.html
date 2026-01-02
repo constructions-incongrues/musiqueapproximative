@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Dependabot :: Musique Approximative</title>
+    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/cicd/dependabot.html">
+    <meta name="description" content="Gestion automatisée des dépendances avec Dependabot">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Musique Approximative</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Accueil</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../guide-demarrage.html">Guide de démarrage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../contribution.html">Contribution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Technique</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../architecture.html">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../desastres.html">Les Désastres</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../docker.html">Docker &amp; GHCR</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../deploiement.html">Déploiement</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Développement</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/environnement.html">Environnement de développement</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/commandes.html">Commandes utiles</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/tests.html">Tests</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">CI/CD</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="github-actions.html">GitHub Actions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="release-please.html">Release Please</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="dependabot.html">Dependabot</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Musique Approximative</span>
+    <span class="version">main</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../index.html">Musique Approximative</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">main</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Musique Approximative</a></li>
+    <li>CI/CD</li>
+    <li><a href="dependabot.html">Dependabot</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/cicd/dependabot.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Dependabot</h1>
+<div class="sect1">
+<h2 id="_quest_ce_que_dependabot"><a class="anchor" href="#_quest_ce_que_dependabot"></a>Qu&#8217;est-ce que Dependabot ?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dependabot est un outil GitHub qui surveille automatiquement les dépendances de votre projet et crée des pull requests pour les mettre à jour.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.github/dependabot.yml</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: 2
+updates:
+  # Dépendances Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_écosystèmes_surveillés"><a class="anchor" href="#_écosystèmes_surveillés"></a>Écosystèmes surveillés</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_docker"><a class="anchor" href="#_docker"></a>Docker</h3>
+<div class="paragraph">
+<p>Dependabot surveille :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Dockerfile</code> : Images de base</p>
+</li>
+<li>
+<p><code>docker-compose.yml</code> : Services et images</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Exemple de PR</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Titre: Bump php from 7.4 to 8.0
+Labels: dependencies, docker</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_github_actions"><a class="anchor" href="#_github_actions"></a>GitHub Actions</h3>
+<div class="paragraph">
+<p>Dependabot surveille :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>.github/workflows/*.yml</code> : Actions utilisées</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Exemple de PR</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Titre: Bump actions/checkout from 3 to 4
+Labels: dependencies, github-actions</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fréquence_des_mises_à_jour"><a class="anchor" href="#_fréquence_des_mises_à_jour"></a>Fréquence des mises à jour</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Écosystème</th>
+<th class="tableblock halign-left valign-top">Fréquence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Docker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hebdomadaire (lundi)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GitHub Actions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hebdomadaire (lundi)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_labels_automatiques"><a class="anchor" href="#_labels_automatiques"></a>Labels automatiques</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les PRs Dependabot sont automatiquement étiquetées :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>dependencies</code> : Toutes les mises à jour de dépendances</p>
+</li>
+<li>
+<p><code>docker</code> : Mises à jour Docker</p>
+</li>
+<li>
+<p><code>github-actions</code> : Mises à jour GitHub Actions</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_workflow_de_mise_à_jour"><a class="anchor" href="#_workflow_de_mise_à_jour"></a>Workflow de mise à jour</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Détection</strong> : Dependabot détecte une nouvelle version</p>
+</li>
+<li>
+<p><strong>PR</strong> : Création automatique d&#8217;une pull request</p>
+</li>
+<li>
+<p><strong>CI</strong> : Les tests CI s&#8217;exécutent automatiquement</p>
+</li>
+<li>
+<p><strong>Review</strong> : Revue manuelle de la PR</p>
+</li>
+<li>
+<p><strong>Merge</strong> : Fusion de la PR si les tests passent</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_auto_merge"><a class="anchor" href="#_auto_merge"></a>Auto-merge</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Pour activer le merge automatique des PRs Dependabot :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Activer auto-merge pour une PR
+gh pr merge --auto --squash PR_NUMBER</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ou configurer une règle GitHub Actions :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">name: Dependabot auto-merge
+on: pull_request
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+
+      - name: Enable auto-merge for Dependabot PRs
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sécurité"><a class="anchor" href="#_sécurité"></a>Sécurité</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_alertes_de_sécurité"><a class="anchor" href="#_alertes_de_sécurité"></a>Alertes de sécurité</h3>
+<div class="paragraph">
+<p>Dependabot crée automatiquement des PRs pour les vulnérabilités de sécurité détectées.</p>
+</div>
+<div class="paragraph">
+<p>Ces PRs sont prioritaires et doivent être traitées rapidement.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_de_sécurité"><a class="anchor" href="#_configuration_de_sécurité"></a>Configuration de sécurité</h3>
+<div class="paragraph">
+<p>Dans <code>.github/settings.yml</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">repository:
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gestion_des_prs"><a class="anchor" href="#_gestion_des_prs"></a>Gestion des PRs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_approuver_et_merger"><a class="anchor" href="#_approuver_et_merger"></a>Approuver et merger</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Lister les PRs Dependabot
+gh pr list --author dependabot[bot]
+
+# Approuver une PR
+gh pr review PR_NUMBER --approve
+
+# Merger une PR
+gh pr merge PR_NUMBER --squash</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fermer_une_pr"><a class="anchor" href="#_fermer_une_pr"></a>Fermer une PR</h3>
+<div class="paragraph">
+<p>Si une mise à jour n&#8217;est pas souhaitée :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">gh pr close PR_NUMBER</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ou utiliser <code>@dependabot ignore</code> dans un commentaire.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_commandes_dependabot"><a class="anchor" href="#_commandes_dependabot"></a>Commandes Dependabot</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dans les commentaires des PRs :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@dependabot rebase</code> : Rebaser la PR</p>
+</li>
+<li>
+<p><code>@dependabot recreate</code> : Recréer la PR</p>
+</li>
+<li>
+<p><code>@dependabot merge</code> : Merger la PR</p>
+</li>
+<li>
+<p><code>@dependabot squash and merge</code> : Squash et merger</p>
+</li>
+<li>
+<p><code>@dependabot cancel merge</code> : Annuler le merge automatique</p>
+</li>
+<li>
+<p><code>@dependabot close</code> : Fermer la PR</p>
+</li>
+<li>
+<p><code>@dependabot ignore this dependency</code> : Ignorer cette dépendance</p>
+</li>
+<li>
+<p><code>@dependabot ignore this major version</code> : Ignorer cette version majeure</p>
+</li>
+<li>
+<p><code>@dependabot ignore this minor version</code> : Ignorer cette version mineure</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bonnes_pratiques"><a class="anchor" href="#_bonnes_pratiques"></a>Bonnes pratiques</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_review_des_prs"><a class="anchor" href="#_review_des_prs"></a>Review des PRs</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Vérifier le changelog</strong> : Lire les notes de version</p>
+</li>
+<li>
+<p><strong>Tester localement</strong> : Si changement majeur</p>
+</li>
+<li>
+<p><strong>Vérifier les breaking changes</strong> : Surtout pour les versions majeures</p>
+</li>
+<li>
+<p><strong>Merger rapidement</strong> : Les patches de sécurité</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grouper_les_mises_à_jour"><a class="anchor" href="#_grouper_les_mises_à_jour"></a>Grouper les mises à jour</h3>
+<div class="paragraph">
+<p>Pour éviter trop de PRs, configurer des groupes :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      docker-updates:
+        patterns:
+          - "*"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_voir_les_dépendances"><a class="anchor" href="#_voir_les_dépendances"></a>Voir les dépendances</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Aller sur <a href="https://github.com/constructions-incongrues/musiqueapproximative/network/dependencies" class="bare">https://github.com/constructions-incongrues/musiqueapproximative/network/dependencies</a></p>
+</li>
+<li>
+<p>Voir le graphe de dépendances</p>
+</li>
+<li>
+<p>Voir les alertes de sécurité</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_insights"><a class="anchor" href="#_insights"></a>Insights</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Dependency graph</strong> : Visualiser les dépendances</p>
+</li>
+<li>
+<p><strong>Dependabot alerts</strong> : Voir les vulnérabilités</p>
+</li>
+<li>
+<p><strong>Dependabot updates</strong> : Historique des mises à jour</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting"><a class="anchor" href="#_troubleshooting"></a>Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_prs_non_créées"><a class="anchor" href="#_prs_non_créées"></a>PRs non créées</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Vérifier la configuration <code>.github/dependabot.yml</code></p>
+</li>
+<li>
+<p>Vérifier que Dependabot est activé dans les settings</p>
+</li>
+<li>
+<p>Consulter les logs Dependabot</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conflits_de_merge"><a class="anchor" href="#_conflits_de_merge"></a>Conflits de merge</h3>
+<div class="paragraph">
+<p>Utiliser <code>@dependabot rebase</code> dans un commentaire pour rebaser la PR.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trop_de_prs"><a class="anchor" href="#_trop_de_prs"></a>Trop de PRs</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Ajuster la fréquence dans la configuration</p>
+</li>
+<li>
+<p>Utiliser des groupes pour regrouper les mises à jour</p>
+</li>
+<li>
+<p>Ignorer certaines dépendances</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ressources"><a class="anchor" href="#_ressources"></a>Ressources</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.github.com/en/code-security/dependabot">Documentation Dependabot</a></p>
+</li>
+<li>
+<p><a href="https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file">Options de configuration</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

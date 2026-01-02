@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GitHub Actions :: Musique Approximative</title>
+    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/cicd/github-actions.html">
+    <meta name="description" content="Configuration et utilisation de GitHub Actions pour le CI/CD">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="../index.html">Musique Approximative</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Accueil</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../guide-demarrage.html">Guide de démarrage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../contribution.html">Contribution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Technique</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../architecture.html">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../desastres.html">Les Désastres</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../docker.html">Docker &amp; GHCR</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../deploiement.html">Déploiement</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Développement</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/environnement.html">Environnement de développement</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/commandes.html">Commandes utiles</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../developpement/tests.html">Tests</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">CI/CD</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="github-actions.html">GitHub Actions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="release-please.html">Release Please</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="dependabot.html">Dependabot</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Musique Approximative</span>
+    <span class="version">main</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="../index.html">Musique Approximative</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">main</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Musique Approximative</a></li>
+    <li>CI/CD</li>
+    <li><a href="github-actions.html">GitHub Actions</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/cicd/github-actions.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">GitHub Actions</h1>
+<div class="sect1">
+<h2 id="_vue_densemble"><a class="anchor" href="#_vue_densemble"></a>Vue d&#8217;ensemble</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Le projet utilise GitHub Actions pour automatiser :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>La validation du code (CI)</p>
+</li>
+<li>
+<p>La construction des images Docker</p>
+</li>
+<li>
+<p>La publication sur GHCR</p>
+</li>
+<li>
+<p>La gestion des releases</p>
+</li>
+<li>
+<p>La génération de la documentation</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_workflows_disponibles"><a class="anchor" href="#_workflows_disponibles"></a>Workflows disponibles</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ci_continuous_integration"><a class="anchor" href="#_ci_continuous_integration"></a>CI (Continuous Integration)</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.github/workflows/ci.yml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Déclencheurs</strong> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Push sur <code>main</code> et <code>develop</code></p>
+</li>
+<li>
+<p>Pull requests</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Jobs</strong> :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>validate</strong> : Validation de la syntaxe PHP</p>
+</li>
+<li>
+<p><strong>docker-build</strong> : Construction et publication de l&#8217;image Docker</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PHP syntax
+        run: find src -name "*.php" -exec php -l {} \;
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/build-push-action@v5
+        with:
+          push: ${{ github.event_name != 'pull_request' }}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_release_please"><a class="anchor" href="#_release_please"></a>Release Please</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.github/workflows/release-please.yml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Déclencheurs</strong> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Push sur <code>main</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Fonctionnement</strong> :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Analyse les commits depuis la dernière release</p>
+</li>
+<li>
+<p>Crée une PR de release avec le CHANGELOG mis à jour</p>
+</li>
+<li>
+<p>Quand la PR est mergée, crée un tag et une release GitHub</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Voir <a href="release-please.html" class="xref page">Release Please</a> pour plus de détails.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_repomix_packing"><a class="anchor" href="#_repomix_packing"></a>Repomix Packing</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.github/workflows/repomix.yml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Déclencheurs</strong> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Quotidien à 2h du matin</p>
+</li>
+<li>
+<p>Push sur <code>main</code></p>
+</li>
+<li>
+<p>Déclenchement manuel</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Fonction</strong> : Génère un pack du repository pour l&#8217;analyse IA.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_documentation"><a class="anchor" href="#_documentation"></a>Documentation</h3>
+<div class="paragraph">
+<p><strong>Fichier</strong> : <code>.github/workflows/documentation.yml</code></p>
+</div>
+<div class="paragraph">
+<p><strong>Déclencheurs</strong> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Push sur <code>main</code> modifiant <code>docs/</code></p>
+</li>
+<li>
+<p>Déclenchement manuel</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Fonction</strong> : Génère et déploie la documentation Antora sur GitHub Pages.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_des_secrets"><a class="anchor" href="#_configuration_des_secrets"></a>Configuration des secrets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Aucun secret n&#8217;est nécessaire ! Le projet utilise :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>GITHUB_TOKEN</code> : Fourni automatiquement par GitHub Actions</p>
+</li>
+<li>
+<p>Permissions configurées dans chaque workflow</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_permissions"><a class="anchor" href="#_permissions"></a>Permissions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les workflows utilisent les permissions suivantes :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Permission</th>
+<th class="tableblock halign-left valign-top">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents: write</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Créer des releases et pousser des commits</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>packages: write</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Publier sur GHCR</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pull-requests: write</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Créer des PRs (Release Please)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pages: write</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Déployer sur GitHub Pages</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id-token: write</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentification GitHub Pages</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_artifacts"><a class="anchor" href="#_artifacts"></a>Artifacts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les workflows génèrent des artifacts :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Repomix</strong> : <code>repomix-output-{sha}</code> (30 jours)</p>
+</li>
+<li>
+<p><strong>Documentation</strong> : Déployé sur GitHub Pages</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cache"><a class="anchor" href="#_cache"></a>Cache</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Le workflow Docker utilise le cache GitHub Actions pour accélérer les builds :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- uses: docker/build-push-action@v5
+  with:
+    cache-from: type=gha
+    cache-to: type=gha,mode=max</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_voir_les_exécutions"><a class="anchor" href="#_voir_les_exécutions"></a>Voir les exécutions</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Aller sur <a href="https://github.com/constructions-incongrues/musiqueapproximative/actions" class="bare">https://github.com/constructions-incongrues/musiqueapproximative/actions</a></p>
+</li>
+<li>
+<p>Sélectionner un workflow</p>
+</li>
+<li>
+<p>Voir l&#8217;historique des exécutions</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_badges_de_statut"><a class="anchor" href="#_badges_de_statut"></a>Badges de statut</h3>
+<div class="paragraph">
+<p>Ajouter des badges dans le README :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-markdown hljs" data-lang="markdown">[![CI](https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg)](https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting"><a class="anchor" href="#_troubleshooting"></a>Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_workflow_échoue"><a class="anchor" href="#_workflow_échoue"></a>Workflow échoue</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Consulter les logs dans l&#8217;interface GitHub Actions</p>
+</li>
+<li>
+<p>Vérifier les permissions du workflow</p>
+</li>
+<li>
+<p>Vérifier la syntaxe YAML</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cache_non_utilisé"><a class="anchor" href="#_cache_non_utilisé"></a>Cache non utilisé</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Le cache expire après 7 jours d&#8217;inactivité</p>
+</li>
+<li>
+<p>Le cache est partagé entre branches</p>
+</li>
+<li>
+<p>Vérifier que les builds précédents ont réussi</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_permissions_insuffisantes"><a class="anchor" href="#_permissions_insuffisantes"></a>Permissions insuffisantes</h3>
+<div class="paragraph">
+<p>Vérifier que les permissions sont bien configurées dans le workflow :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">permissions:
+  contents: write
+  packages: write</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -3,3 +3,7 @@
 
 # Antora cache
 /.cache/
+
+# Sitemap
+sitemap.xml
+    

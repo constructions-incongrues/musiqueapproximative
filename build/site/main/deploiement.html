@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Déploiement :: Musique Approximative</title>
+    <link rel="canonical" href="https://constructions-incongrues.github.io/musiqueapproximative/main/deploiement.html">
+    <meta name="description" content="Guide de déploiement de l'application">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://constructions-incongrues.github.io/musiqueapproximative">Musique Approximative</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="main">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Musique Approximative</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Accueil</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="guide-demarrage.html">Guide de démarrage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="contribution.html">Contribution</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Technique</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="desastres.html">Les Désastres</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="docker.html">Docker &amp; GHCR</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="deploiement.html">Déploiement</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Développement</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="developpement/environnement.html">Environnement de développement</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="developpement/commandes.html">Commandes utiles</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="developpement/tests.html">Tests</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">CI/CD</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cicd/github-actions.html">GitHub Actions</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cicd/release-please.html">Release Please</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cicd/dependabot.html">Dependabot</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Musique Approximative</span>
+    <span class="version">main</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Musique Approximative</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">main</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Musique Approximative</a></li>
+    <li>Technique</li>
+    <li><a href="deploiement.html">Déploiement</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///Users/tristan/Documents/Workspaces/constructions-incongrues/musiqueapproximative.net/musiqueapproximative/docs/modules/ROOT/pages/deploiement.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Déploiement</h1>
+<div class="sect1">
+<h2 id="_déploiement_avec_docker"><a class="anchor" href="#_déploiement_avec_docker"></a>Déploiement avec Docker</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_prérequis"><a class="anchor" href="#_prérequis"></a>Prérequis</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Docker et Docker Compose installés</p>
+</li>
+<li>
+<p>Accès au serveur de production</p>
+</li>
+<li>
+<p>Variables d&#8217;environnement configurées</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_utilisation_de_limage_ghcr"><a class="anchor" href="#_utilisation_de_limage_ghcr"></a>Utilisation de l&#8217;image GHCR</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Pull de l'image depuis GHCR
+docker pull ghcr.io/constructions-incongrues/musiqueapproximative:latest
+
+# Démarrage avec docker-compose
+docker-compose up -d</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_de_production"><a class="anchor" href="#_configuration_de_production"></a>Configuration de production</h3>
+<div class="paragraph">
+<p>Créer un fichier <code>.env</code> avec les variables nécessaires :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-env hljs" data-lang="env">DATABASE_URL=mysql://user:password@host:3306/database
+APP_ENV=prod
+APP_DEBUG=false</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_déploiement_manuel"><a class="anchor" href="#_déploiement_manuel"></a>Déploiement manuel</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_publication_dune_nouvelle_version"><a class="anchor" href="#_publication_dune_nouvelle_version"></a>Publication d&#8217;une nouvelle version</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">VERSION=&lt;VERSION&gt;
+git hf release start ${VERSION}
+git hf release finish ${VERSION}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_déploiement_vers_le_serveur"><a class="anchor" href="#_déploiement_vers_le_serveur"></a>Déploiement vers le serveur</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">VERSION=&lt;VERSION&gt;
+git checkout ${VERSION}
+ant configure build deploy -Dprofile=pastishosting</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_vérifications_post_déploiement"><a class="anchor" href="#_vérifications_post_déploiement"></a>Vérifications post-déploiement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Après le déploiement, vérifier :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Application accessible</strong> : Tester l&#8217;URL de production</p>
+</li>
+<li>
+<p><strong>Base de données</strong> : Vérifier la connexion</p>
+</li>
+<li>
+<p><strong>Logs</strong> : Consulter les logs pour détecter les erreurs</p>
+</li>
+<li>
+<p><strong>Performance</strong> : Vérifier les temps de réponse</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Vérifier les logs
+docker-compose logs -f
+
+# Vérifier l'état des conteneurs
+docker-compose ps
+
+# Tester la connexion à la base de données
+docker-compose exec php php symfony doctrine:check-schema</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_rollback"><a class="anchor" href="#_rollback"></a>Rollback</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>En cas de problème, revenir à la version précédente :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Avec Docker
+docker-compose down
+docker pull ghcr.io/constructions-incongrues/musiqueapproximative:previous-tag
+docker-compose up -d
+
+# Avec Git
+git checkout &lt;previous-version&gt;
+ant configure build deploy -Dprofile=pastishosting</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring"><a class="anchor" href="#_monitoring"></a>Monitoring</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_logs"><a class="anchor" href="#_logs"></a>Logs</h3>
+<div class="paragraph">
+<p>Les logs sont disponibles dans :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Application</strong> : <code>src/log/</code></p>
+</li>
+<li>
+<p><strong>Docker</strong> : <code>docker-compose logs</code></p>
+</li>
+<li>
+<p><strong>Nginx</strong> : Logs du conteneur nginx</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_métriques"><a class="anchor" href="#_métriques"></a>Métriques</h3>
+<div class="paragraph">
+<p>Surveiller :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Utilisation CPU/RAM</p>
+</li>
+<li>
+<p>Temps de réponse</p>
+</li>
+<li>
+<p>Erreurs 5xx</p>
+</li>
+<li>
+<p>Espace disque</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_sauvegarde"><a class="anchor" href="#_sauvegarde"></a>Sauvegarde</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_base_de_données"><a class="anchor" href="#_base_de_données"></a>Base de données</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Backup
+docker-compose exec db mysqldump -u root -p database &gt; backup.sql
+
+# Restore
+docker-compose exec -T db mysql -u root -p database &lt; backup.sql</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fichiers"><a class="anchor" href="#_fichiers"></a>Fichiers</h3>
+<div class="paragraph">
+<p>Sauvegarder régulièrement :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>src/web/tracks/</code> - Fichiers audio</p>
+</li>
+<li>
+<p><code>src/web/avatars/</code> - Avatars utilisateurs</p>
+</li>
+<li>
+<p><code>src/data/</code> - Données de configuration</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting"><a class="anchor" href="#_troubleshooting"></a>Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_lapplication_ne_démarre_pas"><a class="anchor" href="#_lapplication_ne_démarre_pas"></a>L&#8217;application ne démarre pas</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Vérifier les logs : <code>docker-compose logs</code></p>
+</li>
+<li>
+<p>Vérifier la configuration : <code>.env</code> et <code>docker-compose.yml</code></p>
+</li>
+<li>
+<p>Vérifier les permissions des fichiers</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_erreurs_de_base_de_données"><a class="anchor" href="#_erreurs_de_base_de_données"></a>Erreurs de base de données</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Vérifier la connexion : <code>docker-compose exec php php symfony doctrine:check-schema</code></p>
+</li>
+<li>
+<p>Vérifier les migrations : État de la base de données</p>
+</li>
+<li>
+<p>Restaurer depuis un backup si nécessaire</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_performance_dégradée"><a class="anchor" href="#_performance_dégradée"></a>Performance dégradée</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Vider le cache : <code>docker-compose exec php php symfony cache:clear</code></p>
+</li>
+<li>
+<p>Vérifier les ressources système</p>
+</li>
+<li>
+<p>Analyser les slow queries</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
