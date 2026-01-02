@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.1](https://github.com/constructions-incongrues/musiqueapproximative/compare/constructions-incongrues/musiqueapproximative-v1.1.0...constructions-incongrues/musiqueapproximative-v1.1.1) (2026-01-02)
+
+
+### Documentation
+
+* migrate documentation to Antora, add 'Les Désastres' and GHCR pages, and update navigation. ([236c2f5](https://github.com/constructions-incongrues/musiqueapproximative/commit/236c2f5916a44615656a42b1a2de6f9b991aa29c))
+* simplify introductory text and add project link to description ([36b791b](https://github.com/constructions-incongrues/musiqueapproximative/commit/36b791b32e3e533138e40a9e2ef621d312d1fa1a))
+
+
+### Maintenance
+
+* update repomix output [skip ci] ([474d9c6](https://github.com/constructions-incongrues/musiqueapproximative/commit/474d9c67bf83c735200766ef19eaec3c34cd9e1d))
+* update repomix output [skip ci] ([4895b37](https://github.com/constructions-incongrues/musiqueapproximative/commit/4895b370ed0e5b80b4361fbbaa7bb64bc6c71170))
+
 ## [1.1.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/constructions-incongrues/musiqueapproximative-v1.0.0...constructions-incongrues/musiqueapproximative-v1.1.0) (2026-01-02)
 
 
