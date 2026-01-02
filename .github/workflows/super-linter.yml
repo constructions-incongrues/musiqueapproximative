@@ -50,6 +50,5 @@ jobs:
           VALIDATE_NATURAL_LANGUAGE: false
           PRE_COMMIT: true
           
-          
           # Filter regex for files to exclude
           FILTER_REGEX_EXCLUDE: .*/(vendor|node_modules|build|var|web/swf)/.*
