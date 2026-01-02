@@ -200,6 +200,28 @@
                 window.location = $('.nav-l a').attr('href') + '&play=1';
             });
 
+            // Volume sliding support
+            var moveVolume = function(e) {
+                var $bar = $('.jp-volume-bar');
+                var offset = $bar.offset();
+                var x = e.pageX - offset.left;
+                var w = $bar.width();
+                var pc = x / w;
+                if (pc > 1) pc = 1;
+                if (pc < 0) pc = 0;
+                $('#jquery_jplayer_1').jPlayer("volume", pc);
+            };
+
+            $('.jp-volume-bar').mousedown(function(e) {
+                $(document).on('mousemove.jp-volume', moveVolume);
+                moveVolume(e);
+                return false;
+            });
+
+            $(document).mouseup(function() {
+                $(document).off('mousemove.jp-volume');
+            });
+
             $('a.email-subscription-link').click(function(event) {
               $('div#email-subscription').toggle();
             });
