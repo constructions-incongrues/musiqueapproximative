@@ -24,6 +24,7 @@ ____
 == Documentation technique
 * xref:guide-demarrage.adoc[Guide de démarrage rapide]
 * xref:architecture.adoc[Architecture du projet]
+* xref:desastres.adoc[Anatomie d'un Désastre]
 * xref:deploiement.adoc[Déploiement]
 * xref:docker.adoc[Utilisation de Docker]
 
