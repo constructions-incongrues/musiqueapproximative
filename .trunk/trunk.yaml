@@ -21,7 +21,6 @@ lint:
     - phpstan@2.0.3
     - actionlint@1.7.1
     - checkov@3.2.467
-    - codespell@2.3.0
     - dotenv-linter@3.3.0
     - git-diff-check
     - hadolint@2.12.1-beta
