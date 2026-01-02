@@ -1,11 +1,11 @@
 = Musique Approximative - Documentation
 
 [.lead]
-Bienvenue dans la documentation du projet Musique Approximative, une playlist quotidienne anarchique de mélomanes fêlé⋅e⋅s.
+Bienvenue dans la documentation du projet Musique Approximative.
 
 == Qu'est-ce que Musique Approximative ?
 
-C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
+C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. C'est [Musique Approximative](https://www.musiqueapproximative.net).
 
 == Navigation rapide
 
