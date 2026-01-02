@@ -1,6 +1,6 @@
 # Base images
 FROM composer:1 as composer
-FROM php:7.4.33
+FROM php:8.5.1
 
 # Set working directory
 WORKDIR /usr/local/src
