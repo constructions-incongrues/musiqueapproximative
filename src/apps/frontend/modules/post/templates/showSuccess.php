@@ -88,7 +88,7 @@ Parcourir :
     height: 100%;
     background-color: #fff;
     z-index: -2;
-    animation: content-reveal 2s ease-out forwards;
+    animation: content-reveal 2s linear 1s forwards;
   }
 
   body.glitch-active::before {
@@ -105,7 +105,7 @@ Parcourir :
     background-attachment: fixed;
     z-index: -1;
     opacity: 0;
-    animation: glitch-flash 2s ease-out forwards;
+    animation: glitch-flash 2s linear 1s forwards;
   }
 
   /* Default/Error state: plain white background */
