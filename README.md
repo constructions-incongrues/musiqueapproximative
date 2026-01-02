@@ -7,4 +7,4 @@ Error: release-please failed: base (constructions-incongrues/musiqueapproximativ
 
 > C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
 
-📖 **[Documentation complète](https://constructions-incongrues.github.io/musiqueapproximative)** - Documentation technique avec Antora
+📖 **Documentation complète(https://constructions-incongrues.github.io/musiqueapproximative)** - Documentation technique avec Antora
