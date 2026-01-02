@@ -6,4 +6,4 @@
 
 ## Documentation
 
-- Documentation utilisateurs, administrateurs et développeurs : <https://constructions-incongrues.github.io/musiqueapproximative>
+- Documentation [utilisateurs, administrateurs et développeurs](https://constructions-incongrues.github.io/musiqueapproximative)
