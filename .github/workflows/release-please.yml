@@ -17,5 +17,5 @@ jobs:
       - name: Release Please
         uses: googleapis/release-please-action@v4
         with:
-          release-type: composer
+          release-type: php
           manifest-file: .release-please-manifest.json
