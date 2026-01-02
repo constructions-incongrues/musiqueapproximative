@@ -4,12 +4,6 @@
 == Prérequis
 
 * Docker Desktop installé et en cours d'exécution
-* Fichier `/etc/hosts` configuré avec :
-+
-[source,hosts]
-----
-127.0.0.1 www.musiqueapproximative.test
-----
 
 == Installation
 
@@ -47,15 +41,14 @@ Une fois l'application démarrée, vous pouvez y accéder via :
 
 * **Direct** : http://localhost:8001
 * **Via Nginx** : http://localhost:8080
-* **Nom de domaine** : http://www.musiqueapproximative.test:8080
 
 === Interfaces disponibles
 
-* Frontend (prod) : http://www.musiqueapproximative.test
-* Frontend (dev) : http://www.musiqueapproximative.test/frontend_dev.php
-* Admin (prod) : http://www.musiqueapproximative.test/admin_prod.php
-* Admin (dev) : http://www.musiqueapproximative.test/admin_dev.php
-* Gestion de la base de données : http://adminer.musiqueapproximative.test
+* Frontend (prod) : http://localhost:8080
+* Frontend (dev) : http://localhost:8080/frontend_dev.php
+* Admin (prod) : http://localhost:8080/admin_prod.php
+* Admin (dev) : http://localhost:8080/admin_dev.php
+
 ** Identifiants : `root` / `root`
 
 == Prochaines étapes
