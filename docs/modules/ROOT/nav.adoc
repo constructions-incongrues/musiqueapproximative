@@ -1,7 +1,7 @@
 .Documentation
 * xref:index.adoc[Accueil]
 * xref:guide-demarrage.adoc[Guide de démarrage]
-* xref:desastres.adoc[Comment provoquer un Désastre]
+* xref:desastres.adoc[Comment provoquer un Désastre ?]
 * xref:contribution.adoc[Contribution au développement]
 
 .Technique
