@@ -14,4 +14,8 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: Release Please
+        uses: googleapis/release-please-action@v4
+        with:
+          release-type: composer
+          manifest-file: .release-please-manifest.json

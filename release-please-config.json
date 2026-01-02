@@ -2,7 +2,6 @@
   "packages": {
     ".": {
       "release-type": "simple",
-      "package-name": "constructions-incongrues/musiqueapproximative",
       "changelog-sections": [
         {"type": "feat", "section": "Fonctionnalités", "hidden": false},
         {"type": "fix", "section": "Corrections de bugs", "hidden": false},
