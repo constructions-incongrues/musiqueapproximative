@@ -28,7 +28,7 @@ jobs:
           composer validate --strict
 
       - name: Cache des dépendances Composer
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: src/vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('src/composer.lock') }}
