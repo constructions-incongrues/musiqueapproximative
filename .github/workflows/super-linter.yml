@@ -39,8 +39,11 @@ jobs:
           
           # Default branch
           DEFAULT_BRANCH: main
-          
-          # Disable some linters that might be too strict
+
+          VALIDATE_JSON: true
+          VALIDATE_YAML: true
+          VALIDATE_TOML: true
+          VALIDATE_PHP: true
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
           
