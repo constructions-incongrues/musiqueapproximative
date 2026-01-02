@@ -16,6 +16,8 @@ jobs:
   trivy:
     name: Trivy Scan
     runs-on: ubuntu-latest
+    env:
+      TRIVY_DISABLE_VEX_NOTICE: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
