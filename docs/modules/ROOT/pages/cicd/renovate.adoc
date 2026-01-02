@@ -1,0 +1,81 @@
+= Renovate
+:description: Gestion automatisée des dépendances avec Renovate
+
+== Qu'est-ce que Renovate ?
+
+Renovate est un outil de gestion des dépendances ultra-flexible qui surveille vos dépôts et crée des pull requests pour mettre à jour vos dépendances (Composer, Docker, GitHub Actions, etc.).
+
+== Configuration
+
+**Fichier** : `renovate.json`
+
+[source,json]
+----
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases",
+    ":ignoreUnstable",
+    ":prImmediately",
+    ":renovatePrefix",
+    ":semanticPrefixFixDepsChoreOthers",
+    "group:allNonMajor"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "labels": ["dependencies"],
+  "timezone": "Europe/Paris",
+  "composer": {
+    "fileMatch": ["^src/composer\\.json$"]
+  }
+}
+----
+
+== Écosystèmes surveillés
+
+=== Composer (PHP)
+
+Renovate surveille le fichier `src/composer.json` et gère les mises à jour des bibliothèques PHP.
+
+=== Docker
+
+Renovate surveille :
+
+* `Dockerfile` : Images de base
+* `docker-compose.yml` : Services et images
+
+=== GitHub Actions
+
+Renovate surveille :
+
+* `.github/workflows/*.yml` : Actions utilisées (versions taguées ou SHAs)
+
+=== Dev Containers
+
+Renovate surveille :
+
+* `.devcontainer/devcontainer.json` et les Dockerfiles associés.
+
+== Fonctionnement
+
+1. **Scan** : Renovate scanne le dépôt périodiquement.
+2. **Dashboard** : Un "Dependency Dashboard" est créé sous forme de Issue GitHub pour suivre l'état des mises à jour.
+3. **PR** : Des pull requests sont créées selon les règles de groupement.
+4. **Auto-merge** : Les mises à jour mineures et patches sont automatiquement fusionnées si les tests CI passent (à configurer sur GitHub).
+
+== Bonnes pratiques
+
+* **Dependency Dashboard** : Utilisez-le pour voir les mises à jour en attente ou ignorées.
+* **Groupement** : Renovate est configuré pour regrouper les mises à jour non majeures afin de réduire le bruit.
+* **Automerge** : Activé par défaut pour les patches et versions mineures pour fluidifier la maintenance.
+
+== Ressources
+
+* https://docs.renovatebot.com/[Documentation Renovate]
+* https://github.com/renovatebot/renovate[Dépôt GitHub Renovate]
