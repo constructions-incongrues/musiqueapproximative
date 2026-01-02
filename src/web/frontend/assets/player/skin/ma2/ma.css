@@ -179,20 +179,21 @@ background-color:#AAA;color:#000;
 /* VOLUME BAR
 ----------------------------------------------- */
 #jp_container_1 .jp-volume-bar {
-  display: block !important;
-  position: absolute !important;
-  top: 22px !important;
+  display: inline-block !important;
+  position: relative !important;
+  top: -37px !important;
   left: 0 !important;
-  width: 100% !important;
-  height: 25px !important;
+  width: 50% !important;
+  height: 29px !important;
   background-color: #AAA !important;
   cursor: pointer !important;
   z-index: 1000 !important;
+  vertical-align: top !important;
 }
 #jp_container_1 .jp-volume-bar-value {
   display: block !important;
   background-color: #000 !important;
-  height: 25px !important;
+  height: 29px !important;
   width: 0; /* Let jPlayer control this */
 }
 
@@ -205,9 +206,13 @@ background-color:#AAA;color:#000;
   position: relative;
   font-size: 1.5em;
   top: -37px;
-  left: -2px;
+  left: 0;
   color:#FFF;
-  
+  display: inline-block;
+  width: 50%;
+  height: 29px;
+  vertical-align: top;
+  box-sizing: border-box;
 }
 
 .jp-current-time
