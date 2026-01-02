@@ -1,4 +1,4 @@
-= Les Désastres
+= Comment provoquer un Désastre ?
 :description: Système d'effets visuels et sonores dynamiques pour Musique Approximative
 :toc: left
 :toclevels: 3
