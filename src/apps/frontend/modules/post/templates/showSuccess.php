@@ -154,8 +154,8 @@ Parcourir :
     z-index: -1;
   }
 
-  header p, 
-  header a, 
+  header p,
+  header a,
   header input {
     color: #fff !important;
     background-color: transparent !important;
