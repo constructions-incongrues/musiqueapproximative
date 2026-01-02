@@ -30,5 +30,4 @@ ____
 
 == Statut du projet
 * https://github.com/constructions-incongrues/musiqueapproximative/releases[Journal des versions]
-
 * https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
