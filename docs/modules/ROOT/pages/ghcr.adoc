@@ -1,7 +1,7 @@
 = Utilisation de GitHub Container Registry (GHCR)
 :description: Guide d'utilisation du GitHub Container Registry pour le projet
-:toc: left
-:toclevels: 3
+
+:toclevels: 2
 
 == Vue d'ensemble
 

@@ -1,7 +1,7 @@
 = Comment provoquer un Désastre ?
 :description: Système d'effets visuels et sonores dynamiques pour Musique Approximative
-:toc: left
-:toclevels: 3
+
+:toclevels: 2
 
 == Vue d'ensemble
 
@@ -98,7 +98,7 @@ Animation de texte avec effets de division et de mouvement.
 * Animations fluides et personnalisables
 * Effets de rotation, translation, opacité
 
-==== fish
+==== fish (https://www.musiqueapproximative.net/post/the-toilet-fish-and-shit[démo])
 Affiche un poisson animé qui suit le curseur de la souris.
 
 **Technologie** : Lottie
@@ -109,7 +109,7 @@ Affiche un poisson animé qui suit le curseur de la souris.
 * Animation Lottie en boucle
 * Superposition en z-index élevé
 
-==== light
+==== light (https://www.musiqueapproximative.net/post/couronne-de-merde-friday-night-there-s-no-light[démo])
 Crée des rayons lumineux traversant la page.
 
 **Technologie** : CSS + Web Animations API
@@ -120,7 +120,7 @@ Crée des rayons lumineux traversant la page.
 * Déplacement horizontal de gauche à droite
 * Rotation à 45°
 
-==== musique
+==== musique (https://www.musiqueapproximative.net/post/jacques-chirac-musique-officielle-de-sa-campagne-de-1981[démo])
 Retire les lettres "M" et les fait défiler sur une portée musicale SVG.
 
 **Technologie** : anime.js + SVG
@@ -143,7 +143,7 @@ Change la couleur de fond de la page.
 
 === Désastres sonores
 
-==== tts (Text-to-Speech)
+==== tts (Text-to-Speech) (https://www.musiqueapproximative.net/post/eat-rabbit-tts-rapper[démo])
 Synthèse vocale du contenu de la page.
 
 **Technologie** : Web Speech API
@@ -580,6 +580,3 @@ console.log('Titre:', document.title);
 * https://airbnb.io/lottie/[Lottie Documentation]
 
 ---
-
-**Les désastres sont le cœur créatif de Musique Approximative** 🎭 +
-Amusez-vous à créer des expériences uniques et surprenantes !
