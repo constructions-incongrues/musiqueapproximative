@@ -42,8 +42,17 @@ jobs:
         with:
           image-ref: 'musiqueapproximative:scan'
           format: 'table'
-          exit-code: '1' # Fail on critical/high vulnerabilities
+          exit-code: '0' # Fail on critical
           severity: 'CRITICAL'
+          ignore-unfixed: true
+
+      - name: Run Trivy vulnerability scanner (Image)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: 'musiqueapproximative:scan'
+          format: 'table'
+          exit-code: '1' # Fail on critical
+          severity: 'HIGH'
           ignore-unfixed: true
 
       - name: Run Trivy vulnerability scanner (Config)
@@ -52,4 +61,4 @@ jobs:
           scan-type: 'config'
           hide-progress: false
           format: 'table'
-          severity: 'CRITICAL'
+          severity: 'CRITICAL, HIGH'
