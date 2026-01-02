@@ -1,0 +1,585 @@
+= Les Désastres
+:description: Système d'effets visuels et sonores dynamiques pour Musique Approximative
+:toc: left
+:toclevels: 3
+
+== Vue d'ensemble
+
+Les **désastres** sont un système d'effets visuels et sonores qui se déclenchent automatiquement sur le site selon des règles définies. Ils créent des expériences interactives surprenantes et ludiques pour les visiteurs.
+
+Le système repose sur trois composants principaux :
+
+* **Règles** : Conditions de déclenchement basées sur le contenu (titre, artiste, etc.)
+* **Recettes** : Configuration des effets à appliquer
+* **Désastres** : Implémentations JavaScript/CSS des effets visuels
+
+== Architecture
+
+=== Structure des fichiers
+
+[source,text]
+----
+src/
+├── apps/frontend/config/desastres/
+│   ├── desastres.yml              # Configuration principale avec imports
+│   ├── regles/                    # Règles de déclenchement
+│   │   ├── colors.yml
+│   │   ├── misc.yml
+│   │   └── ...
+│   ├── recettes/                  # Configuration des effets
+│   │   ├── mangelettres.yml
+│   │   ├── tts.yml
+│   │   ├── splitouine.yml
+│   │   └── ...
+│   └── schemas/                   # Schémas de validation JSON
+│       ├── regles.schema.json
+│       ├── recettes.schema.json
+│       └── desastres-main.schema.json
+└── web/desastres/                 # Implémentations des désastres
+    ├── mangelettres/
+    ├── splitouine/
+    ├── fish/
+    ├── light/
+    ├── tts/
+    └── ...
+----
+
+=== Flux de fonctionnement
+
+[mermaid]
+----
+graph TD
+    A[Page chargée] --> B{Évaluation des règles}
+    B -->|Condition remplie| C{Test de probabilité}
+    B -->|Condition non remplie| Z[Aucun désastre]
+    C -->|Succès| D[Chargement des recettes]
+    C -->|Échec| Z
+    D --> E[Chargement des scripts JS]
+    E --> F[Application du désastre]
+    F --> G[Effet visuel/sonore actif]
+----
+
+== Types de désastres
+
+=== Désastres visuels
+
+==== mangelettres
+Fait disparaître progressivement certaines lettres du texte.
+
+**Technologie** : GSAP SplitText
+
+**Options** :
+
+* `rate` : Taux de suppression (0.0 à 1.0)
+* `letters` : Lettres à supprimer (ex: "aeiou")
+* `selector` : Sélecteur CSS de l'élément cible
+
+**Exemple** :
+[source,yaml]
+----
+recettes:
+  mange_voyelles:
+    enabled: true
+    desastre: mangelettres
+    options:
+      rate: 0.5
+      letters: "aeiou"
+      selector: "section.content"
+----
+
+==== splitouine
+Animation de texte avec effets de division et de mouvement.
+
+**Technologie** : GSAP SplitText
+
+**Caractéristiques** :
+
+* Division du texte en caractères individuels
+* Animations fluides et personnalisables
+* Effets de rotation, translation, opacité
+
+==== fish
+Affiche un poisson animé qui suit le curseur de la souris.
+
+**Technologie** : Lottie
+
+**Comportement** :
+
+* Suivi du curseur avec décalage vertical
+* Animation Lottie en boucle
+* Superposition en z-index élevé
+
+==== light
+Crée des rayons lumineux traversant la page.
+
+**Technologie** : CSS + Web Animations API
+
+**Effet** :
+
+* Trois rayons lumineux animés
+* Déplacement horizontal de gauche à droite
+* Rotation à 45°
+
+==== musique
+Retire les lettres "M" et les fait défiler sur une portée musicale SVG.
+
+**Technologie** : anime.js + SVG
+
+**Particularités** :
+
+* Extraction des lettres "M" et "m"
+* Génération dynamique d'une portée SVG
+* Animation sinusoïdale des lettres
+
+==== noir / bleu
+Change la couleur de fond de la page.
+
+**Implémentation** : CSS simple
+
+**Options** :
+
+* `noir` : Fond noir
+* `bleu` : Fond bleu
+
+=== Désastres sonores
+
+==== tts (Text-to-Speech)
+Synthèse vocale du contenu de la page.
+
+**Technologie** : Web Speech API
+
+**Options configurables** :
+
+* `rate` : Vitesse de lecture (0.1 à 10, ou plage [min, max])
+* `pitch` : Hauteur de la voix (0 à 2, ou plage [min, max])
+* `volume` : Volume (0 à 1, ou plage [min, max])
+* `lang` : Code langue (ex: "fr-FR", "en-US")
+* `voices` : Liste de noms de voix préférées
+* `texts` : Textes à lire (si non fourni, lit le contenu de la page)
+
+**Exemple** :
+[source,yaml]
+----
+recettes:
+  tts_robot:
+    enabled: true
+    desastre: tts
+    options:
+      rate: [0.8, 1.2]    # Vitesse aléatoire entre 0.8 et 1.2
+      pitch: [0.5, 0.7]   # Voix grave
+      volume: 0.8
+      lang: "fr-FR"
+      voices: ["Google français", "Microsoft Hortense"]
+----
+
+=== Désastres interactifs
+
+==== redirect
+Redirige vers une URL externe.
+
+**Options** :
+
+* `url` : URL de destination
+
+**Exemple** :
+[source,yaml]
+----
+recettes:
+  redirect_kraftwerk:
+    enabled: true
+    desastre: redirect
+    options:
+      url: "https://www.kraftwerk.com"
+----
+
+==== mamie
+Affiche des images aléatoires en superposition.
+
+**Options** :
+
+* `imageFolder` : Dossier contenant les images
+* `imageBaseName` : Préfixe des noms de fichiers
+* `imageExtension` : Extension des fichiers
+* `imageCount` : Nombre d'images disponibles
+
+== Configuration
+
+=== Définir une règle
+
+Les règles déterminent **quand** un désastre se déclenche.
+
+**Structure** :
+[source,yaml]
+----
+# yaml-language-server: $schema=../schemas/regles.schema.json
+
+regles:
+  - query: "query.title ~ /.*bleu.*/i"
+    recettes: [bleu]
+    probability: 0.7
+    trigger: debug_bleu
+----
+
+**Propriétés** :
+
+* `query` (requis) : Expression de condition
+** Syntaxe : `query.FIELD ~ /REGEX/FLAGS`
+** Champs disponibles : `title`, `artist`, `album`, etc.
+* `recettes` (requis) : Liste des recettes à appliquer
+* `probability` : Probabilité de déclenchement (0.0 à 1.0, défaut: 1.0)
+* `trigger` : Paramètre URL pour forcer le déclenchement (ex: `?debug_bleu`)
+
+**Exemples de conditions** :
+
+[source,yaml]
+----
+# Titre contient "fish" ou "poisson"
+query: "query.title ~ /.*(fish|poisson).*/i"
+
+# Artiste exact
+query: "query.artist == 'Kraftwerk'"
+
+# Titre commence par "La"
+query: "query.title ~ /^La .*/i"
+----
+
+=== Créer une recette
+
+Les recettes définissent **comment** le désastre se comporte.
+
+**Structure** :
+[source,yaml]
+----
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+recettes:
+  nom_recette:
+    enabled: true
+    desastre: type_desastre
+    scripts:
+      - "/desastres/shared/gsap.min.js"
+      - "/desastres/mangelettres/javascript/mangelettres.js"
+    options:
+      # Options spécifiques au désastre
+      rate: 0.5
+      selector: "section.content"
+----
+
+**Propriétés** :
+
+* `enabled` (requis) : Active/désactive la recette
+* `desastre` (requis) : Type de désastre (correspond au dossier dans `/desastres/`)
+* `scripts` : Scripts JavaScript à charger
+* `options` : Configuration spécifique au désastre
+
+=== Validation avec JSON Schema
+
+Le système utilise des schémas JSON pour valider la configuration.
+
+**Avantages** :
+
+* ✅ Autocomplétion dans VSCode, IntelliJ
+* ✅ Validation en temps réel
+* ✅ Documentation intégrée
+* ✅ Prévention d'erreurs
+
+**Installation dans VSCode** :
+
+. Installer l'extension **YAML** (Red Hat)
+. Ajouter la directive `# yaml-language-server` en haut des fichiers
+. Profiter de l'autocomplétion ! 🎉
+
+**Validation en ligne de commande** :
+
+[source,bash]
+----
+npm install -g ajv-cli
+
+# Valider un fichier de règles
+ajv validate -s schemas/regles.schema.json -d regles/colors.yml
+
+# Valider un fichier de recettes
+ajv validate -s schemas/recettes.schema.json -d recettes/tts.yml
+----
+
+== Développement
+
+=== Créer un nouveau désastre
+
+. **Créer le dossier** dans `src/web/desastres/mon-desastre/`
++
+[source,bash]
+----
+mkdir -p src/web/desastres/mon-desastre/javascript
+mkdir -p src/web/desastres/mon-desastre/css
+----
+
+. **Créer le fichier JavaScript** `javascript/mon-desastre.js`
++
+[source,javascript]
+----
+/**
+ * Désastre Mon Désastre
+ */
+(function() {
+  console.log('🎭 Désastre "mon-desastre" activé');
+  
+  // Récupérer les options depuis window.desastreOptions
+  const options = window.desastreOptions || {};
+  
+  // Implémenter l'effet
+  function appliquerDesastre() {
+    // Votre code ici
+  }
+  
+  // Initialiser
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', appliquerDesastre);
+  } else {
+    appliquerDesastre();
+  }
+})();
+----
+
+. **Créer le fichier CSS** (optionnel) `css/mon-desastre.css`
+
+. **Créer la recette** dans `src/apps/frontend/config/desastres/recettes/mon-desastre.yml`
++
+[source,yaml]
+----
+# yaml-language-server: $schema=../schemas/recettes.schema.json
+
+recettes:
+  mon_desastre:
+    enabled: true
+    desastre: mon-desastre
+    scripts:
+      - "/desastres/mon-desastre/javascript/mon-desastre.js"
+    options:
+      # Vos options personnalisées
+      intensity: 0.8
+----
+
+. **Créer la règle** dans `src/apps/frontend/config/desastres/regles/mon-desastre.yml`
++
+[source,yaml]
+----
+# yaml-language-server: $schema=../schemas/regles.schema.json
+
+regles:
+  - query: "query.title ~ /.*test.*/i"
+    recettes: [mon_desastre]
+    probability: 1.0
+    trigger: debug_mon_desastre
+----
+
+. **Importer dans la configuration principale** `desastres.yml`
++
+[source,yaml]
+----
+imports:
+  - { resource: regles/mon-desastre.yml }
+  - { resource: recettes/mon-desastre.yml }
+----
+
+. **Documenter** : Créer `src/web/desastres/mon-desastre/README.md`
+
+=== Bibliothèques disponibles
+
+Le système utilise plusieurs bibliothèques JavaScript :
+
+* **GSAP** : Animations avancées
+** Core : `gsap.min.js`
+** SplitText : `SplitText.min.js`
+* **anime.js** : Animations légères
+* **Lottie** : Animations vectorielles
+* **Web Speech API** : Synthèse vocale (natif)
+
+**Chemin des bibliothèques partagées** :
+[source,text]
+----
+/desastres/shared/
+├── gsap.min.js
+├── SplitText.min.js
+└── ...
+----
+
+=== Débogage
+
+==== Forcer un désastre avec trigger
+
+Ajoutez le paramètre `trigger` dans l'URL :
+
+[source,text]
+----
+https://musiqueapproximative.net/post/123?debug_bleu
+----
+
+==== Logs console
+
+Tous les désastres loguent leur activation :
+
+[source,javascript]
+----
+console.log('🎭 Désastre "mangelettres" activé');
+console.log('Options:', options);
+----
+
+==== Inspecter la configuration
+
+La configuration est disponible dans `window.desastreOptions` :
+
+[source,javascript]
+----
+console.log(window.desastreOptions);
+----
+
+== Liste des désastres disponibles
+
+[cols="1,2,1"]
+|===
+|Nom |Description |Technologie
+
+|`amour`
+|Effet visuel d'amour
+|CSS/JS
+
+|`bleu`
+|Fond bleu
+|CSS
+
+|`danse`
+|Animation de danse
+|JS
+
+|`fish`
+|Poisson qui suit le curseur
+|Lottie
+
+|`kraftwerk`
+|Effet Kraftwerk
+|JS
+
+|`light`
+|Rayons lumineux
+|Web Animations API
+
+|`mamie`
+|Images aléatoires
+|JS
+
+|`mangelettres`
+|Suppression de lettres
+|GSAP SplitText
+
+|`musique`
+|Portée musicale avec lettres M
+|anime.js + SVG
+
+|`noir`
+|Fond noir
+|CSS
+
+|`postillons`
+|Effet de postillons
+|JS
+
+|`redirect`
+|Redirection URL
+|JS
+
+|`robot`
+|Effet robotique
+|JS
+
+|`sale`
+|Effet sale/glitch
+|JS
+
+|`splitouine`
+|Animation de texte
+|GSAP SplitText
+
+|`tts`
+|Synthèse vocale
+|Web Speech API
+|===
+
+== Bonnes pratiques
+
+=== Performance
+
+* **Lazy loading** : Les scripts ne sont chargés que si le désastre est déclenché
+* **Probabilités** : Utilisez `probability` pour éviter la lassitude
+* **Cleanup** : Nettoyez les événements et éléments DOM créés
+
+=== Accessibilité
+
+* **Respect du prefers-reduced-motion** :
++
+[source,javascript]
+----
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (prefersReducedMotion) {
+  // Désactiver ou réduire les animations
+  return;
+}
+----
+
+* **Contrôles** : Permettre de désactiver les effets
+* **Audio** : Respecter les préférences de volume
+
+=== Maintenance
+
+* **Documentation** : Chaque désastre doit avoir un README.md
+* **Versioning** : Documenter les changements dans les recettes
+* **Tests** : Tester avec différents contenus et navigateurs
+
+== Troubleshooting
+
+=== Le désastre ne se déclenche pas
+
+. **Vérifier la règle** : La condition est-elle remplie ?
++
+[source,javascript]
+----
+console.log('Titre:', document.title);
+----
+
+. **Vérifier la probabilité** : Essayer avec `probability: 1.0`
+
+. **Utiliser le trigger** : Forcer avec `?debug_nom_desastre`
+
+. **Vérifier les scripts** : Ouvrir la console pour voir les erreurs
+
+=== Erreur de chargement de script
+
+* Vérifier le chemin dans `scripts`
+* S'assurer que le fichier existe
+* Vérifier les permissions
+
+=== Conflit entre désastres
+
+* Certains désastres peuvent interférer (ex: deux désastres modifiant le même texte)
+* Utiliser des sélecteurs CSS spécifiques
+* Tester les combinaisons
+
+=== Performance dégradée
+
+* Réduire le nombre d'éléments animés
+* Utiliser `will-change` CSS pour optimiser
+* Débouncer les événements (scroll, mousemove)
+
+== Ressources
+
+* xref:architecture.adoc[Architecture du projet]
+* xref:developpement/environnement.adoc[Environnement de développement]
+* https://gsap.com/docs/v3/[Documentation GSAP]
+* https://animejs.com/documentation/[Documentation anime.js]
+* https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API[Web Speech API]
+* https://airbnb.io/lottie/[Lottie Documentation]
+
+---
+
+**Les désastres sont le cœur créatif de Musique Approximative** 🎭 +
+Amusez-vous à créer des expériences uniques et surprenantes !

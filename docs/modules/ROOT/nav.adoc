@@ -5,6 +5,7 @@
 
 .Technique
 * xref:architecture.adoc[Architecture]
+* xref:desastres.adoc[Les Désastres]
 * xref:docker.adoc[Docker & GHCR]
 * xref:deploiement.adoc[Déploiement]
 
