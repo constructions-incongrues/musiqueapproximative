@@ -11,6 +11,9 @@ jobs:
     name: Validation du code
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout du code
         uses: actions/checkout@v6
