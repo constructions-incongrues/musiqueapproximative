@@ -1,0 +1,19 @@
+.Documentation
+* xref:index.adoc[Accueil]
+* xref:guide-demarrage.adoc[Guide de démarrage]
+* xref:contribution.adoc[Contribution]
+
+.Technique
+* xref:architecture.adoc[Architecture]
+* xref:docker.adoc[Docker & GHCR]
+* xref:deploiement.adoc[Déploiement]
+
+.Développement
+* xref:developpement/environnement.adoc[Environnement de développement]
+* xref:developpement/commandes.adoc[Commandes utiles]
+* xref:developpement/tests.adoc[Tests]
+
+.CI/CD
+* xref:cicd/github-actions.adoc[GitHub Actions]
+* xref:cicd/release-please.adoc[Release Please]
+* xref:cicd/dependabot.adoc[Dependabot]

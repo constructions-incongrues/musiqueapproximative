@@ -1,0 +1,212 @@
+= Environnement de développement
+:description: Configuration de l'environnement de développement local
+
+== Prérequis
+
+=== Logiciels requis
+
+* **Docker Desktop** : Version 20.10 ou supérieure
+* **Git** : Pour cloner le dépôt
+* **Éditeur de code** : VS Code, PHPStorm, ou autre
+
+=== Configuration système
+
+==== Fichier hosts
+
+Ajouter au fichier `/etc/hosts` (macOS/Linux) ou `C:\Windows\System32\drivers\etc\hosts` (Windows) :
+
+[source,hosts]
+----
+127.0.0.1   www.musiqueapproximative.test adminer.musiqueapproximative.test
+----
+
+==== Docker
+
+Vérifier que Docker est bien installé et démarré :
+
+[source,bash]
+----
+docker --version
+docker-compose --version
+----
+
+== Installation
+
+=== 1. Cloner le dépôt
+
+[source,bash]
+----
+git clone git@github.com:constructions-incongrues/musiqueapproximative.git
+cd musiqueapproximative
+----
+
+=== 2. Configuration
+
+Le fichier `docker-compose.yml` contient la configuration par défaut. Pour personnaliser, créer un fichier `.env` :
+
+[source,env]
+----
+# Base de données
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=musiqueapproximative
+MYSQL_USER=app
+MYSQL_PASSWORD=app
+
+# PHP
+PHP_VERSION=7.4
+----
+
+=== 3. Démarrage
+
+[source,bash]
+----
+# Démarrage automatique
+./start-dev.sh
+
+# Ou manuellement
+docker-compose up -d
+----
+
+Le script `start-dev.sh` effectue :
+
+1. Build des images Docker
+2. Démarrage des conteneurs
+3. Installation des dépendances
+4. Initialisation de la base de données
+
+== Structure de l'environnement
+
+=== Services Docker
+
+[cols="1,2,1"]
+|===
+|Service |Description |Port
+
+|`php`
+|PHP-FPM 7.4 avec Symfony
+|9000
+
+|`nginx`
+|Serveur web Nginx
+|8080
+
+|`db`
+|MySQL/MariaDB
+|3306
+
+|`adminer`
+|Interface de gestion de base de données
+|8081
+|===
+
+=== Volumes
+
+* `./src` → `/var/www/html` : Code source
+* `./var` → `/var/www/var` : Données variables
+
+== Outils de développement
+
+=== VS Code
+
+Extensions recommandées :
+
+* PHP Intelephense
+* Docker
+* EditorConfig
+* GitLens
+
+Configuration dans `.vscode/settings.json` :
+
+[source,json]
+----
+{
+  "php.validate.executablePath": "/usr/bin/php",
+  "editor.formatOnSave": true
+}
+----
+
+=== PHPStorm
+
+Configuration :
+
+1. **Interpreter** : Configurer Docker comme PHP interpreter
+2. **Database** : Connecter à MySQL via Docker
+3. **Symfony Plugin** : Installer le plugin Symfony
+
+== Debugging
+
+=== Xdebug
+
+Xdebug est configuré dans le conteneur PHP. Pour l'activer :
+
+[source,bash]
+----
+# Dans le conteneur
+docker-compose exec php bash
+export XDEBUG_MODE=debug
+----
+
+Configuration IDE :
+
+* **Port** : 9003
+* **IDE Key** : PHPSTORM
+
+=== Logs
+
+Les logs sont disponibles dans :
+
+* **Symfony** : `src/log/`
+* **Nginx** : `docker-compose logs nginx`
+* **PHP** : `docker-compose logs php`
+
+== Workflow de développement
+
+1. **Créer une branche** : `git checkout -b feat/ma-fonctionnalite`
+2. **Développer** : Modifier le code dans `src/`
+3. **Tester** : Vérifier dans le navigateur
+4. **Commiter** : Utiliser Conventional Commits
+5. **Pousser** : `git push origin feat/ma-fonctionnalite`
+6. **Pull Request** : Créer une PR sur GitHub
+
+== Troubleshooting
+
+=== Le site ne s'affiche pas
+
+1. Vérifier que Docker est démarré
+2. Vérifier que les conteneurs sont actifs : `docker-compose ps`
+3. Vérifier les logs : `docker-compose logs`
+4. Vérifier le fichier hosts
+
+=== Erreur de permission
+
+[source,bash]
+----
+# Corriger les permissions
+chmod -R 777 src/cache src/log
+----
+
+=== Base de données non accessible
+
+[source,bash]
+----
+# Vérifier le conteneur MySQL
+docker-compose ps db
+
+# Voir les logs
+docker-compose logs db
+
+# Redémarrer le conteneur
+docker-compose restart db
+----
+
+=== Cache non vidé
+
+[source,bash]
+----
+# Vider le cache Symfony
+docker-compose exec php php symfony cache:clear
+
+# Ou manuellement
+rm -rf src/cache/*
+chmod -R 777 src/cache
+----

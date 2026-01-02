@@ -1,0 +1,212 @@
+= Tests
+:description: Guide des tests pour le projet
+
+== Types de tests
+
+Le projet utilise plusieurs types de tests :
+
+* **Tests de syntaxe** : Validation PHP
+* **Tests fonctionnels** : Tests Symfony
+* **Tests d'intégration** : Tests Docker
+
+== Tests de syntaxe
+
+=== Validation PHP
+
+Vérifier que tous les fichiers PHP sont syntaxiquement corrects :
+
+[source,bash]
+----
+# Tous les fichiers
+find src -name "*.php" -exec php -l {} \;
+
+# Un fichier spécifique
+php -l src/apps/frontend/modules/home/actions/actions.class.php
+----
+
+Cette commande est exécutée automatiquement dans le workflow CI.
+
+== Tests fonctionnels
+
+=== Tests Symfony
+
+[source,bash]
+----
+# Exécuter tous les tests
+docker-compose exec php php symfony test:all
+
+# Tests fonctionnels uniquement
+docker-compose exec php php symfony test:functional
+
+# Tests unitaires uniquement
+docker-compose exec php php symfony test:unit
+----
+
+=== Écrire un test
+
+Créer un fichier de test dans `src/test/functional/` :
+
+[source,php]
+----
+<?php
+
+include(dirname(__FILE__).'/../bootstrap/functional.php');
+
+$browser = new sfTestFunctional(new sfBrowser());
+
+$browser->
+  get('/')->
+  with('request')->begin()->
+    isParameter('module', 'home')->
+    isParameter('action', 'index')->
+  end()->
+  with('response')->begin()->
+    isStatusCode(200)->
+    checkElement('body', '!/This is a temporary page/')->
+  end()
+;
+----
+
+== Tests Docker
+
+=== Build de l'image
+
+[source,bash]
+----
+# Build
+docker-compose build
+
+# Build sans cache
+docker-compose build --no-cache
+
+# Build d'un service spécifique
+docker-compose build php
+----
+
+=== Tests de démarrage
+
+[source,bash]
+----
+# Démarrer les services
+docker-compose up -d
+
+# Vérifier l'état
+docker-compose ps
+
+# Vérifier les logs
+docker-compose logs
+
+# Tester l'accès HTTP
+curl -I http://localhost:8080
+----
+
+== Tests d'intégration
+
+=== Base de données
+
+[source,bash]
+----
+# Vérifier la connexion
+docker-compose exec php php symfony doctrine:check-schema
+
+# Tester une requête
+docker-compose exec db mysql -u root -proot -e "SHOW DATABASES;"
+----
+
+=== Services
+
+[source,bash]
+----
+# Tester PHP-FPM
+docker-compose exec php php -v
+
+# Tester Nginx
+docker-compose exec nginx nginx -t
+
+# Tester MySQL
+docker-compose exec db mysqladmin -u root -proot ping
+----
+
+== CI/CD
+
+=== GitHub Actions
+
+Les tests sont exécutés automatiquement sur chaque push et pull request.
+
+Workflow : `.github/workflows/ci.yml`
+
+[source,yaml]
+----
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PHP syntax
+        run: find src -name "*.php" -exec php -l {} \;
+  
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker-compose build
+----
+
+=== Voir les résultats
+
+1. Aller sur https://github.com/constructions-incongrues/musiqueapproximative/actions
+2. Sélectionner un workflow run
+3. Voir les logs des tests
+
+== Couverture de code
+
+NOTE: La couverture de code n'est pas encore configurée pour ce projet.
+
+Pour l'ajouter, installer PHPUnit avec Xdebug :
+
+[source,bash]
+----
+# Dans le Dockerfile
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+# Générer le rapport
+phpunit --coverage-html coverage/
+----
+
+== Bonnes pratiques
+
+=== Avant de commiter
+
+1. **Vérifier la syntaxe** : `find src -name "*.php" -exec php -l {} \;`
+2. **Tester localement** : Vérifier que l'application fonctionne
+3. **Vérifier Docker** : `docker-compose build`
+
+=== Avant de merger
+
+1. **CI passant** : Vérifier que tous les tests CI sont verts
+2. **Review** : Faire reviewer le code
+3. **Tests manuels** : Tester les nouvelles fonctionnalités
+
+== Debugging des tests
+
+=== Tests qui échouent
+
+1. **Lire les logs** : Comprendre l'erreur
+2. **Reproduire localement** : Exécuter le test en local
+3. **Debugger** : Utiliser `var_dump()` ou Xdebug
+4. **Corriger** : Fixer le problème
+5. **Re-tester** : Vérifier que ça fonctionne
+
+=== Tests lents
+
+1. **Profiler** : Identifier les goulots d'étranglement
+2. **Optimiser** : Améliorer les requêtes SQL
+3. **Cacher** : Utiliser le cache Symfony
+4. **Paralléliser** : Exécuter les tests en parallèle
+
+== Ressources
+
+* https://symfony.com/legacy/doc/gentle-introduction/1_4/en/15-Unit-and-Functional-Testing[Tests Symfony 1.4]
+* https://docs.docker.com/compose/[Docker Compose]
+* https://docs.github.com/en/actions[GitHub Actions]

@@ -1,0 +1,253 @@
+= Dependabot
+:description: Gestion automatisée des dépendances avec Dependabot
+
+== Qu'est-ce que Dependabot ?
+
+Dependabot est un outil GitHub qui surveille automatiquement les dépendances de votre projet et crée des pull requests pour les mettre à jour.
+
+== Configuration
+
+**Fichier** : `.github/dependabot.yml`
+
+[source,yaml]
+----
+version: 2
+updates:
+  # Dépendances Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "docker"
+  
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+----
+
+== Écosystèmes surveillés
+
+=== Docker
+
+Dependabot surveille :
+
+* `Dockerfile` : Images de base
+* `docker-compose.yml` : Services et images
+
+.Exemple de PR
+[source]
+----
+Titre: Bump php from 7.4 to 8.0
+Labels: dependencies, docker
+----
+
+=== GitHub Actions
+
+Dependabot surveille :
+
+* `.github/workflows/*.yml` : Actions utilisées
+
+.Exemple de PR
+[source]
+----
+Titre: Bump actions/checkout from 3 to 4
+Labels: dependencies, github-actions
+----
+
+== Fréquence des mises à jour
+
+[cols="1,2"]
+|===
+|Écosystème |Fréquence
+
+|Docker
+|Hebdomadaire (lundi)
+
+|GitHub Actions
+|Hebdomadaire (lundi)
+|===
+
+== Labels automatiques
+
+Les PRs Dependabot sont automatiquement étiquetées :
+
+* `dependencies` : Toutes les mises à jour de dépendances
+* `docker` : Mises à jour Docker
+* `github-actions` : Mises à jour GitHub Actions
+
+== Workflow de mise à jour
+
+1. **Détection** : Dependabot détecte une nouvelle version
+2. **PR** : Création automatique d'une pull request
+3. **CI** : Les tests CI s'exécutent automatiquement
+4. **Review** : Revue manuelle de la PR
+5. **Merge** : Fusion de la PR si les tests passent
+
+== Auto-merge
+
+Pour activer le merge automatique des PRs Dependabot :
+
+[source,bash]
+----
+# Activer auto-merge pour une PR
+gh pr merge --auto --squash PR_NUMBER
+----
+
+Ou configurer une règle GitHub Actions :
+
+[source,yaml]
+----
+name: Dependabot auto-merge
+on: pull_request
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+      
+      - name: Enable auto-merge for Dependabot PRs
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+----
+
+== Sécurité
+
+=== Alertes de sécurité
+
+Dependabot crée automatiquement des PRs pour les vulnérabilités de sécurité détectées.
+
+Ces PRs sont prioritaires et doivent être traitées rapidement.
+
+=== Configuration de sécurité
+
+Dans `.github/settings.yml` :
+
+[source,yaml]
+----
+repository:
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+----
+
+== Gestion des PRs
+
+=== Approuver et merger
+
+[source,bash]
+----
+# Lister les PRs Dependabot
+gh pr list --author dependabot[bot]
+
+# Approuver une PR
+gh pr review PR_NUMBER --approve
+
+# Merger une PR
+gh pr merge PR_NUMBER --squash
+----
+
+=== Fermer une PR
+
+Si une mise à jour n'est pas souhaitée :
+
+[source,bash]
+----
+gh pr close PR_NUMBER
+----
+
+Ou utiliser `@dependabot ignore` dans un commentaire.
+
+== Commandes Dependabot
+
+Dans les commentaires des PRs :
+
+* `@dependabot rebase` : Rebaser la PR
+* `@dependabot recreate` : Recréer la PR
+* `@dependabot merge` : Merger la PR
+* `@dependabot squash and merge` : Squash et merger
+* `@dependabot cancel merge` : Annuler le merge automatique
+* `@dependabot close` : Fermer la PR
+* `@dependabot ignore this dependency` : Ignorer cette dépendance
+* `@dependabot ignore this major version` : Ignorer cette version majeure
+* `@dependabot ignore this minor version` : Ignorer cette version mineure
+
+== Bonnes pratiques
+
+=== Review des PRs
+
+1. **Vérifier le changelog** : Lire les notes de version
+2. **Tester localement** : Si changement majeur
+3. **Vérifier les breaking changes** : Surtout pour les versions majeures
+4. **Merger rapidement** : Les patches de sécurité
+
+=== Grouper les mises à jour
+
+Pour éviter trop de PRs, configurer des groupes :
+
+[source,yaml]
+----
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      docker-updates:
+        patterns:
+          - "*"
+----
+
+== Monitoring
+
+=== Voir les dépendances
+
+1. Aller sur https://github.com/constructions-incongrues/musiqueapproximative/network/dependencies
+2. Voir le graphe de dépendances
+3. Voir les alertes de sécurité
+
+=== Insights
+
+* **Dependency graph** : Visualiser les dépendances
+* **Dependabot alerts** : Voir les vulnérabilités
+* **Dependabot updates** : Historique des mises à jour
+
+== Troubleshooting
+
+=== PRs non créées
+
+* Vérifier la configuration `.github/dependabot.yml`
+* Vérifier que Dependabot est activé dans les settings
+* Consulter les logs Dependabot
+
+=== Conflits de merge
+
+Utiliser `@dependabot rebase` dans un commentaire pour rebaser la PR.
+
+=== Trop de PRs
+
+* Ajuster la fréquence dans la configuration
+* Utiliser des groupes pour regrouper les mises à jour
+* Ignorer certaines dépendances
+
+== Ressources
+
+* https://docs.github.com/en/code-security/dependabot[Documentation Dependabot]
+* https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file[Options de configuration]

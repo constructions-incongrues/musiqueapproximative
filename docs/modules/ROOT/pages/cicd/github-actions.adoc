@@ -1,0 +1,185 @@
+= GitHub Actions
+:description: Configuration et utilisation de GitHub Actions pour le CI/CD
+
+== Vue d'ensemble
+
+Le projet utilise GitHub Actions pour automatiser :
+
+* La validation du code (CI)
+* La construction des images Docker
+* La publication sur GHCR
+* La gestion des releases
+* La génération de la documentation
+
+== Workflows disponibles
+
+=== CI (Continuous Integration)
+
+**Fichier** : `.github/workflows/ci.yml`
+
+**Déclencheurs** :
+
+* Push sur `main` et `develop`
+* Pull requests
+
+**Jobs** :
+
+1. **validate** : Validation de la syntaxe PHP
+2. **docker-build** : Construction et publication de l'image Docker
+
+[source,yaml]
+----
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PHP syntax
+        run: find src -name "*.php" -exec php -l {} \;
+  
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/build-push-action@v5
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+----
+
+=== Release Please
+
+**Fichier** : `.github/workflows/release-please.yml`
+
+**Déclencheurs** :
+
+* Push sur `main`
+
+**Fonctionnement** :
+
+1. Analyse les commits depuis la dernière release
+2. Crée une PR de release avec le CHANGELOG mis à jour
+3. Quand la PR est mergée, crée un tag et une release GitHub
+
+Voir xref:cicd/release-please.adoc[Release Please] pour plus de détails.
+
+=== Repomix Packing
+
+**Fichier** : `.github/workflows/repomix.yml`
+
+**Déclencheurs** :
+
+* Quotidien à 2h du matin
+* Push sur `main`
+* Déclenchement manuel
+
+**Fonction** : Génère un pack du repository pour l'analyse IA.
+
+=== Documentation
+
+**Fichier** : `.github/workflows/documentation.yml`
+
+**Déclencheurs** :
+
+* Push sur `main` modifiant `docs/`
+* Déclenchement manuel
+
+**Fonction** : Génère et déploie la documentation Antora sur GitHub Pages.
+
+== Configuration des secrets
+
+Aucun secret n'est nécessaire ! Le projet utilise :
+
+* `GITHUB_TOKEN` : Fourni automatiquement par GitHub Actions
+* Permissions configurées dans chaque workflow
+
+== Permissions
+
+Les workflows utilisent les permissions suivantes :
+
+[cols="1,2"]
+|===
+|Permission |Usage
+
+|`contents: write`
+|Créer des releases et pousser des commits
+
+|`packages: write`
+|Publier sur GHCR
+
+|`pull-requests: write`
+|Créer des PRs (Release Please)
+
+|`pages: write`
+|Déployer sur GitHub Pages
+
+|`id-token: write`
+|Authentification GitHub Pages
+|===
+
+== Artifacts
+
+Les workflows génèrent des artifacts :
+
+* **Repomix** : `repomix-output-{sha}` (30 jours)
+* **Documentation** : Déployé sur GitHub Pages
+
+== Cache
+
+Le workflow Docker utilise le cache GitHub Actions pour accélérer les builds :
+
+[source,yaml]
+----
+- uses: docker/build-push-action@v5
+  with:
+    cache-from: type=gha
+    cache-to: type=gha,mode=max
+----
+
+== Monitoring
+
+=== Voir les exécutions
+
+1. Aller sur https://github.com/constructions-incongrues/musiqueapproximative/actions
+2. Sélectionner un workflow
+3. Voir l'historique des exécutions
+
+=== Badges de statut
+
+Ajouter des badges dans le README :
+
+[source,markdown]
+----
+[![CI](https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg)](https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml)
+----
+
+== Troubleshooting
+
+=== Workflow échoue
+
+1. Consulter les logs dans l'interface GitHub Actions
+2. Vérifier les permissions du workflow
+3. Vérifier la syntaxe YAML
+
+=== Cache non utilisé
+
+* Le cache expire après 7 jours d'inactivité
+* Le cache est partagé entre branches
+* Vérifier que les builds précédents ont réussi
+
+=== Permissions insuffisantes
+
+Vérifier que les permissions sont bien configurées dans le workflow :
+
+[source,yaml]
+----
+permissions:
+  contents: write
+  packages: write
+----

@@ -1,0 +1,26 @@
+= Musique Approximative - Documentation
+
+[.lead]
+Bienvenue dans la documentation du projet Musique Approximative, une playlist quotidienne anarchique de mélomanes fêlé⋅e⋅s.
+
+== Qu'est-ce que Musique Approximative ?
+
+C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
+
+== Navigation rapide
+
+* xref:guide-demarrage.adoc[Guide de démarrage rapide]
+* xref:contribution.adoc[Guide de contribution]
+* xref:architecture.adoc[Architecture du projet]
+* xref:deploiement.adoc[Déploiement]
+* xref:docker.adoc[Utilisation de Docker]
+
+== Liens utiles
+
+* https://www.musiqueapproximative.net[Site web]
+* https://github.com/constructions-incongrues/musiqueapproximative[Dépôt GitHub]
+
+== Statut du projet
+
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml/badge.svg[CI Status,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/ci.yml]
+image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg[Release Please,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml]

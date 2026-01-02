@@ -1,0 +1,65 @@
+= Guide de démarrage rapide
+:description: Instructions pour démarrer rapidement avec Musique Approximative
+
+== Prérequis
+
+* Docker Desktop installé et en cours d'exécution
+* Fichier `/etc/hosts` configuré avec :
++
+[source,hosts]
+----
+127.0.0.1 www.musiqueapproximative.test
+----
+
+== Installation
+
+=== Cloner le dépôt
+
+[source,bash]
+----
+git clone git@github.com:constructions-incongrues/musiqueapproximative.git
+cd musiqueapproximative
+----
+
+=== Démarrage automatique
+
+[source,bash]
+----
+./start-dev.sh
+----
+
+Le script `start-dev.sh` va :
+
+1. Démarrer les conteneurs Docker
+2. Initialiser la base de données
+3. Configurer l'environnement de développement
+
+=== Arrêt de l'application
+
+[source,bash]
+----
+./stop-dev.sh
+----
+
+== Accès à l'application
+
+Une fois l'application démarrée, vous pouvez y accéder via :
+
+* **Direct** : http://localhost:8001
+* **Via Nginx** : http://localhost:8080
+* **Nom de domaine** : http://www.musiqueapproximative.test:8080
+
+=== Interfaces disponibles
+
+* Frontend (prod) : http://www.musiqueapproximative.test
+* Frontend (dev) : http://www.musiqueapproximative.test/frontend_dev.php
+* Admin (prod) : http://www.musiqueapproximative.test/admin_prod.php
+* Admin (dev) : http://www.musiqueapproximative.test/admin_dev.php
+* Gestion de la base de données : http://adminer.musiqueapproximative.test
+** Identifiants : `root` / `root`
+
+== Prochaines étapes
+
+* Consultez le xref:contribution.adoc[guide de contribution] pour apprendre à contribuer
+* Explorez l'xref:architecture.adoc[architecture du projet]
+* Découvrez les xref:developpement/commandes.adoc[commandes utiles]
