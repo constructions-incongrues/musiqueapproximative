@@ -1,14 +1,18 @@
-# Documentation Musique Approximative
+= Documentation Musique Approximative
+:description: Guide pour contribuer à la documentation du projet
+:toc: left
+:toclevels: 3
 
-Cette documentation est générée avec [Antora](https://antora.org/) et déployée automatiquement sur GitHub Pages.
+Cette documentation est générée avec https://antora.org/[Antora] et déployée automatiquement sur GitHub Pages.
 
-## 📚 Accéder à la documentation
+== 📚 Accéder à la documentation
 
 **Documentation en ligne** : https://constructions-incongrues.github.io/musiqueapproximative
 
-## 🏗️ Structure
+== 🏗️ Structure
 
-```
+[source,text]
+----
 docs/
 ├── antora.yml              # Descripteur du composant Antora
 ├── modules/
@@ -29,52 +33,56 @@ docs/
 │               ├── release-please.adoc
 │               └── dependabot.adoc
 └── .gitignore
-```
+----
 
-## 🔧 Générer localement
+== 🔧 Générer localement
 
-### Prérequis
+=== Prérequis
 
-- Node.js 20+
-- npm
+* Node.js 20+
+* npm
 
-### Installation
+=== Installation
 
-```bash
+[source,bash]
+----
 npm install -g @antora/cli@latest @antora/site-generator@latest
-```
+----
 
-### Génération
+=== Génération
 
-```bash
+[source,bash]
+----
 # Depuis la racine du projet
 antora antora-playbook.yml
 
 # Le site sera généré dans ./build/site
-```
+----
 
-### Prévisualisation
+=== Prévisualisation
 
-```bash
+[source,bash]
+----
 # Avec un serveur HTTP simple
 npx http-server build/site -p 8000
 
 # Ou avec Python
 cd build/site
 python3 -m http.server 8000
-```
+----
 
 Puis ouvrir http://localhost:8000
 
-## ✍️ Contribuer à la documentation
+== ✍️ Contribuer à la documentation
 
-### Format
+=== Format
 
-La documentation utilise [AsciiDoc](https://asciidoc.org/), un format de markup plus puissant que Markdown.
+La documentation utilise https://asciidoc.org/[AsciiDoc], un format de markup plus puissant que Markdown.
 
-### Syntaxe de base
+=== Syntaxe de base
 
-```asciidoc
+[source,asciidoc]
+----
 = Titre de la page
 :description: Description de la page
 
@@ -105,35 +113,36 @@ echo "Hello"
 xref:autre-page.adoc[Lien vers une autre page]
 
 https://example.com[Lien externe]
-```
+----
 
-### Ajouter une page
+=== Ajouter une page
 
-1. Créer un fichier `.adoc` dans `docs/modules/ROOT/pages/`
-2. Ajouter une entrée dans `docs/modules/ROOT/nav.adoc`
-3. Commiter et pousser
+. Créer un fichier `.adoc` dans `docs/modules/ROOT/pages/`
+. Ajouter une entrée dans `docs/modules/ROOT/nav.adoc`
+. Commiter et pousser
 
 Le site sera automatiquement régénéré et déployé.
 
-### Références croisées
+=== Références croisées
 
-```asciidoc
+[source,asciidoc]
+----
 xref:guide-demarrage.adoc[Guide de démarrage]
 xref:developpement/commandes.adoc[Commandes utiles]
-```
+----
 
-## 🚀 Déploiement
+== 🚀 Déploiement
 
 Le déploiement est automatique via GitHub Actions :
 
-1. **Trigger** : Push sur `main` modifiant `docs/` ou `antora-playbook.yml`
-2. **Build** : Génération du site avec Antora
-3. **Deploy** : Publication sur GitHub Pages
+. **Trigger** : Push sur `main` modifiant `docs/` ou `antora-playbook.yml`
+. **Build** : Génération du site avec Antora
+. **Deploy** : Publication sur GitHub Pages
 
 Workflow : `.github/workflows/documentation.yml`
 
-## 📖 Ressources
+== 📖 Ressources
 
-- [Documentation Antora](https://docs.antora.org/)
-- [Syntaxe AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest/)
-- [Antora UI](https://gitlab.com/antora/antora-ui-default)
+* https://docs.antora.org/[Documentation Antora]
+* https://docs.asciidoctor.org/asciidoc/latest/[Syntaxe AsciiDoc]
+* https://gitlab.com/antora/antora-ui-default[Antora UI]

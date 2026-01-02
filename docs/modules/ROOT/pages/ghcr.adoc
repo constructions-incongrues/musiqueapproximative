@@ -1,43 +1,65 @@
-# Utilisation de GitHub Container Registry (GHCR)
+= Utilisation de GitHub Container Registry (GHCR)
+:description: Guide d'utilisation du GitHub Container Registry pour le projet
+:toc: left
+:toclevels: 3
 
-## Vue d'ensemble
+== Vue d'ensemble
 
 Le projet est configuré pour publier automatiquement les images Docker vers GitHub Container Registry (GHCR) lors de chaque push vers les branches principales.
 
-## Configuration
+== Configuration
 
-### Workflow CI
+=== Workflow CI
 
 Le workflow `.github/workflows/ci.yml` inclut un job `docker-build` qui :
 
-1. **Se connecte à GHCR** avec le token GitHub automatique
-2. **Extrait les métadonnées** pour le tagging automatique
-3. **Build l'image Docker** avec cache optimisé
-4. **Pousse l'image** vers GHCR (sauf pour les PRs)
+. **Se connecte à GHCR** avec le token GitHub automatique
+. **Extrait les métadonnées** pour le tagging automatique
+. **Build l'image Docker** avec cache optimisé
+. **Pousse l'image** vers GHCR (sauf pour les PRs)
 
-### Permissions
+=== Permissions
 
 Le workflow a les permissions suivantes :
-- `contents: read` - Lire le code du dépôt
-- `packages: write` - Écrire dans le registry de packages
 
-## Tags automatiques
+* `contents: read` - Lire le code du dépôt
+* `packages: write` - Écrire dans le registry de packages
+
+== Tags automatiques
 
 Les images sont taguées automatiquement selon le contexte :
 
-| Événement | Tag | Exemple |
-|-----------|-----|---------|
-| Push sur branche | `branch-name` | `main`, `develop` |
-| Pull Request | `pr-123` | `pr-42` |
-| Tag semver | `version`, `major.minor`, `major` | `1.2.3`, `1.2`, `1` |
-| Commit SHA | `branch-sha` | `main-abc1234` |
-| Branche par défaut | `latest` | `latest` |
+[cols="1,1,1"]
+|===
+|Événement |Tag |Exemple
 
-## Utilisation des images
+|Push sur branche
+|`branch-name`
+|`main`, `develop`
 
-### Pull d'une image
+|Pull Request
+|`pr-123`
+|`pr-42`
 
-```bash
+|Tag semver
+|`version`, `major.minor`, `major`
+|`1.2.3`, `1.2`, `1`
+
+|Commit SHA
+|`branch-sha`
+|`main-abc1234`
+
+|Branche par défaut
+|`latest`
+|`latest`
+|===
+
+== Utilisation des images
+
+=== Pull d'une image
+
+[source,bash]
+----
 # Image latest (branche main)
 docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:latest
 
@@ -49,49 +71,55 @@ docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:1.2.3
 
 # Image d'un commit spécifique
 docker pull ghcr.io/constructions-incongrues/net.musiqueapproximative.www:main-abc1234
-```
+----
 
-### Utilisation dans docker-compose
+=== Utilisation dans docker-compose
 
-```yaml
+[source,yaml]
+----
 services:
   app:
     image: ghcr.io/constructions-incongrues/net.musiqueapproximative.www:latest
     # ... reste de la configuration
-```
+----
 
-### Authentification (si le dépôt est privé)
+=== Authentification (si le dépôt est privé)
 
-```bash
+[source,bash]
+----
 # Se connecter à GHCR
 echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 
 # Ou avec un Personal Access Token
 echo $PAT | docker login ghcr.io -u USERNAME --password-stdin
-```
+----
 
-## Visibilité des packages
+== Visibilité des packages
 
 Par défaut, les packages GHCR héritent de la visibilité du dépôt :
-- Dépôt public → Package public
-- Dépôt privé → Package privé
+
+* Dépôt public → Package public
+* Dépôt privé → Package privé
 
 Pour changer la visibilité :
-1. Aller sur https://github.com/orgs/constructions-incongrues/packages
-2. Sélectionner le package
-3. Package settings → Change visibility
 
-## Cache des builds
+. Aller sur https://github.com/orgs/constructions-incongrues/packages
+. Sélectionner le package
+. Package settings → Change visibility
+
+== Cache des builds
 
 Le workflow utilise le cache GitHub Actions pour accélérer les builds :
-- `cache-from: type=gha` - Utilise le cache existant
-- `cache-to: type=gha,mode=max` - Sauvegarde le cache maximum
+
+* `cache-from: type=gha` - Utilise le cache existant
+* `cache-to: type=gha,mode=max` - Sauvegarde le cache maximum
 
 Cela réduit significativement le temps de build pour les builds suivants.
 
-## Workflow de publication
+== Workflow de publication
 
-```mermaid
+[mermaid]
+----
 graph LR
     A[Push vers main] --> B[Trigger CI]
     B --> C[Build Docker]
@@ -100,18 +128,19 @@ graph LR
     E --> F[Build Image]
     F --> G[Push to GHCR]
     G --> H[Tag: latest, main, sha]
-```
+----
 
-## Nettoyage des anciennes images
+== Nettoyage des anciennes images
 
 Pour éviter l'accumulation d'images, vous pouvez :
 
-1. **Manuellement** : Supprimer les anciennes versions via l'interface GitHub
-2. **Automatiquement** : Ajouter une GitHub Action pour nettoyer les anciennes images
+. **Manuellement** : Supprimer les anciennes versions via l'interface GitHub
+. **Automatiquement** : Ajouter une GitHub Action pour nettoyer les anciennes images
 
 Exemple de workflow de nettoyage (optionnel) :
 
-```yaml
+[source,yaml]
+----
 name: Cleanup old images
 
 on:
@@ -128,37 +157,39 @@ jobs:
           package-type: 'container'
           min-versions-to-keep: 10
           delete-only-untagged-versions: 'true'
-```
+----
 
-## Vérification
+== Vérification
 
 Après un push, vérifiez que l'image a été publiée :
 
-1. Aller sur https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www
-2. Vérifier les tags disponibles
-3. Vérifier la date de dernière publication
+. Aller sur https://github.com/constructions-incongrues/net.musiqueapproximative.www/pkgs/container/net.musiqueapproximative.www
+. Vérifier les tags disponibles
+. Vérifier la date de dernière publication
 
-## Troubleshooting
+== Troubleshooting
 
-### Erreur de permission
+=== Erreur de permission
 
 Si vous obtenez une erreur de permission :
-- Vérifier que `packages: write` est bien dans les permissions du workflow
-- Vérifier que le token GitHub a les permissions nécessaires
 
-### Image non publiée sur PR
+* Vérifier que `packages: write` est bien dans les permissions du workflow
+* Vérifier que le token GitHub a les permissions nécessaires
+
+=== Image non publiée sur PR
 
 C'est normal ! Les images ne sont pas publiées pour les PRs pour économiser l'espace de stockage. Elles sont seulement buildées pour vérifier qu'il n'y a pas d'erreurs.
 
-### Cache non utilisé
+=== Cache non utilisé
 
 Si le cache n'est pas utilisé :
-- Vérifier que les builds précédents ont réussi
-- Le cache est partagé entre les branches du même dépôt
-- Le cache expire après 7 jours d'inactivité
 
----
+* Vérifier que les builds précédents ont réussi
+* Le cache est partagé entre les branches du même dépôt
+* Le cache expire après 7 jours d'inactivité
 
-**Registry** : `ghcr.io`  
-**Image** : `ghcr.io/constructions-incongrues/net.musiqueapproximative.www`  
+'''
+
+**Registry** : `ghcr.io` +
+**Image** : `ghcr.io/constructions-incongrues/net.musiqueapproximative.www` +
 **Visibilité** : Hérite du dépôt
