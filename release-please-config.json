@@ -11,7 +11,7 @@
         {"type": "refactor", "section": "Refactoring", "hidden": false},
         {"type": "perf", "section": "Performance", "hidden": false},
         {"type": "test", "section": "Tests", "hidden": false},
-        {"type": "chore", "section": "Maintenance", "hidden": false}
+        {"type": "chore", "section": "Maintenance", "hidden": true}
       ]
     }
   }
