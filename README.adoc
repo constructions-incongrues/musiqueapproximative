@@ -6,4 +6,4 @@ image:https://github.com/constructions-incongrues/musiqueapproximative/actions/w
 image:https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml/badge.svg[Release Please,link=https://github.com/constructions-incongrues/musiqueapproximative/actions/workflows/release-please.yml]
 
 * https://constructions-incongrues.github.io/musiqueapproximative[Documentation]
-* https://www.musiqueapproximative.net[musiqueapproximative.net]
+
