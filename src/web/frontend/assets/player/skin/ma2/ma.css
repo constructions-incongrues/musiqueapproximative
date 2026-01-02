@@ -111,9 +111,20 @@ text-decoration: none;}
 
 }
 
-.jp-controls a  {color:#FFF;font-family: 'Rambla', sans-serif;font-size: 13px;font-size: 1.3rem;text-transform: uppercase;
-background-color: #000;
-padding: 4px 4px 2px 4px;}
+.jp-controls a {
+  color: #FFF;
+  font-family: 'Rambla', sans-serif;
+  font-size: 13px;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  background-color: #000;
+  padding: 4px 8px 4px 8px;
+  display: inline-block;
+  text-indent: 0 !important;
+  overflow: visible !important;
+  width: auto !important;
+  height: 67px !important;
+}
 
 .jp-controls {color:#000;font-size: 15px;font-size: 1.5rem;}
 .jp-controls a:hover, .jp-controls a.not
@@ -124,8 +135,6 @@ background-color:#AAA;color:#000;
 .jp-pause {
   z-index: 1;
   outline: none;
-  width: 30px;
-  height: 30px;
   background-repeat: no-repeat;
 }
 
