@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.6.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.5.0...v1.6.0) (2026-01-02)
+
+
+### Fonctionnalités
+
+* add CodeQL workflow and broaden CI tag trigger to include all tags ([0d2c960](https://github.com/constructions-incongrues/musiqueapproximative/commit/0d2c9606af999b33ce083ab4d42f9988c7b46442))
+* add Dependabot configuration and refactor Trunk Check pull request workflows. ([edcd7cd](https://github.com/constructions-incongrues/musiqueapproximative/commit/edcd7cdca7b1e4ca5f1d1e66fc358adb77b54d74))
+* Add OSSF Scorecard analysis workflow and refactor linting configuration. ([0f88035](https://github.com/constructions-incongrues/musiqueapproximative/commit/0f88035cbc33f8ad0544bdd53dd7cdfa3ea75932))
+* add Trivy vulnerability scanning workflow and update Trunk Linter action reference ([938b13f](https://github.com/constructions-incongrues/musiqueapproximative/commit/938b13f04ef3ca19ffee581bb644e05a84c15cba))
+
+
+### Styles
+
+* add blank line to trunk.yaml ([bbbd5f6](https://github.com/constructions-incongrues/musiqueapproximative/commit/bbbd5f69991e127aaf9182bac4893dcedf9b1a74))
+* Format documentation workflow YAML by removing redundant quotes ([275e03f](https://github.com/constructions-incongrues/musiqueapproximative/commit/275e03f773398cdc96ead48bcf83c52ce9a03dbd))
+
+
+### Refactoring
+
+* enhance shell scripts with robust variable quoting and modern conditional syntax ([cea87fa](https://github.com/constructions-incongrues/musiqueapproximative/commit/cea87fa2905f595cf585e066d6fb38df8d6ffa7d))
+
 ## [1.5.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.4.1...v1.5.0) (2026-01-02)
 
 
