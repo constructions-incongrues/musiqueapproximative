@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.4.0...v1.4.1) (2026-01-02)
+
+
+### Documentation
+
+* refresh GitHub Actions badges and add security scan badge to README. ([007a173](https://github.com/constructions-incongrues/musiqueapproximative/commit/007a173c249bb2222198e5289b8e804a2f2aed72))
+* update Antora site title ([6f93b96](https://github.com/constructions-incongrues/musiqueapproximative/commit/6f93b966cab47cf7a8168827cb13cd420e806023))
+
 ## [1.4.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.3.0...v1.4.0) (2026-01-02)
 
 
