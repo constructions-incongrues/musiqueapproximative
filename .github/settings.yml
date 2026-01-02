@@ -6,7 +6,13 @@ repository:
   name: musiqueapproximative
   description: "Site web de Musique Approximative - Playlist quotidienne anarchique de mélomanes fêlé⋅e⋅s"
   homepage: https://www.musiqueapproximative.net
-  topics: music, playlist, symfony, php, docker, glitch-art
+  topics:
+    - musique
+    - playlist
+    - symfony
+    - php
+    - docker
+    - art-glitch
 
   private: false
   has_issues: true
