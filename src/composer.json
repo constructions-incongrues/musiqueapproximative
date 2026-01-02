@@ -1,7 +1,7 @@
 {
     "name": "constructions-incongrues/musique-approximative",
     "description": "C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.",
-    "license": "AGPLv3",
+    "license": "AGPL-3.0-or-later",
     "authors": [
         {
             "name": "Constructions Incongrues",
