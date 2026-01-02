@@ -382,7 +382,7 @@ imports:
   - { resource: recettes/mon-desastre.yml }
 ----
 
-. **Documenter** : Créer `src/web/desastres/mon-desastre/README.md`
+. **Documenter** : Créer `src/web/desastres/mon-desastre/README.adoc`
 
 === Bibliothèques disponibles
 
@@ -531,7 +531,7 @@ if (prefersReducedMotion) {
 
 === Maintenance
 
-* **Documentation** : Chaque désastre doit avoir un README.md
+* **Documentation** : Chaque désastre doit avoir un README.adoc
 * **Versioning** : Documenter les changements dans les recettes
 * **Tests** : Tester avec différents contenus et navigateurs
 

@@ -1,27 +1,29 @@
-# sfDesastrePlugin
+= sfDesastrePlugin
 
 Plugin Symfony 1.5 pour gérer un système de "désastres" basé sur des règles. Ce plugin permet d'injecter dynamiquement des assets (CSS/JavaScript) dans vos pages en fonction de conditions définies par des règles YAML.
 
-## Caractéristiques
+== Caractéristiques
 
-- **Moteur de règles flexible** : Évaluez des expressions complexes basées sur les paramètres de requête et le contexte
-- **Support des regex** : Testez les valeurs avec des expressions régulières
-- **Contexte temporel** : Déclenchez des désastres selon la date, l'heure, le jour de la semaine
-- **Probabilités** : Contrôlez la fréquence d'apparition des désastres
-- **Configuration YAML** : Définissez vos règles et recettes dans un fichier de configuration simple
-- **Assets automatiques** : Injection automatique de CSS et JavaScript dans la réponse
+* *Moteur de règles flexible* : Évaluez des expressions complexes basées sur les paramètres de requête et le contexte
+* *Support des regex* : Testez les valeurs avec des expressions régulières
+* *Contexte temporel* : Déclenchez des désastres selon la date, l'heure, le jour de la semaine
+* *Probabilités* : Contrôlez la fréquence d'apparition des désastres
+* *Configuration YAML* : Définissez vos règles et recettes dans un fichier de configuration simple
+* *Assets automatiques* : Injection automatique de CSS et JavaScript dans la réponse
 
-## Installation
+== Installation
 
-1. Copiez le plugin dans votre répertoire `plugins/` :
+. Copiez le plugin dans votre répertoire `plugins/` :
 
-```bash
+[,bash]
+----
 cp -r sfDesastrePlugin /path/to/your/symfony/project/plugins/
-```
+----
 
-2. Activez le plugin dans votre `config/ProjectConfiguration.class.php` :
+. Activez le plugin dans votre `config/ProjectConfiguration.class.php` :
 
-```php
+[,php]
+----
 class ProjectConfiguration extends sfProjectConfiguration
 {
   public function setup()
@@ -33,11 +35,12 @@ class ProjectConfiguration extends sfProjectConfiguration
     ));
   }
 }
-```
+----
 
-3. Activez le filtre dans votre `apps/frontend/config/filters.yml` :
+. Activez le filtre dans votre `apps/frontend/config/filters.yml` :
 
-```yaml
+[,yaml]
+----
 rendering: ~
 security:  ~
 
@@ -47,25 +50,28 @@ desastre:
 
 cache:     ~
 execution: ~
-```
+----
 
-4. Créez votre fichier de configuration :
+. Créez votre fichier de configuration :
 
-```bash
+[,bash]
+----
 cp plugins/sfDesastrePlugin/data/config/desastres.yml.example apps/frontend/config/desastres.yml
-```
+----
 
-5. Créez la structure de dossiers pour vos assets :
+. Créez la structure de dossiers pour vos assets :
 
-```bash
+[,bash]
+----
 mkdir -p web/desastres
-```
+----
 
-## Configuration
+== Configuration
 
-### Structure du fichier `desastres.yml`
+=== Structure du fichier `desastres.yml`
 
-```yaml
+[,yaml]
+----
 regles:
   - query: "query.title ~ /.*amour.*/i || (context.date.day == '14' && context.date.month == '2')"
     recettes: [amour_caca, amour_pipi]
@@ -78,46 +84,42 @@ recettes:
     options:
       color: yellow
       text: PIPI
-```
+----
 
-### Syntaxe des règles
+=== Syntaxe des règles
 
-#### Variables disponibles
+==== Variables disponibles
 
-- **query.*** : Tous les paramètres de la requête
-  - `query.title` : Titre d'un post
-  - `query.artist` : Artiste
-  - `query.contributor` : Contributeur
-  - etc.
+* *query.** : Tous les paramètres de la requête
+ ** `query.title` : Titre d'un post
+ ** `query.artist` : Artiste
+ ** `query.contributor` : Contributeur
+ ** etc.
+* *context.date.** : Informations de date/heure
+ ** `context.date.day` : Jour du mois (1-31)
+ ** `context.date.month` : Mois (1-12)
+ ** `context.date.year` : Année (ex: 2025)
+ ** `context.date.hour` : Heure (0-23)
+ ** `context.date.minute` : Minute (0-59)
+ ** `context.date.weekday` : Jour de la semaine (1=lundi, 7=dimanche)
 
-- **context.date.*** : Informations de date/heure
-  - `context.date.day` : Jour du mois (1-31)
-  - `context.date.month` : Mois (1-12)
-  - `context.date.year` : Année (ex: 2025)
-  - `context.date.hour` : Heure (0-23)
-  - `context.date.minute` : Minute (0-59)
-  - `context.date.weekday` : Jour de la semaine (1=lundi, 7=dimanche)
+==== Opérateurs
 
-#### Opérateurs
+* `~` : Test de regex
+ ** Exemple : `query.title ~ /.*love.*/i`
+* `==`, `!=`, `>`, `<`, `>=`, `+<=+` : Comparaisons
+ ** Exemple : `context.date.month == '12'`
+* `&&` : ET logique
+ ** Exemple : `query.artist ~ /.*beatles.*/i && context.date.hour >= '18'`
+* `||` : OU logique
+ ** Exemple : `query.title ~ /.*rock.*/i || query.title ~ /.*metal.*/i`
+* `()` : Groupement
+ ** Exemple : `(context.date.day == '25' && context.date.month == '12')`
 
-- `~` : Test de regex
-  - Exemple : `query.title ~ /.*love.*/i`
+==== Exemples de règles
 
-- `==`, `!=`, `>`, `<`, `>=`, `<=` : Comparaisons
-  - Exemple : `context.date.month == '12'`
-
-- `&&` : ET logique
-  - Exemple : `query.artist ~ /.*beatles.*/i && context.date.hour >= '18'`
-
-- `||` : OU logique
-  - Exemple : `query.title ~ /.*rock.*/i || query.title ~ /.*metal.*/i`
-
-- `()` : Groupement
-  - Exemple : `(context.date.day == '25' && context.date.month == '12')`
-
-#### Exemples de règles
-
-```yaml
+[,yaml]
+----
 # Saint-Valentin ou titre contenant "amour"
 - query: "(context.date.day == '14' && context.date.month == '2') || query.title ~ /.*amour.*/i"
   recettes: [valentines_day]
@@ -134,13 +136,14 @@ recettes:
 # Combinaison complexe
 - query: "query.contributor == 'john' && (query.title ~ /.*rock.*/i || query.title ~ /.*punk.*/i)"
   recettes: [john_rock_playlist]
-```
+----
 
-## Utilisation
+== Utilisation
 
-### Méthode 1 : Utilisation directe du sfDesastreManager
+=== Méthode 1 : Utilisation directe du sfDesastreManager
 
-```php
+[,php]
+----
 class postActions extends sfActions
 {
   public function executeShow(sfWebRequest $request)
@@ -165,11 +168,12 @@ class postActions extends sfActions
     $this->post = $post;
   }
 }
-```
+----
 
-### Méthode 2 : Utilisation avec le helper (recommandé)
+=== Méthode 2 : Utilisation avec le helper (recommandé)
 
-```php
+[,php]
+----
 class postActions extends sfActions
 {
   public function executeShow(sfWebRequest $request)
@@ -192,26 +196,27 @@ class postActions extends sfActions
     $this->post = $post;
   }
 }
-```
+----
 
-### Chargement automatique du helper
+=== Chargement automatique du helper
 
 Vous pouvez charger le helper automatiquement dans `settings.yml` :
 
-```yaml
+[,yaml]
+----
 # apps/frontend/config/settings.yml
 all:
   .settings:
     standard_helpers: [Partial, Cache, Desastre]
-```
+----
 
 Ainsi, `apply_desastre()` sera disponible partout sans avoir besoin de `loadHelpers('Desastre')`.
 
-## Structure des assets
+== Structure des assets
 
 Les assets doivent être organisés par "désastre" :
 
-```
+----
 web/
 └── desastres/
     ├── amour/
@@ -229,15 +234,15 @@ web/
         │   └── robot.css
         └── javascript/
             └── robot-animation.js
-```
+----
 
 Le plugin détectera automatiquement tous les fichiers `.css` et `.js` dans ces dossiers.
 
-### Ordre de chargement des assets
+=== Ordre de chargement des assets
 
-Les fichiers sont chargés par **ordre alphabétique naturel**. Pour contrôler l'ordre de chargement, utilisez des préfixes numériques :
+Les fichiers sont chargés par *ordre alphabétique naturel*. Pour contrôler l'ordre de chargement, utilisez des préfixes numériques :
 
-```
+----
 web/
 └── desastres/
     └── robot/
@@ -250,19 +255,20 @@ web/
             ├── 02-core.js         # Chargé en second
             ├── 03-animations.js   # Chargé en troisième
             └── 10-effects.js      # Chargé en dernier
-```
+----
 
-**Note** : Le tri naturel (`natsort`) gère correctement les nombres, donc `10-effects.js` sera chargé après `02-core.js` (et non entre `01` et `02`).
+*Note* : Le tri naturel (`natsort`) gère correctement les nombres, donc `10-effects.js` sera chargé après `02-core.js` (et non entre `01` et `02`).
 
-## Options des desastres
+== Options des desastres
 
 Les options definies dans la configuration YAML sont automatiquement injectees dans le HTML et accessibles de deux facons :
 
-### Acces via JavaScript
+=== Acces via JavaScript
 
 Les options sont disponibles dans l'objet global `window.DesastreOptions` :
 
-```javascript
+[,javascript]
+----
 // Exemple : acceder aux options du desastre "amour"
 if (window.DesastreOptions && window.DesastreOptions.amour) {
   var options = window.DesastreOptions.amour;
@@ -281,13 +287,14 @@ if (window.DesastreOptions && window.DesastreOptions.amour) {
 //     "speed": "fast"
 //   }
 // }
-```
+----
 
-### Acces via CSS (Custom Properties)
+=== Acces via CSS (Custom Properties)
 
 Les options sont aussi injectees comme variables CSS :
 
-```css
+[,css]
+----
 /* Les options deviennent des variables CSS au format --desastre-NOM-CLE */
 
 /* Exemple avec le desastre "amour" ayant l'option color: "red" */
@@ -301,12 +308,14 @@ Les options sont aussi injectees comme variables CSS :
   animation-duration: var(--desastre-robot-speed);
   /* Equivalent a: animation-duration: 2s; */
 }
-```
+----
 
-### Exemple complet
+=== Exemple complet
 
 Configuration YAML :
-```yaml
+
+[,yaml]
+----
 recettes:
   amour:
     enabled: true
@@ -315,10 +324,12 @@ recettes:
       color: "#ff0066"
       intensity: "high"
       duration: "3s"
-```
+----
 
 JavaScript (`web/desastres/amour/javascript/amour.js`) :
-```javascript
+
+[,javascript]
+----
 (function() {
   var options = window.DesastreOptions.amour;
 
@@ -331,10 +342,12 @@ JavaScript (`web/desastres/amour/javascript/amour.js`) :
     createHearts(20);
   }
 })();
-```
+----
 
 CSS (`web/desastres/amour/stylesheets/style.css`) :
-```css
+
+[,css]
+----
 .heart {
   /* Utiliser la couleur depuis les options */
   background-color: var(--desastre-amour-color);
@@ -342,24 +355,25 @@ CSS (`web/desastres/amour/stylesheets/style.css`) :
   /* Utiliser la duree depuis les options */
   animation-duration: var(--desastre-amour-duration);
 }
-```
+----
 
-### Avantages de ce systeme
+=== Avantages de ce systeme
 
-1. **Centralisation** : Toutes les options sont dans le fichier YAML, pas besoin de modifier le JS/CSS
-2. **Reutilisabilite** : Un meme desastre peut avoir differentes configurations selon la recette
-3. **Flexibilite** : Les options sont accessibles cote client (JS et CSS)
-4. **Maintenabilite** : Modification facile sans toucher au code
+. *Centralisation* : Toutes les options sont dans le fichier YAML, pas besoin de modifier le JS/CSS
+. *Reutilisabilite* : Un meme desastre peut avoir differentes configurations selon la recette
+. *Flexibilite* : Les options sont accessibles cote client (JS et CSS)
+. *Maintenabilite* : Modification facile sans toucher au code
 
-## Ressources partagées
+== Ressources partagées
 
-### Helper Audio Global (`desastre-audio.js`)
+=== Helper Audio Global (`desastre-audio.js`)
 
 Un script partagé qui expose les informations de l'élément audio (jPlayer ou HTML5 `<audio>`) à tous les désastres via `window.DesastreAudio`.
 
-**Inclure dans une recette** :
+*Inclure dans une recette* :
 
-```yaml
+[,yaml]
+----
 recettes:
   mon_desastre:
     enabled: true
@@ -367,11 +381,12 @@ recettes:
     scripts:
       - /desastres/shared/desastre-audio.js  # Charger en premier
       # ... autres scripts
-```
+----
 
-**Utilisation dans votre JavaScript** :
+*Utilisation dans votre JavaScript* :
 
-```javascript
+[,javascript]
+----
 // Attendre que l'audio soit prêt
 window.DesastreAudio.onReady(function(audio) {
     console.log('Duration:', audio.duration + 's');
@@ -382,19 +397,21 @@ window.DesastreAudio.onReady(function(audio) {
         duration: audio.duration
     });
 });
-```
+----
 
-**API disponible** :
-- `window.DesastreAudio.duration` : Durée en secondes (ou `null`)
-- `window.DesastreAudio.element` : Élément `<audio>` HTML5 (ou `null`)
-- `window.DesastreAudio.isReady` : `true` si les métadonnées sont chargées
-- `window.DesastreAudio.onReady(callback)` : Enregistrer un callback appelé quand l'audio est prêt
+*API disponible* :
 
-Voir la [documentation complète](../../web/desastres/shared/README.md) pour plus de détails.
+* `window.DesastreAudio.duration` : Durée en secondes (ou `null`)
+* `window.DesastreAudio.element` : Élément `<audio>` HTML5 (ou `null`)
+* `window.DesastreAudio.isReady` : `true` si les métadonnées sont chargées
+* `window.DesastreAudio.onReady(callback)` : Enregistrer un callback appelé quand l'audio est prêt
 
-### Exemple de recettes multiples avec options differentes
+Voir la xref:../../web/desastres/shared/README.adoc[documentation complète] pour plus de détails.
 
-```yaml
+=== Exemple de recettes multiples avec options differentes
+
+[,yaml]
+----
 regles:
   # Saint-Valentin : coeurs rouges intenses
   - query: "context.date.day == '14' && context.date.month == '2'"
@@ -420,105 +437,110 @@ recettes:
       color: "#ffb3d9"
       intensity: low
       count: 10
-```
+----
 
-## API
+== API
 
-### sfDesastreManager
+=== sfDesastreManager
 
-#### `__construct($config = null)`
+==== `__construct($config = null)`
 
 Cree une nouvelle instance du gestionnaire.
 
-- **$config** : Chemin vers le fichier YAML ou tableau de configuration
+* *$config* : Chemin vers le fichier YAML ou tableau de configuration
 
-#### `loadConfig($configPath)`
+==== `loadConfig($configPath)`
 
 Charge la configuration depuis un fichier YAML.
 
-- **$configPath** : Chemin vers le fichier de configuration
-- **Retour** : Instance courante (chainage)
+* *$configPath* : Chemin vers le fichier de configuration
+* *Retour* : Instance courante (chainage)
 
-#### `applyToRequest(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $webRoot = '/desastres', $fsRoot = null)`
+==== `applyToRequest(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $webRoot = '/desastres', $fsRoot = null)`
 
-**NOUVEAU** : Methode tout-en-un qui applique automatiquement les desastres pour une requete donnee.
+*NOUVEAU* : Methode tout-en-un qui applique automatiquement les desastres pour une requete donnee.
 
-- **$request** : Objet requete Symfony (sfWebRequest)
-- **$response** : Objet reponse Symfony
-- **$extraParams** : Parametres supplementaires a ajouter aux parametres de la requete
-- **$webRoot** : Chemin web racine
-- **$fsRoot** : Chemin systeme de fichiers racine
+* *$request* : Objet requete Symfony (sfWebRequest)
+* *$response* : Objet reponse Symfony
+* *$extraParams* : Parametres supplementaires a ajouter aux parametres de la requete
+* *$webRoot* : Chemin web racine
+* *$fsRoot* : Chemin systeme de fichiers racine
 
 Cette methode :
-1. Fusionne les parametres de `$request` avec `$extraParams`
-2. Trouve les recettes correspondantes
-3. Applique automatiquement les assets CSS/JS a la reponse
 
-#### `findRecettes($request = array(), array $context = array())`
+. Fusionne les parametres de `$request` avec `$extraParams`
+. Trouve les recettes correspondantes
+. Applique automatiquement les assets CSS/JS a la reponse
+
+==== `findRecettes($request = array(), array $context = array())`
 
 Trouve les recettes correspondant aux parametres.
 
-- **$request** : Objet sfWebRequest ou tableau de parametres
-- **$context** : Contexte additionnel (optionnel)
-- **Retour** : Tableau de recettes
+* *$request* : Objet sfWebRequest ou tableau de parametres
+* *$context* : Contexte additionnel (optionnel)
+* *Retour* : Tableau de recettes
 
-#### `applyRecettesToResponse(sfWebResponse $response, array $recettes, $webRoot = '/desastres', $fsRoot = null)`
+==== `applyRecettesToResponse(sfWebResponse $response, array $recettes, $webRoot = '/desastres', $fsRoot = null)`
 
 Applique les recettes a une reponse Symfony.
 
-- **$response** : Objet reponse Symfony
-- **$recettes** : Recettes a appliquer
-- **$webRoot** : Chemin web racine
-- **$fsRoot** : Chemin systeme de fichiers racine
+* *$response* : Objet reponse Symfony
+* *$recettes* : Recettes a appliquer
+* *$webRoot* : Chemin web racine
+* *$fsRoot* : Chemin systeme de fichiers racine
 
-### sfDesastreRuleEngine
+=== sfDesastreRuleEngine
 
-#### `__construct(array $query = array(), array $context = array())`
+==== `__construct(array $query = array(), array $context = array())`
 
 Crée un moteur de règles.
 
-- **$query** : Paramètres de requête
-- **$context** : Contexte (date par défaut)
+* *$query* : Paramètres de requête
+* *$context* : Contexte (date par défaut)
 
-#### `evaluate($expression)`
+==== `evaluate($expression)`
 
 Évalue une expression de règle.
 
-- **$expression** : Expression à évaluer
-- **Retour** : Boolean
+* *$expression* : Expression à évaluer
+* *Retour* : Boolean
 
-## Exemples avancés
+== Exemples avancés
 
-### Désastre de Noël avec probabilité
+=== Désastre de Noël avec probabilité
 
-```yaml
+[,yaml]
+----
 regles:
   - query: "context.date.month == '12' && context.date.day >= '20'"
     recettes: [noel_snow, noel_lights]
     probability: 0.7  # 70% de chances
-```
+----
 
-### Désastre par plage horaire
+=== Désastre par plage horaire
 
-```yaml
+[,yaml]
+----
 regles:
   - query: "context.date.hour >= '22' || context.date.hour <= '6'"
     recettes: [night_mode]
-```
+----
 
-### Désastre basé sur plusieurs critères
+=== Désastre basé sur plusieurs critères
 
-```yaml
+[,yaml]
+----
 regles:
   - query: "query.contributor ~ /.*john.*/i && query.title ~ /.*rock.*/i && context.date.weekday >= '5'"
     recettes: [weekend_rock_special]
-```
+----
 
-## Tests
+== Tests
 
 Pour tester le moteur de règles :
 
-```php
+[,php]
+----
 // Test simple
 $engine = new sfDesastreRuleEngine(
   array('title' => 'Love Song'),
@@ -531,12 +553,12 @@ var_dump($result); // bool(true)
 // Test avec date
 $result = $engine->evaluate("context.date.day == '14' && context.date.month == '2'");
 var_dump($result); // bool(true)
-```
+----
 
-## Licence
+== Licence
 
 Ce plugin est développé pour Musique Approximative.
 
-## Support
+== Support
 
 Pour toute question ou problème, contactez l'équipe de développement.

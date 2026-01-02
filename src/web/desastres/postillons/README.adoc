@@ -1,0 +1,194 @@
+= Désastre Postillons
+
+== Description
+
+Le désastre "postillons" transforme recouvre progressivement la page d'images positionnées aléatoirement sur une grille. Les images apparaissent une par une avec un délai entre chaque, créant un effet de "peuplement".
+
+== Déclenchement
+
+Le désastre est déclenché lorsque le titre de l'émission contient "mort", "morte", "morts", "death", "deaths" ou "dead" (insensible à la casse).
+
+*Règle :*
+
+[,yaml]
+----
+- query: "query.title ~ /.*(morte?s?|deaths?|dead).*/i"
+  recettes: [postillons]
+  probability: 0.7
+----
+
+== Configuration
+
+=== Options disponibles
+
+|===
+| Option | Type | Défaut | Description
+
+| `imageFolder`
+| string
+| `/desastres/postillons/img`
+| Chemin du dossier contenant les images
+
+| `imageBaseName`
+| string
+| `image`
+| Nom de base des images (sans numéro ni extension)
+
+| `imageExtension`
+| string
+| `png`
+| Extension des fichiers image
+
+| `imageCount`
+| number
+| `20`
+| Nombre d'images à afficher
+
+| `imageSize`
+| number
+| `120`
+| Taille des images en pixels
+
+| `delay`
+| number
+| `800`
+| Délai en ms entre l'apparition de chaque tombe
+|===
+
+=== Exemple de configuration
+
+*Configuration par défaut (cimetière) :*
+
+[,yaml]
+----
+postillons:
+  enabled: true
+  desastre: postillons
+  options:
+    imageFolder: /desastres/postillons/img/cimetiere
+    imageBaseName: image
+    imageExtension: png
+    imageCount: 20
+    imageSize: 120
+    delay: 800
+----
+
+*Configuration personnalisée (par exemple pour Halloween) :*
+
+[,yaml]
+----
+postillons:
+  enabled: true
+  desastre: postillons
+  options:
+    imageFolder: /desastres/halloween/img
+    imageBaseName: pumpkin
+    imageExtension: svg
+    imageCount: 15
+    imageSize: 100
+    delay: 600
+----
+
+== Fonctionnement
+
+. *Chargement des options* : Lecture des options depuis `window.DesastreOptions.postillons` avec fallback sur valeurs par défaut
+. *Création du plateau* : Une div `.plateau` est créée en bas de la page (60vh de hauteur)
+. *Génération de positions* :
+ ** Grille adaptative basée sur le viewport et `imageSize`
+ ** Nombre de positions selon `imageCount`
+ ** Évite les chevauchements (distance min : 2 cellules)
+. *Création progressive* : Les images apparaissent une par une selon le `delay` configuré
+. *Chargement des images* : Chaque tombe affiche une image depuis `imageFolder/imageBaseName[1-N].imageExtension`
+
+== Positionnement
+
+=== Plateau
+
+* *Position* : absolute, bottom: 0
+* *Hauteur* : 60vh
+* *Largeur* : 100%
+* *Z-index* : 1000
+
+=== Grille
+
+* *Cellule* : Configurable via `imageSize` (défaut: 120x120px)
+* *Espacement* : Minimum 2 cellules entre images
+* *Algorithme* : Placement aléatoire avec vérification de distance
+
+=== images
+
+* *Taille* : Configurable via `imageSize`
+* *Images* : `imageFolder/imageBaseName[1-N].imageExtension`
+* *ID* : `tombe-1` à `tombe-N`
+
+== Gestion des images
+
+Le chemin des images est construit dynamiquement :
+
+[,javascript]
+----
+const imagePath = `${options.imageFolder}/${options.imageBaseName}${index + 1}.${options.imageExtension}`;
+----
+
+*Exemples de chemins générés :*
+
+* Défaut : `/desastres/postillons/img/image1.png` à `/desastres/postillons/img/image20.png`
+* Personnalisé : `/desastres/halloween/img/pumpkin1.svg` à `/desastres/halloween/img/pumpkin15.svg`
+
+*Gestion des erreurs :*
+
+[,javascript]
+----
+image.onerror = function() {
+  console.error(`[desastres/postillons] ERROR: Image not found: ${imagePath}`);
+  this.style.display = 'none';
+}
+----
+
+== Timing
+
+* *Délai entre images* : Configurable via `delay` (défaut: 800ms)
+* *Durée totale apparition* : `imageCount * delay` ms
+* *Tentatives placement* : Max 200 essais par tombe pour éviter chevauchement
+
+== Fichiers
+
+* `javascript/postillons.js` : Script principal de génération du cimetière
+* `stylesheets/style.css` : Styles du plateau et des images
+* `img/image1.png` à `image20.png` : Images des pierres tombales
+* `README.adoc` : Cette documentation
+
+== Logs de débogage
+
+[,javascript]
+----
+console.log('[desastres/postillons] Loaded');
+console.log('[desastres/postillons] Options loaded:', window.DesastreOptions.postillons);
+console.log('[desastres/postillons] Using options:', options);
+console.log('[desastres/postillons] Plateau created at bottom (60vh height)');
+console.log('[desastres/postillons] Starting tomb creation');
+console.log(`[desastres/postillons] ${options.imageCount} tombs will be created progressively (${options.delay}ms delay)`);
+console.log(`[desastres/postillons] Image loaded: ${imagePath}`);
+console.error(`[desastres/postillons] ERROR: Image not found: ${imagePath}`);
+console.error('[desastres/postillons] ERROR: .plateau div not found');
+console.error('[desastres/postillons] ERROR: Options not found in window.DesastreOptions.postillons');
+----
+
+== Compatibilité
+
+JavaScript vanilla, compatible avec tous les navigateurs modernes :
+
+* Chrome/Edge : ✅
+* Firefox : ✅
+* Safari : ✅
+* Opera : ✅
+
+== Limitations
+
+* Nombre d'images fixé à 20 (sauf utilisation de la fonction alternative)
+* Les images doivent être nommées exactement `image1.png` à `image20.png`
+* Hauteur du plateau fixée à 60vh (non configurable)
+* Le plateau peut masquer le contenu du bas de page (z-index: 1000)
+* L'algorithme de placement peut échouer si trop de images sur petit viewport
+* Pas de responsive sur la taille des images (120px fixe)
+* Deux fonctions similaires dans le code (duplication)

@@ -33,7 +33,7 @@ jobs:
 
       - name: Valider les fichiers AsciiDoc
         run: |
-          find docs -name "*.adoc" -exec asciidoctor --failure-level WARNING -o /dev/null {} +
+          find . -name "*.adoc" -not -path "*/vendor/*" -not -path "*/node_modules/*" -not -path "./build/*" -not -path "./var/*" -exec asciidoctor --failure-level WARNING -o /dev/null {} +
 
       - name: Super-Linter
         uses: super-linter/super-linter@v8.3.2

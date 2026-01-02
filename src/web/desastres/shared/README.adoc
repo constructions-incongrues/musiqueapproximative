@@ -1,18 +1,19 @@
-# Shared Resources for Desastres
+= Shared Resources for Desastres
 
 Ce dossier contient des ressources partagées utilisables par tous les désastres.
 
-## desastre-audio.js
+== desastre-audio.js
 
 Script qui expose les informations audio globalement via `window.DesastreAudio`.
 
-### Utilisation
+=== Utilisation
 
-#### 1. Inclure le script dans votre recette
+==== 1. Inclure le script dans votre recette
 
-Ajoutez le script dans la section `scripts` de votre recette YAML **avant** votre script de désastre :
+Ajoutez le script dans la section `scripts` de votre recette YAML *avant* votre script de désastre :
 
-```yaml
+[,yaml]
+----
 recettes:
   mon_desastre:
     enabled: true
@@ -21,15 +22,16 @@ recettes:
       - /desastres/shared/desastre-audio.js  # Charger en premier
       - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
       # ... autres scripts
-```
+----
 
-#### 2. Accéder à la durée audio
+==== 2. Accéder à la durée audio
 
-##### Méthode 1 : Callback (recommandé)
+===== Méthode 1 : Callback (recommandé)
 
 Utilisez `window.DesastreAudio.onReady()` pour être notifié quand les métadonnées audio sont chargées :
 
-```javascript
+[,javascript]
+----
 document.addEventListener("DOMContentLoaded", () => {
     console.log('[mon-desastre] Loaded');
 
@@ -45,13 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-```
+----
 
-##### Méthode 2 : Accès direct (pour les cas simples)
+===== Méthode 2 : Accès direct (pour les cas simples)
 
 Si votre code s'exécute après le chargement de l'audio :
 
-```javascript
+[,javascript]
+----
 document.addEventListener("DOMContentLoaded", () => {
     // Vérifier si l'audio est prêt
     if (window.DesastreAudio && window.DesastreAudio.isReady) {
@@ -59,73 +62,83 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('Duration:', duration);
     }
 });
-```
+----
 
-### API
+=== API
 
-#### `window.DesastreAudio`
+==== `window.DesastreAudio`
 
 Objet global contenant les informations audio.
 
-**Propriétés** :
+*Propriétés* :
 
-| Propriété | Type | Description |
-|-----------|------|-------------|
-| `duration` | `number` ou `null` | Durée du morceau en secondes |
-| `element` | `HTMLAudioElement` ou `null` | Élément audio HTML5 |
-| `isReady` | `boolean` | `true` si les métadonnées audio sont chargées |
+|===
+| Propriété | Type | Description
 
-**Méthodes** :
+| `duration`
+| `number` ou `null`
+| Durée du morceau en secondes
 
-##### `onReady(callback)`
+| `element`
+| `HTMLAudioElement` ou `null`
+| Élément audio HTML5
+
+| `isReady`
+| `boolean`
+| `true` si les métadonnées audio sont chargées
+|===
+
+*Méthodes* :
+
+===== `onReady(callback)`
 
 Enregistre une fonction de rappel qui sera appelée quand l'audio est prêt.
 
-- **callback** `Function(DesastreAudio)` : Fonction appelée avec l'objet `DesastreAudio` en paramètre
-- Si l'audio est déjà prêt, le callback est appelé immédiatement
-- Sinon, il est mis en file d'attente et appelé dès que les métadonnées sont chargées
+* *callback* `Function(DesastreAudio)` : Fonction appelée avec l'objet `DesastreAudio` en paramètre
+* Si l'audio est déjà prêt, le callback est appelé immédiatement
+* Sinon, il est mis en file d'attente et appelé dès que les métadonnées sont chargées
 
-**Exemple** :
+*Exemple* :
 
-```javascript
+[,javascript]
+----
 window.DesastreAudio.onReady(function(audio) {
     console.log('Audio ready!');
     console.log('Duration:', audio.duration + 's');
     console.log('Element:', audio.element);
 });
-```
+----
 
-### Fonctionnement
+=== Fonctionnement
 
-1. Le script recherche automatiquement un élément audio dans la page :
-   - D'abord dans `.jp-jplayer` (jPlayer)
-   - Puis dans n'importe quel `<audio>` si jPlayer n'est pas trouvé
+. Le script recherche automatiquement un élément audio dans la page :
+ ** D'abord dans `.jp-jplayer` (jPlayer)
+ ** Puis dans n'importe quel `<audio>` si jPlayer n'est pas trouvé
+. Il écoute les événements `loadedmetadata` et `durationchange` pour détecter quand la durée est disponible
+. Dès que la durée est connue :
+ ** `window.DesastreAudio.duration` est défini
+ ** `window.DesastreAudio.isReady` passe à `true`
+ ** Tous les callbacks enregistrés avec `onReady()` sont appelés
+. Si l'audio n'est pas trouvé immédiatement, le script réessaye après 500ms (utile si l'élément est créé dynamiquement par jPlayer)
 
-2. Il écoute les événements `loadedmetadata` et `durationchange` pour détecter quand la durée est disponible
-
-3. Dès que la durée est connue :
-   - `window.DesastreAudio.duration` est défini
-   - `window.DesastreAudio.isReady` passe à `true`
-   - Tous les callbacks enregistrés avec `onReady()` sont appelés
-
-4. Si l'audio n'est pas trouvé immédiatement, le script réessaye après 500ms (utile si l'élément est créé dynamiquement par jPlayer)
-
-### Logs de débogage
+=== Logs de débogage
 
 Le script affiche des logs dans la console :
 
-```
+----
 [desastres/shared/audio] Initializing audio helper
 [desastres/shared/audio] Found jPlayer audio element
 [desastres/shared/audio] Audio ready, duration: 234.5s
-```
+----
 
-### Exemple complet
+=== Exemple complet
 
 Voici un exemple de désastre qui synchronise son animation avec la durée du morceau :
 
-**desastres.yml** :
-```yaml
+*desastres.yml* :
+
+[,yaml]
+----
 recettes:
   fade_out_sync:
     enabled: true
@@ -133,10 +146,12 @@ recettes:
     scripts:
       - /desastres/shared/desastre-audio.js
       - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-```
+----
 
-**fade_out.js** :
-```javascript
+*fade_out.js* :
+
+[,javascript]
+----
 console.log('[desastres/fade_out] Loaded');
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -156,18 +171,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-```
+----
 
-### Compatibilité
+=== Compatibilité
 
-- Fonctionne avec jPlayer et les éléments HTML5 `<audio>` natifs
-- Compatible tous navigateurs modernes
-- Gère les cas où l'audio est créé dynamiquement
-- Supporte plusieurs callbacks simultanés
+* Fonctionne avec jPlayer et les éléments HTML5 `<audio>` natifs
+* Compatible tous navigateurs modernes
+* Gère les cas où l'audio est créé dynamiquement
+* Supporte plusieurs callbacks simultanés
 
-### Notes
+=== Notes
 
-- Le script est autonome, pas de dépendances
-- Peut être utilisé par plusieurs désastres en même temps
-- Les callbacks sont exécutés dans l'ordre d'enregistrement
-- En cas d'erreur dans un callback, les autres callbacks continuent de s'exécuter
+* Le script est autonome, pas de dépendances
+* Peut être utilisé par plusieurs désastres en même temps
+* Les callbacks sont exécutés dans l'ordre d'enregistrement
+* En cas d'erreur dans un callback, les autres callbacks continuent de s'exécuter

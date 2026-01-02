@@ -1,0 +1,477 @@
+= Banque de Mémoire - Musique Approximative
+
+== Vue d'ensemble du projet
+
+*Nom du projet* : Musique Approximative +
+*Dépôt* : `constructions-incongrues/net.musiqueapproximative.www` +
+*Type* : Plateforme de partage musical / Site de playlist quotidienne +
+*Description* : C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C'est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e.
+
+== Stack technologique
+
+=== Backend
+
+* *Framework* : Symfony 1.5 (framework PHP legacy)
+* *Version PHP* : 7.4+
+* *ORM* : Doctrine 1.3
+* *Base de données* : MySQL (accessible via Adminer)
+* *Moteur de templates* : Templates PHP
+
+=== Frontend
+
+* *JavaScript* : jQuery (via sfJqueryReloadedPlugin)
+* *Lecteur audio* : JW Player (basé sur SWF, situé dans `src/web/swf/mediaplayer-5.9/`)
+* *Styles* : CSS personnalisé avec support de thèmes
+
+=== Infrastructure
+
+* *Conteneurisation* : Docker + Docker Compose
+* *Serveur web* : Nginx (proxy sur le port 8080)
+* *Serveur PHP* : Serveur PHP intégré (port 8001)
+* *Domaine de développement* : `www.musiqueapproximative.test`
+
+=== Dépendances clés
+
+[,json]
+----
+{
+  "lexpress/doctrine1": "1.3.*",
+  "lexpress/symfony1": "1.5.*",
+  "nyholm/psr7": "^1.8",
+  "php": "^7.4",
+  "symfony/process": "^3.2"
+}
+----
+
+== Structure du projet
+
+----
+musiqueapproximative/
+├── .devcontainer/          # Configuration du conteneur de dev
+├── .github/                # Workflows GitHub
+├── .vscode/                # Paramètres VS Code
+├── docker-compose.yml      # Orchestration Docker
+├── Dockerfile              # Définition du conteneur PHP
+├── nginx.conf              # Configuration Nginx
+├── start-dev.sh            # Script de démarrage développement
+├── stop-dev.sh             # Script d'arrêt développement
+├── src/                    # Code principal de l'application
+│   ├── apps/
+│   │   └── frontend/       # Application frontend
+│   │       ├── modules/
+│   │       │   └── post/   # Module post (fonctionnalité principale)
+│   │       ├── templates/  # Templates globaux
+│   │       └── config/     # Configuration de l'app
+│   ├── lib/                # Bibliothèques personnalisées
+│   ├── plugins/            # Plugins Symfony
+│   ├── web/                # Racine web publique
+│   │   ├── desastres/      # Système d'effets "désastre"
+│   │   ├── images/         # Images statiques
+│   │   ├── theme/          # Assets des thèmes
+│   │   └── tracks/         # Fichiers audio
+│   ├── data/               # Fichiers de données & fixtures
+│   └── config/             # Configuration globale
+├── etc/                    # Configuration additionnelle
+└── var/                    # Données variables
+----
+
+== Fonctionnalités principales
+
+=== 1. Système de Posts
+
+* *Entité principale* : `Post` (modèle Doctrine)
+* *Champs clés* :
+ ** `track_author` - Nom de l'artiste
+ ** `track_title` - Titre du morceau
+ ** `track_filename` - Nom du fichier audio
+ ** `body` - Description du post (Markdown)
+ ** `slug` - Identifiant URL-friendly
+ ** `publish_on` - Horodatage de publication
+ ** Relation avec le contributeur (sfGuardUser)
+
+=== 2. Actions Post (`postActions`)
+
+Emplacement : `src/apps/frontend/modules/post/actions/actions.class.php`
+
+*Méthodes clés* :
+
+* `executeShow()` - Afficher un post unique (ligne 27)
+* `executeList()` - Lister les posts avec recherche/filtres (ligne 153)
+* `executeFeed()` - Génération du flux RSS (ligne 186)
+* `executeRandom()` - Post aléatoire (ligne 254)
+* `executeNext()` / `executePrev()` - Navigation (lignes 266, 272)
+* `executeOembed()` - Support oEmbed (ligne 289)
+* `executeHome()` - Page d'accueil redirige vers le dernier post (ligne 141)
+
+=== 3. Fonctionnalité Logo Glitch
+
+*Objectif* : Glitcher aléatoirement le logo du site pour plus de variété visuelle
+
+*Implémentation* :
+
+* *Service* : `+https://gliche.constructions-incongrues.net/+`
+* *Déclenchement* : Aléatoire (1 chance sur N, configurable via `app_glitch_divisor`)
+* *Emplacements d'utilisation* :
+ ** Page d'affichage du post (lignes 60-66)
+ ** Items du flux RSS (lignes 226-231)
+ ** Images de fond sur les pages de posts
+* *Paramètres* :
+ ** `seed` - ID du post pour la reproductibilité
+ ** `amount` - Intensité du glitch (0-100)
+ ** `url` - URL de l'image source
+
+*Exemple* :
+
+[,php]
+----
+$urlImg = sprintf(
+  'https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png',
+  $post->id,
+  rand(0, 100),
+  $request->getUriPrefix()
+);
+----
+
+=== 4. Système Désastre
+
+*Objectif* : Appliquer des "désastres" visuels/comportementaux aléatoires aux pages
+
+*Configuration* : `src/apps/frontend/config/desastres.yml` +
+*Emplacement des recettes* : `src/web/desastres/`
+
+*Désastres disponibles* :
+
+* `amour` - Effets sur le thème de l'amour
+* `bleu` - Palette de couleurs bleues
+* `fish` - Visuels liés aux poissons
+* `light` - Effets de lumière
+* `mamie` - Thème mamie
+* `mangelettres` - Mange-lettres
+* `musique` - Lié à la musique
+* `noir` - Thème noir/sombre
+* `postillons` - Effets de postillons
+* `redirect` - Redirections
+* `robot` - Thème robot
+* `sale` - Effets sales/désordonnés
+* `splitouine` - Effets de division
+* `tts` - Synthèse vocale
+
+*Helper* : Fonction `apply_desastre()` (chargée via le helper `Desastre`)
+
+=== 5. Support multi-formats
+
+*Formats supportés* :
+
+* `json` - API JSON (conforme à jsonapi.org)
+* `max` - Format Max/MSP
+* `xspf` - Format playlist XSPF
+* `rss` - Flux RSS 2.01
+* `oembed` - oEmbed (JSON/XML)
+
+=== 6. Métadonnées OpenGraph
+
+Support complet OpenGraph pour le partage social :
+
+* Titre, description, image
+* Intégration du lecteur vidéo (SWF)
+* Dimensions appropriées (476x476)
+
+== Workflow de développement
+
+=== Démarrage du développement
+
+[,bash]
+----
+./start-dev.sh
+----
+
+=== Points d'accès
+
+* *PHP direct* : http://localhost:8001
+* *Via Nginx* : http://localhost:8080
+* *Domaine* : http://www.musiqueapproximative.test:8080
+* *Frontend Dev* : http://www.musiqueapproximative.test/frontend_dev.php
+* *Admin* : http://www.musiqueapproximative.test/admin_dev.php
+* *Adminer* : http://adminer.musiqueapproximative.test (root/root)
+
+=== Commandes courantes
+
+[,bash]
+----
+# Vider le cache Symfony
+docker-compose exec php php symfony cache:clear
+
+# Voir les logs
+docker-compose logs -f
+
+# Accéder au conteneur PHP
+docker-compose exec php bash
+
+# Arrêter le développement
+./stop-dev.sh
+----
+
+=== Déploiement
+
+[,bash]
+----
+VERSION=<VERSION>
+git hf release start ${VERSION}
+git hf release finish ${VERSION}
+git checkout ${VERSION}
+ant configure build deploy -Dprofile=pastishosting
+----
+
+== Contexte des travaux récents
+
+=== Conversations récentes (10 dernières)
+
+. *Génération du fichier .gitignore* - Création du gitignore pour un contrôle de version propre
+. *Image Glitch dans la syndication* - Intégration des images glitchées dans les flux RSS
+. *Visibilité du curseur de volume* - Correction des contrôles de volume du lecteur audio et du style
+. *Style des arrière-plans de page* - Implémentation d'effets de clignotement/disparition, arrière-plans pleine largeur
+. *Arrière-plan Logo Glitch* - Ajout du logo glitché comme arrière-plan pleine page sur les pages de posts
+. *Implémentation Logo Glitch* - Création d'une tâche Symfony pour glitcher systématiquement le logo
+. *Glitcher le logo avec le service* - Intégration du service gliche.constructions-incongrues.net
+. *Raffinement de l'API Glitch* - Amélioration de l'API glitch avec scanline jitter, fonction randomize, responsive mobile
+. *Analyse du répertoire du projet* - Exploration du projet musiques-incongrues-tronches
+. *ADR pour le choix de l'IDE LLM* - Documentation de la décision de sélection de l'IDE LLM
+
+=== Domaines de focus actuels
+
+* Effets visuels et esthétique glitch
+* Améliorations du lecteur audio
+* Améliorations des flux RSS
+* Style d'arrière-plan et animations
+* Responsive mobile
+
+== Plugins clés
+
+=== Plugins Symfony 1
+
+* `sfAdminDashPlugin` - Tableau de bord admin
+* `sfDesastrePlugin` - Système d'effets désastre
+* `sfDoctrineGuardPlugin` - Authentification/autorisation utilisateur
+* `sfFeed2Plugin` - Génération de flux RSS/Atom
+* `sfJqueryReloadedPlugin` - Intégration jQuery
+* `sfTaskExtraPlugin` - Tâches Symfony supplémentaires
+
+== Fichiers importants
+
+=== Configuration
+
+* `src/apps/frontend/config/routing.yml` - Routage des URLs
+* `src/apps/frontend/config/desastres.yml` - Recettes de désastres
+* `src/apps/frontend/config/settings.yml` - Paramètres de l'app
+* `src/apps/frontend/config/view.yml` - Configuration des vues
+
+=== Templates
+
+* `src/apps/frontend/templates/layout.php` - Template de layout principal
+* `src/apps/frontend/modules/post/templates/showSuccess.php` - Template d'affichage de post
+
+=== Modèles
+
+* `src/lib/model/doctrine/Post.class.php` - Modèle Post
+* `src/lib/model/doctrine/PostTable.class.php` - Repository Post
+
+=== Assets
+
+* `src/web/theme/musiqueapproximative/` - Assets du thème
+* `src/web/images/logo_500.png` - Logo principal (500x500)
+* `src/web/images/glitched_logo.png` - Logo pré-glitché pour les flux
+
+== Points de terminaison API
+
+=== Points de terminaison Post
+
+* `GET /` - Page d'accueil (redirige vers le dernier post)
+* `GET /post/:slug` - Afficher un post
+* `GET /posts` - Lister tous les posts
+* `GET /posts?c=:contributor` - Filtrer par contributeur
+* `GET /posts?q=:query` - Rechercher des posts
+* `GET /random` - Post aléatoire (JSON)
+* `GET /next?current=:id` - Post suivant (JSON)
+* `GET /prev?current=:id` - Post précédent (JSON)
+* `GET /md5/:md5sum` - Trouver un post par MD5 (JSON)
+
+=== Points de terminaison Flux
+
+* `GET /feed.rss` - Flux RSS
+* `GET /feed.rss?contributor=:name` - Flux spécifique à un contributeur
+* `GET /feed.rss?count=:n` - Limiter les items du flux
+
+=== Points de terminaison Format
+
+* `GET /post/:slug.json` - Format JSON
+* `GET /post/:slug.xspf` - Playlist XSPF
+* `GET /post/:slug.max` - Format Max/MSP
+
+=== Points de terminaison Embed
+
+* `GET /post/:slug?embed=:type` - Lecteur embarqué
+* `GET /oembed?url=:url&format=:format` - Point de terminaison oEmbed
+
+== Schéma de base de données
+
+=== Table Post (Champs clés)
+
+* `id` - Clé primaire
+* `slug` - Identifiant URL unique
+* `track_author` - Nom de l'artiste
+* `track_title` - Titre du morceau
+* `track_filename` - Chemin du fichier audio
+* `body` - Description (Markdown)
+* `publish_on` - Date/heure de publication
+* `sf_guard_user_id` - Clé étrangère contributeur
+* `created_at` - Horodatage de création
+* `updated_at` - Horodatage de mise à jour
+
+== Patterns de conception & Conventions
+
+=== Pattern MVC Symfony 1
+
+* *Modèles* : ORM Doctrine dans `src/lib/model/doctrine/`
+* *Vues* : Templates PHP dans `src/apps/frontend/modules/*/templates/`
+* *Contrôleurs* : Classes d'actions dans `src/apps/frontend/modules/*/actions/`
+
+=== Conventions de nommage
+
+* Méthodes d'action : `+execute{ActionName}()+`
+* Templates : `+{actionName}Success.php+`
+* Routes : `+@{module}_{action}+`
+
+=== Utilisation des Helpers
+
+* Charger des helpers : `+$this->getContext()->getConfiguration()->loadHelpers('HelperName')+`
+* Helpers courants : `Markdown`, `Desastre`, `Url`
+
+== Sécurité & Authentification
+
+=== sfGuardPlugin
+
+* Gestion des utilisateurs via `sfGuardUser`
+* Contrôle d'accès basé sur les rôles
+* Protection de l'interface admin
+
+=== CORS & Accès API
+
+* Points de terminaison API JSON accessibles publiquement
+* Support oEmbed pour l'intégration
+
+== Considérations de performance
+
+=== Cache
+
+* Cache Symfony dans `src/cache/`
+* Vidage du cache : `php symfony cache:clear`
+
+=== Assets statiques
+
+* Fichiers audio servis directement depuis `src/web/tracks/`
+* Images servies depuis `src/web/images/` et `src/web/theme/`
+
+== Tests & Débogage
+
+=== Mode Debug
+
+* Frontend dev : `/frontend_dev.php`
+* Admin dev : `/admin_dev.php`
+* Barre d'outils de débogage web activée en mode dev
+
+=== Logs
+
+* Logs de l'application : `src/log/`
+* Logs Docker : `docker-compose logs -f`
+
+== Services externes
+
+=== Service Gliche
+
+* *URL* : https://gliche.constructions-incongrues.net/
+* *Objectif* : API de glitch d'images
+* *Paramètres* : `seed`, `amount`, `url`
+* *Utilisé pour* : Variations du logo, effets visuels
+
+== Système de thèmes
+
+=== Thème actuel
+
+* `musiqueapproximative` (configurable via `app_theme`)
+* Assets du thème dans `src/web/theme/musiqueapproximative/`
+
+=== Assets du thème
+
+* Images : `+src/web/theme/{theme}/images/+`
+* CSS : `+src/web/theme/{theme}/css/+`
+* JavaScript : `+src/web/theme/{theme}/js/+`
+
+== Lecteur audio
+
+=== JW Player 5.9
+
+* Emplacement : `src/web/swf/mediaplayer-5.9/`
+* Format : Flash SWF (legacy)
+* Fonctionnalités : Lecture automatique, images personnalisées, contrôle du volume
+
+=== Améliorations récentes
+
+* Corrections de la visibilité du curseur de volume
+* Paramètres de volume par défaut
+* Surcharges de style CSS
+
+== Problèmes connus & Particularités
+
+=== Technologie Legacy
+
+* Symfony 1.5 est en fin de vie
+* Lecteur Flash (SWF) déprécié dans les navigateurs modernes
+* PHP 7.4 approche de sa fin de vie
+
+=== Permissions de fichiers
+
+* Les montages de volumes Docker peuvent nécessiter des ajustements de permissions
+* Les répertoires cache/log nécessitent un accès en écriture
+
+=== Fichiers de configuration
+
+* Certains fichiers de config dans `.gitignore` (ex: `app.yml`)
+* Paramètres spécifiques à l'environnement via `.env`
+
+== Considérations futures
+
+=== Opportunités de modernisation
+
+* Migrer de Symfony 1 vers un framework moderne
+* Remplacer le lecteur Flash par de l'audio HTML5
+* Mise à jour vers PHP 8.x
+* Implémenter un framework JavaScript moderne
+* Améliorer le responsive mobile
+
+=== Idées de fonctionnalités
+
+* Capacités de recherche améliorées
+* Playlists utilisateur
+* Améliorations du partage social
+* Meilleur lecteur audio mobile
+* Support Progressive Web App (PWA)
+
+== Ressources utiles
+
+=== Documentation
+
+* Docs Symfony 1.4 : https://symfony.com/legacy/doc
+* Docs Doctrine 1.2 : http://www.doctrine-project.org/projects/orm/1.2/docs/
+* Spec XSPF : http://xspf.org/
+* JSON API : http://jsonapi.org/
+* OpenGraph : http://ogp.me/
+
+=== Projets liés
+
+* Service Gliche : https://gliche.constructions-incongrues.net/
+* Musiques Incongrues (lié) : `musiques-incongrues.net/musiques-incongrues-tronches`
+
+'''
+
+*Dernière mise à jour* : 2026-01-02 +
+*Mainteneur* : Tristan Rivoallan link:mailto:tristan@rivoallan.net[tristan@rivoallan.net]
