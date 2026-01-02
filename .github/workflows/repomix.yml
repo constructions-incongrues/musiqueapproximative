@@ -3,11 +3,11 @@ name: Repomix Packing
 on:
   # Exécution quotidienne à 2h du matin
   schedule:
-    - cron: '0 2 * * *'
-  
+    - cron: "0 2 * * *"
+
   # Permet l'exécution manuelle
   workflow_dispatch:
-  
+
   # Exécution sur push vers main (optionnel)
   push:
     branches:
@@ -19,36 +19,36 @@ permissions:
 jobs:
   pack-repository:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      
+          node-version: "20"
+
       - name: Run Repomix
         run: npx -y repomix@latest
-      
+
       - name: Upload Repomix output as artifact
         uses: actions/upload-artifact@v4
         with:
           name: repomix-output-${{ github.sha }}
           path: repomix-output.xml
           retention-days: 30
-      
+
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
+
           # Ajouter le fichier s'il a changé
           git add repomix-output.xml || true
-          
+
           # Vérifier s'il y a des changements
           if git diff --staged --quiet; then
             echo "Aucun changement détecté"

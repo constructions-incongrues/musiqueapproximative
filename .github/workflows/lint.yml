@@ -1,38 +1,21 @@
----
-name: Lint
+name: Pull Request
+on: [pull_request, workflow_dispatch]
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
-on:
-  push:
-    branches: [main, master, develop]
-  pull_request:
-    branches: [main, master, develop]
-
-permissions: {}
+permissions: read-all
 
 jobs:
-  lint:
-    name: Lint Code Base
+  trunk_check:
+    name: Trunk Check Runner
     runs-on: ubuntu-latest
-
     permissions:
-      contents: read
-      packages: read
-      statuses: write
+      checks: write # For trunk to post annotations
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Installer Asciidoctor
-        run: sudo apt-get install -y asciidoctor
-
-      - name: Valider les fichiers AsciiDoc
-        run: |
-          find . -name "*.adoc" -not -path "*/vendor/*" -not -path "*/node_modules/*" -not -path "./build/*" -not -path "./var/*" -exec asciidoctor --failure-level WARNING -o /dev/null {} +
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Trunk Check
-        uses: trunk-io/trunk-action@v1
-        with:
-          check-mode: ${{ github.event_name == 'push' && 'all' || 'changes' }}
+        uses: ./ # external users, use: trunk-io/trunk-action@v1
