@@ -1,0 +1,24 @@
+name: Cache Trunk
+
+on:
+  push:
+    branches: [main]
+    paths: [.trunk/trunk.yaml]
+
+permissions: read-all
+
+jobs:
+  cache_trunk:
+    name: Cache Trunk
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: populate_cache_only
