@@ -44,8 +44,12 @@ jobs:
           VALIDATE_YAML: true
           VALIDATE_TOML: true
           VALIDATE_PHP: true
+          PHP_PHPCS: true
+          PHP_PHPCS_RULESET: .phpcs.xml
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
+          PRE_COMMIT: true
+          
           
           # Filter regex for files to exclude
           FILTER_REGEX_EXCLUDE: .*/(vendor|node_modules|build|var|web/swf)/.*
