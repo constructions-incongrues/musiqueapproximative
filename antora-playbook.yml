@@ -6,7 +6,7 @@ site:
 content:
   sources:
     - url: .
-      branches: [main, v1.0]
+      branches: [main, v1.0.*]
       worktrees: false
       start_path: docs
 
