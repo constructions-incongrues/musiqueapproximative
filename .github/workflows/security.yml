@@ -27,7 +27,7 @@ jobs:
           scan-ref: '.'
           format: 'sarif'
           output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
@@ -43,7 +43,7 @@ jobs:
           image-ref: 'musiqueapproximative:scan'
           format: 'table'
           exit-code: '1' # Fail on critical/high vulnerabilities
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
           ignore-unfixed: true
 
       - name: Run Trivy vulnerability scanner (Config)
@@ -52,4 +52,4 @@ jobs:
           scan-type: 'config'
           hide-progress: false
           format: 'table'
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
