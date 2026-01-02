@@ -40,18 +40,6 @@ jobs:
           # Default branch
           DEFAULT_BRANCH: main
           
-          # Linters to enable
-          VALIDATE_PHP: true
-          VALIDATE_PHP_BUILTIN: true
-          VALIDATE_JAVASCRIPT_ES: true
-          VALIDATE_CSS: true
-          VALIDATE_HTML: true
-          VALIDATE_YAML: true
-          VALIDATE_JSON: true
-          VALIDATE_MARKDOWN: true
-          VALIDATE_BASH: true
-          VALIDATE_DOCKERFILE_HADOLINT: true
-          
           # Disable some linters that might be too strict
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
