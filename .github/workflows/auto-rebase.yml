@@ -1,0 +1,31 @@
+name: Auto Rebase
+
+on:
+  # Déclencher sur les pushs vers main
+  push:
+    branches:
+      - main
+      - master
+  
+  # Permettre le déclenchement manuel
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-rebase:
+    name: Rebase automatique des PRs
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Rebase automatique
+        uses: cirrus-actions/rebase@1.8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
