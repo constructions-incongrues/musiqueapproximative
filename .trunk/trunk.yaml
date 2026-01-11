@@ -21,7 +21,6 @@ runtimes:
 lint:
   enabled:
     - renovate@42.76.5
-    - phpstan@2.0.3
     - actionlint@1.7.10
     - checkov@3.2.497
     - dotenv-linter@4.0.0
@@ -43,3 +42,6 @@ actions:
     - trunk-fmt-pre-commit
   enabled:
     - trunk-upgrade-available
+tools:
+  disabled:
+    - phpstan
