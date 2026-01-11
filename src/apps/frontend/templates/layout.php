@@ -276,11 +276,55 @@
 
       var h = $('.content').height();
       var pad = (h - 30) / 2;
-      $('.nav-l img, .nav-r img').height(h);
-      $('.nav-l img, .nav-r img').css({
-        'padding-top': pad + 'px',
-        'padding-bottom': pad + 'px'
-      });
+      
+      // Positionner verticalement nav-l et nav-r selon la position de .jp-progress
+      function positionNavElements() {
+        var $progress = $('.jp-progress');
+        var $navL = $('.nav-l');
+        var $navR = $('.nav-r');
+        
+        if ($progress.length && ($navL.length || $navR.length)) {
+          // Récupérer la position de .jp-progress par rapport au document
+          var progressOffset = $progress.offset();
+          var progressHeight = $progress.outerHeight();
+          
+          // Récupérer la position du parent (wrapper) pour calculer la position relative
+          var $wrapper = $('.content > .wrapper');
+          var wrapperOffset = $wrapper.offset();
+          
+          if (progressOffset && wrapperOffset) {
+            // Calculer la position verticale du centre de .jp-progress par rapport au wrapper
+            var progressCenterY = (progressOffset.top - wrapperOffset.top) + (progressHeight / 2);
+            
+            // Appliquer le positionnement
+            $navL.css({
+              'position': 'relative',
+              'top': progressCenterY + 'px',
+              'transform': 'translateY(-50%)'
+            });
+            
+            $navR.css({
+              'position': 'relative',
+              'top': progressCenterY + 'px',
+              'transform': 'translateY(-50%)'
+            });
+          }
+        }
+      }
+      
+      // Positionner immédiatement
+      positionNavElements();
+      
+      // Repositionner lors du redimensionnement de la fenêtre
+      $(window).on('resize', positionNavElements);
+      
+      // Repositionner après un court délai pour s'assurer que le DOM est complètement chargé
+      setTimeout(positionNavElements, 100);
+      // $('.nav-l img, .nav-r img').height(h);
+      // $('.nav-l img, .nav-r img').css({
+      //   'padding-top': pad + 'px',
+      //   'padding-bottom': pad + 'px'
+      // });
 
       if (window.random !== 0) {
         var current_post_id = $('#download').data().postid;

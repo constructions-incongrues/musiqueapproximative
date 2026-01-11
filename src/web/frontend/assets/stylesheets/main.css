@@ -274,9 +274,22 @@ article {
 .nav-l,
 .nav-r {
   vertical-align: middle;
-  max-height: 100px;
+  max-height: fit-content;
+  position: relative;
+
+  p{
+    margin: 0;
+    padding: 0;
+  }
 }
 
+@media screen and (max-width: 768px) {
+  .nav-l,
+  .nav-r {
+    top:inherit!important;
+    transform:inherit!important;
+  }
+}
 /* Search */
 input.search {
   border: none;
