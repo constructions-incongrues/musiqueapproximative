@@ -2,10 +2,10 @@
 
 <?php slot('browse') ?>
 <p>
-Parcourir :
-<a href="<?php echo url_for('@post_list') ?>">tous les morceaux</a> |
-<a href="<?php echo url_for('@post_list?c='.$contributor->username) ?>" class="index-toggle-contributor"><?php echo $post->getContributorDisplayName() ?></a>
-<span id="loading" style="display: none;">(chargement...)</span>
+  Parcourir :
+  <a href="<?php echo url_for('@post_list') ?>">tous les morceaux</a> |
+  <a href="<?php echo url_for('@post_list?c=' . $contributor->username) ?>" class="index-toggle-contributor"><?php echo $post->getContributorDisplayName() ?></a>
+  <span id="loading" style="display: none;">(chargement...)</span>
 </p>
 <?php end_slot() ?>
 
@@ -18,11 +18,11 @@ Parcourir :
 <?php slot('formats_footer') ?>
 <h2>Servez-vous !</h2>
 <p>Ce post est aussi disponible aux formats suivants :
-<?php foreach ($formats as $name => $format): ?>
-  <?php if ($format['display']): ?>
-  <a href="<?php echo url_for(sprintf('@post_show?slug=%s&format=%s', $post->slug, $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a>
-  <?php endif ?>
-<?php endforeach; ?>
+  <?php foreach ($formats as $name => $format): ?>
+    <?php if ($format['display']): ?>
+      <a href="<?php echo url_for(sprintf('@post_show?slug=%s&format=%s', $post->slug, $name)) ?>" title="<?php echo $format['contentType'] ?> <?php if ($format['about']): ?> (<?php echo $format['about'] ?>) <?php endif ?>"><?php echo $name ?></a>
+    <?php endif ?>
+  <?php endforeach; ?>
 </p>
 <br />
 <br />
@@ -37,189 +37,243 @@ Parcourir :
   <script>
     (function() {
       var img = new Image();
-      img.onload = function() { document.body.classList.add('glitch-active'); };
-      img.onerror = function() { document.body.classList.add('glitch-error'); };
+      img.onload = function() {
+        document.body.classList.add('glitch-active');
+      };
+      img.onerror = function() {
+        document.body.classList.add('glitch-error');
+      };
       img.src = '<?php echo $glitchUrl ?>';
     })();
   </script>
 
-<style>
-  @keyframes glitch-flash {
-    0%   { opacity: 0; }
-    5%   { opacity: 1; }
-    10%  { opacity: 0; }
-    15%  { opacity: 1; }
-    20%  { opacity: 0; }
-    25%  { opacity: 1; }
-    30%  { opacity: 0.2; }
-    35%  { opacity: 1; }
-    40%  { opacity: 0.1; }
-    45%  { opacity: 0.8; }
-    50%  { opacity: 0; }
-    100% { opacity: 0; }
-  }
+  <style>
+    @keyframes glitch-flash {
+      0% {
+        opacity: 0;
+      }
 
-  @keyframes content-reveal {
-    0%   { background-color: #000; }
-    45%  { background-color: #000; }
-    50%  { background-color: #fff; }
-    100% { background-color: #fff; }
-  }
+      5% {
+        opacity: 1;
+      }
 
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: #fff !important;
-    overflow-x: hidden;
-  }
+      10% {
+        opacity: 0;
+      }
 
-  /* Only run animation if glitch is active */
-  body.glitch-active {
-    background-color: transparent !important;
-  }
+      15% {
+        opacity: 1;
+      }
 
-  body.glitch-active::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    z-index: -2;
-    animation: content-reveal 2s linear 1s forwards;
-  }
+      20% {
+        opacity: 0;
+      }
 
-  body.glitch-active::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('<?php echo $glitchUrl ?>');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    z-index: -1;
-    opacity: 0;
-    animation: glitch-flash 2s linear 1s forwards;
-  }
+      25% {
+        opacity: 1;
+      }
 
-  /* Default/Error state: plain white background */
-  body.glitch-error {
-    background-color: #fff !important;
-  }
-  body.glitch-error::before,
-  body.glitch-error::after {
-    display: none !important;
-  }
+      30% {
+        opacity: 0.2;
+      }
 
-  .grid-container {
-    background: transparent !important;
-    overflow: visible !important;
-  }
+      35% {
+        opacity: 1;
+      }
 
-  section.content, 
-  section.content article, 
-  section.content .content-text,
-  section.content .descriptif,
-  section.content h1,
-  section.content h2,
-  section.content p,
-  section.content .nav-l,
-  section.content .nav-r,
-  section.content #skin-loader {
-    background: transparent !important;
-  }
+      40% {
+        opacity: 0.1;
+      }
 
-  /* Header part noir - Full width */
-  header {
-    position: relative;
-    background-color: #000 !important;
-    z-index: 100;
-  }
+      45% {
+        opacity: 0.8;
+      }
 
-  header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 100%;
-    background-color: #000 !important;
-    z-index: -1;
-  }
+      50% {
+        opacity: 0;
+      }
 
-  header p,
-  header a,
-  header input {
-    color: #fff !important;
-    background-color: transparent !important;
-  }
+      100% {
+        opacity: 0;
+      }
+    }
 
-  header input.search {
-    border-bottom: 1px solid #fff !important;
-  }
+    @keyframes content-reveal {
+      0% {
+        background-color: #000;
+      }
 
-  /* Footer part noir - Full width */
-  .infos {
-    position: relative;
-    background-color: transparent !important;
-  }
+      45% {
+        background-color: #000;
+      }
 
-  .infos::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 5000px; /* High enough to cover everything below */
-    background-color: #000;
-    z-index: -1;
-  }
+      50% {
+        background-color: #fff;
+      }
 
-  .infos, 
-  .contributors,
-  .infos .title,
-  .contributors h1,
-  .contributors h2,
-  .contributors p,
-  .contributors a,
-  .contributors li {
-    color: #fff !important;
-    background-color: transparent !important;
-  }
+      100% {
+        background-color: #fff;
+      }
+    }
 
-  .contributors a:hover {
-    background-color: #fff !important;
-    color: #000 !important;
-  }
-</style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #fff !important;
+      overflow-x: hidden;
+    }
+
+    /* Only run animation if glitch is active */
+    body.glitch-active {
+      background-color: transparent !important;
+    }
+
+    body.glitch-active::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      z-index: -2;
+      animation: content-reveal 2s linear 1s forwards;
+    }
+
+    body.glitch-active::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('<?php echo $glitchUrl ?>');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      z-index: -1;
+      opacity: 0;
+      animation: glitch-flash 2s linear 1s forwards;
+    }
+
+    /* Default/Error state: plain white background */
+    body.glitch-error {
+      background-color: #fff !important;
+    }
+
+    body.glitch-error::before,
+    body.glitch-error::after {
+      display: none !important;
+    }
+
+    .grid-container {
+      background: transparent !important;
+      overflow: visible !important;
+    }
+
+    section.content,
+    section.content article,
+    section.content .content-text,
+    section.content .descriptif,
+    section.content h1,
+    section.content h2,
+    section.content p,
+    section.content .nav-l,
+    section.content .nav-r,
+    section.content #skin-loader {
+      background: transparent !important;
+    }
+
+    /* Header part noir - Full width */
+    header {
+      position: relative;
+      background-color: #000 !important;
+      z-index: 100;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 100%;
+      background-color: #000 !important;
+      z-index: -1;
+    }
+
+    header p,
+    header a,
+    header input {
+      color: #fff !important;
+      background-color: transparent !important;
+    }
+
+    header input.search {
+      border-bottom: 1px solid #fff !important;
+    }
+
+    /* Footer part noir - Full width */
+    .infos {
+      position: relative;
+      background-color: transparent !important;
+    }
+
+    .infos::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 5000px;
+      /* High enough to cover everything below */
+      background-color: #000;
+      z-index: -1;
+    }
+
+    .infos,
+    .contributors,
+    .infos .title,
+    .contributors h1,
+    .contributors h2,
+    .contributors p,
+    .contributors a,
+    .contributors li {
+      color: #fff !important;
+      background-color: transparent !important;
+    }
+
+    .contributors a:hover {
+      background-color: #fff !important;
+      color: #000 !important;
+    }
+
+  </style>
 <?php endif; ?>
 
 <section class="content">
   <article class="grid-100">
     <div class="nav-l grid-5 hide-on-mobile">
       <p>
-<?php if ($post_previous): ?>
-        <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
- <?php endif; ?>
+        <?php if ($post_previous): ?>
+          <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
+        <?php endif; ?>
       </p>
     </div>
 
     <div class="nav-l grid-5 hide-on-desktop">
       <p>
-<?php if ($post_previous): ?>
-        <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
-<?php endif; ?>
-<?php if ($post_next): ?>
-        <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
-<?php endif; ?>
+        <?php if ($post_previous): ?>
+          <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
+        <?php endif; ?>
+        <?php if ($post_next): ?>
+          <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
+        <?php endif; ?>
       </p>
     </div>
 
@@ -231,10 +285,10 @@ Parcourir :
         <?php echo $post->track_author ?>
       </h1>
       <h2 class="hide-on-mobile">
-          <?php echo $post->track_title ?>
+        <?php echo $post->track_title ?>
       </h2>
       <h2 class="hide-on-desktop">
-          <?php echo $post->track_title ?>
+        <?php echo $post->track_title ?>
       </h2>
 
 
@@ -245,61 +299,67 @@ Parcourir :
 
       <div id="skin-loader"></div>
       <div id="skin-wrapper">
-          <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-          <div id="jp_container_1" class="jp-audio">
-              <div class="jp-gui jp-interface">
-                  <div class="jp-progress">
-                      <div class="jp-seek-bar">
-                          <div class="jp-play-bar"></div>
-                      </div>
-                  </div>
-                  <ul class="jp-controls">
-                      <li>
-                          <a href="javascript:;" class="jp-play" tabindex="1">play</a>
-                      </li>
-                      <li>
-                          <a href="javascript:;" class="jp-pause" tabindex="1">pause</a>
-                      </li>
-                      <li>
-<?php if ($sf_request->getParameter('random') == '1'): ?>
-                          <a href="#" id="random">random</a>
-<?php else: ?>
-                          <a href="#" id="random" class="not">random</a>
-<?php endif; ?>
-                      </li>
-                  </ul>
-                  <div class="jp-volume-bar">
-                      <div class="jp-volume-bar-value"></div>
-                  </div>
-                  <div class="jp-time-holder hide-on-mobile">
-                      <div class="jp-duration"></div>
-                      <div class="jp-current-time"></div>
-                  </div>
+        <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+        <div id="jp_container_1" class="jp-audio">
+          <div class="jp-gui jp-interface">
+            <div class="jp-progress">
+              <div class="jp-seek-bar">
+                <div class="jp-play-bar"></div>
               </div>
-          </div><!-- .jp-audio -->
+            </div>
+            <ul class="jp-controls">
+              <li>
+                <a href="javascript:;" class="jp-play" tabindex="1">play</a>
+              </li>
+              <li>
+                <a href="javascript:;" class="jp-pause" tabindex="1">pause</a>
+              </li>
+              <li>
+                <?php if ($sf_request->getParameter('random') == '1'): ?>
+                  <a href="#" id="random">random</a>
+                <?php else: ?>
+                  <a href="#" id="random" class="not">random</a>
+                <?php endif; ?>
+              </li>
+            </ul>
+            <div class="jp-controls-wrapper">
+              <div class="jp-volume-bar">
+                <div class="jp-volume-bar-value"></div>
+              </div>
+              <div class="jp-pitch-bar">
+                <div class="jp-pitch-handle"></div>
+                <div class="jp-pitch-value">x1.0</div>
+              </div>
+              <div class="jp-time-holder hide-on-mobile">
+                <div class="jp-duration"></div>
+                <div class="jp-current-time"></div>
+              </div>
+            </div>
+          </div>
+        </div><!-- .jp-audio -->
       </div><!-- .wrapper -->
 
       <p class="author">
-        <span title="Posté le <?php echo strftime('%d/%m/%Y', $post->getDateTimeObject('created_at')->getTimestamp()) ?> à <?php echo $post->getDateTimeObject('created_at')->format('H:i') ?>">Contribué par</span> : <a rel="author" href="<?php echo url_for('@homepage?c='.$post->getSfGuardUser()->username) ?>" title="Écouter la playlist de <?php echo $post->getContributorDisplayName() ?>"><?php echo $post->getContributorDisplayName() ?></a><br />
-         <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
-<?php if ($post->buy_url): ?>
-         / <a href="<?php echo $post->buy_url ?>" title="Soutenez l'artiste !">Acheter</a>
-<?php endif ?>
+        <span title="Posté le <?php echo strftime('%d/%m/%Y', $post->getDateTimeObject('created_at')->getTimestamp()) ?> à <?php echo $post->getDateTimeObject('created_at')->format('H:i') ?>">Contribué par</span> : <a rel="author" href="<?php echo url_for('@homepage?c=' . $post->getSfGuardUser()->username) ?>" title="Écouter la playlist de <?php echo $post->getContributorDisplayName() ?>"><?php echo $post->getContributorDisplayName() ?></a><br />
+        <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
+        <?php if ($post->buy_url): ?>
+          / <a href="<?php echo $post->buy_url ?>" title="Soutenez l'artiste !">Acheter</a>
+        <?php endif ?>
       </p>
-          </div>
-<!-- grid-70 -->
+    </div>
+    <!-- grid-70 -->
 
-      <div class="nav-r grid-5 hide-on-mobile">
-        <p>
-<?php if ($post_next): ?>
+    <div class="nav-r grid-5 hide-on-mobile">
+      <p>
+        <?php if ($post_next): ?>
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">
             <img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/right4.svg">
           </a>
-<?php endif; ?>
-        </p>
-      </div>
-      <div class="nav-r grid-5 hide-on-desktop">
-        <p class="display:none;"><!-- Mobile debug --> </p>
-      </div>
-    </article>
-  </section>
+        <?php endif; ?>
+      </p>
+    </div>
+    <div class="nav-r grid-5 hide-on-desktop">
+      <p class="display:none;"><!-- Mobile debug --> </p>
+    </div>
+  </article>
+</section>
