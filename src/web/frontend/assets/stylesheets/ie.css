@@ -211,9 +211,6 @@
   position: relative;
 }
 
-.hide-on-desktop {
-  display: none !important;
-}
 
 .grid-5 {
   float: left;
@@ -1697,9 +1694,6 @@ body {
   position: relative;
 }
 
-.hide-on-desktop {
-  display: none !important;
-}
 
 .grid-5 {
   float: left;

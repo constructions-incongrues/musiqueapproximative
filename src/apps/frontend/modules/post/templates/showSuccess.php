@@ -137,7 +137,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #fff;
+      /* background-color: #fff; */
       z-index: -2;
       animation: content-reveal 2s linear 1s forwards;
     }
@@ -161,7 +161,7 @@
 
     /* Default/Error state: plain white background */
     body.glitch-error {
-      background-color: #fff !important;
+      /* background-color: #fff !important; */
     }
 
     body.glitch-error::before,
@@ -245,53 +245,47 @@
     .contributors a,
     .contributors li {
       color: #fff !important;
-      background-color: transparent !important;
+      /* background-color: transparent !important; */
     }
 
     .contributors a:hover {
       background-color: #fff !important;
       color: #000 !important;
     }
-
   </style>
 <?php endif; ?>
 
 <section class="content">
-  <article class="grid-100">
-    <div class="nav-l grid-5 hide-on-mobile">
+  <article class="wrapper">
+    <div class="nav-l">
       <p>
         <?php if ($post_previous): ?>
           <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
         <?php endif; ?>
       </p>
+
+      <div class="nav-l mobile">
+        <p>
+          <?php if ($post_previous): ?>
+            <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
+          <?php endif; ?>
+          <?php if ($post_next): ?>
+            <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
+          <?php endif; ?>
+        </p>
+      </div>
     </div>
 
-    <div class="nav-l grid-5 hide-on-desktop">
-      <p>
-        <?php if ($post_previous): ?>
-          <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
-        <?php endif; ?>
-        <?php if ($post_next): ?>
-          <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
-        <?php endif; ?>
-      </p>
-    </div>
 
-    <div class="grid-90 content-text">
-      <h1 class="hide-on-mobile">
+
+    <div class="content-text">
+      <h1>
         <?php echo $post->track_author ?>
       </h1>
-      <h1 class="hide-on-desktop">
-        <?php echo $post->track_author ?>
-      </h1>
-      <h2 class="hide-on-mobile">
+
+      <h2>
         <?php echo $post->track_title ?>
       </h2>
-      <h2 class="hide-on-desktop">
-        <?php echo $post->track_title ?>
-      </h2>
-
-
 
       <div class="descriptif">
         <?php echo Markdown($post->body) ?>
@@ -330,7 +324,7 @@
                 <div class="jp-pitch-handle"></div>
                 <div class="jp-pitch-value">x1.0</div>
               </div>
-              <div class="jp-time-holder hide-on-mobile">
+              <div class="jp-time-holder">
                 <div class="jp-duration"></div>
                 <div class="jp-current-time"></div>
               </div>
@@ -349,7 +343,7 @@
     </div>
     <!-- grid-70 -->
 
-    <div class="nav-r grid-5 hide-on-mobile">
+    <div class="nav-r">
       <p>
         <?php if ($post_next): ?>
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">
@@ -357,9 +351,6 @@
           </a>
         <?php endif; ?>
       </p>
-    </div>
-    <div class="nav-r grid-5 hide-on-desktop">
-      <p class="display:none;"><!-- Mobile debug --> </p>
     </div>
   </article>
 </section>

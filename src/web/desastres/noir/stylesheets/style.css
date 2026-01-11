@@ -46,8 +46,6 @@ section .content {
 .grid-100,
 .content,
 article p,
-article h1.hide-on-mobile,
-article h2.hide-on-mobile,
 article p a:hover,
 .author a {
   background-color: rgb(25, 25, 25);
