@@ -90,9 +90,9 @@
     <?php endif ?>
 
     <section class="contributors">
-      <div class="grid-90 prefix-5 suffix-5">
+      <div class="wrapper">
 
-        <div class="grid-50 push-50 about">
+        <div class="about">
           <h1>
             À propos
           </h1>
@@ -150,7 +150,7 @@
           <p><a href="https://www.musiqueapproximative.net/login">Se connecter</a></p>
           <?php include_slot('formats_footer') ?>
         </div>
-        <div class="grid-50 pull-50 contributors_ul">
+        <div class="contributors_ul">
           <?php include_component('post', 'contributors') ?>
         </div>
       </div><!-- .grid-90 -->

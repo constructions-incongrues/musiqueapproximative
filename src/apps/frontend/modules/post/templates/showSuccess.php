@@ -248,12 +248,12 @@
       background-color: transparent !important;
     }
 
-    .contributors a:hover {
-      background-color: #fff !important;
-      color: #000 !important;
-    }
+      .contributors a:hover {
+        background-color: #fff !important;
+        color: #000 !important;
+      }
 
-  </style>
+    </style>
 <?php endif; ?>
 
 <section class="content">
@@ -266,7 +266,7 @@
       </p>
     </div>
 
-    <div class="nav-l grid-5 hide-on-desktop">
+    <!-- <div class="nav-l">
       <p>
         <?php if ($post_previous): ?>
           <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
@@ -275,10 +275,10 @@
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
         <?php endif; ?>
       </p>
-    </div>
+    </div> -->
 
     <div class="content-text">
-      <h1 class="hide-on-mobile">
+      <h1>
         <?php echo $post->track_author ?>
       </h1>
       <h1 class="hide-on-desktop">
@@ -290,8 +290,6 @@
       <h2 class="hide-on-desktop">
         <?php echo $post->track_title ?>
       </h2>
-
-
 
       <div class="descriptif">
         <?php echo Markdown($post->body) ?>

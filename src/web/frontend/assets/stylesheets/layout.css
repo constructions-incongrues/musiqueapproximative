@@ -1,5 +1,5 @@
-.wrapper:before,
-.wrapper:after {
+.content > .wrapper:before,
+.content > .wrapper:after {
   content: ".";
   display: block;
   overflow: hidden;
@@ -10,17 +10,18 @@
   height: 0;
 }
 
-.wrapper:after {
+.content > .wrapper:after {
   clear: both;
 }
 
-.wrapper {
+.content > .wrapper {
   display:grid;
   grid-template-columns: 5% auto 5%;
+  background-color: #fff;
 }
 
 @media screen and (max-width: 768px) {
-  .wrapper {
+  .content > .wrapper {
     grid-template-columns: 100%;
   }
 }
@@ -31,7 +32,7 @@
   padding-left: 10px;
   padding-right: 10px;
 }
-
+/* 
 .push-5,
 .pull-5,
 .push-10,
@@ -1357,9 +1358,27 @@
       "px"
   );
   /* </IE7> */
-}
+} */
 
-.wrapper {
+.content > .wrapper {
   clear: both;
   width: 100%;
+}
+
+
+.contributors > .wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  .about {
+    width: 50%;
+    min-width: 300px;
+    order:2;
+    flex-grow: 2;
+  }
+
+  .contributors_ul {
+    width: 50%;
+    flex-grow: 2;
+  }
 }

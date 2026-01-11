@@ -257,24 +257,15 @@ header p:nth-child(3) {
 
 article h1 {
   padding: 20px 0 10px 0;
+  font-size: 4rem;
   color: #000;
   background: #fff;
-}
-
-article h1.hide-on-mobile {
-  font-size: 40px;
-  font-size: 4rem;
-}
-
-article h1.hide-on-desktop {
-  font-size: 25px;
-  font-size: 2.5rem;
-  text-align: left;
 }
 
 article h2 {
   color: #555;
   background-color: #fff;
+  font-size: 3.5rem;
 }
 
 article h1,
@@ -314,8 +305,26 @@ article h2.hide-on-desktop {
 
 /* ----- list ----- */
 
+.contributors_ul {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.contributors_ul h1 {
+  width: 100%;
+}
+
+.contributors_ul ul {
+  
+}
+
 .contributors_ul ul {
   margin-top: 15px;
+  width: calc(100% / 4);
+  min-width: 100px;
+  flex-grow: 2;
 }
 
 .contributors ul,
@@ -363,10 +372,10 @@ header {
   }
 }
 
-.content-text,
+/* .content-text,
 article {
   background-color: #fff;
-}
+} */
 
 input.search,
 input.submit,
