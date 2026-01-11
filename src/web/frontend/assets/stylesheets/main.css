@@ -158,7 +158,6 @@ article p a,
 
 article p a:hover {
   color: #000;
-  background: #fff;
 }
 
 .contributors a,
@@ -326,6 +325,17 @@ input.submit {
 }
 
 /* ====== Listes ====== */
+.contributors_ul {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.contributors_ul h1 {
+  width: 100%;
+}
+
 .contributors_ul {
   display: flex;
   justify-content: space-between;
