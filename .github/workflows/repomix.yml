@@ -35,7 +35,7 @@ jobs:
         run: npx -y repomix@latest
 
       - name: Upload Repomix output as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: repomix-output-${{ github.sha }}
           path: repomix-output.xml
