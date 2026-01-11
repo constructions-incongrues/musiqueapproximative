@@ -1,6 +1,5 @@
 <h1>Les <?php echo count($contributors) ?> mélomanes fêlé⋅e⋅s</h1>
 
-<div class="grid-25">
 	<ul>
 <?php $i = 0; ?>
 <?php foreach ($contributors as $contributor): ?>
@@ -10,10 +9,7 @@
 <?php $i++; ?>
 <?php if ($i % round(count($contributors) / 4) == 0): ?>
 	</ul>
-</div>
-<div class="grid-25">
 	<ul>
 <?php endif; ?>
 <?php endforeach; ?>
 	</ul>
-</div>
