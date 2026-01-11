@@ -137,7 +137,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #fff;
+      /* background-color: #fff; */
       z-index: -2;
       animation: content-reveal 2s linear 1s forwards;
     }
@@ -161,7 +161,7 @@
 
     /* Default/Error state: plain white background */
     body.glitch-error {
-      background-color: #fff !important;
+      /* background-color: #fff !important; */
     }
 
     body.glitch-error::before,
@@ -245,7 +245,7 @@
     .contributors a,
     .contributors li {
       color: #fff !important;
-      background-color: transparent !important;
+      /* background-color: transparent !important; */
     }
 
     .contributors a:hover {
