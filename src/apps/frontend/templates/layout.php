@@ -67,18 +67,11 @@
   </script>
 
   <div class="grid-container">
-    <header class="grid-100 grid-parent">
-      <div class="grid-40">
+    <header>
         <?php include_slot('browse') ?>
-      </div>
-      <div class="grid-60 hide-on-mobile">
+      <div class="search-container">
         <form id="search" method="get" action="<?php echo url_for('post_list') ?>">
           <input type="text" class="search" name="q" value="<?php echo $sf_request->getParameter('q') ?>"> <input type="submit" class="submit" value="Search !">
-        </form>
-      </div>
-      <div class="grid-60 hide-on-desktop">
-        <form id="search" method="get" action="<?php echo url_for('post_list') ?>">
-          <input type="text" class="search" name="q" value=""> <input type="submit" class="submit" value="Search !">
         </form>
       </div>
       <!-- posts list -->
