@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.6.0...v1.7.0) (2026-01-11)
+
+
+### Fonctionnalités
+
+* add pitch control feature to audio player with UI updates ([#55](https://github.com/constructions-incongrues/musiqueapproximative/issues/55)) ([f3fdef3](https://github.com/constructions-incongrues/musiqueapproximative/commit/f3fdef3a0c87e07f224a49500e5fe76652cf405e))
+
+
+### Documentation
+
+* update lint badge link in README.adoc ([73073d9](https://github.com/constructions-incongrues/musiqueapproximative/commit/73073d97f6683efb561610b19654333485f07d1b))
+
 ## [1.6.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.5.0...v1.6.0) (2026-01-02)
 
 
