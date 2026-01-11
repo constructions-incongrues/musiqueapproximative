@@ -14,6 +14,8 @@
   <link rel="apple-touch-icon" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png" />
   <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png" />
   <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-114x114-precomposed.png" />
+  <link rel="manifest" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/manifest.json">
+  <meta name="theme-color" content="#000000">
 
   <!-- Stylesheets -->
   <!--[if lt IE 9]>
@@ -400,6 +402,17 @@
       var pageTracker = _gat._getTracker("UA-4958604-1");
       pageTracker._trackPageview();
     } catch (err) {}
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('<?php echo $sf_request->getRelativeUrlRoot() ?>/sw.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
   </script>
 </body>
 
