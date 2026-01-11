@@ -283,13 +283,8 @@
       <h1>
         <?php echo $post->track_author ?>
       </h1>
-      <h1 class="hide-on-desktop">
-        <?php echo $post->track_author ?>
-      </h1>
-      <h2 class="hide-on-mobile">
-        <?php echo $post->track_title ?>
-      </h2>
-      <h2 class="hide-on-desktop">
+     
+      <h2>
         <?php echo $post->track_title ?>
       </h2>
 
