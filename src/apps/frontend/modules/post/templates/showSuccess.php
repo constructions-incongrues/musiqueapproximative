@@ -257,8 +257,8 @@
 <?php endif; ?>
 
 <section class="content">
-  <article class="grid-100">
-    <div class="nav-l grid-5 hide-on-mobile">
+  <article class="wrapper">
+    <div class="nav-l">
       <p>
         <?php if ($post_previous): ?>
           <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
@@ -277,7 +277,7 @@
       </p>
     </div>
 
-    <div class="grid-90 content-text">
+    <div class="content-text">
       <h1 class="hide-on-mobile">
         <?php echo $post->track_author ?>
       </h1>
