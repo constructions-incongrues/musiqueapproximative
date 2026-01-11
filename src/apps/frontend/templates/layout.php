@@ -88,9 +88,10 @@
         <img src="<?php echo sprintf('%s/quickos/quickos_recto.png', $sf_request->getRelativeUrlRoot()) ?>" style="width:20%" />
       </div>
     <?php endif ?>
-    <p class="title">
-      Musique Approximative </p>
+    
     <section class="contributors">
+    <p class="title">
+    Musique Approximative </p>
       <div class="wrapper">
 
         <div class="about">
