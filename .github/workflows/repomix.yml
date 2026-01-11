@@ -8,11 +8,6 @@ on:
   # Permet l'exécution manuelle
   workflow_dispatch:
 
-  # Exécution sur push vers main (optionnel)
-  push:
-    branches:
-      - main
-
 permissions:
   contents: write
 
