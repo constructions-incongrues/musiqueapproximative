@@ -257,7 +257,35 @@
         updatePitchBar();
       };
 
+      // Détecter le double-clic pour réinitialiser à 1.0
+      var isDoubleClick = false;
+      
+      $('.jp-pitch-bar').dblclick(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        isDoubleClick = true;
+        
+        // Réinitialiser à 1.0
+        pitchValue = 1.0;
+        var audioElement = document.querySelector('.jp-jplayer audio');
+        if (audioElement) {
+          audioElement.playbackRate = pitchValue;
+        }
+        updatePitchBar();
+        
+        // Réinitialiser le flag après un court délai
+        setTimeout(function() {
+          isDoubleClick = false;
+        }, 100);
+        
+        return false;
+      });
+
       $('.jp-pitch-bar').mousedown(function(e) {
+        // Ignorer le mousedown si c'est un double-clic
+        if (isDoubleClick) {
+          return false;
+        }
         $(document).on('mousemove.jp-pitch', movePitch);
         movePitch(e);
         return false;
