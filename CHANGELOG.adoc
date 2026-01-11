@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.7.0...v1.8.0) (2026-01-11)
+
+
+### Fonctionnalités
+
+* enhance navigation positioning and styling in layout ([#61](https://github.com/constructions-incongrues/musiqueapproximative/issues/61)) ([4c60159](https://github.com/constructions-incongrues/musiqueapproximative/commit/4c60159133b56deb01b3cc5f3fd946fa70140aea))
+* PWA ([#60](https://github.com/constructions-incongrues/musiqueapproximative/issues/60)) ([b791842](https://github.com/constructions-incongrues/musiqueapproximative/commit/b791842862e9fa748f842c1b9ee1577f281621d7))
+* refacto css ([#58](https://github.com/constructions-incongrues/musiqueapproximative/issues/58)) ([6713718](https://github.com/constructions-incongrues/musiqueapproximative/commit/671371816eb1062560fb18d2bf0563c4ebcfca19))
+
 ## [1.7.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.6.0...v1.7.0) (2026-01-11)
 
 
