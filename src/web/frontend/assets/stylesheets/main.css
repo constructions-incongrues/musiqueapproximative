@@ -128,6 +128,8 @@ article p {
 .title {
   color: #fff;
   background-color: #000;
+  text-align: center;
+  padding: 20px 0 20px 0;
 }
 
 
@@ -165,12 +167,10 @@ article p.author a,
 article p a,
 .author a {
   color: #555050;
-  /* background: #fff; */
 }
 
 article p a:hover {
   color: #000;
-  background: #fff;
 }
 
 .contributors a,
@@ -264,7 +264,9 @@ article h2 {
 }
 
 @media screen and (max-width: 768px) {
-  article h1, article h2 {
+
+  article h1,
+  article h2 {
     text-align: left;
   }
 
@@ -314,7 +316,7 @@ article h2 {
   width: calc(100% / 4);
   min-width: 100px;
   flex-grow: 2;
-} 
+}
 
 @media screen and (max-width: 768px) {
   .contributors_ul ul {
@@ -359,7 +361,7 @@ article h2 {
 /* ====== Page Head, Body, and Foot ====== */
 
 header {
-  display: flex!important;
+  display: flex !important;
   justify-content: space-between;
   align-items: center;
   min-height: 40px;
