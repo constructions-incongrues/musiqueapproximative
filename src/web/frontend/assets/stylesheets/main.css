@@ -273,15 +273,18 @@ article h2 {
   text-align: center;
 }
 
-article h2.hide-on-mobile {
-  font-size: 35px;
-  font-size: 3.5rem;
-}
+@media screen and (max-width: 768px) {
+  article h1, article h2 {
+    text-align: left;
+  }
 
-article h2.hide-on-desktop {
-  font-size: 20px;
-  font-size: 2rem;
-  text-align: left;
+  article h1 {
+    font-size: 2.5rem;
+  }
+
+  article h2 {
+    font-size: 2rem;
+  }
 }
 
 .contributors h1 {
@@ -317,14 +320,22 @@ article h2.hide-on-desktop {
 }
 
 .contributors_ul ul {
-  
-}
-
-.contributors_ul ul {
   margin-top: 15px;
   width: calc(100% / 4);
   min-width: 100px;
   flex-grow: 2;
+} 
+
+@media screen and (max-width: 768px) {
+  .contributors_ul ul {
+    /* width: calc(100% / 3); */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .contributors_ul ul {
+    width: 100%;
+  }
 }
 
 .contributors ul,
@@ -335,7 +346,6 @@ article h2.hide-on-desktop {
 
 .contributors li {
   padding: 0 0 5px 0;
-  margin-left: -8px;
 }
 
 .shortcuts {
@@ -416,7 +426,7 @@ input.submit {
   border: none;
   font-size: 08px;
   font-size: 0.8rem;
-  margin: 2px -11px 0 0;
+  margin: 2px 0 0 0;
   padding: 3px 0 2px 0;
 }
 

@@ -264,18 +264,20 @@
           <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>"><img src="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme', 'musiqueapproximative') ?>/images/left4.svg"></a>
         <?php endif; ?>
       </p>
+
+      <div class="nav-l mobile">
+        <p>
+          <?php if ($post_previous): ?>
+            <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
+          <?php endif; ?>
+          <?php if ($post_next): ?>
+            <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
+          <?php endif; ?>
+        </p>
+      </div>
     </div>
 
-    <!-- <div class="nav-l">
-      <p>
-        <?php if ($post_previous): ?>
-          <a title="<?php echo sprintf('%s - %s', $post_previous->track_author, $post_previous->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_previous->slug, $sf_data->getRaw('common_query_string'))) ?>">Précédent</a> /
-        <?php endif; ?>
-        <?php if ($post_next): ?>
-          <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">Suivant</a>
-        <?php endif; ?>
-      </p>
-    </div> -->
+    
 
     <div class="content-text">
       <h1>
@@ -347,7 +349,7 @@
     </div>
     <!-- grid-70 -->
 
-    <div class="nav-r grid-5 hide-on-mobile">
+    <div class="nav-r">
       <p>
         <?php if ($post_next): ?>
           <a title="<?php echo sprintf('%s - %s', $post_next->track_author, $post_next->track_title) ?>" href="<?php echo url_for(sprintf('@post_show?slug=%s&%s', $post_next->slug, $sf_data->getRaw('common_query_string'))) ?>">
