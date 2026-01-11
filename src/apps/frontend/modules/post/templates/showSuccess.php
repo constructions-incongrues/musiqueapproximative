@@ -248,12 +248,11 @@
       background-color: transparent !important;
     }
 
-      .contributors a:hover {
-        background-color: #fff !important;
-        color: #000 !important;
-      }
-
-    </style>
+    .contributors a:hover {
+      background-color: #fff !important;
+      color: #000 !important;
+    }
+  </style>
 <?php endif; ?>
 
 <section class="content">
@@ -277,13 +276,13 @@
       </div>
     </div>
 
-    
+
 
     <div class="content-text">
       <h1>
         <?php echo $post->track_author ?>
       </h1>
-     
+
       <h2>
         <?php echo $post->track_title ?>
       </h2>
@@ -325,7 +324,7 @@
                 <div class="jp-pitch-handle"></div>
                 <div class="jp-pitch-value">x1.0</div>
               </div>
-              <div class="jp-time-holder hide-on-mobile">
+              <div class="jp-time-holder">
                 <div class="jp-duration"></div>
                 <div class="jp-current-time"></div>
               </div>
@@ -352,9 +351,6 @@
           </a>
         <?php endif; ?>
       </p>
-    </div>
-    <div class="nav-r grid-5 hide-on-desktop">
-      <p class="display:none;"><!-- Mobile debug --> </p>
     </div>
   </article>
 </section>

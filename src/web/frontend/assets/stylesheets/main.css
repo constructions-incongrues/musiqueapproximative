@@ -56,7 +56,7 @@ input.mailing-ok {
 
 article p {
   color: #000;
-  background-color: #fff;
+  /* background-color: #fff; */
   text-align: center;
   font-size: 13px;
   font-size: 1rem;
@@ -130,16 +130,6 @@ article p {
   background-color: #000;
 }
 
-.title.hide-on-desktop {
-  text-align: left;
-  padding: 20px 0 0 0;
-  margin-left: -13px;
-}
-
-.title.hide-on-mobile {
-  text-align: center;
-  padding: 20px 0 20px 0;
-}
 
 .contributors p {
   padding: 0 0 0 0;
@@ -175,7 +165,7 @@ article p.author a,
 article p a,
 .author a {
   color: #555050;
-  background: #fff;
+  /* background: #fff; */
 }
 
 article p a:hover {
@@ -458,20 +448,11 @@ div.descriptif p {
 .nav-l,
 .nav-r {
   vertical-align: middle;
+  max-height: 100px;
 }
 
 /* search */
 
-.grid-60.hide-on-desktop {
-  margin-left: -12px;
-  padding-bottom: 10px;
-  text-align: left;
-}
-
-.grid-60.hide-on-mobile {
-  padding-top: 6px;
-  text-align: right;
-}
 
 .author {
   margin-top: 70px;
