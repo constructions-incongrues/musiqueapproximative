@@ -6,30 +6,33 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 
+  <?php
+  $chk = sfConfig::get('app_version', 'dev');
+  ?>
   <!-- favicon and other icons -->
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="pinned-icon.png">
   <meta name="application-name" content="<?php echo sfConfig::get('app_title') ?>">
-  <link rel="shortcut icon" type="image/png" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/favicon.png" />
-  <link rel="apple-touch-icon" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png" />
-  <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-114x114-precomposed.png" />
-  <link rel="manifest" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/manifest.json">
+  <link rel="shortcut icon" type="image/png" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/favicon.png?v=<?php echo $chk ?>" />
+  <link rel="apple-touch-icon" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png?v=<?php echo $chk ?>" />
+  <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-72x72-precomposed.png?v=<?php echo $chk ?>" />
+  <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/theme/<?php echo sfConfig::get('app_theme') ?>/images/apple-touch-icon-114x114-precomposed.png?v=<?php echo $chk ?>" />
+  <link rel="manifest" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/manifest.json?v=<?php echo $chk ?>">
   <meta name="theme-color" content="#000000">
 
   <!-- Stylesheets -->
   <!--[if lt IE 9]>
-    <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/html5.js"></script>
+    <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/html5.js?v=<?php echo $chk ?>"></script>
     <![endif]-->
-  <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/main.css" type="text/css">
-  <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/reset.css" type="text/css"><!--[if (gt IE 8) | (IEMobile)]><!-->
-  <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/layout.css" type="text/css"><!--<![endif]-->
+  <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/main.css?v=<?php echo $chk ?>" type="text/css">
+  <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/reset.css?v=<?php echo $chk ?>" type="text/css"><!--[if (gt IE 8) | (IEMobile)]><!-->
+  <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/layout.css?v=<?php echo $chk ?>" type="text/css"><!--<![endif]-->
   <!--[if (lt IE 9) & (!IEMobile)]>
-    <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/ie.css" />
+    <link rel="stylesheet" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/stylesheets/ie.css?v=<?php echo $chk ?>" />
     <![endif]-->
-  <link type="text/css" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/skin/ma2/ma.css" rel="stylesheet">
+  <link type="text/css" href="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/skin/ma2/ma.css?v=<?php echo $chk ?>" rel="stylesheet">
 
-  <link type="text/css" href="<?php echo sprintf('%s/theme/%s/main.css', $sf_request->getRelativeUrlRoot(), sfConfig::get('app_theme', 'musiqueapproximative')) ?>" rel="stylesheet">
+  <link type="text/css" href="<?php echo sprintf('%s/theme/%s/main.css?v=%s', $sf_request->getRelativeUrlRoot(), sfConfig::get('app_theme', 'musiqueapproximative'), $chk) ?>" rel="stylesheet">
 
   <?php include_http_metas() ?>
   <?php foreach ($sf_context->getResponse()->getMetas() as $name => $content): ?>
@@ -55,7 +58,9 @@
   <link type="application/rss+xml" title="<?php echo sfConfig::get('app_title') ?>" rel="alternate" href="http://feeds.feedburner.com/musique-approximative" />
 
   <!-- Désastres -->
-  <?php include_stylesheets() ?>
+  <?php foreach (sfContext::getInstance()->getResponse()->getStylesheets() as $file => $options): ?>
+    <?php echo stylesheet_tag($file.'?v='.$chk, $options) ?>
+  <?php endforeach ?>
 </head>
 
 <body>
@@ -82,7 +87,6 @@
     </header>
 
     <?php echo $sf_content ?>
-
 
 
     <?php if (sfConfig::get('app_theme') == 'quickos'): ?>
@@ -161,9 +165,9 @@
     </section>
 
   </div><!-- grid-container -->
-  <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/jquery.js" type="text/javascript"></script>
-  <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/jquery.hotkeys.js" type="text/javascript"></script>
-  <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/jquery.jplayer.min.js" type="text/javascript"></script>
+  <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/jquery.js?v=<?php echo $chk ?>" type="text/javascript"></script>
+  <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/javascripts/jquery.hotkeys.js?v=<?php echo $chk ?>" type="text/javascript"></script>
+  <script src="<?php echo $sf_request->getRelativeUrlRoot() ?>/frontend/assets/player/jquery.jplayer.min.js?v=<?php echo $chk ?>" type="text/javascript"></script>
   <!-- Désastres -->
   <?php include_javascripts(); ?>
   <script type="text/javascript">

@@ -2,11 +2,14 @@
 # http://www.symfony-project.org/reference/1_4/en/12-Filters
 
 rendering: ~
-security:  ~
+security: ~
 
 # insert your own filters here
+version:
+  class: VersionFilter
+
 desastre:
   class: sfDesastreFilter
 
-cache:     ~
+cache: ~
 execution: ~
