@@ -43,3 +43,6 @@ actions:
     - trunk-fmt-pre-commit
   enabled:
     - trunk-upgrade-available
+tools:
+  disabled:
+    - phpstan
