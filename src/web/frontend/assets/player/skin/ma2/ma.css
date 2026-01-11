@@ -199,14 +199,13 @@
 /* VOLUME BAR
 ----------------------------------------------- */
 #jp_container_1 .jp-volume-bar {
-  display: block !important;
-  position: relative !important;
-  margin: 10px auto 0 !important;
-  width: 100px !important;
-  height: 8px !important;
-  background-color: #aaa !important;
-  cursor: pointer !important;
-  z-index: 1000 !important;
+  display: block;
+  position: relative;
+  width: 100px;
+  height: 8px;
+  background-color: #aaa;
+  cursor: pointer;
+  z-index: 1000;
 }
 
 #jp_container_1 .jp-volume-bar-value {
@@ -214,6 +213,65 @@
   background-color: #000 !important;
   height: 8px !important;
   width: 0;
+}
+
+/* PITCH BAR
+----------------------------------------------- */
+#jp_container_1 .jp-pitch-bar {
+  display: block;
+  position: relative;
+  width: 100px;
+  height: 8px;
+  background-color: #aaa;
+  cursor: pointer;
+  z-index: 1000;
+
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 1px;
+    height: 15px;
+    background-color: #000;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -3px;
+    right: 0;
+    width: 1px;
+    height: 15px;
+    background-color: #000;
+  }
+}
+
+#jp_container_1 .jp-pitch-handle {
+  display: block;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 4px;
+  background-color: #000;
+  /* border-radius: 50%; */
+  cursor: pointer;
+  z-index: 1001;
+  transform: translate(-50%, -50%);
+  transition: left 0.1s ease;
+}
+
+#jp_container_1 .jp-pitch-value {
+  display: block !important;
+  font-family: "Rambla", sans-serif;
+  font-size: 12px;
+  font-size: 0.8rem;
+  color: #000 !important;
+  text-align: center !important;
+  margin-top: 15px !important;
+  line-height: 1 !important;
 }
 
 /* TIME HOLDER
@@ -301,4 +359,21 @@
   100% {
     background-position: -7px;
   }
+}
+
+.jp-controls-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+}
+
+.jp-pitch-bar {
+  width: 100px;
+  height: 8px;
+  background-color: #aaa;
+  cursor: pointer;
 }

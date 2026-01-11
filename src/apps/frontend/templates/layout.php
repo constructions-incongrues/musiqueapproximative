@@ -220,7 +220,63 @@
 
             $(document).mouseup(function() {
                 $(document).off('mousemove.jp-volume');
+                $(document).off('mousemove.jp-pitch');
             });
+
+            // Pitch sliding support
+            // playbackRate: 0.5 = 1 octave en dessous, 1.0 = normal (centré), 1.5 = limite supérieure
+            var pitchValue = 1.0; // Valeur par défaut (normal)
+            var pitchMin = 0.5;
+            var pitchMax = 1.5;
+            var updatePitchBar = function() {
+                // Convertir playbackRate (0.5-1.5) en pourcentage (0-100%)
+                // 0.5 -> 0%, 1.0 -> 50% (centré), 1.5 -> 100%
+                var percentage = ((pitchValue - pitchMin) / (pitchMax - pitchMin)) * 100;
+                // Positionner le rond (handle) selon le pourcentage
+                var $handle = $('.jp-pitch-handle');
+                if ($handle.length) {
+                    $handle.css({
+                        'left': percentage + '%',
+                        'transform': 'translate(-50%, -50%)'
+                    });
+                    // Mettre à jour l'affichage de la valeur
+                    $('.jp-pitch-value').text('x' + pitchValue.toFixed(2));
+                }
+            };
+
+            var movePitch = function(e) {
+                var $bar = $('.jp-pitch-bar');
+                var offset = $bar.offset();
+                var x = e.pageX - offset.left;
+                var w = $bar.width();
+                var pc = x / w;
+                if (pc > 1) pc = 1;
+                if (pc < 0) pc = 0;
+                // Convertir pourcentage (0-100%) en playbackRate (0.5-1.5)
+                pitchValue = pitchMin + (pc * (pitchMax - pitchMin));
+                var audioElement = document.querySelector('.jp-jplayer audio');
+                if (audioElement) {
+                    audioElement.playbackRate = pitchValue;
+                }
+                updatePitchBar();
+            };
+
+            $('.jp-pitch-bar').mousedown(function(e) {
+                $(document).on('mousemove.jp-pitch', movePitch);
+                movePitch(e);
+                return false;
+            });
+
+            $('.jp-pitch-handle').mousedown(function(e) {
+                e.stopPropagation();
+                $(document).on('mousemove.jp-pitch', movePitch);
+                return false;
+            });
+
+            // Initialiser la barre de pitch une fois le DOM prêt
+            setTimeout(function() {
+                updatePitchBar();
+            }, 100);
 
             $('a.email-subscription-link').click(function(event) {
               $('div#email-subscription').toggle();
