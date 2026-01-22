@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/refs/heads/main/schemas/config.json",
   "packages": {
     "musiqueapproximative": {
       "display-name": "Musique Approximative",
@@ -16,7 +17,7 @@
       ],
       "extra-files": [
         {
-          "type": "plain-text",
+          "type": "generic",
           "path": "src/VERSION"
         }
       ]
