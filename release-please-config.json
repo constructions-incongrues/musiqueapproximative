@@ -19,11 +19,6 @@
         {
           "type": "generic",
           "path": "src/VERSION"
-        },
-        {
-          "type": "json",
-          "path": "src/composer.json",
-          "jsonpath": "$.version"
         }
       ]
     }
