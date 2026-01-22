@@ -390,7 +390,7 @@ input.submit {
   font-size: 10px;
   font-size: 1rem;
   padding: 2px 0 1px 0;
-  margin-left: -20px;
+  /* margin-left: -20px; */
   text-transform: capitalize;
 }
 
