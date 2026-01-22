@@ -129,6 +129,9 @@ class PostTable extends Doctrine_Table
       ->where('p.is_online = 1 and p.publish_on <= date_add(now(), interval 2 hour)')
       ->orderBy('p.publish_on DESC');
 
+    // Filter out posts with null or empty slug to avoid routing errors
+    $q->andWhere('p.slug IS NOT NULL AND p.slug != ""');
+
     if ($contributor)
     {
       $q->andWhere('u.username = ?', (string)$contributor);
