@@ -186,10 +186,14 @@ class postActions extends sfActions
   public function executeFeed(sfWebRequest $request)
   {
     sfContext::getInstance()->getConfiguration()->loadHelpers('Markdown');
+
+    // Use app_url_root config or fall back to request URI prefix
+    $feedLink = sfConfig::get('app_url_root') ?: $request->getUriPrefix();
+
     $feed = sfFeedPeer::newInstance('rss201');
     $feed->initialize(array(
       'title'         => sfConfig::get('app_title'),
-      'link'          => sfConfig::get('app_url_root'),
+      'link'          => $feedLink,
       'authorEmail'   => 'bertier@musiqueapproximative.net',
       'description'   => "C'est l'exutoire anarchique d'une bande de mélomanes fêlé⋅e⋅s. C’est une playlist infernale alimentée chaque jour par les obsessions et les découvertes de chacun⋅e. L’arbitraire y est roi et on s’y amuse bien : c’est Musique Approximative.",
       'language'      => 'fr'
@@ -200,7 +204,7 @@ class postActions extends sfActions
     $feedImage->setFavicon(sprintf('%s/favicon.ico', $request->getUriPrefix()));
     $feedImage->setImage(sprintf('%s/images/glitched_logo.png', $request->getUriPrefix()));
     $feedImage->setTitle(sfConfig::get('app_title'));
-    $feedImage->setLink(sfConfig::get('app_url_root'));
+    $feedImage->setLink($feedLink);
     $feed->setImage($feedImage);
 
     $posts = Doctrine_Core::getTable('Post')->getOnlinePosts($request->getParameter('contributor'), $request->getParameter('count', 50));
