@@ -10,3 +10,6 @@ all:
   urls:
     tracks: //${APP_DOMAIN}/tracks
     secure_player: https://${APP_DOMAIN}/player.swf
+  cloudflare:
+    api_token: ${CLOUDFLARE_API_TOKEN}
+    zone_id: ${CLOUDFLARE_ZONE_ID}
