@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/refs/heads/main/schemas/config.json",
   "packages": {
-    "musiqueapproximative": {
+    ".": {
       "display-name": "Musique Approximative",
       "release-type": "php",
       "changelog-path": "CHANGELOG.adoc",
