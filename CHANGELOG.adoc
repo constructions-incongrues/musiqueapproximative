@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.9.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.8.0...v1.9.0) (2026-01-23)
+
+
+### Fonctionnalités
+
+* Add Cloudflare cache purge integration with API configuration ([6f347b3](https://github.com/constructions-incongrues/musiqueapproximative/commit/6f347b3f7b677d72a5ce4661666eba4ecbff5dd9))
+
+
+### Corrections de bugs
+
+* feed generation ([#68](https://github.com/constructions-incongrues/musiqueapproximative/issues/68)) ([5b02bbd](https://github.com/constructions-incongrues/musiqueapproximative/commit/5b02bbdd5ceadcd0d85ab0d5250a4c4bcf9c770d))
+* update Cloudflare cache purge task to reflect API limitations and remove obsolete options ([23c2c73](https://github.com/constructions-incongrues/musiqueapproximative/commit/23c2c73e9bb20e3480414898ce0d0741c2ec8d07))
+
+
+### Refactoring
+
+* comment out margin-left property in submit input styles for improved layout flexibility ([#70](https://github.com/constructions-incongrues/musiqueapproximative/issues/70)) ([3464225](https://github.com/constructions-incongrues/musiqueapproximative/commit/3464225739e4b8351f875cc2cda8b2355bcac7df))
+
 ## [1.8.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.7.0...v1.8.0) (2026-01-11)
 
 
