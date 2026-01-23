@@ -16,9 +16,9 @@ Call it with:
 
   [php symfony musiqueapproximative:purge-cloudflare-cache|INFO]
 
-To purge all files:
-
-  [php symfony musiqueapproximative:purge-cloudflare-cache --purge-all|INFO]
+Note: This task purges all cached content. Cloudflare API doesn't support
+selective purging by file type. The --purge-all option is kept for backward
+compatibility but has no effect.
 EOF;
   }
 
@@ -43,16 +43,10 @@ EOF;
     $apiUrl = sprintf('https://api.cloudflare.com/client/v4/zones/%s/purge_cache', $zoneId);
 
     // Prepare payload
-    if ($options['purge-all']) {
-      $payload = json_encode(array('purge_everything' => true));
-      $this->logSection('cloudflare', 'Purging all files from cache');
-    } else {
-      // Purge only HTML files by default
-      $payload = json_encode(array(
-        'types' => array('html')
-      ));
-      $this->logSection('cloudflare', 'Purging HTML files from cache');
-    }
+    // Note: Cloudflare API doesn't support purging by file type.
+    // The API requires one of: purge_everything, files, tags, hosts, or prefixes.
+    $payload = json_encode(array('purge_everything' => true));
+    $this->logSection('cloudflare', 'Purging all files from cache');
 
     // Make API request
     $ch = curl_init();
