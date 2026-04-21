@@ -11,5 +11,8 @@ version:
 desastre:
   class: sfDesastreFilter
 
+json_api:
+  class: JsonApiFilter
+
 cache: ~
 execution: ~
