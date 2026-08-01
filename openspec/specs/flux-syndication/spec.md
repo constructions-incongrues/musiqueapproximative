@@ -79,7 +79,3 @@ Chaque item du flux SHALL identifier le morceau, dater sa publication et permett
 - **ET** le type déclaré de la pièce jointe est `audio/mpeg`
 - **ET** la taille déclarée est celle du fichier, ou zéro lorsque le fichier n'est pas
   lisible sur le serveur
-
-> Comportement constaté, non souhaitable : la taille de la pièce jointe est obtenue en
-> chargeant l'intégralité de chaque fichier audio en mémoire, pour chaque item et à
-> chaque demande du flux. À traiter par un changement dédié.

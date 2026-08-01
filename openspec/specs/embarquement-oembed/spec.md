@@ -55,12 +55,14 @@ inséré par le consommateur.
 ### Requirement: Négociation du format oEmbed
 
 La réponse oEmbed SHALL être servie en JSON par défaut, et en XML sur demande explicite.
+Tout autre format demandé SHALL être refusé explicitement, et non produire une réponse
+vide.
 
 #### Scénario : Format JSON par défaut
 
 - **QUAND** aucun paramètre `format` n'est fourni, ou qu'il vaut `json`
 - **ALORS** la réponse est un objet JSON
-- **ET** le type de contenu est `application/json`
+- **ET** le type de contenu est `application/json+oembed`
 
 #### Scénario : Format XML
 
@@ -69,14 +71,17 @@ La réponse oEmbed SHALL être servie en JSON par défaut, et en XML sur demande
 - **ET** chaque champ devient un élément enfant, son contenu étant échappé
 - **ET** le type de contenu est `text/xml+oembed`
 
-#### Scénario : Format inconnu
+#### Scénario : Format non pris en charge
 
 - **QUAND** le paramètre `format` vaut autre chose que `json` ou `xml`
-- **ALORS** aucune donnée n'est encodée et la réponse est inexploitable
+- **ALORS** la réponse porte le code `501 Not Implemented`
+- **ET** aucune donnée de morceau n'est divulguée dans le corps
 
-> Comportement constaté, non souhaitable : ni erreur, ni repli sur le format par défaut.
-> Le type de contenu `application/json+oembed` attendu par la spécification oEmbed n'est
-> par ailleurs pas déclaré. À traiter par un changement dédié.
+#### Scénario : Casse et espaces du paramètre
+
+- **QUAND** le paramètre `format` vaut `JSON`, `Xml`, ou la même valeur entourée
+  d'espaces
+- **ALORS** le format est reconnu comme s'il était écrit en minuscules et sans espaces
 
 ### Requirement: Gabarit d'embarquement
 
