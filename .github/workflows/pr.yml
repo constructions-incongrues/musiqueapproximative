@@ -25,4 +25,9 @@ jobs:
       - name: Trunk Check
         uses: trunk-io/trunk-action@v1
         with:
-          post-annotations: true
+          # Désactivé : l'étape interne « Download annotations artifact » de
+          # trunk-action construit un appel github-script avec un run_id vide
+          # lorsque l'upload d'annotations est sauté, et le job échoue sur un
+          # SyntaxError alors que le lint est passé. Le workflow était rouge en
+          # continu depuis février 2026 pour cette raison.
+          post-annotations: false

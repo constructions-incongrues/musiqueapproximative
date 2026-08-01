@@ -1,0 +1,223 @@
+name: musique-approximative
+version: 1
+description: Workflow allégé de Musique Approximative — proposition, specs, tâches
+
+# Dérivé de `spec-driven`. Deux écarts assumés :
+#
+# 1. L'artefact `design` est retiré du graphe. Sur ce projet — une seule
+#    application, un seul mainteneur — il faisait doublon avec la proposition à
+#    chaque changement. Ce qui relève du design y tient en une section. Un
+#    changement réellement structurant se discute avant d'être écrit, pas dans
+#    un document de plus.
+#
+# 2. Tout ce qui n'est pas analysé par l'outil est rédigé en français.
+#    Restent en anglais, parce que le parseur les cherche littéralement :
+#      - `## Why` et `## What Changes` dans la proposition ;
+#      - `## Purpose` et `## ADDED Requirements` — ainsi que MODIFIED, REMOVED
+#        et RENAMED — dans les specs ;
+#      - le préfixe `### Requirement:`, le nom qui suit étant libre ;
+#      - les mots-clés normatifs `SHALL` et `MUST`.
+#    En revanche `#### Scénario : ...` fonctionne : le parseur compte tout titre
+#    de niveau 4 sans regarder son libellé. `**QUAND**` et `**ALORS**` ne sont
+#    lus par personne, ils sont là pour le lecteur humain.
+
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Proposition — pourquoi ce changement, et ce qu'il touche
+    template: proposal.md
+    instruction: |
+      Rédige la proposition, qui établit POURQUOI ce changement est nécessaire.
+
+      Sections attendues :
+      - **Why** : une ou deux phrases sur le problème. Quel problème est résolu,
+        et pourquoi maintenant ? Titre en anglais, contenu en français : le
+        parseur cherche cette section par son nom.
+      - **What Changes** : liste de ce qui change. Sois précis sur les
+        comportements ajoutés, modifiés ou retirés. Marque les ruptures de
+        compatibilité par **BREAKING**. Même remarque sur le titre.
+      - **Hors périmètre** : ce que ce changement ne fait délibérément pas.
+        Section obligatoire. Sur du code legacy, la tentation de corriger
+        « tant qu'on y est » est le premier facteur de dérive.
+      - **Capacités** : quelles specs seront créées ou modifiées.
+        - **Nouvelles capacités** : chacune donnera un `specs/<nom>/spec.md`.
+          Nomme-les en kebab-case et en français, par exemple
+          `flux-syndication` ou `catalogue-morceaux`.
+        - **Capacités modifiées** : capacités existantes dont les EXIGENCES
+          changent, pas simplement l'implémentation. Vérifie les noms déjà
+          présents dans `openspec/specs/`. Laisse vide si aucune exigence ne
+          bouge.
+      - **Impact** : fichiers, routes, formats et systèmes touchés. Dis
+        explicitement si le contrat public est concerné.
+
+      Tout changement doit déclarer au moins une capacité, ou renoncer
+      explicitement aux specs en posant `skip_specs: true` dans le
+      `.openspec.yaml` du changement. N'utilise `skip_specs` que si aucun
+      comportement observable ne change : outillage, documentation, refactoring
+      pur. N'invente jamais une exigence pour satisfaire la validation.
+
+      Reste bref, une page suffit presque toujours.
+
+      Ce schéma n'a pas d'artefact de design. Si le changement est structurant —
+      plusieurs modules, schéma de données, dépendance nouvelle, migration —
+      décris l'approche retenue et les options écartées dans une section
+      **Approche** de cette proposition, puis arrête-toi pour en discuter avant
+      d'écrire les specs. Ne fais pas passer une décision d'architecture pour un
+      détail d'implémentation.
+    requires: []
+
+  - id: specs
+    generates: specs/**/*.md
+    description: Spécifications — le comportement observable, pas son implémentation
+    template: spec.md
+    instruction: |
+      Rédige les fichiers de spécification qui définissent CE QUE le système
+      doit faire.
+
+      Une spec est un contrat de comportement, pas un plan d'implémentation.
+
+      Ce qui a sa place dans une spec :
+      - le comportement observable dont dépendent les visiteurs ou les
+        consommateurs d'API ;
+      - les entrées, les sorties et les cas d'erreur ;
+      - les contraintes externes de compatibilité, de sécurité, de fiabilité ;
+      - des scénarios vérifiables un par un.
+
+      Ce qui n'y a pas sa place :
+      - les noms de classes, de méthodes ou de fichiers ;
+      - les choix de bibliothèque ou de framework ;
+      - les étapes d'implémentation.
+
+      Test rapide : si l'implémentation peut changer sans que le comportement
+      observable bouge, cela ne va pas dans la spec. En particulier, ne mentionne
+      jamais Symfony ni Doctrine dans une spec — ils ont vocation à disparaître,
+      pas le comportement.
+
+      Un fichier par capacité listée dans la proposition.
+      - Nouvelle capacité : reprends exactement le nom kebab-case de la
+        proposition, dans `specs/<capacité>/spec.md`.
+      - Capacité modifiée : reprends le nom du dossier existant sous
+        `openspec/specs/<capacité>/`.
+
+      Il faut au moins un fichier de spec, sauf si le changement pose
+      `skip_specs: true`.
+
+      FORMAT — les repères suivants sont analysés par l'outil et doivent être
+      écrits exactement ainsi, en anglais :
+
+      - les opérations de delta, en titre de niveau 2 :
+        `## ADDED Requirements` pour les exigences nouvelles ;
+        `## MODIFIED Requirements` pour un comportement changé, en recopiant
+        l'exigence ENTIÈRE, scénarios compris, avant de l'éditer ;
+        `## REMOVED Requirements`, avec **Raison** et **Migration** ;
+        `## RENAMED Requirements`, au format FROM:/TO:.
+      - chaque exigence : `### Requirement: <nom en français>`.
+      - le corps de chaque exigence contient `SHALL` ou `MUST` : ce sont les
+        seuls mots-clés normatifs reconnus. Évite « devrait » et « peut », qui
+        n'engagent à rien.
+
+      Tout le reste est en français :
+
+      - chaque scénario est un titre de niveau 4 : `#### Scénario : <nom>`.
+        **CRITIQUE** : exactement quatre dièses. Trois, ou une puce, et le
+        scénario est ignoré silencieusement.
+      - dans un scénario, écris `- **QUAND** <condition>` puis
+        `- **ALORS** <résultat attendu>`, et `- **ET**` pour enchaîner. Ces
+        mots ne sont lus par personne d'autre qu'un lecteur humain.
+      - toute exigence doit porter au moins un scénario.
+
+      Nouvelle capacité seulement : ouvre le fichier par une section
+      `## Purpose`, titre en anglais et contenu en français, d'une ou deux
+      phrases — au moins cinquante caractères, sans quoi
+      `openspec validate --strict` la signale comme trop brève. N'ajoute pas de
+      `## Purpose` au delta d'une capacité existante : elle en a déjà une, celle
+      du delta serait ignorée.
+
+      Ce projet n'a pas de suite de tests. Les specs en tiennent lieu : elles
+      sont le seul filet de non-régression, et le contrat à respecter si l'on
+      sort un jour de Symfony 1. Écris-les d'après le code, jamais de mémoire —
+      `docs/memory-bank/README.adoc` a dérivé sur plusieurs points et ne fait
+      pas foi.
+
+      Quand tu spécifies du comportement existant et que tu rencontres un
+      défaut, consigne-le tel qu'il est observable, puis signale-le en citation
+      sous l'exigence concernée. Une spec décrit ce qui est ; corriger relève
+      d'un autre changement.
+
+      Exemple :
+      ```
+      ## Purpose
+
+      Décrit ce que le site expose aux consommateurs d'un flux de syndication.
+
+      ## ADDED Requirements
+
+      ### Requirement: Publication du flux
+      Le système SHALL publier un flux RSS 2.01 en français.
+
+      #### Scénario : Accès au flux
+      - **QUAND** un consommateur demande `/posts/feed`
+      - **ALORS** un document RSS 2.01 est servi
+      - **ET** la langue déclarée est le français
+      ```
+    requires:
+      - proposal
+
+  - id: tasks
+    generates: tasks.md
+    description: Tâches — le découpage de l'implémentation et sa vérification
+    template: tasks.md
+    instruction: |
+      Rédige la liste des tâches qui découpe le travail d'implémentation.
+
+      **IMPORTANT : respecte le format de cases à cocher.** L'avancement est
+      suivi en analysant les `- [ ]`. Une tâche écrite autrement n'est pas
+      comptée.
+
+      Règles :
+      - regroupe les tâches sous des titres de niveau 2 numérotés ;
+      - chaque tâche est une case à cocher, au format `- [ ] X.Y Description` ;
+      - une tâche tient dans une séance de travail ;
+      - ordonne par dépendance, ce qui doit être fait d'abord vient d'abord ;
+      - rédige en français.
+
+      Ce projet n'a aucune suite de tests automatisés sur laquelle s'appuyer.
+      Termine donc toujours par une section de vérification manuelle, dont les
+      tâches sont assez précises pour être exécutées par quelqu'un d'autre :
+      quelle URL demander, quoi regarder dans la réponse, quel résultat attendre.
+
+      Si une vérification n'a pas pu être menée, faute d'environnement ou
+      d'accès, laisse sa case décochée et dis-le en clair dans le fichier. Une
+      case cochée signifie vérifiée, jamais « probablement bon ».
+
+      Exemple :
+      ```
+      ## 1. Métadonnées
+
+      - [ ] 1.1 Remplacer l'URL du lecteur dans l'action d'affichage d'un morceau
+      - [ ] 1.2 Aligner les dimensions déclarées sur celles de l'embed servi
+
+      ## 2. Vérification manuelle
+
+      - [ ] 2.1 Vider le cache, puis vérifier qu'aucune métadonnée de
+            `/post/:slug` ne référence de ressource `.swf`
+      ```
+
+      Appuie-toi sur les specs pour savoir ce qui doit être construit.
+    requires:
+      - specs
+
+apply:
+  requires: [tasks]
+  tracks: tasks.md
+  instruction: |
+    Lis la proposition et les specs, traite les tâches en attente, et coche-les
+    au fur et à mesure.
+
+    Ne coche jamais une tâche de vérification que tu n'as pas réellement
+    exécutée : dis ce qui bloque et laisse la case ouverte.
+
+    Ne touche ni à `src/lib/vendor` ni aux plugins tiers de `src/plugins`.
+    Vide le cache après toute modification de configuration ou de routing.
+    Si une spec se révèle fausse au contact du code, c'est la spec qu'il faut
+    corriger : arrête-toi et signale-le.
