@@ -8,6 +8,10 @@ on:
     branches: [main]
   schedule:
     - cron: 39 2 * * 3
+  # Permet de lancer le scan à la demande. Indispensable pour diagnostiquer : GitHub
+  # désactive ce workflow après une période d'inactivité du dépôt, et sans déclencheur
+  # manuel on ne peut que constater l'absence d'exécution, jamais la provoquer.
+  workflow_dispatch:
 
 permissions:
   contents: read
