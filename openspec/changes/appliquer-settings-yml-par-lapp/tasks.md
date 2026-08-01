@@ -66,12 +66,20 @@
       la plage documentée étant 1 à 6 et une valeur hors plage invalidant la charge
       entière ; `allow_force_pushes` et `allow_deletions`, absents de la documentation,
       sont retirés. Ne subsistent que les cinq clés que la référence décrit.
-- [ ] 3.2octies Après fusion, vérifier une nouvelle fois si la protection est créée. Si elle ne l'est toujours pas, la cause n'est plus dans le contenu du fichier : chercher du côté des permissions accordées à l'app, ou renoncer et gérer la protection à la main en retirant la section `branches`
-- [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue
+- [x] 3.2octies Après fusion, vérifier une nouvelle fois si la protection est créée
+      — **on renonce.** Après trois tentatives d'alignement sur la documentation de
+      l'app — ajout de `restrictions`, `required_pull_request_reviews` à `null`, retrait
+      des clés non documentées — la protection n'est toujours pas créée. Le coût de
+      l'enquête dépasse désormais le bénéfice attendu.
+- [x] 3.2nonies Retirer la section `branches` de `.github/settings.yml` — fait. Tant
+      qu'elle y figurait, chaque fusion sur `main` effaçait la protection. Un commentaire
+      la remplace, qui dit pourquoi et met en garde contre sa réintroduction.
+- [ ] 3.2decies Restaurer la protection de `main` à la main, une dernière fois. Elle ne sera plus effacée, la section fautive ayant disparu du fichier
+- [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue — les sections `repository` et `labels` restent pilotées par l'app, et n'ont jamais été auditées
 - [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
       verts, les quatre contextes requis compris, et la pull request est restée
       `blocked` plusieurs minutes avant d'être fusionnée sans qu'on puisse dire si
       l'automatisme a joué. Reste inexpliqué : sans aucune protection, GitHub aurait dû
       rapporter `clean`. Une règle au niveau de l'organisation reste à écarter.
-- [ ] 3.5 Modifier une valeur du fichier dans une pull request et vérifier qu'elle est appliquée après fusion : c'est ce qui distingue une source de vérité d'un document décoratif
+- [ ] 3.5 Décider du sort des sections `repository` et `labels`, seules rescapées : les laisser à l'app, ou renoncer aussi et désinstaller

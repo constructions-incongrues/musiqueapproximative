@@ -98,50 +98,18 @@ labels:
     color: 0366d6
     description: Mise à jour de dépendances
 
-# Protection des branches
-branches:
-  - name: main
-    protection:
-      # Aucune revue exigée. Le dépôt n'a qu'un mainteneur, et GitHub interdit
-      # d'approuver sa propre pull request : exiger une approbation rendait toute fusion
-      # automatique impossible, et contraignait à fusionner à la main en contournant la
-      # règle. Le contrôle avant fusion repose sur les contextes requis ci-dessous.
-      #
-      # `null` et non `required_approving_review_count: 0` : la documentation de l'app
-      # donne 1 à 6 comme plage valide, et une valeur hors plage invalide la charge
-      # entière — auquel cas aucun réglage n'est appliqué. Pour ne pas exiger de revue,
-      # la forme attendue est la désactivation complète du bloc.
-      required_pull_request_reviews: null
-
-      required_status_checks:
-        strict: true
-        # Ces noms doivent correspondre au caractère près à ceux des jobs. Un contexte
-        # qui ne remonte jamais laisse la branche indéfiniment non fusionnable, sans
-        # message d'erreur : il reste simplement « en attente ».
-        contexts:
-          - Validation du code
-          - Build et Push Docker
-          - Trunk Check
-          - Trivy Scan
-
-      # Volontairement à false. Un contexte requis peut cesser de remonter sans prévenir
-      # — job renommé, workflow désactivé pour inactivité, action cassée en amont : les
-      # trois se sont produits sur ce dépôt. Avec un seul mainteneur, qui ne peut pas
-      # approuver ses propres pull requests, interdire le contournement administrateur ne
-      # laisserait aucune issue et verrouillerait le dépôt jusqu'à correction manuelle de
-      # la protection.
-      enforce_admins: false
-
-      # Obligatoire, même inutilisé. La documentation de l'app est explicite : chaque
-      # élément de premier niveau sous `protection` doit être renseigné — dont
-      # `restrictions` — et mis à `null` si l'on n'en veut pas. Sinon **aucun** réglage
-      # n'est appliqué. Son absence a fait perdre la protection de `main` à deux
-      # reprises : l'app envoyait une charge incomplète à l'API, qui n'en retenait rien.
-      restrictions: null
-
-      required_linear_history: true
-
-      # `allow_force_pushes` et `allow_deletions` ont été retirés : ils ne figurent pas
-      # dans la documentation de l'app, et une clé qu'elle ne sait pas transmettre est un
-      # suspect de plus dans une charge qui n'était pas appliquée. À réintroduire, une par
-      # une, si la protection se crée correctement sans elles.
+# La protection de la branche `main` n'est PAS gérée ici.
+#
+# Elle l'a été un temps, et c'était une erreur. L'app Settings appliquait ce fichier à
+# chaque push sur la branche par défaut, et la section `branches` ne produisait aucune
+# protection — elle effaçait celle qui existait. Trois tentatives d'alignement sur la
+# documentation de l'app ont échoué : ajout de `restrictions`, passage de
+# `required_pull_request_reviews` à `null`, retrait des clés non documentées. `main` s'est
+# retrouvée sans protection à deux reprises.
+#
+# La protection est désormais gérée à la main, dans Réglages → Branches. Ce fichier ne la
+# décrit plus, pour ne plus prétendre piloter ce qu'il ne pilote pas — et surtout pour ne
+# plus la détruire.
+#
+# Ne pas réintroduire de section `branches` sans avoir d'abord vérifié, sur un dépôt
+# d'essai, que l'app crée bien la protection au lieu de la supprimer.
