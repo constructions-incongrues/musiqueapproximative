@@ -16,7 +16,20 @@
       décoratif. Elle a depuis été installée, par le changement
       `appliquer-settings-yml-par-lapp`.
 - [x] 3.2 Reporter à la main dans Réglages → Branches → `main` les corrections que `settings.yml` déclarait sans les appliquer — fait, indépendamment de l'installation de l'app.
-- [ ] 3.3bis Relever la protection réellement appliquée, notamment `enforce_admins` : sept fusions manuelles ont abouti sur des branches non fusionnables, ce que cette règle interdirait si elle était active
+      — **mauvais écran.** Réglages → Branches gouverne les règles classiques ; `main` est
+      protégée par un ruleset, sous Réglages → Rules → Rulesets. Les corrections portées
+      là n'ont donc jamais rencontré la protection qui s'applique réellement, ce qui
+      explique qu'elles aient paru s'évaporer d'une fusion à l'autre.
+- [x] 3.3bis Relever la protection réellement appliquée, notamment `enforce_admins` : sept fusions manuelles ont abouti sur des branches non fusionnables, ce que cette règle interdirait si elle était active
+      — **relevé, et c'est le nœud de toute l'affaire.** `main` n'est pas gouvernée par une
+      règle classique mais par un **ruleset** — un second système de protection, avec sa
+      propre interface et sa propre API, sur lequel `settings.yml` et l'app Settings n'ont
+      aucune prise. Ce ruleset est actif, et sa liste de contournement comporte
+      « Repository admin — Always allow », l'équivalent d'`enforce_admins: false`.
+      Les sept fusions manuelles s'expliquent : elles empruntaient ce contournement.
+      La fusion automatique, elle, ne l'emprunte pas — elle attend une pull request
+      réellement fusionnable. D'où les deux états observés ensemble tout au long de
+      l'enquête : `blocked` pour l'automatisme, et fusionnable à la main.
 - [x] 3.3 Réactiver `security.yml`, désactivé pour inactivité — fait, le workflow est repassé `active`. Le scan de sécurité peut de nouveau s'exécuter.
       — `scorecard.yml`, `nightly.yml` et `repomix.yml` sont **délibérément laissés
       éteints** : seul le scan de sécurité importait. Leurs fichiers restent au dépôt

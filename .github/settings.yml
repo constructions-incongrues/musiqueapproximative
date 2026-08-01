@@ -1,13 +1,19 @@
 # ⚠️  CE FICHIER N'EST APPLIQUÉ PAR RIEN.
 #
 # Il décrit une intention, pas l'état du dépôt. Les réglages qui font foi sont ceux de
-# l'interface GitHub — Réglages, et Réglages → Branches pour la protection.
+# l'interface GitHub. Pour la protection de `main`, c'est Réglages → Rules → Rulesets —
+# et non Réglages → Branches, qui gouverne l'autre système, celui qui ne s'applique pas
+# ici.
 #
 # Il a été conçu pour l'app GitHub Settings (https://github.com/apps/settings), qui
 # l'appliquerait à chaque push sur la branche par défaut. Elle a été installée le
-# 1er août 2026, puis désinstallée le jour même : loin de créer la protection de branche
-# déclarée ici, elle effaçait celle qui existait, laissant `main` sans protection à deux
-# reprises. Trois alignements successifs sur sa documentation n'y ont rien changé.
+# 1er août 2026, puis désinstallée le jour même, après trois tentatives infructueuses de
+# faire créer par elle la protection de branche déclarée ici.
+#
+# La raison a été comprise après coup : l'app n'écrit que la **protection classique**,
+# tandis que `main` est gouvernée par un **ruleset**. Deux systèmes distincts, deux API
+# distinctes. La section `branches` de ce fichier visait donc, depuis l'origine, un
+# mécanisme qui ne s'applique pas à cette branche. Elle a été retirée.
 #
 # Le fichier est conservé pour mémoire : c'est lui qui garde trace de ce que la
 # configuration du dépôt est censée être. Le lire comme une description de la réalité
@@ -112,18 +118,18 @@ labels:
     color: 0366d6
     description: Mise à jour de dépendances
 
-# La protection de la branche `main` n'est PAS gérée ici.
+# La protection de la branche `main` n'est PAS gérée ici, et ne peut pas l'être.
 #
-# Elle l'a été un temps, et c'était une erreur. L'app Settings appliquait ce fichier à
-# chaque push sur la branche par défaut, et la section `branches` ne produisait aucune
-# protection — elle effaçait celle qui existait. Trois tentatives d'alignement sur la
-# documentation de l'app ont échoué : ajout de `restrictions`, passage de
-# `required_pull_request_reviews` à `null`, retrait des clés non documentées. `main` s'est
-# retrouvée sans protection à deux reprises.
+# Elle est assurée par un **ruleset** — Réglages → Rules → Rulesets. Les rulesets sont un
+# système à part, avec leur propre API. L'app Settings ne sait écrire que la protection
+# *classique*, celle de Réglages → Branches. Quoi qu'on déclare dans une section
+# `branches` ici, cela ne peut donc ni créer, ni modifier, ni supprimer le ruleset qui
+# gouverne réellement `main`.
 #
-# La protection est désormais gérée à la main, dans Réglages → Branches. Ce fichier ne la
-# décrit plus, pour ne plus prétendre piloter ce qu'il ne pilote pas — et surtout pour ne
-# plus la détruire.
+# La section a bien existé, et trois tentatives d'alignement sur la documentation de l'app
+# ont échoué à produire quoi que ce soit : ajout de `restrictions`, passage de
+# `required_pull_request_reviews` à `null`, retrait des clés non documentées. On cherchait
+# la panne dans le fichier alors qu'elle était dans le choix du système.
 #
-# Ne pas réintroduire de section `branches` sans avoir d'abord vérifié, sur un dépôt
-# d'essai, que l'app crée bien la protection au lieu de la supprimer.
+# Ne pas réintroduire de section `branches` : elle décrirait un mécanisme inactif sur ce
+# dépôt, et un lecteur pressé la prendrait pour la protection en vigueur.
