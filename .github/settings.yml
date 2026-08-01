@@ -102,14 +102,16 @@ labels:
 branches:
   - name: main
     protection:
-      required_pull_request_reviews:
-        # Le dépôt n'a qu'un mainteneur, et GitHub interdit d'approuver sa propre pull
-        # request : exiger une approbation rendait toute fusion automatique impossible,
-        # et contraignait à fusionner à la main en contournant la règle. Le contrôle
-        # avant fusion repose désormais sur les contextes requis ci-dessous.
-        required_approving_review_count: 0
-        dismiss_stale_reviews: true
-        require_code_owner_reviews: false
+      # Aucune revue exigée. Le dépôt n'a qu'un mainteneur, et GitHub interdit
+      # d'approuver sa propre pull request : exiger une approbation rendait toute fusion
+      # automatique impossible, et contraignait à fusionner à la main en contournant la
+      # règle. Le contrôle avant fusion repose sur les contextes requis ci-dessous.
+      #
+      # `null` et non `required_approving_review_count: 0` : la documentation de l'app
+      # donne 1 à 6 comme plage valide, et une valeur hors plage invalide la charge
+      # entière — auquel cas aucun réglage n'est appliqué. Pour ne pas exiger de revue,
+      # la forme attendue est la désactivation complète du bloc.
+      required_pull_request_reviews: null
 
       required_status_checks:
         strict: true
@@ -138,5 +140,8 @@ branches:
       restrictions: null
 
       required_linear_history: true
-      allow_force_pushes: false
-      allow_deletions: false
+
+      # `allow_force_pushes` et `allow_deletions` ont été retirés : ils ne figurent pas
+      # dans la documentation de l'app, et une clé qu'elle ne sait pas transmettre est un
+      # suspect de plus dans une charge qui n'était pas appliquée. À réintroduire, une par
+      # une, si la protection se crée correctement sans elles.

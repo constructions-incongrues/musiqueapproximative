@@ -58,7 +58,15 @@
       laissait la branche sans protection. La conclusion « il faut désinstaller » est
       retirée.
 - [x] 3.2quinquies Ajouter `restrictions: null` à `.github/settings.yml` — fait.
-- [ ] 3.2sexies Une fois ce correctif dans `main`, vérifier que l'app crée enfin la protection : quatre contextes requis, zéro approbation, historique linéaire. C'est le nouveau test décisif
+- [x] 3.2sexies Vérifier que l'app crée la protection après le correctif `restrictions`
+      — **non, elle n'apparaît toujours pas.** `restrictions` n'était donc pas le seul
+      élément fautif.
+- [x] 3.2septies Aligner strictement la protection sur la référence documentée — fait :
+      `required_pull_request_reviews` passe à `null` plutôt que `required_approving_review_count: 0`,
+      la plage documentée étant 1 à 6 et une valeur hors plage invalidant la charge
+      entière ; `allow_force_pushes` et `allow_deletions`, absents de la documentation,
+      sont retirés. Ne subsistent que les cinq clés que la référence décrit.
+- [ ] 3.2octies Après fusion, vérifier une nouvelle fois si la protection est créée. Si elle ne l'est toujours pas, la cause n'est plus dans le contenu du fichier : chercher du côté des permissions accordées à l'app, ou renoncer et gérer la protection à la main en retirant la section `branches`
 - [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue
 - [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
