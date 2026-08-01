@@ -1,11 +1,19 @@
 ## Why
 
 > **Issue de ce changement : renoncement.** L'app n'a jamais créé la protection de
-> branche, malgré trois alignements successifs sur sa documentation. Elle effaçait en
-> revanche celle qui existait, à chaque push sur la branche par défaut — `main` s'est
-> retrouvée sans protection à deux reprises. La section `branches` a été retirée du
-> fichier ; la protection est gérée à la main. Les sections `repository` et `labels`
-> restent pilotées par l'app, et leur sort n'est pas tranché.
+> branche, malgré trois alignements successifs sur sa documentation. La section `branches`
+> a été retirée du fichier, et l'app désinstallée.
+>
+> **La raison n'a été comprise qu'après.** GitHub offre deux systèmes de protection : les
+> règles *classiques*, seules pilotables par l'app, et les *rulesets*, qui ont leur propre
+> API et lui échappent entièrement. `main` est gouvernée par un ruleset. La section
+> `branches` visait donc, depuis l'origine, un mécanisme sans effet sur cette branche.
+>
+> Cette confusion a coûté toute l'enquête. Elle a fait conclure tour à tour que l'app était
+> inerte, qu'elle détruisait la protection, puis que `main` n'était plus protégée du tout —
+> trois conclusions fausses, tirées d'observations faites sur le mauvais écran. Ce qu'on
+> voyait apparaître et disparaître sous Réglages → Branches était la règle classique que
+> l'app n'arrivait pas à créer ; le ruleset, lui, n'a jamais bougé.
 >
 > Ce qui suit décrit l'intention initiale, conservée telle quelle pour mémoire.
 

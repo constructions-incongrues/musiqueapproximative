@@ -106,8 +106,18 @@ alors que trois fusions manuelles ont abouti sur des branches non fusionnables.
 
 Vérification faite : **l'app n'est pas installée**. Éditer ce fichier n'a donc rien changé
 à la protection réelle. Les corrections des sections 1 et 2 sont restées lettre morte, et
-la fusion automatique demeure cassée pour les raisons décrites plus haut. Elles doivent
-être reportées à la main dans Réglages → Branches, ce que trace la tâche 3.2.
+la fusion automatique demeure cassée pour les raisons décrites plus haut.
+
+**Rectification, établie après coup.** Les reporter dans Réglages → Branches, comme le
+prescrivait la tâche 3.2, ne pouvait pas marcher non plus : `main` est protégée par un
+**ruleset**, sous Réglages → Rules → Rulesets. Deux systèmes coexistent chez GitHub, et
+toute cette enquête a raisonné sur le mauvais. L'app Settings n'écrit que le système
+classique, ce qui explique du même coup pourquoi elle ne produisait jamais rien de
+visible.
+
+L'analyse des causes ci-dessus reste valable sur le fond — un contexte requis qui ne
+remonte jamais bloque effectivement la branche — mais elle visait un objet inerte. Les
+tâches 3.3bis, 3.3ter et 3.3quater portent le diagnostic corrigé.
 
 Ce constat désigne un problème plus large que ce changement : `settings.yml` décrit une
 configuration qui n'est pas celle du dépôt. C'est le troisième artefact de ce genre

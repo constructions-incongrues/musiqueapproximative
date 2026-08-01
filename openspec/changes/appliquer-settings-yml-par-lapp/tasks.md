@@ -27,25 +27,47 @@
 
 ## 3. Installation et vérification
 
-> **La prémisse de ce changement est fausse.** Constat établi après vérification des
-> réglages du dépôt : il n'existait plus **ni ruleset, ni règle de protection classique**
-> sur `main`. La branche était sans aucune protection.
+> **La prémisse de ce changement est fausse**, mais pas pour la raison qu'on a d'abord
+> retenue. Deux systèmes de protection coexistent sur GitHub, et toute cette section les a
+> confondus :
 >
-> `settings.yml` déclare pourtant une section `branches` complète, l'app est installée, et
-> plusieurs push sur la branche par défaut ont eu lieu depuis. Aucune règle n'a été créée.
-> **L'app n'applique donc pas le fichier.** Deux lectures, non départagées : elle échoue
-> silencieusement — permissions, ou section refusée par l'API — ou bien elle a supprimé la
-> protection existante sans la remplacer.
+> - les **règles classiques**, sous Réglages → Branches, seules pilotables par l'app
+>   Settings — c'est ce que décrivait la section `branches` du fichier ;
+> - les **rulesets**, sous Réglages → Rules → Rulesets, un système distinct avec sa propre
+>   API, que l'app ne sait **ni créer, ni modifier, ni supprimer**.
 >
-> Dans les deux cas, faire de ce fichier la source de vérité de la protection ne marche
-> pas. Il reste légitime pour les métadonnées et les libellés.
+> `main` est gouvernée par un **ruleset**. Il porte le nom `main`, il est actif, et sa
+> liste de contournement comporte « Repository admin — Always allow ». L'API le confirme :
+> `main` remonte `protected: true`.
 >
-> Une protection a été restaurée à la main. La prochaine fusion sur `main` dira si l'app
-> la supprime à nouveau : c'est le test qui désigne le coupable.
+> Ce qu'il faut en tirer :
+>
+> - l'app n'a **jamais pu** effacer la protection de `main`, contrairement à ce que
+>   trois entrées ci-dessous affirment. Ce qui disparaissait sous Réglages → Branches était
+>   la règle classique, que l'app n'arrivait pas à créer ; le ruleset, lui, n'a jamais été
+>   dans son périmètre ;
+> - la protection n'a donc probablement jamais cessé de s'appliquer. Les réponses
+>   successives « le ruleset a disparu », puis « plus rien », portaient sur des écrans qui
+>   ne montraient pas le bon système ;
+> - **c'est l'explication de la fusion automatique qui ne se déclenche jamais.** Le
+>   contournement administrateur autorise le mainteneur à fusionner à la main, quoi que
+>   dise le ruleset — ce qu'il a fait sept fois. La fusion automatique, elle, n'emprunte
+>   pas ce contournement : elle attend que la pull request soit réellement fusionnable.
+>   Une exigence du ruleset jamais satisfaite laisse donc les deux états observés
+>   simultanément — `blocked` pour l'automatisme, fusionnable à la main.
+>
+> Reste à établir ce que le ruleset exige : c'est l'objet de 3.4bis.
+>
+> Ce qui subsiste de valide : faire de `settings.yml` la source de vérité de la protection
+> ne marche pas, puisque le fichier ne peut atteindre que le système classique — celui qui
+> ne gouverne pas cette branche. Il reste légitime pour les métadonnées et les libellés.
 
 - [x] 3.1 Installer l'app GitHub Settings — fait. La protection de `main` a par ailleurs été corrigée à la main, indépendamment de l'app.
 - [x] 3.2 Établir lequel des deux systèmes gouverne `main`
-      — **aucun des deux.** Ni ruleset, ni règle classique. La branche était ouverte.
+      — **le ruleset.** Un ruleset nommé `main`, à l'état actif, contournable par les
+      administrateurs du dépôt. L'app Settings n'a aucune prise dessus : elle n'écrit que
+      la protection classique. La réponse « aucun des deux », portée ici pendant toute
+      l'enquête, était fausse ; elle vient d'avoir été relevée sur le mauvais écran.
 - [x] 3.2bis Décider du sort de la section `branches` de `settings.yml`
       — la question ne se pose plus dans les termes prévus : ce n'est pas que le fichier
       décrive le mauvais système, c'est que l'app ne l'applique pas du tout. La décision
@@ -60,6 +82,10 @@
       L'app envoyait donc une charge incomplète à l'API, qui n'en retenait rien et
       laissait la branche sans protection. La conclusion « il faut désinstaller » est
       retirée.
+      — **Rectifié depuis** : « la protection a disparu » désignait la règle classique,
+      seule chose que l'app manipule et qu'elle n'a jamais réussi à créer. Le ruleset qui
+      gouverne réellement `main` était hors de sa portée et n'a pas bougé. L'app n'a rien
+      détruit ; elle n'a rien produit non plus.
 - [x] 3.2quinquies Ajouter `restrictions: null` à `.github/settings.yml` — fait.
 - [x] 3.2sexies Vérifier que l'app crée la protection après le correctif `restrictions`
       — **non, elle n'apparaît toujours pas.** `restrictions` n'était donc pas le seul
@@ -74,10 +100,15 @@
       l'app — ajout de `restrictions`, `required_pull_request_reviews` à `null`, retrait
       des clés non documentées — la protection n'est toujours pas créée. Le coût de
       l'enquête dépasse désormais le bénéfice attendu.
-- [x] 3.2nonies Retirer la section `branches` de `.github/settings.yml` — fait. Tant
-      qu'elle y figurait, chaque fusion sur `main` effaçait la protection. Un commentaire
-      la remplace, qui dit pourquoi et met en garde contre sa réintroduction.
-- [ ] 3.2decies Restaurer la protection de `main` à la main, une dernière fois. Elle ne sera plus effacée, la section fautive ayant disparu du fichier
+- [x] 3.2nonies Retirer la section `branches` de `.github/settings.yml` — fait. Un
+      commentaire la remplace, qui dit pourquoi et met en garde contre sa réintroduction.
+      — **Rectifié** : la section n'effaçait pas la protection, elle échouait à en créer
+      une. Son retrait reste le bon geste, pour une raison plus simple que celle
+      invoquée : elle décrit un système — la protection classique — qui ne gouverne pas
+      cette branche, et laisser un fichier prétendre le contraire égare le lecteur.
+- [x] 3.2decies Restaurer la protection de `main`
+      — **sans objet : elle n'avait pas disparu.** Le ruleset `main` est actif, et l'API
+      rapporte `protected: true` sur la branche. Il n'y avait rien à restaurer.
 - [x] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés
       — jamais fait, et désormais sans urgence : l'app est désinstallée, plus rien
       n'applique le fichier. Un écart éventuel resterait figé plutôt que réappliqué.
@@ -86,8 +117,21 @@
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
       verts, les quatre contextes requis compris, et la pull request est restée
       `blocked` plusieurs minutes avant d'être fusionnée sans qu'on puisse dire si
-      l'automatisme a joué. Reste inexpliqué : sans aucune protection, GitHub aurait dû
-      rapporter `clean`. Une règle au niveau de l'organisation reste à écarter.
+      l'automatisme a joué.
+      — **L'anomalie de cette tentative est levée.** « Sans aucune protection, GitHub
+      aurait dû rapporter `clean` » : la protection existait bel et bien, sous forme de
+      ruleset. `blocked` était la réponse correcte. Il n'y a pas de règle d'organisation à
+      écarter.
+- [ ] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
+      revues, historique linéaire. C'est la dernière inconnue : une exigence qui ne peut
+      jamais être satisfaite expliquerait à elle seule que la fusion automatique n'ait
+      jamais abouti en une quinzaine de pull requests
+      — le test de `reparer-fusion-automatique` 3.6 réduit le champ à deux candidats :
+      **une approbation exigée** (insatisfiable à un seul mainteneur, qui est l'auteur), ou
+      **un contexte requis fantôme** du type `Build Docker`. Deux réglages à lire dans
+      l'écran du ruleset : « Require a pull request before merging » → *Required approvals*,
+      qu'il faut mettre à **0**, et « Require status checks to pass » → la liste, qui ne
+      doit contenir que `Validation du code`, `Build et Push Docker` et `Trunk Check`.
 - [x] 3.5 Décider du sort des sections `repository` et `labels`
       — **tranché par les faits : l'app est désinstallée.** Plus rien n'applique le
       fichier, quelle que soit sa section. `settings.yml` redevient ce qu'il était au
