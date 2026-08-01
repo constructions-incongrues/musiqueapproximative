@@ -37,15 +37,15 @@ a rien à construire, seulement une déclaration à remettre en cohérence.
   demande de vérifier qu'aucune URL externe historique n'en dépend.
 - L'apparence et les dimensions du gabarit d'embed (`showEmbed.php`), inchangées.
 
-## Capabilities
+## Capacités
 
-### New Capabilities
+### Nouvelles capacités
 
 - `metadonnees-partage`: les métadonnées OpenGraph exposées par une page de morceau
   pour permettre aux plateformes tierces de restituer un titre, une illustration et
   un lecteur audio jouable.
 
-### Modified Capabilities
+### Capacités modifiées
 
 Aucune : le dépôt ne contient pas encore de specs principales (`openspec/specs/` est
 vide, ce changement est le premier à en produire).

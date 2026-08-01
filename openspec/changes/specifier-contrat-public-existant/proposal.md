@@ -40,9 +40,9 @@ Défauts déjà relevés lors de la lecture, spécifiés tels quels :
 - Les métadonnées OpenGraph, déjà couvertes par le changement
   `remplacer-embed-flash-opengraph`.
 
-## Capabilities
+## Capacités
 
-### New Capabilities
+### Nouvelles capacités
 
 - `catalogue-morceaux`: quels morceaux sont publiquement visibles, dans quel ordre, et
   comment on navigue entre eux (dernier morceau, suivant, précédent, aléatoire,
@@ -57,7 +57,7 @@ Défauts déjà relevés lors de la lecture, spécifiés tels quels :
 - `desastres`: l'altération aléatoire et conditionnelle des pages par des recettes
   déclarées en configuration.
 
-### Modified Capabilities
+### Capacités modifiées
 
 Aucune. `openspec/specs/` est vide ; ce changement est le premier à peupler le corpus.
 

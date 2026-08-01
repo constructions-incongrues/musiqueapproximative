@@ -7,7 +7,7 @@
 - [x] 1.5 Spécifier `desastres` d'après `sfDesastreManager`, `DesastreHelper` et les recettes et règles de `config/desastres/`
 - [x] 1.6 Consigner les défauts constatés dans les specs concernées, sans les corriger
 
-## 2. Vérification des specs contre le code
+## 2. Vérification manuelle des specs contre le code
 
 > Cette section demande un environnement Docker fonctionnel, indisponible lors de la
 > rédaction. Chaque scénario a été écrit d'après le code lu, mais aucun n'a été exercé
