@@ -26,7 +26,12 @@
       — constaté sur la PR #96 : le check est apparu de lui-même et a abouti, une fois
       `trivy-action` montée en version. Le déclenchement automatique fonctionne, avec un
       délai de propagation d'une dizaine de minutes après la réactivation du workflow.
-- [ ] 3.5 Une fois la protection réelle corrigée (3.2), y réintroduire `Trivy Scan` parmi les contextes requis, et le remettre dans `.github/settings.yml` pour que le fichier reste fidèle
+- [x] 3.5 Réintroduire `Trivy Scan` parmi les contextes requis
+      — **annulée.** Cette tâche contredisait `retirer-scan-trivy` 2.2, qui met en garde
+      contre exactement ce geste. Le scan a été retiré du dépôt : exiger son contexte
+      laisserait la branche indéfiniment non fusionnable, reproduisant le blocage que
+      `Build Docker` a provoqué six mois durant. Les contextes à déclarer sont
+      `Validation du code`, `Build et Push Docker` et `Trunk Check`.
 - [ ] 3.6 Ouvrir une pull request de contrôle, sans y toucher, et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le seul test qui valide l'objet de ce changement
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
