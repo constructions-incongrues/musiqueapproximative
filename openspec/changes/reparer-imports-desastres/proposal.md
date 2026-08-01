@@ -56,11 +56,12 @@ effet observable du doublon est donc la probabilité.** Aucun script ni feuille 
 double.
 
 La question à trancher n'est pas technique, elle est éditoriale : un morceau « mort »
-doit-il glitcher sept fois sur dix, ou neuf ? La proposition retenue est de **supprimer la
-copie de `misc.yml`** et de conserver celle de `postillons.yml`, où elle est à sa place
-thématique, en ramenant la probabilité à la valeur déclarée. Si les 0,91 étaient voulus,
-il faut alors l'écrire — `probability: 0.91` sur une règle unique — plutôt que de le
-laisser émerger d'une redondance que rien ne signale.
+doit-il glitcher sept fois sur dix, ou neuf ?
+
+**Tranché par le mainteneur : sept sur dix.** La copie de `misc.yml` est supprimée, celle
+de `postillons.yml` conservée — elle y est à sa place thématique — et la probabilité
+effective revient à la valeur que la règle annonce. Les 0,91 n'étaient pas voulus ; ils
+étaient le produit d'une redondance que rien ne signalait.
 
 ### Approche
 
