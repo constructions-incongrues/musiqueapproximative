@@ -114,9 +114,44 @@
       protégée**, et l'exigence qui bloquait a cédé dès qu'on a regardé le bon écran. La
       conclusion du premier temps — « la fusion ne se déclenche pas » — n'était vraie que
       du ruleset non corrigé.
-- [ ] 3.6bis Confirmer d'une pull request suivante que la fusion automatique se déclenche
+- [x] 3.6bis Confirmer d'une pull request suivante que la fusion automatique se déclenche
       bien seule, en l'armant et en n'y touchant plus. C'est le seul geste qui départage
       les deux lectures ci-dessus, et il ne coûte rien : la prochaine pull request suffit
+      — **fait sur la PR #106, et le résultat penche du côté opposé.** Chronologie :
+
+      | Heure (UTC) | Événement |
+      |---|---|
+      | 22:36:10 | les neuf checks aboutissent, tous en succès |
+      | 22:38:41 | brouillon levé, fusion automatique armée en `squash` ; `mergeable_state` : `blocked` |
+      | 22:38 → 22:59 | **vingt minutes sans rien.** Aucune poussée, aucun check, aucun changement d'état |
+      | 22:59:03 | fusionnée |
+
+      Ces vingt minutes sont la donnée neuve. Une fusion automatique armée sur une pull
+      request qui devient fusionnable part en une ou deux minutes — c'est d'ailleurs le
+      délai observé sur la #105. Vingt minutes d'immobilité sur une pull request verte et
+      armée disent l'inverse : **elle n'est jamais devenue fusionnable d'elle-même.**
+      L'exigence du ruleset tenait toujours.
+
+      L'explication la plus économique couvre alors les deux pull requests sans rien
+      supposer de plus : **le mainteneur fusionne à la main, par contournement
+      administrateur, quand il y vient.** Promptement sur la #105, une vingtaine de minutes
+      plus tard sur la #106. Le délai d'une minute et demie de la #105, que j'avais lu
+      comme la signature de l'automatisme, n'était qu'une coïncidence de rapidité.
+
+      **Conséquence : la conclusion de 3.6, second temps, penche du mauvais côté.** Elle
+      présentait deux lectures en donnant l'avantage à « la fusion automatique s'est
+      déclenchée ». La #106 retire cet avantage. Sur les quelque dix-sept pull requests
+      observées, **aucune n'a jamais fusionné autrement qu'à la main.**
+
+      Ce qui reste vrai de 3.6 : `main` est protégée, et c'est bien un ruleset qui la
+      gouverne. Ce qui tombe : l'idée que le blocage aurait cédé.
+- [ ] 3.6ter **Lire la section « Rules » du ruleset `main`.** C'est la seule information
+      qui manque encore, et aucun outil accessible d'ici ne la donne — l'API des rulesets
+      n'est pas exposée. Deux réglages suffisent : *Required approvals*, à mettre à **0**,
+      et la liste des contextes requis, qui ne doit contenir que `Validation du code`,
+      `Build et Push Docker` et `Trunk Check`. Tant qu'elle n'est pas lue, l'enquête
+      raisonne sur une hypothèse au lieu d'un fait — c'est précisément l'erreur qui lui a
+      coûté trois conclusions fausses
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.
