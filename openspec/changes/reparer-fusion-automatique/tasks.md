@@ -64,10 +64,27 @@
       `settings.yml`, la banque de mémoire et les badges morts : un quatrième document qui
       décrit sans contraindre. Les mises à jour de dépendances viennent toutes de
       Dependabot, qui n'a pas de fusion automatique configurée.
-- [ ] 3.6 Ouvrir une pull request de contrôle, sans y toucher, et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le seul test qui valide l'objet de ce changement
-      — la PR #105 sert de contrôle. Le test ne peut se faire qu'une fois le brouillon
-      levé, et la fusion automatique activée explicitement : ce sont les deux préalables
-      que l'on ignorait.
+- [x] 3.6 Ouvrir une pull request de contrôle, sans y toucher, et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le seul test qui valide l'objet de ce changement
+      — **fait sur la PR #105, et le test est concluant : la fusion ne se déclenche pas.**
+      Conditions du relevé, toutes réunies : brouillon levé, fusion automatique armée en
+      `squash`, **neuf checks terminés et tous en succès** — `Validation du code`,
+      `Build et Push Docker`, `Trunk Check`, `Trunk Check Runner`, `CodeQL`,
+      `Analyze (actions)`, `Analyze (javascript-typescript)`, `GitGuardian Security
+      Checks`, plus `Créer alias de version` en `skipped`. Aucun `Trivy Scan`.
+      `mergeable_state` reste `blocked`.
+      — Il ne reste donc qu'une exigence non satisfaite, et **zéro revue** figure sur la
+      pull request. L'explication qui tient sans rien supposer d'autre : le ruleset exige
+      au moins une approbation. Sur un dépôt à un seul mainteneur, qui est aussi l'auteur
+      de la pull request, GitHub interdit l'auto-approbation — l'exigence est donc
+      **structurellement insatisfiable**, et le contournement administrateur est la seule
+      issue. C'est exactement le comportement observé depuis le début.
+      — Le diagnostic initial de ce changement avait vu juste sur ce point : il visait
+      `required_approving_review_count: 1`, et le faisait passer à `0`. Mais il l'a corrigé
+      dans `settings.yml`, qui ne pilote rien, au lieu du ruleset, qui gouverne. Le
+      correctif était bon ; il a été appliqué au mauvais endroit.
+      — Reste une seconde hypothèse, non écartée faute d'accès à l'API des rulesets : un
+      contexte requis fantôme, `Build Docker` par exemple, qui ne remonterait jamais. Elle
+      se départage d'un coup d'œil à 3.4bis.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.

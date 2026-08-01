@@ -126,6 +126,12 @@
       revues, historique linéaire. C'est la dernière inconnue : une exigence qui ne peut
       jamais être satisfaite expliquerait à elle seule que la fusion automatique n'ait
       jamais abouti en une quinzaine de pull requests
+      — le test de `reparer-fusion-automatique` 3.6 réduit le champ à deux candidats :
+      **une approbation exigée** (insatisfiable à un seul mainteneur, qui est l'auteur), ou
+      **un contexte requis fantôme** du type `Build Docker`. Deux réglages à lire dans
+      l'écran du ruleset : « Require a pull request before merging » → *Required approvals*,
+      qu'il faut mettre à **0**, et « Require status checks to pass » → la liste, qui ne
+      doit contenir que `Validation du code`, `Build et Push Docker` et `Trunk Check`.
 - [x] 3.5 Décider du sort des sections `repository` et `labels`
       — **tranché par les faits : l'app est désinstallée.** Plus rien n'applique le
       fichier, quelle que soit sa section. `settings.yml` redevient ce qu'il était au
