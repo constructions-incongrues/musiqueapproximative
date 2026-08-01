@@ -1,8 +1,8 @@
 ## 1. Implémentation du gabarit
 
-- [ ] 1.1 Remplacer le contenu de `src/apps/frontend/modules/post/templates/showSuccess.max.php` par la construction de ligne, en reprenant à l'identique celle de `listSuccess.max.php` : rang, artiste, titre, adresse du fichier audio, adresse de la page, contributeur, nombre total, corps du post
-- [ ] 1.2 Fixer le rang à `0` et le nombre total de morceaux à `1`
-- [ ] 1.3 Reprendre l'assainissement des champs textuels du gabarit de liste : retrait des guillemets et des retours à la ligne, décodage des entités HTML
+- [x] 1.1 Remplacer le contenu de `src/apps/frontend/modules/post/templates/showSuccess.max.php` par la construction de ligne, en reprenant à l'identique celle de `listSuccess.max.php` : rang, artiste, titre, adresse du fichier audio, adresse de la page, contributeur, nombre total, corps du post
+- [x] 1.2 Fixer le rang à `0` et le nombre total de morceaux à `1`
+- [x] 1.3 Reprendre l'assainissement des champs textuels du gabarit de liste : retrait des guillemets et des retours à la ligne, décodage des entités HTML
 
 ## 2. Vérification manuelle
 

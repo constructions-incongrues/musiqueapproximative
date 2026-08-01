@@ -1,8 +1,8 @@
 ## 1. Négociation du format
 
-- [ ] 1.1 Dans `executeOembed()` (`src/apps/frontend/modules/post/actions/actions.class.php`), normaliser le paramètre `format` avant comparaison : minuscules et espaces de bordure retirés
-- [ ] 1.2 Ajouter le cas de refus pour tout format autre que `json` ou `xml` : répondre `501` sans corps de données
-- [ ] 1.3 Déclarer le type de contenu `application/json+oembed` pour la réponse JSON, en retirant la ligne mise en commentaire qui le prévoyait déjà
+- [x] 1.1 Dans `executeOembed()` (`src/apps/frontend/modules/post/actions/actions.class.php`), normaliser le paramètre `format` avant comparaison : minuscules et espaces de bordure retirés
+- [x] 1.2 Ajouter le cas de refus pour tout format autre que `json` ou `xml` : répondre `501` sans corps de données
+- [x] 1.3 Déclarer le type de contenu `application/json+oembed` pour la réponse JSON, en retirant la ligne mise en commentaire qui le prévoyait déjà
 
 ## 2. Vérification manuelle
 

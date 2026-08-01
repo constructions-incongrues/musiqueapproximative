@@ -1,11 +1,11 @@
 ## 1. Calcul de la taille du fichier joint
 
-- [ ] 1.1 Dans `executeFeed()` (`src/apps/frontend/modules/post/actions/actions.class.php`), remplacer la mesure par lecture du fichier par une interrogation du système de fichiers
-- [ ] 1.2 Conserver la vérification de lisibilité et le repli à zéro qu'elle commande, pour ne pas produire d'avertissement sur un fichier absent en développement
+- [x] 1.1 Dans `executeFeed()` (`src/apps/frontend/modules/post/actions/actions.class.php`), remplacer la mesure par lecture du fichier par une interrogation du système de fichiers
+- [x] 1.2 Conserver la vérification de lisibilité et le repli à zéro qu'elle commande, pour ne pas produire d'avertissement sur un fichier absent en développement
 
 ## 2. Corpus de specs
 
-- [ ] 2.1 Retirer la note de défaut qui accompagne l'exigence « Contenu d'un item » dans `openspec/specs/flux-syndication/spec.md` : elle n'a plus d'objet une fois le calcul corrigé
+- [x] 2.1 Retirer la note de défaut qui accompagne l'exigence « Contenu d'un item » dans `openspec/specs/flux-syndication/spec.md` : elle n'a plus d'objet une fois le calcul corrigé
 
 ## 3. Vérification manuelle
 
