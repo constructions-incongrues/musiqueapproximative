@@ -16,9 +16,14 @@ autant cesser de servir la page.
 
 - **QUAND** un chemin déclaré sous `imports` ne désigne aucun fichier
 - **ALORS** la page est servie normalement, avec les règles et recettes des imports valides
-- **ET** l'import non résolu est signalé autrement que par la seule journalisation du
-  serveur, de sorte qu'une configuration partiellement invalide ne puisse pas passer pour
-  une configuration complète
+- **ET** l'import non résolu est consigné dans les journaux du serveur
+- **ET** un avertissement nommant le chemin fautif est émis dans la console du navigateur,
+  de sorte que la panne soit constatable sans accès au serveur
+
+#### Scénario : Tous les imports valides
+
+- **QUAND** chaque chemin déclaré sous `imports` se résout
+- **ALORS** aucun avertissement n'est émis, ni dans les journaux, ni dans la console
 
 #### Scénario : Configuration partiellement invalide
 

@@ -73,8 +73,25 @@ compromis défavorable.
 
 L'exigence retenue est donc **la visibilité, pas la rupture** : le système continue de
 servir la page, mais l'import non résolu doit être constatable autrement qu'en fouillant
-les journaux PHP d'un serveur de production. La forme exacte relève de l'implémentation ;
-le contrat est qu'un import déclaré et non résolu ne puisse pas passer inaperçu.
+les journaux PHP d'un serveur de production.
+
+**Tranché par le mainteneur : journaux et console.** Deux canaux, complémentaires par ce
+qu'ils atteignent :
+
+- **les journaux serveur** — l'`error_log` existant est conservé tel quel. C'est la trace
+  durable, celle qu'on relit après coup ;
+- **la console du navigateur** — un avertissement est émis dans la page, nommant les
+  imports déclarés qui ne se résolvent pas. C'est ce qui rend la panne constatable **sans
+  accès au serveur**, et donc ce qui aurait fait voir celle-ci en janvier plutôt qu'en
+  août.
+
+Le second canal emprunte le chemin déjà tracé : `sfDesastreFilter` injecte du JavaScript
+avant `</head>` dans les réponses `text/html`, et `injectDesastreOptions()` sait déjà
+produire un `<script>` inline. Rien de nouveau n'est à bâtir.
+
+Ce que ce choix implique et qu'il faut assumer : **l'avertissement est public**, visible
+par tout visiteur qui ouvre sa console. C'est cohérent avec le reste — les déclencheurs le
+seront aussi — et il ne divulgue qu'un chemin de fichier de configuration.
 
 ## Hors périmètre
 
