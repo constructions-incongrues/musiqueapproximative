@@ -1,5 +1,15 @@
 ## Why
 
+> **Issue de ce changement : renoncement.** L'app n'a jamais créé la protection de
+> branche, malgré trois alignements successifs sur sa documentation. Elle effaçait en
+> revanche celle qui existait, à chaque push sur la branche par défaut — `main` s'est
+> retrouvée sans protection à deux reprises. La section `branches` a été retirée du
+> fichier ; la protection est gérée à la main. Les sections `repository` et `labels`
+> restent pilotées par l'app, et leur sort n'est pas tranché.
+>
+> Ce qui suit décrit l'intention initiale, conservée telle quelle pour mémoire.
+
+
 `.github/settings.yml` décrit la configuration du dépôt — options de fusion, seize
 libellés, protection de la branche `main` — mais rien ne l'applique : l'app GitHub
 Settings n'est pas installée. Le fichier est purement décoratif, et les corrections de
