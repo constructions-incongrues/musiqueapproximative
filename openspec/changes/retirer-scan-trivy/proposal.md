@@ -48,7 +48,8 @@ nuance que l'archivage doit conserver.
   `repomix.yml` — dont les fichiers subsistent. Leur sort reste à décider, et ce
   changement ne le préjuge pas.
 - CodeQL, GitGuardian, Dependabot et Renovate, tous conservés.
-- La restauration de la protection de `main`, qui incombe au mainteneur.
+- Le contenu du ruleset qui protège `main`, dont la mise à jour incombe au mainteneur —
+  il faut seulement s'assurer que `Trivy Scan` n'y figure pas comme contexte requis.
 
 ## Capacités
 
