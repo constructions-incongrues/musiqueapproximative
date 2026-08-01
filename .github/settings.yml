@@ -129,6 +129,14 @@ branches:
       # laisserait aucune issue et verrouillerait le dépôt jusqu'à correction manuelle de
       # la protection.
       enforce_admins: false
+
+      # Obligatoire, même inutilisé. La documentation de l'app est explicite : chaque
+      # élément de premier niveau sous `protection` doit être renseigné — dont
+      # `restrictions` — et mis à `null` si l'on n'en veut pas. Sinon **aucun** réglage
+      # n'est appliqué. Son absence a fait perdre la protection de `main` à deux
+      # reprises : l'app envoyait une charge incomplète à l'API, qui n'en retenait rien.
+      restrictions: null
+
       required_linear_history: true
       allow_force_pushes: false
       allow_deletions: false

@@ -49,9 +49,16 @@
       dépend du test ci-dessous.
 - [x] 3.2ter Restaurer une protection sur `main` à la main — fait.
 - [x] 3.2quater **Test décisif** — verdict : **la protection a de nouveau disparu**
-      après la fusion de la PR #100. L'app supprime donc la règle à chaque application,
-      sans la remplacer. Elle l'avait déjà fait une première fois lors de son
-      installation. Elle doit être désinstallée.
+      après la fusion de la PR #100, comme lors de l'installation.
+      — **Cause trouvée, et elle n'est pas l'app.** Sa documentation est explicite :
+      chaque élément de premier niveau sous `protection` doit être renseigné — dont
+      `restrictions` — et mis à `null` si l'on n'en veut pas, faute de quoi *aucun*
+      réglage n'est appliqué. `restrictions` manquait depuis l'origine du fichier.
+      L'app envoyait donc une charge incomplète à l'API, qui n'en retenait rien et
+      laissait la branche sans protection. La conclusion « il faut désinstaller » est
+      retirée.
+- [x] 3.2quinquies Ajouter `restrictions: null` à `.github/settings.yml` — fait.
+- [ ] 3.2sexies Une fois ce correctif dans `main`, vérifier que l'app crée enfin la protection : quatre contextes requis, zéro approbation, historique linéaire. C'est le nouveau test décisif
 - [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue
 - [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
