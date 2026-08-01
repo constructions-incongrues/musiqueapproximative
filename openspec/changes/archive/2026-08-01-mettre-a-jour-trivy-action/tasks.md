@@ -17,7 +17,11 @@
 - [x] 2.2 Vérifier que le scan s'exécute et que le check `Trivy Scan` passe au vert. Si l'échec persiste, relever le nouveau message : il désignera l'étape suivante, la montée de version étant le seul remède disponible sans renoncer à l'action
 - [x] 2.3 Vérifier que le fichier `trivy-results.sarif` est bien produit, le gabarit `@/contrib/sarif.tpl` étant récupéré en amont et pouvant avoir bougé
 - [x] 2.4 Vérifier que les résultats remontent dans l'onglet Security du dépôt, l'envoi SARIF étant la finalité du workflow
-- [ ] 2.5 Examiner les vulnérabilités remontées : Trivy passe de v0.65.0 à v0.70.0, et un moteur plus récent peut signaler ce que l'ancien ignorait. Un premier scan sévère est un résultat, pas une régression
+- [x] 2.5 Examiner les vulnérabilités remontées
+      — **jamais fait, et désormais sans objet** : le scan a été retiré du dépôt avant que
+      l'onglet Security n'ait été consulté. C'est la seule question de fond que cette
+      séquence n'aura pas tranchée — on ne saura pas ce que Trivy v0.70.0 avait à dire
+      d'une image PHP 7.4. Le retrait a d'ailleurs été décidé sans cette information.
 - [x] 2.6 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.
