@@ -103,17 +103,25 @@ branches:
   - name: main
     protection:
       required_pull_request_reviews:
-        required_approving_review_count: 1
+        # Le dépôt n'a qu'un mainteneur, et GitHub interdit d'approuver sa propre pull
+        # request : exiger une approbation rendait toute fusion automatique impossible,
+        # et contraignait à fusionner à la main en contournant la règle. Le contrôle
+        # avant fusion repose désormais sur les contextes requis ci-dessous.
+        required_approving_review_count: 0
         dismiss_stale_reviews: true
         require_code_owner_reviews: false
 
       required_status_checks:
         strict: true
+        # Ces noms doivent correspondre au caractère près à ceux des jobs. Un contexte
+        # qui ne remonte jamais laisse la branche indéfiniment non fusionnable.
+        # `Trivy Scan` est à réintroduire une fois `security.yml` réactivé : GitHub l'a
+        # désactivé pour inactivité du dépôt le 24 juin 2026, et un workflow désactivé
+        # ne produit aucun contexte.
         contexts:
           - Validation du code
-          - Build Docker
+          - Build et Push Docker
           - Trunk Check
-          - Trivy Scan
 
       enforce_admins: true
       required_linear_history: true
