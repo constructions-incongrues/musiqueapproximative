@@ -65,9 +65,16 @@ alors retirer l'attente.
 
 ### Hors périmètre
 
-- **La réactivation des quatre workflows désactivés.** Elle ne peut pas se faire par un
-  commit : c'est une action manuelle depuis l'onglet Actions, ou un appel à l'API
-  `PUT /actions/workflows/{id}/enable`. Une tâche la trace, mais elle t'incombe.
+- **La réactivation des workflows désactivés.** Elle ne peut pas se faire par un commit :
+  c'est une action manuelle depuis l'onglet Actions, ou un appel à l'API
+  `PUT /actions/workflows/{id}/enable`. Une tâche la trace, mais elle incombe au
+  mainteneur.
+
+  Décision prise depuis : seul `security.yml` a été réactivé. `scorecard.yml`,
+  `nightly.yml` et `repomix.yml` restent délibérément éteints, le scan de sécurité étant
+  le seul qui importait. Leurs fichiers subsistent au dépôt sans jamais s'exécuter — un
+  changement dédié devrait décider de leur retrait, car un workflow présent mais inerte
+  induit en erreur qui le lit.
 - `strict: true` sur les contextes requis, qui impose en plus que la branche soit à jour
   avec `main`. Ce n'est pas ce qui bloque aujourd'hui.
 - `enforce_admins: true`, que la réalité contredit déjà — trois fusions manuelles ont
