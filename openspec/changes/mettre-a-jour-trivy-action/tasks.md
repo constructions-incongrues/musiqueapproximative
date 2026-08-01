@@ -18,4 +18,6 @@
 - [x] 2.3 Vérifier que le fichier `trivy-results.sarif` est bien produit, le gabarit `@/contrib/sarif.tpl` étant récupéré en amont et pouvant avoir bougé
 - [x] 2.4 Vérifier que les résultats remontent dans l'onglet Security du dépôt, l'envoi SARIF étant la finalité du workflow
 - [ ] 2.5 Examiner les vulnérabilités remontées : Trivy passe de v0.65.0 à v0.70.0, et un moteur plus récent peut signaler ce que l'ancien ignorait. Un premier scan sévère est un résultat, pas une régression
-- [ ] 2.6 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
+- [x] 2.6 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
+      — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
+      Le badge affiche la conclusion du dernier run sur la branche par défaut.
