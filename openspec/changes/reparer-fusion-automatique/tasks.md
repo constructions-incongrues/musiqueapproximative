@@ -45,7 +45,29 @@
       laisserait la branche indéfiniment non fusionnable, reproduisant le blocage que
       `Build Docker` a provoqué six mois durant. Les contextes à déclarer sont
       `Validation du code`, `Build et Push Docker` et `Trunk Check`.
+- [x] 3.3ter Établir ce qui, dans ce dépôt, est censé **activer** la fusion automatique
+      — **rien.** C'est le second volet de l'explication, et le plus embarrassant : la
+      fusion automatique de GitHub n'a rien d'automatique. Elle s'active pull request par
+      pull request, à la main ou par un appel d'API. Aucun workflow du dépôt ne le fait —
+      les dix fichiers de `.github/workflows/` ne mentionnent jamais l'auto-merge — et
+      aucune app ne s'en charge.
+      — Conséquence pour les pull requests de cette enquête : **elle n'y a jamais été
+      activée**, et il n'y avait donc rien à déclencher. Un obstacle mécanique s'y ajoute :
+      elles sont ouvertes en brouillon, et GitHub refuse d'activer la fusion automatique
+      sur un brouillon. Vérifié sur la PR #105, où l'API répond « Pull request is a draft ».
+      — Cela ne vaut pas pour les #89, #90 et #91, où l'énoncé de ce changement rapporte
+      qu'elle avait bien été armée. Ce sont ces trois-là que le ruleset explique, par le
+      contournement administrateur relevé en 3.3bis.
+- [x] 3.3quater Vérifier ce que fait Renovate, dont la configuration déclare `automerge: true`
+      — **elle ne fait rien : Renovate n'a jamais ouvert une seule pull request sur ce
+      dépôt**, aucun état confondu. L'app n'est pas installée. `renovate.json` rejoint donc
+      `settings.yml`, la banque de mémoire et les badges morts : un quatrième document qui
+      décrit sans contraindre. Les mises à jour de dépendances viennent toutes de
+      Dependabot, qui n'a pas de fusion automatique configurée.
 - [ ] 3.6 Ouvrir une pull request de contrôle, sans y toucher, et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le seul test qui valide l'objet de ce changement
+      — la PR #105 sert de contrôle. Le test ne peut se faire qu'une fois le brouillon
+      levé, et la fusion automatique activée explicitement : ce sont les deux préalables
+      que l'on ignorait.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.
