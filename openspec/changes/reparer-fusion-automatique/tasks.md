@@ -28,4 +28,6 @@
       délai de propagation d'une dizaine de minutes après la réactivation du workflow.
 - [ ] 3.5 Une fois la protection réelle corrigée (3.2), y réintroduire `Trivy Scan` parmi les contextes requis, et le remettre dans `.github/settings.yml` pour que le fichier reste fidèle
 - [ ] 3.6 Ouvrir une pull request de contrôle, sans y toucher, et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le seul test qui valide l'objet de ce changement
-- [ ] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
+- [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
+      — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
+      Le badge affiche la conclusion du dernier run sur la branche par défaut.
