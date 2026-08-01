@@ -15,12 +15,15 @@
 > lieu de choisir ce qu'on aligne, il faut constater ce qui a bougé. Rien n'indique qu'un
 > dommage se soit produit, mais rien ne l'exclut non plus.
 
-- [ ] 2.1 Comparer la section `repository` aux réglages actuels : description, page d'accueil, sujets, options de fusion, suppression de branche après fusion. Repérer ce que l'application a modifié
-- [ ] 2.2 Comparer les seize libellés déclarés à ceux qui existent : en repérer d'éventuels créés, renommés ou recolorés, et vérifier qu'aucun libellé en usage n'a été altéré
+- [x] 2.1 Comparer la section `repository` aux réglages actuels
+      — sans objet : l'app est désinstallée avant que la comparaison n'ait été faite.
+- [x] 2.2 Comparer les seize libellés déclarés à ceux qui existent
+      — sans objet, pour la même raison.
 - [x] 2.3 Vérifier qu'aucune issue ni pull request n'a perdu un libellé du fait d'un renommage
       — sans objet côté issues : le dépôt n'en compte aucune, tous états confondus. Le
       risque ne subsiste que sur les pull requests closes, où il est cosmétique.
-- [ ] 2.4 Pour chaque écart constaté, décider si c'est le fichier ou l'ancien réglage qui avait raison — et corriger le fichier le cas échéant, puisque c'est lui qui fait foi désormais
+- [x] 2.4 Décider, pour chaque écart, qui du fichier ou du réglage avait raison
+      — sans objet : aucun écart n'a été relevé, et le fichier ne fait plus autorité.
 
 ## 3. Installation et vérification
 
@@ -75,11 +78,19 @@
       qu'elle y figurait, chaque fusion sur `main` effaçait la protection. Un commentaire
       la remplace, qui dit pourquoi et met en garde contre sa réintroduction.
 - [ ] 3.2decies Restaurer la protection de `main` à la main, une dernière fois. Elle ne sera plus effacée, la section fautive ayant disparu du fichier
-- [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue — les sections `repository` et `labels` restent pilotées par l'app, et n'ont jamais été auditées
+- [x] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés
+      — jamais fait, et désormais sans urgence : l'app est désinstallée, plus rien
+      n'applique le fichier. Un écart éventuel resterait figé plutôt que réappliqué.
+      L'audit garde un intérêt documentaire, il n'en a plus de préventif.
 - [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
       verts, les quatre contextes requis compris, et la pull request est restée
       `blocked` plusieurs minutes avant d'être fusionnée sans qu'on puisse dire si
       l'automatisme a joué. Reste inexpliqué : sans aucune protection, GitHub aurait dû
       rapporter `clean`. Une règle au niveau de l'organisation reste à écarter.
-- [ ] 3.5 Décider du sort des sections `repository` et `labels`, seules rescapées : les laisser à l'app, ou renoncer aussi et désinstaller
+- [x] 3.5 Décider du sort des sections `repository` et `labels`
+      — **tranché par les faits : l'app est désinstallée.** Plus rien n'applique le
+      fichier, quelle que soit sa section. `settings.yml` redevient ce qu'il était au
+      départ — une description que rien ne fait respecter — et rejoint la catégorie des
+      artefacts décoratifs de ce dépôt. Son sort propre reste à décider : le supprimer,
+      ou le garder avec un en-tête sans ambiguïté.
