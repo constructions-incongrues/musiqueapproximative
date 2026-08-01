@@ -92,5 +92,8 @@
       — **tranché par les faits : l'app est désinstallée.** Plus rien n'applique le
       fichier, quelle que soit sa section. `settings.yml` redevient ce qu'il était au
       départ — une description que rien ne fait respecter — et rejoint la catégorie des
-      artefacts décoratifs de ce dépôt. Son sort propre reste à décider : le supprimer,
-      ou le garder avec un en-tête sans ambiguïté.
+      artefacts décoratifs de ce dépôt.
+- [x] 3.6 Trancher le sort de `settings.yml` — **conservé**, avec un en-tête qui dit sans
+      ambiguïté qu'il n'est appliqué par rien et que les réglages GitHub font foi. Le
+      supprimer aurait effacé la seule trace de ce que la configuration est censée être ;
+      le garder muet aurait reproduit le travers de la banque de mémoire.
