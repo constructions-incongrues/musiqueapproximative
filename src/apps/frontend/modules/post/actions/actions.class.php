@@ -13,10 +13,44 @@ use Nyholm\Psr7\ServerRequest;
  */
 class postActions extends sfActions
 {
+  /**
+   * Dimensions du lecteur embarquable servi par /post/:slug?embed.
+   * Partagées par les métadonnées OpenGraph et la réponse oEmbed, qui doivent
+   * annoncer les mêmes valeurs.
+   */
+  const EMBED_WIDTH = 510;
+  const EMBED_HEIGHT = 220;
+
   private function getDisaster(sfWebRequest $request, sfWebResponse $response, array $query = [])
   {
     $this->getContext()->getConfiguration()->loadHelpers('Desastre');
     apply_desastre($request, $response, $query);
+  }
+
+  /**
+   * Force une URL absolue en HTTPS.
+   */
+  private function toSecureUrl($url)
+  {
+    return preg_replace('#^http://#i', 'https://', $url);
+  }
+
+  /**
+   * Type MIME d'un fichier de piste, déduit de son extension.
+   */
+  private function getTrackMimeType($filename)
+  {
+    $types = array(
+      'mp3'  => 'audio/mpeg',
+      'ogg'  => 'audio/ogg',
+      'oga'  => 'audio/ogg',
+      'm4a'  => 'audio/mp4',
+      'flac' => 'audio/flac',
+      'wav'  => 'audio/wav',
+    );
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    return isset($types[$extension]) ? $types[$extension] : 'audio/mpeg';
   }
 
   /**
@@ -51,7 +85,8 @@ class postActions extends sfActions
     $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
-    $urlTrack = rawurlencode(sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename));
+    $urlTrack = $this->toSecureUrl(sprintf('%s/%s', sfConfig::get('app_urls_tracks'), rawurlencode($post->track_filename)));
+    $urlEmbed = $this->toSecureUrl(sprintf('%s?embed', $this->getController()->genUrl('@post_show?slug='.$post->slug, true)));
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
@@ -68,28 +103,15 @@ class postActions extends sfActions
     $this->getResponse()->addMeta('og:image:type', 'image/png');
     $this->getResponse()->addMeta('og:image:height', '476');
     $this->getResponse()->addMeta('og:image:width', '476');
-    $this->getResponse()->addMeta('og:type', 'video');
-    $this->getResponse()->addMeta(
-      'og:video',
-      sprintf(
-        'http://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
-        sfConfig::get('app_domain'),
-        $urlTrack,
-        $urlImg
-      )
-    );
-    $this->getResponse()->addMeta(
-      'og:video:secure_url',
-      sprintf(
-        'https://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
-        sfConfig::get('app_domain'),
-        $urlTrack,
-        $urlImg
-      )
-    );
-    $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
-    $this->getResponse()->addMeta('og:video:height', '476');
-    $this->getResponse()->addMeta('og:video:width', '476');
+    $this->getResponse()->addMeta('og:type', 'music.song');
+    $this->getResponse()->addMeta('og:video', $urlEmbed);
+    $this->getResponse()->addMeta('og:video:secure_url', $urlEmbed);
+    $this->getResponse()->addMeta('og:video:type', 'text/html');
+    $this->getResponse()->addMeta('og:video:height', (string) self::EMBED_HEIGHT);
+    $this->getResponse()->addMeta('og:video:width', (string) self::EMBED_WIDTH);
+    $this->getResponse()->addMeta('og:audio', $urlTrack);
+    $this->getResponse()->addMeta('og:audio:secure_url', $urlTrack);
+    $this->getResponse()->addMeta('og:audio:type', $this->getTrackMimeType($post->track_filename));
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
 
     // Gather common query parameters
@@ -305,11 +327,11 @@ class postActions extends sfActions
       'type'          => 'rich',
       'provider_name' => 'MusiqueApproximative',
       'provider_url'  => sfConfig::get('app_url_root'),
-      'height'        => 220,
-      'width'         => 510,
+      'height'        => self::EMBED_HEIGHT,
+      'width'         => self::EMBED_WIDTH,
       'title'         => sprintf('%s - %s', $post->track_author, $post->track_title),
       'description'   => strip_tags(Markdown($post->body)),
-      'html'          => sprintf('<iframe width="510" height="220" scrolling="no" frameborder="no" src="%s?embed"></iframe>', $this->getController()->genUrl('@post_show?slug='.$post->slug, true))
+      'html'          => sprintf('<iframe width="%d" height="%d" scrolling="no" frameborder="no" src="%s?embed"></iframe>', self::EMBED_WIDTH, self::EMBED_HEIGHT, $this->getController()->genUrl('@post_show?slug='.$post->slug, true))
     );
 
     // Encode data depending on requested format
