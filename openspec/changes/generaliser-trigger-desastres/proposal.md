@@ -62,10 +62,26 @@ paramétrable supposerait de toucher au moteur ; `trigger` la contourne sans y t
 il est déjà écrit, déjà documenté, déjà éprouvé sur une règle.
 
 La contrepartie est assumée : les déclencheurs sont **publics**. N'importe quel visiteur
-peut forcer n'importe quel désastre en devinant un paramètre d'URL. Sur un site dont la
-raison d'être est le glitch et l'anarchie, ce n'est pas une faille — c'est au pire un jeu,
-et sans doute une bonne chose. Aucun désastre n'expose de donnée ni ne modifie d'état ;
-le pire cas est une redirection que le visiteur a lui-même demandée.
+peut forcer n'importe quel désastre en devinant un paramètre d'URL.
+
+**Tranché par le mainteneur : publics.** Aucun mécanisme de secret — pas de jeton, pas de
+paramètre deviné long, pas de restriction à l'environnement de développement. Ce qui
+motive la décision, et qui vaut d'être écrit plutôt que sous-entendu :
+
+- **rien n'est exposé.** Aucun désastre ne lit de donnée ni ne modifie d'état. Le pire cas
+  est une redirection que le visiteur a lui-même demandée, ou une feuille de style qui
+  déforme sa propre page ;
+- **un secret aurait rendu la vérification plus fragile**, pas plus sûre : il faudrait le
+  transmettre à ce qui vérifie, donc le stocker quelque part, donc le voir dériver — le
+  mode de défaillance de ce dépôt, précisément ;
+- **sur ce site, c'est cohérent.** Un endroit dont la raison d'être est le glitch et
+  l'anarchie n'a pas de raison de cacher ses interrupteurs. Vingt paramètres devinables
+  qui déclenchent chacun un effet, ce n'est pas une faille — c'est un jeu, et il se trouve
+  qu'il sert aussi à tester.
+
+Cela suppose que les désastres à venir respectent la même règle : ne rien lire, ne rien
+modifier. Un désastre qui y dérogerait ne pourrait plus être forcé publiquement, et c'est
+alors le désastre qu'il faudrait revoir, pas le mécanisme.
 
 ## Hors périmètre
 
