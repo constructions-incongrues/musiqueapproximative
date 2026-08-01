@@ -23,4 +23,7 @@
       — le badge reflète la conclusion du dernier run sur la branche par défaut, qui
       est désormais celui-ci. Le SVG lui-même n'a pas pu être récupéré, le proxy de la
       session bloquant les chemins GitHub hors API.
-- [ ] 2.6 Sur la pull request suivante, vérifier si un check `Trivy Scan` apparaît de lui-même. C'est ce qui dira si le déclenchement automatique est rétabli, indépendamment du lancement manuel
+- [x] 2.6 Sur la pull request suivante, vérifier si un check `Trivy Scan` apparaît de lui-même
+      — **sans objet** : le scan a été retiré du dépôt par `retirer-scan-trivy`. Le
+      déclenchement automatique avait toutefois été constaté avant ce retrait, sur les
+      PR #96 et #101, où le check apparaissait seul et aboutissait.
