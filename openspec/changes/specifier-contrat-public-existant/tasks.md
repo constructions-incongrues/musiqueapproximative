@@ -9,26 +9,34 @@
 
 ## 2. Vérification manuelle des specs contre le code
 
-> Cette section demande un environnement Docker fonctionnel, indisponible lors de la
-> rédaction. Chaque scénario a été écrit d'après le code lu, mais aucun n'a été exercé
-> contre l'application en fonctionnement.
+> Exécutée par le mainteneur, sur un environnement dont l'agent ne disposait pas. Les
+> scénarios avaient été écrits d'après le code lu ; ils ont été exercés contre
+> l'application, et **aucun n'a été contredit**. La lecture du code s'est donc révélée
+> exacte, y compris sur les points les plus incertains : la fenêtre de deux heures sur
+> `publish_on`, les extrémités du catalogue et la résolution d'URL par `/oembed`.
+>
+> La tâche 2.6 a constaté le comportement d'alors — une réponse vide sur format inconnu.
+> Le changement `fiabiliser-negociation-format-oembed` l'a remplacé depuis par un `501` :
+> c'est ce dernier qui décrit l'état visé, et son delta prévaudra dans le corpus.
 
-- [ ] 2.1 Vérifier la fenêtre de deux heures sur `publish_on` : un morceau à publication dans une heure est-il bien accessible, à trois heures bien inaccessible
-- [ ] 2.2 Vérifier le comportement de `/posts/next` et `/posts/prev` aux extrémités du catalogue, quand aucun morceau suivant ou précédent n'existe
-- [ ] 2.3 Vérifier la réponse de `/post/md5/:md5sum` pour une empreinte inconnue
-- [ ] 2.4 Vérifier les types de contenu réellement émis pour `format=json`, `format=xspf` et `format=max`
-- [ ] 2.5 Vérifier la résolution du morceau par `/oembed` pour une URL comportant des paramètres de requête ou une barre oblique finale
-- [ ] 2.6 Vérifier qu'un `format` inconnu sur `/oembed` produit bien une réponse vide, et non une erreur
-- [ ] 2.7 Vérifier le déclenchement d'un désastre par paramètre d'URL, et le cumul de plusieurs recettes sur une même page
-- [ ] 2.8 Corriger les scénarios que la vérification contredit — le comportement observé fait foi, pas la lecture du code
-- [ ] 2.9 Reporter dans `openspec/specs/` les corrections issues de 2.8 : le corpus principal a été peuplé avant vérification, il porte les mêmes hypothèses
+- [x] 2.1 Vérifier la fenêtre de deux heures sur `publish_on` : un morceau à publication dans une heure est-il bien accessible, à trois heures bien inaccessible
+- [x] 2.2 Vérifier le comportement de `/posts/next` et `/posts/prev` aux extrémités du catalogue, quand aucun morceau suivant ou précédent n'existe
+- [x] 2.3 Vérifier la réponse de `/post/md5/:md5sum` pour une empreinte inconnue
+- [x] 2.4 Vérifier les types de contenu réellement émis pour `format=json`, `format=xspf` et `format=max`
+- [x] 2.5 Vérifier la résolution du morceau par `/oembed` pour une URL comportant des paramètres de requête ou une barre oblique finale
+- [x] 2.6 Vérifier qu'un `format` inconnu sur `/oembed` produit bien une réponse vide, et non une erreur
+- [x] 2.7 Vérifier le déclenchement d'un désastre par paramètre d'URL, et le cumul de plusieurs recettes sur une même page
+- [x] 2.8 Corriger les scénarios que la vérification contredit — le comportement observé fait foi, pas la lecture du code
+      — sans objet : aucun scénario n'a été contredit.
+- [x] 2.9 Reporter dans `openspec/specs/` les corrections issues de 2.8
+      — sans objet, 2.8 n'ayant produit aucune correction. Le corpus, peuplé avant
+      vérification, se trouve confirmé tel quel.
 
 ## 3. Promotion dans le corpus principal
 
 - [x] 3.1 Promouvoir les specs dans `openspec/specs/`
-      — fait avant la vérification de la section 2, sur décision explicite. Le corpus
-      principal décrit donc un comportement lu dans le code, pas encore observé. La
-      section 2 reste due, et ses conclusions devront être reportées dans le corpus.
+      — fait avant la vérification de la section 2, sur décision explicite. Le pari s'est
+      avéré : la vérification n'a rien contredit, le corpus était juste dès sa promotion.
 - [x] 3.2 Supprimer `docs/memory-bank/README.adoc`
       — le corpus de specs le remplace sur le comportement observable, et
       `openspec/config.yaml` sur le contexte technique. Le document avait dérivé au point

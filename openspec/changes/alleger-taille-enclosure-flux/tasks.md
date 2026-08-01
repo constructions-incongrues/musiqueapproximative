@@ -9,7 +9,7 @@
 
 ## 3. Vérification manuelle
 
-- [ ] 3.1 Démarrer l'environnement (`./start-dev.sh`) et vider le cache
-- [ ] 3.2 Enregistrer la sortie de `/posts/feed` avant modification, puis après, et vérifier que les deux documents sont identiques — les tailles déclarées doivent être inchangées, item par item
-- [ ] 3.3 Vérifier qu'un morceau dont le fichier audio est absent du disque produit toujours une taille déclarée de zéro, sans avertissement PHP
-- [ ] 3.4 Vérifier que `/posts/feed?contributor=` et `/posts/feed?count=` restent inchangés
+- [x] 3.1 Démarrer l'environnement (`./start-dev.sh`) et vider le cache
+- [x] 3.2 Enregistrer la sortie de `/posts/feed` avant modification, puis après, et vérifier que les deux documents sont identiques — les tailles déclarées doivent être inchangées, item par item
+- [x] 3.3 Vérifier qu'un morceau dont le fichier audio est absent du disque produit toujours une taille déclarée de zéro, sans avertissement PHP
+- [x] 3.4 Vérifier que `/posts/feed?contributor=` et `/posts/feed?count=` restent inchangés

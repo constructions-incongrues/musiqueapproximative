@@ -6,9 +6,9 @@
 
 ## 2. Vérification manuelle
 
-- [ ] 2.1 Démarrer l'environnement (`./start-dev.sh`) et vider le cache
-- [ ] 2.2 Demander `/post/:slug?format=max` sur un morceau existant et vérifier qu'une ligne complète est servie, et non le mot `TODO`
-- [ ] 2.3 Vérifier que le type de contenu de la réponse est bien `application/maxmsp+text`
-- [ ] 2.4 Comparer champ à champ la ligne obtenue avec celle que produit `/posts?format=max` pour ce même morceau : seuls le rang et le nombre total doivent différer
-- [ ] 2.5 Choisir un morceau dont l'artiste, le titre ou le corps contiennent un guillemet ou un retour à la ligne, et vérifier que la ligne produite reste analysable
-- [ ] 2.6 Vérifier que `/posts?format=max` est inchangé
+- [x] 2.1 Démarrer l'environnement (`./start-dev.sh`) et vider le cache
+- [x] 2.2 Demander `/post/:slug?format=max` sur un morceau existant et vérifier qu'une ligne complète est servie, et non le mot `TODO`
+- [x] 2.3 Vérifier que le type de contenu de la réponse est bien `application/maxmsp+text`
+- [x] 2.4 Comparer champ à champ la ligne obtenue avec celle que produit `/posts?format=max` pour ce même morceau : seuls le rang et le nombre total doivent différer
+- [x] 2.5 Choisir un morceau dont l'artiste, le titre ou le corps contiennent un guillemet ou un retour à la ligne, et vérifier que la ligne produite reste analysable
+- [x] 2.6 Vérifier que `/posts?format=max` est inchangé
