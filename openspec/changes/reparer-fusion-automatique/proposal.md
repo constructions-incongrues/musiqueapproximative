@@ -99,9 +99,19 @@ jamais sur le comportement du site. Aucune exigence du corpus ne bouge, d'où
 - `.github/workflows/security.yml` : nom du job.
 - Contrat public **inchangé**. Aucun fichier de `src/` n'est touché.
 
-**Réserve importante** : `.github/settings.yml` n'est qu'une déclaration, appliquée
-uniquement si l'app GitHub Settings est installée sur le dépôt. Un indice donne à penser
-qu'elle ne l'est pas : `enforce_admins: true` y figure, alors que trois fusions manuelles
-ont abouti sur des branches non fusionnables. Si l'app n'est pas installée, éditer ce
-fichier ne changera rien à la protection réelle, et il faudra reporter les mêmes
-corrections à la main dans Réglages → Branches. Une tâche de vérification le contrôle.
+**Réserve importante, depuis confirmée** : `.github/settings.yml` n'est qu'une
+déclaration, appliquée uniquement si l'app GitHub Settings est installée sur le dépôt.
+Un indice donnait à penser qu'elle ne l'était pas — `enforce_admins: true` y figure,
+alors que trois fusions manuelles ont abouti sur des branches non fusionnables.
+
+Vérification faite : **l'app n'est pas installée**. Éditer ce fichier n'a donc rien changé
+à la protection réelle. Les corrections des sections 1 et 2 sont restées lettre morte, et
+la fusion automatique demeure cassée pour les raisons décrites plus haut. Elles doivent
+être reportées à la main dans Réglages → Branches, ce que trace la tâche 3.2.
+
+Ce constat désigne un problème plus large que ce changement : `settings.yml` décrit une
+configuration qui n'est pas celle du dépôt. C'est le troisième artefact de ce genre
+rencontré ici, après `docs/memory-bank/README.adoc` — supprimé pour avoir dérivé — et les
+workflows désactivés dont les fichiers subsistent. Décider du sort de `settings.yml`
+— l'appliquer en installant l'app, le supprimer, ou le marquer explicitement comme
+indicatif — dépasse le périmètre de ce changement et mérite le sien.
