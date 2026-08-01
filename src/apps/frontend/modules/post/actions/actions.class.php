@@ -239,13 +239,17 @@ class postActions extends sfActions
       $track_file_url = htmlspecialchars(sprintf('%s/tracks/%s', sfConfig::get('app_url_root'), rawurlencode($post->track_filename)));
 
       // Make sure no errors are generated when files do not exist (useful in dev mode)
-      if (!is_readable(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename))
+      $track_file_path = sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename;
+      if (!is_readable($track_file_path))
       {
         $file_size = 0;
       }
       else
       {
-        $file_size = strlen(file_get_contents(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename));
+        // Taille demandée au système de fichiers : lire le fichier entier en mémoire
+        // pour n'en mesurer que la longueur coûtait une lecture complète par item et
+        // par requête sur le flux.
+        $file_size = filesize($track_file_path);
       }
 
       // Glitch logo ?
@@ -335,17 +339,24 @@ class postActions extends sfActions
     );
 
     // Encode data depending on requested format
-    if ($request->getParameter('format', 'json') == 'json') {
+    $format = strtolower(trim($request->getParameter('format', 'json')));
+    if ($format == 'json') {
       $dataEncoded = json_encode($data);
-      // $this->getResponse()->setContentType('application/json+oembed');
-      $this->getResponse()->setContentType('application/json');
-    } else if ($request->getParameter('format', 'json') == 'xml') {
+      $this->getResponse()->setContentType('application/json+oembed');
+    } else if ($format == 'xml') {
       $xml = new SimpleXMLElement('<oembed/>');
       foreach ($data as $key => $value) {
         $xml->addChild($key, htmlentities($value));
       }
       $dataEncoded = $xml->asXml();
       $this->getResponse()->setContentType('text/xml+oembed');
+    } else {
+      // La spécification oEmbed demande 501 quand le format demandé n'est pas
+      // pris en charge. Auparavant la réponse partait vide, en 200.
+      $this->getResponse()->setStatusCode(501);
+      sfConfig::set('sf_web_debug', false);
+
+      return sfView::NONE;
     }
 
     // Pass data to view

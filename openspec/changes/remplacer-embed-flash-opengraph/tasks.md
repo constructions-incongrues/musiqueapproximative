@@ -16,14 +16,20 @@
 
 ## 4. Vérification manuelle
 
-> Non exécutée : ces tâches demandent un environnement Docker fonctionnel, indisponible
-> lors de l'implémentation. Elles restent ouvertes et doivent être faites avant fusion.
-> Vérifications statiques déjà effectuées : `php -l` passe, et plus aucune occurrence de
-> `.swf` ni de `application/x-shockwave-flash` ne subsiste dans le module `post`.
+> Exécutée par le mainteneur, sur un environnement dont l'agent ne disposait pas. Aucun
+> écart constaté : le comportement observé correspond à ce que les specs décrivent.
+>
+> Le code avait été fusionné dans `main` par la PR #89 avant que ces contrôles aient lieu.
+> Ils sont désormais faits, et la carte de partage a été vue telle que la restituent les
+> plateformes.
+>
+> Vérifications statiques déjà effectuées auparavant : `php -l` passe, et plus aucune
+> occurrence de `.swf` ni de `application/x-shockwave-flash` ne subsiste dans le module
+> `post`.
 
-- [ ] 4.1 Démarrer l'environnement (`./start-dev.sh`) et vider le cache Symfony
-- [ ] 4.2 Sur une page de morceau, vérifier dans le HTML servi qu'aucune métadonnée ne contient `.swf` ni `application/x-shockwave-flash`
-- [ ] 4.3 Vérifier que l'URL déclarée par `og:video` répond bien et affiche le lecteur HTML5 (comparer avec le champ `html` de `/oembed?url=...`)
-- [ ] 4.4 Vérifier que l'URL déclarée par `og:audio` sert bien le fichier audio
-- [ ] 4.5 Contrôler le rendu de la carte de partage avec un validateur OpenGraph externe, ou à défaut en partageant l'URL de production après déploiement
-- [ ] 4.6 Vérifier que le titre, la description et l'illustration (glitchée ou non) sont inchangés par rapport à avant le changement
+- [x] 4.1 Démarrer l'environnement (`./start-dev.sh`) et vider le cache Symfony
+- [x] 4.2 Sur une page de morceau, vérifier dans le HTML servi qu'aucune métadonnée ne contient `.swf` ni `application/x-shockwave-flash`
+- [x] 4.3 Vérifier que l'URL déclarée par `og:video` répond bien et affiche le lecteur HTML5 (comparer avec le champ `html` de `/oembed?url=...`)
+- [x] 4.4 Vérifier que l'URL déclarée par `og:audio` sert bien le fichier audio
+- [x] 4.5 Contrôler le rendu de la carte de partage avec un validateur OpenGraph externe, ou à défaut en partageant l'URL de production après déploiement
+- [x] 4.6 Vérifier que le titre, la description et l'illustration (glitchée ou non) sont inchangés par rapport à avant le changement

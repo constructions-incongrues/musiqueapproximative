@@ -135,9 +135,10 @@ artifacts:
 
       Ce projet n'a pas de suite de tests. Les specs en tiennent lieu : elles
       sont le seul filet de non-régression, et le contrat à respecter si l'on
-      sort un jour de Symfony 1. Écris-les d'après le code, jamais de mémoire —
-      `docs/memory-bank/README.adoc` a dérivé sur plusieurs points et ne fait
-      pas foi.
+      sort un jour de Symfony 1. Écris-les d'après le code, jamais de mémoire ni
+      d'après une documentation existante. Une banque de mémoire tenue à la main
+      a précédé ce corpus et a fini par décrire cinq routes qui n'existaient pas :
+      c'est exactement ce que le corpus, validé par l'outil, doit éviter.
 
       Quand tu spécifies du comportement existant et que tu rencontres un
       défaut, consigne-le tel qu'il est observable, puis signale-le en citation
