@@ -24,30 +24,36 @@
 
 ## 3. Installation et vérification
 
-> **Un ruleset a disparu.** Constat rapporté après l'installation, cause non établie.
+> **La prémisse de ce changement est fausse.** Constat établi après vérification des
+> réglages du dépôt : il n'existait plus **ni ruleset, ni règle de protection classique**
+> sur `main`. La branche était sans aucune protection.
 >
-> GitHub protège une branche par deux systèmes distincts : les *branch protection rules*
-> classiques, et les *rulesets*, plus récents, dotés d'une API entièrement séparée. À
-> notre connaissance l'app Probot Settings ne pilote que le premier : sa section
-> `branches[].protection` écrit dans l'API classique et ignore les rulesets.
+> `settings.yml` déclare pourtant une section `branches` complète, l'app est installée, et
+> plusieurs push sur la branche par défaut ont eu lieu depuis. Aucune règle n'a été créée.
+> **L'app n'applique donc pas le fichier.** Deux lectures, non départagées : elle échoue
+> silencieusement — permissions, ou section refusée par l'API — ou bien elle a supprimé la
+> protection existante sans la remplacer.
 >
-> Si la protection de ce dépôt était un ruleset, alors `settings.yml` ne la décrivait pas
-> et ne pouvait pas la décrire — ce qui expliquerait que les contextes requis qu'il
-> déclarait ne correspondaient à rien d'observable. La prémisse de ce changement serait
-> alors fausse : le fichier ne peut pas être la source de vérité de la protection, même
-> s'il reste légitime pour les métadonnées et les libellés.
+> Dans les deux cas, faire de ce fichier la source de vérité de la protection ne marche
+> pas. Il reste légitime pour les métadonnées et les libellés.
 >
-> À trancher avant toute autre chose. Tant que ce n'est pas établi, `main` est peut-être
-> sans protection.
+> Une protection a été restaurée à la main. La prochaine fusion sur `main` dira si l'app
+> la supprime à nouveau : c'est le test qui désigne le coupable.
 
 - [x] 3.1 Installer l'app GitHub Settings — fait. La protection de `main` a par ailleurs été corrigée à la main, indépendamment de l'app.
-- [ ] 3.2 Établir lequel des deux systèmes gouverne `main` : consulter Réglages → Rules → Rulesets, puis Réglages → Branches. Si un ruleset existait et a disparu, déterminer si l'app en est la cause
-- [ ] 3.2bis Si le dépôt fonctionne aux rulesets, acter que la section `branches` de `settings.yml` est inopérante et décider de son sort — la retirer, ou renoncer aux rulesets au profit de la protection classique
+- [x] 3.2 Établir lequel des deux systèmes gouverne `main`
+      — **aucun des deux.** Ni ruleset, ni règle classique. La branche était ouverte.
+- [x] 3.2bis Décider du sort de la section `branches` de `settings.yml`
+      — la question ne se pose plus dans les termes prévus : ce n'est pas que le fichier
+      décrive le mauvais système, c'est que l'app ne l'applique pas du tout. La décision
+      dépend du test ci-dessous.
+- [x] 3.2ter Restaurer une protection sur `main` à la main — fait.
+- [ ] 3.2quater **Test décisif** : après la prochaine fusion sur `main`, vérifier si la protection restaurée est toujours là. Si elle a disparu, l'app en est la cause et doit être désinstallée. Si elle tient, l'app est simplement inerte, et sa section `branches` est à retirer du fichier
 - [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue
 - [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
       verts, les quatre contextes requis compris, et la pull request est restée
       `blocked` plusieurs minutes avant d'être fusionnée sans qu'on puisse dire si
-      l'automatisme a joué. Une exigence non satisfaite subsistait, qui n'était aucun
-      des contextes.
+      l'automatisme a joué. Reste inexpliqué : sans aucune protection, GitHub aurait dû
+      rapporter `clean`. Une règle au niveau de l'organisation reste à écarter.
 - [ ] 3.5 Modifier une valeur du fichier dans une pull request et vérifier qu'elle est appliquée après fusion : c'est ce qui distingue une source de vérité d'un document décoratif
