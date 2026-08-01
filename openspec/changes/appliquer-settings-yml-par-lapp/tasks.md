@@ -48,7 +48,10 @@
       décrive le mauvais système, c'est que l'app ne l'applique pas du tout. La décision
       dépend du test ci-dessous.
 - [x] 3.2ter Restaurer une protection sur `main` à la main — fait.
-- [ ] 3.2quater **Test décisif** : après la prochaine fusion sur `main`, vérifier si la protection restaurée est toujours là. Si elle a disparu, l'app en est la cause et doit être désinstallée. Si elle tient, l'app est simplement inerte, et sa section `branches` est à retirer du fichier
+- [x] 3.2quater **Test décisif** — verdict : **la protection a de nouveau disparu**
+      après la fusion de la PR #100. L'app supprime donc la règle à chaque application,
+      sans la remplacer. Elle l'avait déjà fait une première fois lors de son
+      installation. Elle doit être désinstallée.
 - [ ] 3.3 Vérifier que les réglages du dépôt et les libellés n'ont pas été altérés de façon inattendue
 - [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
