@@ -114,16 +114,21 @@ branches:
       required_status_checks:
         strict: true
         # Ces noms doivent correspondre au caractère près à ceux des jobs. Un contexte
-        # qui ne remonte jamais laisse la branche indéfiniment non fusionnable.
-        # `Trivy Scan` est à réintroduire une fois `security.yml` réactivé : GitHub l'a
-        # désactivé pour inactivité du dépôt le 24 juin 2026, et un workflow désactivé
-        # ne produit aucun contexte.
+        # qui ne remonte jamais laisse la branche indéfiniment non fusionnable, sans
+        # message d'erreur : il reste simplement « en attente ».
         contexts:
           - Validation du code
           - Build et Push Docker
           - Trunk Check
+          - Trivy Scan
 
-      enforce_admins: true
+      # Volontairement à false. Un contexte requis peut cesser de remonter sans prévenir
+      # — job renommé, workflow désactivé pour inactivité, action cassée en amont : les
+      # trois se sont produits sur ce dépôt. Avec un seul mainteneur, qui ne peut pas
+      # approuver ses propres pull requests, interdire le contournement administrateur ne
+      # laisserait aucune issue et verrouillerait le dépôt jusqu'à correction manuelle de
+      # la protection.
+      enforce_admins: false
       required_linear_history: true
       allow_force_pushes: false
       allow_deletions: false
