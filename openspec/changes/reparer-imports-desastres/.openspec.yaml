@@ -1,0 +1,4 @@
+schema: musique-approximative
+created: 2026-08-01
+goal: Corriger les trois chemins d'import invalides de desastres.yml et trancher
+  le doublon postillons_mort
