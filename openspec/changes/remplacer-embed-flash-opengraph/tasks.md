@@ -16,8 +16,14 @@
 
 ## 4. Vérification manuelle
 
-> Non exécutée : ces tâches demandent un environnement Docker fonctionnel, indisponible
-> lors de l'implémentation. Elles restent ouvertes et doivent être faites avant fusion.
+> Non exécutée : ces tâches demandent un environnement Docker fonctionnel. Le démon était
+> indisponible lors de l'implémentation, et l'est toujours à la reprise après fusion de la
+> PR #89 — le blocage n'est donc pas levé. Ces tâches restent ouvertes.
+>
+> Le code, lui, est déjà dans `main` : la fusion est intervenue sans que ces vérifications
+> aient eu lieu. Elles gardent tout leur objet, et notamment le contrôle de la carte de
+> partage réelle, qui ne peut de toute façon se faire qu'après déploiement.
+>
 > Vérifications statiques déjà effectuées : `php -l` passe, et plus aucune occurrence de
 > `.swf` ni de `application/x-shockwave-flash` ne subsiste dans le module `post`.
 

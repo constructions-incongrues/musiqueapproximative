@@ -29,5 +29,13 @@
       — fait avant la vérification de la section 2, sur décision explicite. Le corpus
       principal décrit donc un comportement lu dans le code, pas encore observé. La
       section 2 reste due, et ses conclusions devront être reportées dans le corpus.
-- [ ] 3.2 Corriger `docs/memory-bank/README.adoc`, qui documente des routes inexistantes (`/random`, `/next`, `/prev`, `/md5/:md5sum`, `/feed.rss`) et un lecteur JW Player abandonné — ou acter que le corpus de specs le remplace sur ce périmètre
-- [ ] 3.3 Ouvrir un changement dédié pour chacun des défauts consignés : gabarit `max` d'un morceau isolé, lecture intégrale des fichiers audio par le flux, négociation de format d'`/oembed`
+- [x] 3.2 Supprimer `docs/memory-bank/README.adoc`
+      — le corpus de specs le remplace sur le comportement observable, et
+      `openspec/config.yaml` sur le contexte technique. Le document avait dérivé au point
+      de décrire cinq routes inexistantes et un lecteur abandonné. Ni le code ni la
+      navigation Antora ne le référençaient ; les renvois qui le mentionnaient dans le
+      schéma et la configuration ont été réécrits.
+- [x] 3.3 Ouvrir un changement dédié pour chacun des défauts consignés
+      — `implementer-format-max-morceau`, `alleger-taille-enclosure-flux` et
+      `fiabiliser-negociation-format-oembed`. Artefacts complets, aucun code écrit :
+      chaque proposition tranche le comportement visé, à arbitrer en relecture.

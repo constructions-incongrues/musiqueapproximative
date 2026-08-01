@@ -20,9 +20,11 @@ context: |
   Formats de sortie : `json` (jsonapi.org), `xspf`, `max` (Max/MSP), flux RSS 2.01,
   oEmbed (JSON et XML) ; métadonnées OpenGraph.
 
-  Attention : `docs/memory-bank/README.adoc` documente des routes qui n'existent pas
-  (`/random`, `/next`, `/prev`, `/md5/:md5sum`, `/feed.rss`) et un lecteur JW Player
-  qui n'est plus utilisé. Se référer au code, jamais à la banque de mémoire.
+  Ce contrat est spécifié en détail dans `openspec/specs/`, qui fait foi sur le
+  comportement observable. Une banque de mémoire tenue à la main a existé sous
+  `docs/memory-bank/` ; elle a été supprimée après avoir dérivé au point de
+  documenter cinq routes inexistantes et un lecteur audio abandonné. Ne pas la
+  recréer : le corpus de specs joue ce rôle, et il est validé par l'outil.
 
   Conventions du dépôt :
   - Commits : Conventional Commits (release-please gère version et CHANGELOG).
