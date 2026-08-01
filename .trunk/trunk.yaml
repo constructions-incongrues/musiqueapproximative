@@ -35,6 +35,15 @@ lint:
     - svgo@4.0.0
     - trufflehog@3.92.4
     - yamllint@1.37.1
+  ignore:
+    # Fichiers générés par `openspec init` / `openspec update`, et artefacts dont la
+    # structure est imposée par le schéma OpenSpec (titres de section en `##`, ce que
+    # markdownlint MD041 refuse). Les reformater serait annulé à la régénération.
+    # Seuls les linters de forme sont désactivés : trufflehog et git-diff-check restent actifs.
+    - linters: [markdownlint, prettier]
+      paths:
+        - .claude/**
+        - openspec/**
 actions:
   disabled:
     - trunk-announce

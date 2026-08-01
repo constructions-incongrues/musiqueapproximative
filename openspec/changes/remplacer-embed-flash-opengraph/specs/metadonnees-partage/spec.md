@@ -14,7 +14,7 @@ le contenu : titre, description et URL canonique.
 #### Scenario: Métadonnées d'identification présentes
 
 - **WHEN** un consommateur récupère le HTML de `/post/:slug`
-- **THEN** la page contient `og:title` valant « <artiste> - <titre> | <titre du site> »
+- **THEN** la page contient `og:title` valant « `artiste` - `titre` | `titre du site` »
 - **AND** la page contient `og:description` contenant le corps du post débarrassé de
   son balisage Markdown et HTML
 - **AND** la page contient `og:url` valant l'URL absolue canonique du morceau
@@ -22,7 +22,7 @@ le contenu : titre, description et URL canonique.
 #### Scenario: Titre enrichi du contributeur
 
 - **WHEN** la page est demandée avec le paramètre de contributeur `c`
-- **THEN** `og:title` mentionne en plus « Playlist de <contributeur> »
+- **THEN** `og:title` mentionne en plus « Playlist de `contributeur` »
 
 ### Requirement: Illustration du partage
 
