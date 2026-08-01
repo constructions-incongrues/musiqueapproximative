@@ -65,8 +65,10 @@
       décrit sans contraindre. Les mises à jour de dépendances viennent toutes de
       Dependabot, qui n'a pas de fusion automatique configurée.
 - [x] 3.6 Ouvrir une pull request de contrôle, sans y toucher, et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le seul test qui valide l'objet de ce changement
-      — **fait sur la PR #105, et le test est concluant : la fusion ne se déclenche pas.**
-      Conditions du relevé, toutes réunies : brouillon levé, fusion automatique armée en
+      — **fait sur la PR #105. Le test a deux temps, et le second renverse le premier.**
+
+      **Premier temps — bloqué.** Conditions du relevé, toutes réunies : brouillon levé,
+      fusion automatique armée en
       `squash`, **neuf checks terminés et tous en succès** — `Validation du code`,
       `Build et Push Docker`, `Trunk Check`, `Trunk Check Runner`, `CodeQL`,
       `Analyze (actions)`, `Analyze (javascript-typescript)`, `GitGuardian Security
@@ -82,9 +84,39 @@
       `required_approving_review_count: 1`, et le faisait passer à `0`. Mais il l'a corrigé
       dans `settings.yml`, qui ne pilote rien, au lieu du ruleset, qui gouverne. Le
       correctif était bon ; il a été appliqué au mauvais endroit.
-      — Reste une seconde hypothèse, non écartée faute d'accès à l'API des rulesets : un
-      contexte requis fantôme, `Build Docker` par exemple, qui ne remonterait jamais. Elle
-      se départage d'un coup d'œil à 3.4bis.
+      — Restait une seconde hypothèse, non écartée faute d'accès à l'API des rulesets : un
+      contexte requis fantôme, `Build Docker` par exemple, qui ne remonterait jamais.
+
+      **Second temps — la PR #105 a fusionné.** Une fois le blocage signalé et le ruleset
+      corrigé, elle est partie. La chronologie du 1er août :
+
+      | Heure (UTC) | Événement |
+      |---|---|
+      | 22:28 | fusion automatique armée en `squash`, `mergeable_state` : `blocked` |
+      | 22:29:30 | poussée du commit `8a1ac19`, qui remplace la tête |
+      | 22:30:13 | `ci.yml` abouti ; les autres workflows suivent vers 22:31 |
+      | 22:32:48 | **fusionnée** |
+
+      Deux lectures possibles, et il faut le dire plutôt que trancher au forceps :
+
+      - **la fusion automatique s'est déclenchée.** C'est la lecture que la chronologie
+        soutient. La tête précédente, `8075c60`, était verte dès 22:24:52 et n'a pas été
+        fusionnée : elle est restée `blocked` près de quatre minutes. Rien n'a bougé tant
+        que la fusion automatique n'était pas armée. Une fois armée, et une fois la CI de
+        la nouvelle tête verte, la fusion suit d'environ une minute et demie — c'est le
+        délai de propagation habituel de l'automatisme ;
+      - **une fusion manuelle par contournement administrateur**, tombée par coïncidence
+        dans cette fenêtre. L'API ne permet pas de les distinguer : dans les deux cas
+        `merged_by` porte le nom du mainteneur, puisque la fusion automatique s'exécute
+        au nom de qui l'a armée.
+
+      Ce que le second temps établit sans ambiguïté, en revanche : **`main` était bien
+      protégée**, et l'exigence qui bloquait a cédé dès qu'on a regardé le bon écran. La
+      conclusion du premier temps — « la fusion ne se déclenche pas » — n'était vraie que
+      du ruleset non corrigé.
+- [ ] 3.6bis Confirmer d'une pull request suivante que la fusion automatique se déclenche
+      bien seule, en l'armant et en n'y touchant plus. C'est le seul geste qui départage
+      les deux lectures ci-dessus, et il ne coûte rien : la prochaine pull request suffit
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.
