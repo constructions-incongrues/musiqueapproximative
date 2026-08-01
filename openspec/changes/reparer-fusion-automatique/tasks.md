@@ -11,12 +11,12 @@
 ## 3. Vérification manuelle
 
 - [x] 3.1 Contrôler si l'app GitHub Settings est installée sur le dépôt
-      — **elle ne l'est pas.** `settings.yml` ne pilote donc rien : les corrections des
-      sections 1 et 2, fusionnées par la PR #92, n'ont modifié qu'un fichier décoratif.
-      La protection réelle est inchangée, et la fusion automatique reste cassée pour les
-      mêmes raisons qu'au départ. Elles restent à reporter à la main.
-- [ ] 3.2 Reporter à la main dans Réglages → Branches → `main` les corrections que `settings.yml` déclare sans les appliquer : contextes requis alignés sur `Validation du code`, `Build et Push Docker` et `Trunk Check`, et nombre d'approbations exigées ramené à zéro
-- [ ] 3.3bis Relever au passage la protection réellement appliquée, notamment `enforce_admins` : trois fusions manuelles ont abouti sur des branches non fusionnables, ce que cette règle interdirait si elle était active
+      — **elle ne l'était pas.** `settings.yml` ne pilotait donc rien : les corrections
+      des sections 1 et 2, fusionnées par la PR #92, n'ont modifié qu'un fichier
+      décoratif. Elle a depuis été installée, par le changement
+      `appliquer-settings-yml-par-lapp`.
+- [x] 3.2 Reporter à la main dans Réglages → Branches → `main` les corrections que `settings.yml` déclarait sans les appliquer — fait, indépendamment de l'installation de l'app.
+- [ ] 3.3bis Relever la protection réellement appliquée, notamment `enforce_admins` : sept fusions manuelles ont abouti sur des branches non fusionnables, ce que cette règle interdirait si elle était active
 - [x] 3.3 Réactiver `security.yml`, désactivé pour inactivité — fait, le workflow est repassé `active`. Le scan de sécurité peut de nouveau s'exécuter.
       — `scorecard.yml`, `nightly.yml` et `repomix.yml` sont **délibérément laissés
       éteints** : seul le scan de sécurité importait. Leurs fichiers restent au dépôt
