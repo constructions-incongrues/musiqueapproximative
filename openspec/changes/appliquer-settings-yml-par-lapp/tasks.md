@@ -132,6 +132,15 @@
       l'écran du ruleset : « Require a pull request before merging » → *Required approvals*,
       qu'il faut mettre à **0**, et « Require status checks to pass » → la liste, qui ne
       doit contenir que `Validation du code`, `Build et Push Docker` et `Trunk Check`.
+      — **Le ruleset a été corrigé dans la foulée**, et la PR #105 a fusionné. Le contenu
+      exact d'avant et d'après n'a pas été relevé — l'API des rulesets n'est pas accessible
+      d'ici — mais le blocage a cédé, ce qui suffit à valider le raisonnement. Reste à
+      consigner la configuration retenue, pour qu'elle cesse d'être une connaissance
+      orale : c'est l'objet de 3.4ter.
+- [ ] 3.4ter Consigner dans le dépôt la configuration du ruleset `main` — contextes requis,
+      approbations exigées, liste de contournement. Sans quoi la prochaine dérive
+      silencieuse mettra encore six mois à se voir. Un fichier de documentation, pas un
+      fichier appliqué : `settings.yml` a montré ce que coûte la confusion entre les deux
 - [x] 3.5 Décider du sort des sections `repository` et `labels`
       — **tranché par les faits : l'app est désinstallée.** Plus rien n'applique le
       fichier, quelle que soit sa section. `settings.yml` redevient ce qu'il était au
