@@ -21,9 +21,13 @@
 - [ ] 2.6 Vérifier qu'un `format` inconnu sur `/oembed` produit bien une réponse vide, et non une erreur
 - [ ] 2.7 Vérifier le déclenchement d'un désastre par paramètre d'URL, et le cumul de plusieurs recettes sur une même page
 - [ ] 2.8 Corriger les scénarios que la vérification contredit — le comportement observé fait foi, pas la lecture du code
+- [ ] 2.9 Reporter dans `openspec/specs/` les corrections issues de 2.8 : le corpus principal a été peuplé avant vérification, il porte les mêmes hypothèses
 
 ## 3. Promotion dans le corpus principal
 
-- [ ] 3.1 Une fois les specs vérifiées, les promouvoir dans `openspec/specs/` avec `openspec sync`
+- [x] 3.1 Promouvoir les specs dans `openspec/specs/`
+      — fait avant la vérification de la section 2, sur décision explicite. Le corpus
+      principal décrit donc un comportement lu dans le code, pas encore observé. La
+      section 2 reste due, et ses conclusions devront être reportées dans le corpus.
 - [ ] 3.2 Corriger `docs/memory-bank/README.adoc`, qui documente des routes inexistantes (`/random`, `/next`, `/prev`, `/md5/:md5sum`, `/feed.rss`) et un lecteur JW Player abandonné — ou acter que le corpus de specs le remplace sur ce périmètre
 - [ ] 3.3 Ouvrir un changement dédié pour chacun des défauts consignés : gabarit `max` d'un morceau isolé, lecture intégrale des fichiers audio par le flux, négociation de format d'`/oembed`
