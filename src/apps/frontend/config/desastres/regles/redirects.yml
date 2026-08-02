@@ -5,9 +5,12 @@ regles:
   - probability: 1
     query: query.title == 'Spooky Mix'
     recettes: [spooky]
+    trigger: spooky
   - probability: 0.1
     query: context.date.month == '12'
     recettes: [quickos]
+    trigger: quickos
   - probability: 0.5
     query: context.date.month == '12' && (context.date.day == '24' || context.date.day == '25')
     recettes: [quickos]
+    trigger: quickos_noel
