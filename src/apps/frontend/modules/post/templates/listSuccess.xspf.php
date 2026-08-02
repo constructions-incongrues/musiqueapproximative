@@ -14,4 +14,8 @@ if ($sf_request->getParameter('contributor')) {
   $title = 'Musique Approximative : Tous les morceaux';
 }
 
-include_partial('post/xspfPlaylist', array('posts' => $posts, 'title' => $title));
+include_partial('post/xspfPlaylist', array(
+  'posts' => $posts,
+  'title' => $title,
+  'baseUrl' => $sf_request->getUriPrefix() . $sf_request->getRelativeUrlRoot(),
+));

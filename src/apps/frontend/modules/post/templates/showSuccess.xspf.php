@@ -8,4 +8,8 @@ $title = sprintf(
   $post->track_title
 );
 
-include_partial('post/xspfPlaylist', array('posts' => array($post), 'title' => $title));
+include_partial('post/xspfPlaylist', array(
+  'posts' => array($post),
+  'title' => $title,
+  'baseUrl' => $sf_request->getUriPrefix() . $sf_request->getRelativeUrlRoot(),
+));

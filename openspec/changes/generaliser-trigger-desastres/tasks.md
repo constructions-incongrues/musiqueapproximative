@@ -67,22 +67,29 @@
 > désastre `X` se reconnaissent aux chemins `/desastres/X/javascript/*.js` et
 > `/desastres/X/stylesheets/*.css`, et aux options dans `window.DesastreOptions`.
 >
-> **Aucune n'a pu être menée : le correctif n'est pas déployé.** Ce changement ne modifie
-> que de la configuration et de la documentation — aucun code — et le mécanisme qu'il
-> généralise est déjà en service sur `tts_jinglist` depuis des mois. Ce qui a été contrôlé
-> ici, par script, tient en trois lignes : dix-neuf règles, dix-neuf déclencheurs, aucun
-> doublon, aucune collision avec un paramètre de l'application, et un tableau de
-> documentation qui correspond exactement à la configuration.
+> **Déployées et vérifiées le 2 août 2026, contre la production.** Les dix-neuf
+> déclencheurs forcent leur désastre, sans exception. Seule 4.7 reste ouverte : elle
+> suppose de désactiver une recette en configuration, ce qui n'a pas sa place sur un site
+> en ligne.
 >
-> Cela ne dit rien de ce qui compte : qu'un déclencheur force effectivement sa règle sur
-> une page servie. C'est l'objet de tout ce qui suit.
+> Deux contrôles avaient précédé le déploiement, et ils ne valaient que ce qu'ils
+> valaient : dix-neuf règles pour dix-neuf déclencheurs, sans doublon ni collision, et un
+> tableau de documentation conforme à la configuration. Ils ne disaient rien de ce qui
+> compte — qu'un déclencheur force effectivement sa règle sur une page servie. C'est
+> maintenant établi.
 
-- [ ] 4.1 Demander `/post/:slug?danse` sur un morceau dont le titre ne contient pas `danse`, et vérifier que le désastre est appliqué malgré la condition non satisfaite
-- [ ] 4.2 Demander `/post/:slug?kraftwerk` sur un morceau dont l'artiste n'est pas Kraftwerk — même attente
-- [ ] 4.3 Demander la même page **sans** paramètre, plusieurs fois, et vérifier que le désastre n'apparaît que selon sa probabilité. C'est le contrôle de non-régression qui compte : le forçage ne doit rien changer en son absence
-- [ ] 4.4 Demander `/post/:slug?quickos` un jour qui n'est ni le 24 ni le 25 décembre, et vérifier la redirection. C'est la vérification qui débloque la tâche 4.4 de `reparer-imports-desastres`, restée ouverte faute de pouvoir attendre décembre
-- [ ] 4.5 Demander `/post/:slug?bleu&noir` et vérifier que **les deux** désastres sont appliqués
-- [ ] 4.6 Demander un déclencheur avec une valeur — `?danse=1`, `?danse=true`, `?danse=nimportequoi` — et vérifier que les trois se comportent comme `?danse` seul
+- [x] 4.1 Demander `/post/:slug?danse` sur un morceau dont le titre ne contient pas `danse`, et vérifier que le désastre est appliqué malgré la condition non satisfaite
+- [x] 4.2 Demander `/post/:slug?kraftwerk` sur un morceau dont l'artiste n'est pas Kraftwerk — même attente
+- [x] 4.3 Demander la même page **sans** paramètre, plusieurs fois, et vérifier que le désastre n'apparaît que selon sa probabilité. C'est le contrôle de non-régression qui compte : le forçage ne doit rien changer en son absence
+      — vérifié sur `/post/patric-catani-le-split` : sans paramètre, seul `splitouine`
+      (`probability: 1`) apparaît, dix fois sur dix. Aucun des dix-huit autres désastres ne
+      s'invite. Le témoin historique tient aussi : `danse` continue de se déclencher sans
+      paramètre sur un morceau dont le titre le contient. **Aucune régression.**
+- [x] 4.4 Demander `/post/:slug?quickos` un jour qui n'est ni le 24 ni le 25 décembre, et vérifier la redirection. C'est la vérification qui débloque la tâche 4.4 de `reparer-imports-desastres`, restée ouverte faute de pouvoir attendre décembre
+- [x] 4.5 Demander `/post/:slug?bleu&noir` et vérifier que **les deux** désastres sont appliqués
+- [x] 4.6 Demander un déclencheur avec une valeur — `?danse=1`, `?danse=true`, `?danse=nimportequoi` — et vérifier que les trois se comportent comme `?danse` seul
 - [ ] 4.7 Marquer temporairement une recette `enabled: false`, forcer sa règle, et vérifier qu'elle n'est **pas** appliquée : le forçage porte sur la sélection de la règle, jamais sur l'activation d'une recette. Rétablir ensuite
-- [ ] 4.8 Parcourir les **dix-neuf** déclencheurs un à un et cocher cette tâche seulement quand les dix-neuf ont été constatés. Si l'un d'eux ne produit rien, l'écrire ici plutôt que cocher — c'est exactement le genre de panne silencieuse que ce changement existe pour rendre visible
-- [ ] 4.9 Demander `/posts/feed?danse`, `/post/:slug?format=json&danse` et `/oembed?url=...&danse`, et vérifier qu'aucun désastre n'est injecté : les recettes ne s'appliquent qu'aux réponses `text/html`
+      — **laissée ouverte à dessein.** Désactiver une recette en production pour observer le
+      résultat n'est pas un geste raisonnable. À faire sur une instance locale.
+- [x] 4.8 Parcourir les **dix-neuf** déclencheurs un à un et cocher cette tâche seulement quand les dix-neuf ont été constatés. Si l'un d'eux ne produit rien, l'écrire ici plutôt que cocher — c'est exactement le genre de panne silencieuse que ce changement existe pour rendre visible
+- [x] 4.9 Demander `/posts/feed?danse`, `/post/:slug?format=json&danse` et `/oembed?url=...&danse`, et vérifier qu'aucun désastre n'est injecté : les recettes ne s'appliquent qu'aux réponses `text/html`
