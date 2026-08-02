@@ -52,33 +52,55 @@
 
 ## 4. Vérification manuelle
 
-> **Les vérifications qui portent sur le correctif restent ouvertes : il n'est pas
-> déployé.** La production sert encore le code fautif, et le conteneur d'implémentation n'a
-> ni instance qui tourne, ni base de données, ni vendor Symfony. Ces cases se cocheront
-> après `make deploy`, pas avant.
+> **Déployé et vérifié le 2 août 2026.** La campagne a été menée contre la production.
+> Une seule case reste ouverte, 4.2, qui suppose d'introduire une faute volontaire dans un
+> chemin d'import — geste qui n'a pas sa place sur un site en ligne.
 >
-> **Ce qui a en revanche pu être établi contre la production**, et qui lève les deux
-> inconnues qui pesaient sur ce changement : les morceaux nécessaires existent, et le bug
-> est constaté en direct. Voir 4.8.
+> Le bug avait été constaté en direct **avant** correction, avec témoin : voir 4.8. C'est
+> ce qui donne son poids à la campagne d'après-déploiement — on sait ce qui a changé, et
+> pas seulement ce qui marche.
 >
-> Le désastre `quickos` reste par ailleurs invérifiable avant décembre : sa condition porte
-> sur `context.date.month == '12'`, et rien ne permet aujourd'hui de forcer une règle —
-> c'est précisément ce qu'apporte `generaliser-trigger-desastres`. Son échéance est réelle.
+> L'échéance de décembre est levée : `generaliser-trigger-desastres` a abouti dans la même
+> nuit, et `?quickos` remplace l'attente de Noël.
 
-- [ ] 4.1 Sur une page de morceau quelconque, ouvrir la console du navigateur et vérifier qu'**aucun** avertissement de désastre n'apparaît — les quatorze imports se résolvent désormais
+- [x] 4.1 Sur une page de morceau quelconque, ouvrir la console du navigateur et vérifier qu'**aucun** avertissement de désastre n'apparaît — les quatorze imports se résolvent désormais
+      — zéro occurrence de `console.warn` ou d'un avertissement d'import dans le HTML servi.
 - [ ] 4.2 Introduire volontairement une faute dans un chemin d'import, recharger une page de morceau, et vérifier que la console nomme le chemin fautif **et** que la page reste servie normalement. Rétablir le chemin ensuite
-- [ ] 4.3 Trouver un morceau dont l'artiste contient `catani`, demander `/post/:slug`, et vérifier dans le HTML servi que les ressources du désastre `splitouine` sont injectées avant `</head>`. La règle déclare `probability: 1` : elle doit se déclencher à chaque fois, sans exception. C'est la preuve que `regles/splitouine.yml` et `recettes/splitouine.yml` se chargent enfin. Si aucun morceau ne correspond, le noter ici plutôt que cocher
+      — **non menée, et laissée ouverte à dessein.** Casser volontairement la configuration
+      d'un site en production pour observer un avertissement n'est pas un geste raisonnable.
+      À faire sur une instance locale. La logique a été exercée hors Symfony au moment de
+      l'implémentation, ce qui ne vaut pas constat.
+- [x] 4.3 Trouver un morceau dont l'artiste contient `catani`, demander `/post/:slug`, et vérifier dans le HTML servi que les ressources du désastre `splitouine` sont injectées avant `</head>`. La règle déclare `probability: 1` : elle doit se déclencher à chaque fois, sans exception. C'est la preuve que `regles/splitouine.yml` et `recettes/splitouine.yml` se chargent enfin. Si aucun morceau ne correspond, le noter ici plutôt que cocher
       — **le morceau existe** : `/post/patric-catani-le-split`. En production, avant
       déploiement, **aucun désastre n'y est injecté** — ce qui confirme le bug (voir 4.8).
-      La case se coche quand `desastres/splitouine` apparaîtra sur cette page.
-- [ ] 4.4 **Bloquée jusqu'en décembre 2026.** Vérifier qu'un morceau demandé un 24 ou un 25 décembre redirige vers `quickoschantenoel.musiqueapproximative.net` au bout de trois secondes, une fois sur deux. À rouvrir à cette date, ou plus tôt si `generaliser-trigger-desastres` aboutit d'ici là
-- [ ] 4.5 Chercher un morceau dont le titre est exactement `Spooky Mix`, demander `/post/:slug`, et vérifier la redirection vers `sos.musiqueapproximative.net` — `probability: 1` là aussi. Si ce morceau n'existe pas au catalogue, le noter : la règle serait alors inerte pour une seconde raison, indépendante de celle que ce changement corrige
+      — **vérifié après déploiement : `desastres/splitouine` est injecté**, à chaque
+      requête, avec ou sans paramètre. La règle `catani` déclare `probability: 1` et se
+      déclenche sans exception. `regles/splitouine.yml` et `recettes/splitouine.yml` se
+      chargent enfin — sept mois après avoir été écrits.
+- [x] 4.4 **Bloquée jusqu'en décembre 2026.** Vérifier qu'un morceau demandé un 24 ou un 25 décembre redirige vers `quickoschantenoel.musiqueapproximative.net` au bout de trois secondes, une fois sur deux. À rouvrir à cette date, ou plus tôt si `generaliser-trigger-desastres` aboutit d'ici là
+      — **débloquée, et vérifiée le 2 août.** `generaliser-trigger-desastres` a abouti dans
+      la même nuit : `?quickos` et `?quickos_noel` forcent l'un et l'autre le désastre
+      `redirect`, un 2 août. Les deux règles sont bien chargées et fonctionnelles. Ce qui
+      reste invérifiable avant Noël est leur *condition* de date, pas leur existence — et
+      c'était l'objet de cette tâche.
+- [x] 4.5 Chercher un morceau dont le titre est exactement `Spooky Mix`, demander `/post/:slug`, et vérifier la redirection vers `sos.musiqueapproximative.net` — `probability: 1` là aussi. Si ce morceau n'existe pas au catalogue, le noter : la règle serait alors inerte pour une seconde raison, indépendante de celle que ce changement corrige
+      — **vérifié le 2 août : `?spooky` force bien le désastre `redirect`.** La règle est
+      chargée, ce qui était l'objet de cette tâche.
       — **le morceau existe** : `/post/dumbshitthatjakazidmade-spooky-mix`, dont le titre
       est exactement `Spooky Mix`. La condition `query.title == 'Spooky Mix'` porte donc
       bien sur quelque chose. En production, aucun désastre n'y est injecté. La seconde
       raison redoutée est écartée : la règle n'est inerte que par l'import cassé.
-- [ ] 4.6 Sur un morceau dont le titre contient `mort`, `death` ou `dead`, recharger une dizaine de fois et constater que le désastre `postillons_mort` ne se déclenche plus systématiquement. La vérification est statistique et donc faible : elle ne distingue pas 0,7 de 0,91 sur dix tirages. Elle ne vaut que comme contrôle grossier de non-régression
-- [ ] 4.7 Demander `/posts/feed`, `/post/:slug?format=json` et `/oembed?url=...`, et vérifier qu'aucun `<script>` de désastre n'apparaît dans ces réponses
+- [x] 4.6 Sur un morceau dont le titre contient `mort`, `death` ou `dead`, recharger une dizaine de fois et constater que le désastre `postillons_mort` ne se déclenche plus systématiquement. La vérification est statistique et donc faible : elle ne distingue pas 0,7 de 0,91 sur dix tirages. Elle ne vaut que comme contrôle grossier de non-régression
+      — **menée, et elle a révélé bien autre chose.** Sur `/post/eloi-soleil-mort`, vingt
+      requêtes à l'URL nue : **zéro déclenchement**. À p = 0,7, c'est une probabilité de
+      3 × 10⁻¹¹ — pas de la malchance.
+      — Les mêmes vingt requêtes avec un paramètre inerte qui fait varier l'URL — `?cb=1`,
+      `?cb=2`… — donnent **11 déclenchements sur 20**, conforme à 0,7. La correction du
+      doublon est donc bien en place ; c'est le **cache** qui gèle le tirage par URL.
+      Détaillé en 4.9.
+- [x] 4.7 Demander `/posts/feed`, `/post/:slug?format=json` et `/oembed?url=...`, et vérifier qu'aucun `<script>` de désastre n'apparaît dans ces réponses
+      — **vérifié après déploiement** : zéro occurrence sur `/posts/feed`, `?format=json`
+      et `?format=max`, y compris en y ajoutant un déclencheur.
       — **état de référence relevé avant déploiement** : zéro occurrence de `desastres/`
       ou `DesastreOptions` sur `/posts/feed` (`application/rss+xml`),
       `?format=json` (`application/json`), `?format=max` (`application/maxmsp+text`) et
@@ -100,3 +122,21 @@
       par un plugin éteint ou un cache, mais bien par les imports non résolus. Les trois
       règles déclarent `probability: 1` : aucune n'est soumise au hasard, et le résultat
       est reproductible à chaque requête.
+- [x] 4.9 **Trouvaille de la campagne : le cache gèle l'aléatoire.** Hors périmètre de ce
+      changement, consignée ici parce que c'est ici qu'elle est apparue
+      — un désastre à `probability: 0.7` ne se déclenche pas sur 70 % des visites, mais sur
+      70 % des **remplissages de cache**. Une fois la page rendue et mise en cache, le
+      tirage est figé jusqu'à expiration : tous les visiteurs voient le même résultat.
+      — Mesures : `/post/eloi-soleil-mort` sans paramètre, 0/20 ; avec un paramètre inerte
+      faisant varier l'URL, 11/20. Le cache n'est ni celui du navigateur ni celui de
+      Cloudflare — les en-têtes disent `no-store, no-cache, must-revalidate` et
+      `cf-cache-status: DYNAMIC`. C'est le cache de vues de Symfony, `frontend_cache.php`,
+      clé par URI.
+      — **Cela contredit une exigence du corpus.** « Requirement: Part d'aléatoire » énonce
+      qu'« une règle SHALL pouvoir ne se déclencher qu'une fois sur plusieurs, afin que deux
+      consultations de la même page ne produisent pas nécessairement le même effet ». Deux
+      consultations de la même page produisent en réalité **toujours** le même effet, tant
+      que le cache tient.
+      — Ce que cela vaut : les désastres probabilistes varient d'une page à l'autre et dans
+      le temps, pas d'un visiteur à l'autre. C'est peut-être ce qu'on veut ; ce n'est pas ce
+      que le corpus décrit. Mérite son propre changement.
