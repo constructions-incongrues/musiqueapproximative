@@ -20,7 +20,6 @@ runtimes:
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   enabled:
-    - renovate@42.76.5
     - actionlint@1.7.10
     - checkov@3.2.497
     - dotenv-linter@4.0.0
