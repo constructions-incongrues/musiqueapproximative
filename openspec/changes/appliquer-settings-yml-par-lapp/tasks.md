@@ -137,10 +137,38 @@
       d'ici — mais le blocage a cédé, ce qui suffit à valider le raisonnement. Reste à
       consigner la configuration retenue, pour qu'elle cesse d'être une connaissance
       orale : c'est l'objet de 3.4ter.
-- [ ] 3.4ter Consigner dans le dépôt la configuration du ruleset `main` — contextes requis,
+- [x] 3.4ter Consigner dans le dépôt la configuration du ruleset `main` — contextes requis,
       approbations exigées, liste de contournement. Sans quoi la prochaine dérive
       silencieuse mettra encore six mois à se voir. Un fichier de documentation, pas un
       fichier appliqué : `settings.yml` a montré ce que coûte la confusion entre les deux
+      — **relevée le 2 août 2026**, écran par écran. Elle cesse d'être une connaissance
+      orale :
+
+      | Réglage | Valeur |
+      |---|---|
+      | Nom du ruleset | `main` |
+      | Enforcement | Active |
+      | Contournement | Repository admin — Role — Always allow |
+      | Require a pull request before merging | activé |
+      | Required approvals | **0** |
+      | Dismiss stale approvals when new commits are pushed | activé, sans objet à 0 |
+      | Require review from specific teams | désactivé |
+      | Require review from Code Owners | désactivé |
+      | Do not require status checks on creation | désactivé |
+      | Contextes requis | `Trunk Check`, `Build et Push Docker`, `Validation du code` — tous GitHub Actions |
+      | Block force pushes | activé |
+
+      — Les règles **classiques** sont, elles, confirmées absentes : Réglages → Branches
+      affiche « Classic branch protections have not been configured ». C'est bien un
+      ruleset, et lui seul, qui protège `main`. Ce que l'app Settings n'aurait jamais pu
+      atteindre.
+      — Deux réglages restent hors du relevé, faute d'avoir été visibles : **« Require
+      branches to be up to date before merging »**, et l'existence éventuelle d'un
+      **second ruleset**, notamment au niveau de l'organisation. Ils sont suivis par
+      `reparer-fusion-automatique` 3.6quater.
+      — Ce tableau est un document de plus qui décrira sans contraindre. Il ne pilote
+      rien : les réglages GitHub font foi, et lui dérivera. Sa seule vertu est qu'un
+      écart futur devienne constatable — c'est déjà ce qui manquait le plus.
 - [x] 3.5 Décider du sort des sections `repository` et `labels`
       — **tranché par les faits : l'app est désinstallée.** Plus rien n'applique le
       fichier, quelle que soit sa section. `settings.yml` redevient ce qu'il était au
