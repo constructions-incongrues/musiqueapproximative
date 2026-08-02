@@ -12,9 +12,6 @@ regles:
     query: query.title ~ /.*(fish|poisson).*/i
     recettes: [fish]
   - probability: 0.7
-    query: query.title ~ /.*(morte?s?|deaths?|dead).*/i
-    recettes: [postillons_mort]
-  - probability: 0.7
     query: query.title ~ /.*(musique|music).*/i
     recettes: [musique]
   - probability: 0.7
