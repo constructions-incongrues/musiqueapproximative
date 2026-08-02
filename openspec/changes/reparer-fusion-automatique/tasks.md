@@ -172,6 +172,14 @@
       niveau de l'organisation `constructions-incongrues`, qui apparaîtrait en lecture
       seule dans la liste des rulesets du dépôt. Ne rien conclure avant d'avoir regardé
       l'un et l'autre
+      — **la première piste est écartée par mesure**, le 2 août. La PR #115 est restée
+      `blocked` avec sa CI verte alors que sa base était `main` à jour, au commit près :
+      elle ne pouvait donc pas être en retard sur quoi que ce soit. « Require branches to
+      be up to date before merging » ne peut pas expliquer le blocage.
+      — Reste la seconde, et elle seule parmi celles nommées. Un coup d'œil à la liste
+      `Réglages → Rules → Rulesets` suffit : s'il n'y figure qu'une ligne, il faudra
+      chercher ailleurs — et se garder de conclure « il ne reste que ça », erreur déjà
+      commise quatre fois dans cette enquête.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.

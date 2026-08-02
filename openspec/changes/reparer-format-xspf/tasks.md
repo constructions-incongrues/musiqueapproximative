@@ -53,8 +53,10 @@
 > un partiel symfony 1 n'hérite d'aucune variable de son appelant, et le mien attendait
 > `$sf_request`. Corrigé, mais **non redéployé** à l'heure où ces lignes sont écrites.
 >
-> Toutes les cases ci-dessous restent donc ouvertes, et le resteront jusqu'au prochain
-> `make deploy`. Ce qui a été fait à la place — un banc d'essai reproduisant cette fois
+> Toutes les cases ci-dessous restent donc ouvertes, et le resteront jusqu'à la prochaine
+> mise en ligne. **Elle est automatique** : Plesk tire `main` à chaque poussée, il n'y a pas
+> de geste de déploiement — le `make deploy` par rsync du Makefile est déprécié. Fusionner
+> cette pull request, c'est donc mettre en production. Ce qui a été fait à la place — un banc d'essai reproduisant cette fois
 > l'isolement du partiel, sept assertions vertes, et l'échec attendu sans la variable — ne
 > les remplace pas. Le premier banc était vert lui aussi.
 
