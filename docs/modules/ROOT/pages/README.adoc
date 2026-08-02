@@ -29,8 +29,7 @@ docs/
 │           │   └── commandes.adoc
 │           └── cicd/
 │               ├── github-actions.adoc
-│               ├── release-please.adoc
-│               └── renovate.adoc
+│               └── release-please.adoc
 └── .gitignore
 ----
 
