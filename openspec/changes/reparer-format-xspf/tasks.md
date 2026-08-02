@@ -49,22 +49,37 @@
 
 ## 4. Vérification manuelle
 
-> **Toutes ces vérifications supposent le correctif déployé, et aucune ne l'est.** Celles
-> qui portent sur l'état actuel — le 500, les formats annoncés — ont été menées contre la
-> production avant déploiement et sont consignées dans la proposition.
+> **Une première correction a été déployée et n'a pas fonctionné.** Le détail est en 4.0 :
+> un partiel symfony 1 n'hérite d'aucune variable de son appelant, et le mien attendait
+> `$sf_request`. Corrigé, mais **non redéployé** à l'heure où ces lignes sont écrites.
 >
-> Ce qui a été fait à la place, et qui ne les remplace pas : le partiel `_xspfPlaylist.php`
-> a été exercé hors Symfony, avec des bouchons pour la requête et `url_for()`. **Quatorze
-> contrôles, tous verts** — document bien formé, encodage déclaré, racine et espace de noms
-> XSPF, titre, date au format `xsd:dateTime`, nombre de morceaux, adresse absolue et
-> encodée du fichier audio, et surtout l'échappement : un morceau intitulé
-> `Rock <b>N</b> Roll "Live"` par `AC/DC & "friends"`, avec un corps contenant une balise
-> `script`, est restitué à l'identique sans casser le document ni produire de balise réelle.
-> C'est la tâche 4.6, et c'était le point le plus facile à casser en se passant de
-> `File_XSPF` — il reste néanmoins à revérifier sur une vraie page.
->
-> `php -l` passe sur les trois gabarits. Le banc d'essai n'est pas versé au dépôt.
+> Toutes les cases ci-dessous restent donc ouvertes, et le resteront jusqu'à la prochaine
+> mise en ligne. **Elle est automatique** : Plesk tire `main` à chaque poussée, il n'y a pas
+> de geste de déploiement — le `make deploy` par rsync du Makefile est déprécié. Fusionner
+> cette pull request, c'est donc mettre en production. Ce qui a été fait à la place — un banc d'essai reproduisant cette fois
+> l'isolement du partiel, sept assertions vertes, et l'échec attendu sans la variable — ne
+> les remplace pas. Le premier banc était vert lui aussi.
 
+- [x] 4.0 **Constater que la première correction ne fonctionnait pas, et trouver pourquoi**
+      — relevé après déploiement : `?format=xspf` répondait toujours `500` avec un corps
+      vide, sur les deux routes. Le déploiement était pourtant bien passé — `?kraftwerk`
+      forçait son désastre, donc la PR #112, postérieure à celle-ci, était en ligne.
+      — **Cause : un partiel symfony 1 est hermétique.** `get_partial()` n'appelle que
+      `setPartialVars()` : le porteur d'attributs du partiel ne contient que les variables
+      qu'on lui passe. Ni `$sf_request`, ni `$sf_data`, ni `$sf_context`. Le partiel
+      appelait `$sf_request->getUriPrefix()`, soit une méthode sur `null`, soit une erreur
+      fatale, soit un 500 au corps vide.
+      — **Le banc d'essai n'a pas pu l'attraper, et c'est instructif.** Il déclarait
+      `$sf_request` comme variable locale avant d'inclure le gabarit : il validait la
+      logique du gabarit, jamais la portée que le framework lui accorde. Un banc qui
+      fournit ce que l'appelant réel ne fournit pas ne teste que lui-même.
+      — Corrigé en passant `baseUrl`, calculé par l'appelant. Le partiel a besoin d'un
+      préfixe, pas d'un objet requête, et son contrat en devient explicite.
+      — Deux contrôles refaits, cette fois en reproduisant l'isolement : sept assertions
+      vertes avec `baseUrl`, et l'échec attendu — « Undefined variable $baseUrl » — sans.
+      — `DOMDocument` a été écarté comme cause par mesure, non par supposition :
+      `/oembed?format=xml` répond `200` en production et construit sa réponse avec
+      `SimpleXMLElement`, donc l'extension XML est bien présente dans l'image.
 - [ ] 4.1 Demander `/posts?format=xspf` et vérifier un code `200`, le type `application/xspf+xml`, et un corps non vide dont la racine est une playlist XSPF
 - [ ] 4.2 Demander `/posts?c=<contributeur>&format=xspf` et vérifier que le titre de la playlist nomme ce contributeur
 - [ ] 4.3 Demander `/posts?q=<terme>&format=xspf` et vérifier que le titre reprend le terme

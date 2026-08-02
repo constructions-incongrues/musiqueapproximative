@@ -1,0 +1,4 @@
+schema: musique-approximative
+created: 2026-08-02
+goal: Aligner l'exigence sur l'aléatoire des désastres avec le comportement
+  réel, que le cache de vues gèle par URL

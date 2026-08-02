@@ -10,8 +10,15 @@
  * `require` échouait fatalement, et le format répondait 500 avec un corps vide.
  * `DOMDocument` assure l'échappement que la bibliothèque assurait.
  *
- * @var array  $posts Morceaux bruts, hors décorateur d'échappement
- * @var string $title Titre de la playlist
+ * Un partiel symfony 1 est hermétique : son porteur d'attributs ne contient que
+ * les variables qu'on lui passe. Ni `$sf_request`, ni `$sf_data`, ni `$sf_context`
+ * n'y sont disponibles — voir `get_partial()`, qui n'appelle que `setPartialVars()`.
+ * D'où `$baseUrl`, calculé par l'appelant : le partiel a besoin d'un préfixe, pas
+ * d'un objet requête.
+ *
+ * @var array  $posts   Morceaux bruts, hors décorateur d'échappement
+ * @var string $title   Titre de la playlist
+ * @var string $baseUrl Préfixe absolu du site, sans barre oblique finale
  */
 
 $document = new DOMDocument('1.0', 'utf-8');
@@ -35,12 +42,7 @@ foreach ($posts as $post) {
   $track = $document->createElement('track');
   $trackList->appendChild($track);
 
-  $location = sprintf(
-    '%s%s/tracks/%s',
-    $sf_request->getUriPrefix(),
-    $sf_request->getRelativeUrlRoot(),
-    rawurlencode($post->track_filename)
-  );
+  $location = sprintf('%s/tracks/%s', $baseUrl, rawurlencode($post->track_filename));
 
   // createTextNode échappe les valeurs : guillemets, esperluettes et chevrons
   // d'un titre ou d'un corps de post ne peuvent pas casser le document.
