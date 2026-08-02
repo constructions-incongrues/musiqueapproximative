@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.10.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.9.0...v1.10.0) (2026-08-02)
+
+
+### Fonctionnalités
+
+* **desastres:** dote chaque règle d'un déclencheur, et rend le champ obligatoire ([#112](https://github.com/constructions-incongrues/musiqueapproximative/issues/112)) ([112c1f4](https://github.com/constructions-incongrues/musiqueapproximative/commit/112c1f48319ccb44db32f20a3c21fa2886ab65d1))
+
+
+### Corrections de bugs
+
+* **desastres:** répare trois imports invalides et signale ceux qui ne résolvent pas ([#110](https://github.com/constructions-incongrues/musiqueapproximative/issues/110)) ([eb35707](https://github.com/constructions-incongrues/musiqueapproximative/commit/eb35707714e5b85e0d916677a1d97b3ce57ac70f))
+* **formats:** passe baseUrl au partiel XSPF, et consigne la campagne de vérification ([#115](https://github.com/constructions-incongrues/musiqueapproximative/issues/115)) ([ec3a456](https://github.com/constructions-incongrues/musiqueapproximative/commit/ec3a45676bfbb0797f856927edd91639a278397b))
+* **formats:** rétablit le format XSPF, cassé en production ([#111](https://github.com/constructions-incongrues/musiqueapproximative/issues/111)) ([1fdd4ee](https://github.com/constructions-incongrues/musiqueapproximative/commit/1fdd4ee5114ee9d4c24c8ac37750e108d5ed4da4))
+* **settings:** aligne la protection sur la référence documentée ([#102](https://github.com/constructions-incongrues/musiqueapproximative/issues/102)) ([b88d139](https://github.com/constructions-incongrues/musiqueapproximative/commit/b88d1392550f7e6d0d3a0982c1edd4d39d06d3b8))
+
+
+### Documentation
+
+* **openspec:** acte l'arbitrage sur les déclencheurs publics ([#109](https://github.com/constructions-incongrues/musiqueapproximative/issues/109)) ([c741530](https://github.com/constructions-incongrues/musiqueapproximative/commit/c74153021accd4ebbfc48182206fb72daaca3a1a))
+* **openspec:** acte l'installation de l'app et la correction manuelle ([#98](https://github.com/constructions-incongrues/musiqueapproximative/issues/98)) ([b0bbe61](https://github.com/constructions-incongrues/musiqueapproximative/commit/b0bbe618ffa4a587318dd0b81072f8b00da11037))
+* **openspec:** acte la réactivation du scan de sécurité ([#93](https://github.com/constructions-incongrues/musiqueapproximative/issues/93)) ([a5a1f46](https://github.com/constructions-incongrues/musiqueapproximative/commit/a5a1f463b01b1db540d22b5dfa75fe0b1a4a570d))
+* **openspec:** acte que main était sans protection et que l'app est inerte ([#100](https://github.com/constructions-incongrues/musiqueapproximative/issues/100)) ([8a32a13](https://github.com/constructions-incongrues/musiqueapproximative/commit/8a32a135a83cffb403dcdc715772c618cd627472))
+* **openspec:** consigne la disparition d'un ruleset ([#99](https://github.com/constructions-incongrues/musiqueapproximative/issues/99)) ([9247c1b](https://github.com/constructions-incongrues/musiqueapproximative/commit/9247c1b4b78ddad2e265af0b60c391537b6bcb05))
+* **openspec:** consigne le ruleset main, et enterre l'hypothèse de l'approbation ([#113](https://github.com/constructions-incongrues/musiqueapproximative/issues/113)) ([6588480](https://github.com/constructions-incongrues/musiqueapproximative/commit/6588480eccb22e43627416902855a4d08ed0940d))
+* **openspec:** la PR [#105](https://github.com/constructions-incongrues/musiqueapproximative/issues/105) a fusionné, le blocage a cédé ([#106](https://github.com/constructions-incongrues/musiqueapproximative/issues/106)) ([00e5ab5](https://github.com/constructions-incongrues/musiqueapproximative/commit/00e5ab5740458d86c4e3c34bf55ed9227fd69d91))
+* **openspec:** le test de la PR [#106](https://github.com/constructions-incongrues/musiqueapproximative/issues/106) renverse la conclusion précédente ([#107](https://github.com/constructions-incongrues/musiqueapproximative/issues/107)) ([ffe166a](https://github.com/constructions-incongrues/musiqueapproximative/commit/ffe166a718e4f3da6a7d4bb86e2666856704e1d7))
+* **openspec:** propose la réparation des imports de désastres et la généralisation des triggers ([#108](https://github.com/constructions-incongrues/musiqueapproximative/issues/108)) ([327c638](https://github.com/constructions-incongrues/musiqueapproximative/commit/327c63847276683d28e6b052b17fa5cea996032d))
+* **openspec:** rectifie le diagnostic, main est protégée par un ruleset ([#105](https://github.com/constructions-incongrues/musiqueapproximative/issues/105)) ([f3b6389](https://github.com/constructions-incongrues/musiqueapproximative/commit/f3b6389b5347f7b3816b36ca2c787572cf81633e))
+
 ## [1.9.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.8.0...v1.9.0) (2026-01-23)
 
 
