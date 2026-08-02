@@ -12,15 +12,15 @@ imports:
     - desastres/recettes/misc.yml
     - desastres/recettes/postillons.yml
     - desastres/recettes/redirect.yml
-    - desastres/recettes/slitouine.yml
+    - desastres/recettes/splitouine.yml
     - desastres/recettes/tts.yml
   regles:
     - desastres/regles/mamie.yml
     - desastres/regles/mangelettres.yml
     - desastres/regles/misc.yml
     - desastres/regles/postillons.yml
-    - desastres/regles/redirect.yml
-    - desastres/regles/slitouine.yml
+    - desastres/regles/redirects.yml
+    - desastres/regles/splitouine.yml
     - desastres/regles/tts.yml
 
 # On peut aussi definir des regles/recettes directement ici
