@@ -31,6 +31,18 @@
       `postillons_mort`. Contrôlé par script : aucune règle sans déclencheur, aucun
       déclencheur en double, aucune collision avec un paramètre de l'application.
 
+- [x] 2.9 Rendre la CI verte après l'ajout des déclencheurs
+      — trois fichiers signalés par prettier, pour **deux causes distinctes**.
+      — `regles/mamie.yml` et `regles/splitouine.yml` n'avaient **jamais eu de saut de
+      ligne final**. Le défaut préexistait ; il ne s'est révélé qu'en les modifiant, la CI
+      ne contrôlant que les fichiers touchés par la pull request. Corrigé.
+      — `schemas/regles.schema.json` : le tableau `examples` que j'y ai ajouté dépassait
+      quatre-vingts colonnes. Développé sur plusieurs lignes, à la manière de celui qui
+      documente déjà `query`.
+      — **`recettes/splitouine.yml` souffre du même défaut et n'est pas corrigé ici** : ce
+      changement ne touche pas les recettes. Il fera rougir la CI de qui l'éditera le jour
+      venu, sans autre conséquence.
+
 ## 3. Schéma et documentation
 
 - [x] 3.1 Décider si `trigger` devient obligatoire dans `src/apps/frontend/config/desastres/schemas/regles.schema.json`. Le rendre obligatoire fait porter au schéma l'exigence « aucune règle sans déclencheur », ce que rien ne vérifierait autrement
