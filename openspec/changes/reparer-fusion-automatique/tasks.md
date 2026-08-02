@@ -145,13 +145,33 @@
 
       Ce qui reste vrai de 3.6 : `main` est protégée, et c'est bien un ruleset qui la
       gouverne. Ce qui tombe : l'idée que le blocage aurait cédé.
-- [ ] 3.6ter **Lire la section « Rules » du ruleset `main`.** C'est la seule information
+- [x] 3.6ter **Lire la section « Rules » du ruleset `main`.** C'est la seule information
       qui manque encore, et aucun outil accessible d'ici ne la donne — l'API des rulesets
       n'est pas exposée. Deux réglages suffisent : *Required approvals*, à mettre à **0**,
       et la liste des contextes requis, qui ne doit contenir que `Validation du code`,
       `Build et Push Docker` et `Trunk Check`. Tant qu'elle n'est pas lue, l'enquête
       raisonne sur une hypothèse au lieu d'un fait — c'est précisément l'erreur qui lui a
       coûté trois conclusions fausses
+      — **lue le 2 août 2026, et elle enterre l'explication qu'on tenait.** Les deux
+      réglages sont déjà dans l'état recommandé : *Required approvals* vaut **0**, et les
+      contextes requis sont exactement les trois qui existent. Voir
+      `appliquer-settings-yml-par-lapp` 3.4ter pour la composition complète.
+      — L'hypothèse de l'exigence d'approbation insatisfiable était **fausse**. C'est la
+      quatrième conclusion de cette enquête à tomber, et la leçon est toujours la même :
+      elle reposait sur une déduction — « il ne reste que ça » — au lieu d'une lecture.
+      Le raisonnement était solide, la prémisse manquait.
+      — Ce qui subsiste est un fait sans explication : **un ruleset entièrement
+      satisfaisable, une CI intégralement verte, et `mergeable_state: blocked`**, observé
+      quatre fois. Reporté en 3.6quater.
+- [ ] 3.6quater Élucider ce qui reste : le ruleset lu est satisfaisable de bout en bout, et
+      la pull request reste pourtant `blocked`. Deux pistes, aucune vérifiée :
+      **« Require branches to be up to date before merging »**, sous-option de
+      « Require status checks to pass » située juste au-dessus de la liste des contextes,
+      et qui bloquerait toute pull request dont la base a avancé — `main` a avancé sans
+      cesse pendant l'enquête ; ou bien **un second ruleset**, éventuellement défini au
+      niveau de l'organisation `constructions-incongrues`, qui apparaîtrait en lecture
+      seule dans la liste des rulesets du dépôt. Ne rien conclure avant d'avoir regardé
+      l'un et l'autre
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.

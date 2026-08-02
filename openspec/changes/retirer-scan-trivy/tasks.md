@@ -9,7 +9,11 @@
 - [x] 2.1 Sur la pull request de ce changement, vérifier qu'aucun check `Trivy Scan` n'apparaît plus
       — vérifié sur la PR #103 : le check a disparu de la liste, alors qu'il figurait sur
       toutes les pull requests depuis la #96.
-- [ ] 2.2 **Vérifier que `Trivy Scan` ne figure pas parmi les contextes requis du ruleset `main`**, et l'en retirer le cas échéant. Un contexte qui ne remonte jamais laisse la branche indéfiniment non fusionnable, sans message d'erreur — c'est le premier suspect pour expliquer que la fusion automatique n'ait jamais abouti. Les trois contextes qui subsistent sont `Validation du code`, `Build et Push Docker` et `Trunk Check`. À relever sous Réglages → Rules → Rulesets → `main`, et non sous Réglages → Branches
+- [x] 2.2 **Vérifier que `Trivy Scan` ne figure pas parmi les contextes requis du ruleset `main`**, et l'en retirer le cas échéant. Un contexte qui ne remonte jamais laisse la branche indéfiniment non fusionnable, sans message d'erreur — c'est le premier suspect pour expliquer que la fusion automatique n'ait jamais abouti. Les trois contextes qui subsistent sont `Validation du code`, `Build et Push Docker` et `Trunk Check`. À relever sous Réglages → Rules → Rulesets → `main`, et non sous Réglages → Branches
+      — **vérifié le 2 août 2026 : le piège n'a pas été retendu.** Les contextes requis du
+      ruleset sont exactement `Trunk Check`, `Build et Push Docker` et `Validation du
+      code`. Aucune trace de `Trivy Scan`, ni de `Build Docker`, le nom fantôme qui avait
+      bloqué la branche six mois durant.
 - [x] 2.3 Vérifier que le README et la page d'accueil de la documentation ne comportent plus de badge mort
       — vérifié sur `main` : zéro occurrence de `security.yml` dans `README.adoc` et dans
       `docs/modules/ROOT/pages/index.adoc`, et le fichier de workflow n'existe plus.
