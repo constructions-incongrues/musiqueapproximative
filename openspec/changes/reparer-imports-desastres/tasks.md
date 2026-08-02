@@ -52,15 +52,14 @@
 
 ## 4. Vérification manuelle
 
-> **Aucune de ces vérifications n'a pu être menée, et toutes les cases restent ouvertes.**
-> Le conteneur où ce changement a été implémenté n'a ni instance du site qui tourne, ni
-> base de données, ni le vendor Symfony installé. Les tâches 4.3 et 4.5 supposent en outre
-> l'existence de morceaux précis au catalogue — un artiste contenant `catani`, un titre
-> exactement égal à `Spooky Mix` — ce qui ne se sait pas d'ici.
+> **Les vérifications qui portent sur le correctif restent ouvertes : il n'est pas
+> déployé.** La production sert encore le code fautif, et le conteneur d'implémentation n'a
+> ni instance qui tourne, ni base de données, ni vendor Symfony. Ces cases se cocheront
+> après `make deploy`, pas avant.
 >
-> Ce qui a été vérifié à la place, et qui ne remplace rien : la logique modifiée, exercée
-> hors Symfony par un banc d'essai à bouchons (tâche 3.6), et la résolution des quatorze
-> chemins d'import confrontée aux fichiers (tâche 1.4).
+> **Ce qui a en revanche pu être établi contre la production**, et qui lève les deux
+> inconnues qui pesaient sur ce changement : les morceaux nécessaires existent, et le bug
+> est constaté en direct. Voir 4.8.
 >
 > Le désastre `quickos` reste par ailleurs invérifiable avant décembre : sa condition porte
 > sur `context.date.month == '12'`, et rien ne permet aujourd'hui de forcer une règle —
@@ -69,7 +68,35 @@
 - [ ] 4.1 Sur une page de morceau quelconque, ouvrir la console du navigateur et vérifier qu'**aucun** avertissement de désastre n'apparaît — les quatorze imports se résolvent désormais
 - [ ] 4.2 Introduire volontairement une faute dans un chemin d'import, recharger une page de morceau, et vérifier que la console nomme le chemin fautif **et** que la page reste servie normalement. Rétablir le chemin ensuite
 - [ ] 4.3 Trouver un morceau dont l'artiste contient `catani`, demander `/post/:slug`, et vérifier dans le HTML servi que les ressources du désastre `splitouine` sont injectées avant `</head>`. La règle déclare `probability: 1` : elle doit se déclencher à chaque fois, sans exception. C'est la preuve que `regles/splitouine.yml` et `recettes/splitouine.yml` se chargent enfin. Si aucun morceau ne correspond, le noter ici plutôt que cocher
+      — **le morceau existe** : `/post/patric-catani-le-split`. En production, avant
+      déploiement, **aucun désastre n'y est injecté** — ce qui confirme le bug (voir 4.8).
+      La case se coche quand `desastres/splitouine` apparaîtra sur cette page.
 - [ ] 4.4 **Bloquée jusqu'en décembre 2026.** Vérifier qu'un morceau demandé un 24 ou un 25 décembre redirige vers `quickoschantenoel.musiqueapproximative.net` au bout de trois secondes, une fois sur deux. À rouvrir à cette date, ou plus tôt si `generaliser-trigger-desastres` aboutit d'ici là
 - [ ] 4.5 Chercher un morceau dont le titre est exactement `Spooky Mix`, demander `/post/:slug`, et vérifier la redirection vers `sos.musiqueapproximative.net` — `probability: 1` là aussi. Si ce morceau n'existe pas au catalogue, le noter : la règle serait alors inerte pour une seconde raison, indépendante de celle que ce changement corrige
+      — **le morceau existe** : `/post/dumbshitthatjakazidmade-spooky-mix`, dont le titre
+      est exactement `Spooky Mix`. La condition `query.title == 'Spooky Mix'` porte donc
+      bien sur quelque chose. En production, aucun désastre n'y est injecté. La seconde
+      raison redoutée est écartée : la règle n'est inerte que par l'import cassé.
 - [ ] 4.6 Sur un morceau dont le titre contient `mort`, `death` ou `dead`, recharger une dizaine de fois et constater que le désastre `postillons_mort` ne se déclenche plus systématiquement. La vérification est statistique et donc faible : elle ne distingue pas 0,7 de 0,91 sur dix tirages. Elle ne vaut que comme contrôle grossier de non-régression
 - [ ] 4.7 Demander `/posts/feed`, `/post/:slug?format=json` et `/oembed?url=...`, et vérifier qu'aucun `<script>` de désastre n'apparaît dans ces réponses
+      — **état de référence relevé avant déploiement** : zéro occurrence de `desastres/`
+      ou `DesastreOptions` sur `/posts/feed` (`application/rss+xml`),
+      `?format=json` (`application/json`), `?format=max` (`application/maxmsp+text`) et
+      `/oembed` (`application/json+oembed`). La case se coche quand le même relevé sera
+      refait après déploiement, l'avertissement de console ne devant pas non plus y
+      apparaître.
+- [x] 4.8 **Constater le bug en production, avec témoin**, avant tout déploiement — c'est
+      ce qui distingue un diagnostic d'une conjecture
+      — fait le 2 août 2026 contre `https://www.musiqueapproximative.net` :
+
+      | Règle | `probability` | Fichier | Chargé ? | Désastre injecté ? |
+      |---|---|---|---|---|
+      | `danse` | 1 | `misc.yml` | oui | **`desastres/danse`** ✓ |
+      | `catani` | 1 | `splitouine.yml` | non | aucun |
+      | `spooky` | 1 | `redirects.yml` | non | aucun |
+
+      Le témoin est ce qui donne sa valeur au relevé : `danse` prouve que les désastres
+      fonctionnent en production. L'absence sur `catani` et `spooky` ne s'explique donc pas
+      par un plugin éteint ou un cache, mais bien par les imports non résolus. Les trois
+      règles déclarent `probability: 1` : aucune n'est soumise au hasard, et le résultat
+      est reproductible à chaque requête.
