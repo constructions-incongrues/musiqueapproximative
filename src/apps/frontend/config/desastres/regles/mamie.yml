@@ -5,3 +5,4 @@ regles:
   - probability: 0.5
     query: query.title ~ /.*(phone|t[eé]l[eé]phone|allo).*/i
     recettes: [mamie_allo]
+    trigger: mamie_allo

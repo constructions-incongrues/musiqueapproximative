@@ -4,6 +4,60 @@
 
 Le paramètre `trigger` permet de *forcer le déclenchement d'une règle de désastre* via un paramètre d'URL, *indépendamment de la condition `query` et de la `probability`*.
 
+*Ce n'est pas une option : toute règle en porte un, et le schéma l'exige.*
+
+C'est ce qui rend les désastres vérifiables. Quatorze des dix-neuf règles sont probabilistes : sans déclencheur, on ne peut pas répondre à la question « cette règle fonctionne-t-elle ? » autrement qu'en rechargeant une page jusqu'à ce que le hasard tranche — et une règle qui ne se déclenche *jamais*, parce qu'un fichier de configuration ne se charge pas, est alors indiscernable d'une règle malchanceuse. C'est exactement ce qui s'est produit : quatre règles sont restées inertes sept mois durant, derrière trois chemins d'import invalides, sans que rien ne le signale.
+
+=== Ils sont publics, et c'est délibéré
+
+Aucun secret ne protège ces paramètres : n'importe quel visiteur peut forcer n'importe quel désastre en devinant un nom. Trois raisons à ce choix :
+
+* *rien n'est exposé*. Aucun désastre ne lit de donnée ni ne modifie d'état. Le pire cas est une redirection que le visiteur a lui-même demandée, ou une feuille de style qui déforme sa propre page ;
+* *un secret rendrait la vérification plus fragile, pas plus sûre*. Il faudrait le transmettre à ce qui vérifie, donc le stocker, donc le voir dériver ;
+* *c'est cohérent avec le site*. Un endroit dont la raison d'être est le glitch n'a pas de raison de cacher ses interrupteurs.
+
+La contrepartie engage les désastres à venir : *ne rien lire, ne rien modifier*. Un désastre qui y dérogerait ne pourrait plus être forcé publiquement, et c'est alors le désastre qu'il faudrait revoir, pas le mécanisme.
+
+== Convention de nommage
+
+Le nom d'un déclencheur se déduit de la règle, il ne s'invente pas :
+
+. par défaut, *le nom de la recette* que la règle applique — `danse`, `kraftwerk`, `spooky` ;
+. si la règle applique *plusieurs recettes*, le nom du désastre qu'elles partagent — `mangelettres`, pour `consonnard` et `voyelliste` ;
+. si *deux règles appliquent la même recette*, un suffixe distingue la seconde — `quickos` et `quickos_noel` ;
+. un déclencheur déjà en service ne se renomme pas : `tts_jinglist` garde `jinglist`.
+
+Un déclencheur doit être *unique* dans l'ensemble de la configuration, et ne pas entrer en collision avec un paramètre déjà interprété par l'application : `format`, `c`, `q`, `current`, `embed`, `url`, `count`, `contributor`.
+
+== Déclencheurs en service
+
+[cols="2,3,1,2"]
+|===
+| Déclencheur | Recettes | Proba. | Fichier
+
+| `mamie_allo` | `mamie_allo` | 0,5 | `mamie.yml`
+| `mangelettres` | `consonnard`, `voyelliste` | 0,3 | `mangelettres.yml`
+| `amour` | `amour` | 0,7 | `misc.yml`
+| `robot` | `robot` | 0,7 | `misc.yml`
+| `fish` | `fish` | 0,7 | `misc.yml`
+| `musique` | `musique` | 0,7 | `misc.yml`
+| `bleu` | `bleu` | 0,7 | `misc.yml`
+| `noir` | `noir` | 0,7 | `misc.yml`
+| `light` | `light` | 0,7 | `misc.yml`
+| `danse` | `danse` | 1 | `misc.yml`
+| `postillons_mort` | `postillons_mort` | 0,7 | `postillons.yml`
+| `kraftwerk` | `kraftwerk` | 1 | `postillons.yml`
+| `sale` | `sale` | 1 | `postillons.yml`
+| `spooky` | `spooky` | 1 | `redirects.yml`
+| `quickos` | `quickos` | 0,1 | `redirects.yml`
+| `quickos_noel` | `quickos` | 0,5 | `redirects.yml`
+| `splitouine_titles_matchduration` | `splitouine_titles_matchduration` | 1 | `splitouine.yml`
+| `tts_rapper` | `tts_rapper` | 1 | `tts.yml`
+| `jinglist` | `tts_jinglist` | 0,1 | `tts.yml`
+|===
+
+Deux règles méritent une mention, parce qu'elles sont autrement invérifiables : `quickos` et `quickos_noel` ne se déclenchent qu'en décembre, la seconde les seuls 24 et 25. Sans déclencheur, il faudrait attendre Noël pour savoir si elles marchent.
+
 == Utilisation
 
 === Configuration dans desastres.yml
@@ -14,7 +68,7 @@ regles:
   - query: "query.title ~ /(.*)/"
     recettes: [tts_jinglist]
     probability: 1.0
-    trigger: jinglist  # ← Nouveau paramètre
+    trigger: jinglist
 ----
 
 === Déclenchement

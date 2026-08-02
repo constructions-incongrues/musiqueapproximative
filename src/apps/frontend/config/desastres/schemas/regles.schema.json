@@ -17,7 +17,7 @@
   "definitions": {
     "regle": {
       "type": "object",
-      "required": ["query", "recettes"],
+      "required": ["query", "recettes", "trigger"],
       "properties": {
         "query": {
           "type": "string",
@@ -49,8 +49,9 @@
         },
         "trigger": {
           "type": "string",
-          "description": "Paramètre URL qui force le déclenchement de la règle (ignore query et probability)",
-          "examples": ["jinglist", "debug", "preview"]
+          "description": "Paramètre URL qui force le déclenchement de la règle, en ignorant query et probability. OBLIGATOIRE : sans lui, une règle probabiliste n'est observable que par tirage, et une panne qui l'empêche de se déclencher reste invisible. Convention : le nom de la recette de la règle ; le nom du désastre commun si elle en applique plusieurs ; un suffixe distinctif si deux règles partagent la même recette. Doit être unique dans l'ensemble de la configuration, et ne pas entrer en collision avec un paramètre déjà interprété par l'application : format, c, q, current, embed, url, count, contributor.",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "examples": ["danse", "kraftwerk", "mangelettres", "quickos_noel", "jinglist"]
         },
         "scripts": {
           "type": "array",
