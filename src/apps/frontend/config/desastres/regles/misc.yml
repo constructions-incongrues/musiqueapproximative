@@ -5,24 +5,32 @@ regles:
   - probability: 0.7
     query: query.title ~ /.*(amour|love).*/i
     recettes: [amour]
+    trigger: amour
   - probability: 0.7
     query: query.title ~ /.*robot.*/i
     recettes: [robot]
+    trigger: robot
   - probability: 0.7
     query: query.title ~ /.*(fish|poisson).*/i
     recettes: [fish]
+    trigger: fish
   - probability: 0.7
     query: query.title ~ /.*(musique|music).*/i
     recettes: [musique]
+    trigger: musique
   - probability: 0.7
     query: query.title ~ /.*bleu.*/i || query.artist ~ /.*bleu.*/i
     recettes: [bleu]
+    trigger: bleu
   - probability: 0.7
     query: query.title ~ /.*(noir|black).*/i
     recettes: [noir]
+    trigger: noir
   - probability: 0.7
     query: query.title ~ /.*(light|lumiere).*/i
     recettes: [light]
+    trigger: light
   - probability: 1
     query: query.title ~ /.*(danse).*/i
     recettes: [danse]
+    trigger: danse
