@@ -29,8 +29,9 @@ class sfDesastreFilter extends sfFilter
     $user = $this->context->getUser();
     $jsCode = $user->getAttribute('desastre_options_js', null);
     $cssCode = $user->getAttribute('desastre_options_css', null);
+    $warningsCode = $user->getAttribute('desastre_warnings_js', null);
 
-    if (!$jsCode && !$cssCode) {
+    if (!$jsCode && !$cssCode && !$warningsCode) {
       return;
     }
 
@@ -55,6 +56,9 @@ class sfDesastreFilter extends sfFilter
       }
       if ($jsCode) {
         $inject .= $jsCode . "\n";
+      }
+      if ($warningsCode) {
+        $inject .= $warningsCode . "\n";
       }
 
       $content = str_replace('</head>', $inject . '</head>', $content);
