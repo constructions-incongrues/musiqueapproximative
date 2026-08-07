@@ -10,7 +10,8 @@ manière dont un consommateur les demande.
 ### Requirement: Sélection du format
 
 Le système SHALL servir une représentation alternative lorsque le paramètre `format`
-désigne un format connu, et SHALL déclarer le type de contenu correspondant.
+désigne un format connu, et SHALL déclarer le type de contenu correspondant. Un format
+déclaré SHALL aboutir : il ne peut ni échouer, ni servir un corps vide.
 
 #### Scénario : Formats reconnus
 
@@ -19,17 +20,33 @@ désigne un format connu, et SHALL déclarer le type de contenu correspondant.
 - **ALORS** la réponse est servie sans gabarit d'habillage
 - **ET** le type de contenu est respectivement `application/json`,
   `application/xspf+xml` ou `application/maxmsp+text`
+- **ET** le corps n'est pas vide
+
+#### Scénario : Un format déclaré aboutit toujours
+
+- **QUAND** un format figure dans la liste des formats connus du système
+- **ALORS** il est servi avec un code `200` sur `/posts` comme sur `/post/:slug`
+- **ET** aucune dépendance absente de l'environnement d'exécution ne peut le faire échouer
+  silencieusement
 
 #### Scénario : Format inconnu
 
 - **QUAND** le paramètre `format` désigne une valeur non reconnue
 - **ALORS** la page est servie dans sa représentation HTML habituelle
 
-#### Scénario : Formats annoncés au visiteur
+#### Scénario : Formats annoncés sur une page de liste
 
-- **QUAND** une page de morceau ou de liste est servie en HTML
-- **ALORS** les formats `json` et `xspf` sont annoncés au visiteur
-- **ET** le format `max` ne l'est pas, bien qu'il reste accessible
+- **QUAND** une page de liste est servie en HTML
+- **ALORS** `json`, `xspf` et `max` sont déclarés en `<link rel="alternate">`, chacun avec
+  son type de contenu
+- **ET** seuls `json` et `xspf` figurent parmi les liens visibles proposés au visiteur
+
+#### Scénario : Formats annoncés sur une page de morceau
+
+- **QUAND** une page de morceau est servie en HTML
+- **ALORS** `json` est le seul format annoncé, en `<link rel="alternate">` comme parmi les
+  liens visibles
+- **ET** `xspf` et `max` restent accessibles par le paramètre `format`, sans être annoncés
 
 ### Requirement: Représentation JSON d'un morceau
 
@@ -77,24 +94,34 @@ URL, et SHALL exposer le morceau, sa piste, son contributeur et ses liens de nav
 
 ### Requirement: Représentation XSPF d'une liste
 
-La représentation XSPF d'une liste SHALL être une playlist valide, encodée en UTF-8,
-dont chaque piste porte son adresse de lecture directe.
+La représentation XSPF SHALL être un document de playlist valide, portant un titre décrivant
+la sélection demandée et un élément par morceau.
 
-#### Scénario : Structure de la playlist
+#### Scénario : Document servi
 
 - **QUAND** un consommateur demande une liste au format `xspf`
-- **ALORS** la réponse est un document XSPF déclarant l'encodage UTF-8
-- **ET** chaque piste porte le créateur, le titre, le corps du post en annotation,
-  l'adresse de la page du morceau en information, et l'adresse absolue du fichier audio
-  en localisation
+- **ALORS** la racine du document est une playlist XSPF
+- **ET** le document déclare l'encodage `utf-8`
+- **ET** le type de contenu est `application/xspf+xml`
 
-#### Scénario : Titre de la playlist selon le filtre
+#### Scénario : Titre de la playlist
 
 - **QUAND** la liste est filtrée par contributeur
-- **ALORS** le titre de la playlist mentionne le nom d'affichage de ce contributeur
-- **ET** lorsque la liste résulte d'une recherche, le titre mentionne les termes
-  recherchés
-- **ET** en l'absence de filtre, le titre annonce l'ensemble des morceaux
+- **ALORS** le titre de la playlist nomme ce contributeur
+- **ET** lorsque la liste est filtrée par recherche, le titre reprend le terme cherché
+- **ET** sans filtre, le titre désigne l'ensemble des morceaux
+
+#### Scénario : Description d'un morceau
+
+- **QUAND** un morceau figure dans la playlist
+- **ALORS** son élément porte l'adresse absolue du fichier audio, l'artiste, le titre, le
+  corps du post et l'adresse de sa page
+
+#### Scénario : Morceau isolé
+
+- **QUAND** un consommateur demande `/post/:slug` au format `xspf`
+- **ALORS** une playlist d'un seul élément est servie, à l'image de ce que font les formats
+  `json` et `max`
 
 ### Requirement: Représentation Max/MSP d'une liste
 
@@ -139,3 +166,4 @@ comme une liste d'un seul élément.
 - **ALORS** les deux lignes portent les mêmes champs, dans le même ordre et avec le même
   échappement
 - **ET** seuls le rang et le nombre total de morceaux peuvent différer
+
