@@ -22,8 +22,27 @@
       Le `500` observé sur `xspf` vient de l'arbre de travail utilisé pour la mesure, qui
       précède le correctif de `reparer-format-xspf` ; il n'a pas de rapport avec ce
       changement.
-- [ ] 3.4 **Après déploiement** : reprendre la mesure de production faite pour ce changement — deux adresses jamais servies, quatre demandes chacune — et vérifier que les options figurent partout. C'est le seul contrôle qui vaille : le défaut a été établi en production, il doit y être levé
-- [ ] 3.5 Vérifier qu'un désastre s'applique visuellement à la deuxième consultation d'une page, dans un navigateur. La présence du bloc d'options ne prouve pas que le script s'exécute — c'est la même distinction qui a fait passer ce défaut inaperçu
+- [x] 3.4 **Après déploiement** : reprendre la mesure de production faite pour ce changement — deux adresses jamais servies, quatre demandes chacune — et vérifier que les options figurent partout. C'est le seul contrôle qui vaille : le défaut a été établi en production, il doit y être levé
+      — **mesuré le 7 août 2026**, après la mise en ligne de `v1.10.2`. Sur les deux mêmes
+      morceaux, adresses neuves : `1,1,1,1` chacun, contre `1,0,0,0` avant. Les quatre
+      demandes mesurées sont toutes servies depuis le cache — l'entrée avait été créée par
+      la demande de découverte — donc c'est exactement le cas qui était en défaut.
+- [x] 3.5 Vérifier qu'un désastre s'applique visuellement à la deuxième consultation d'une page, dans un navigateur. La présence du bloc d'options ne prouve pas que le script s'exécute — c'est la même distinction qui a fait passer ce défaut inaperçu
+      — **le script s'exécute**, vérifié dans un navigateur sur
+      `/post/free-kitten-greener-pastures?z=900` en production, page servie depuis le cache.
+      `window.DesastreOptions.mangelettres` porte sa configuration complète, et la console
+      trace le déroulé : « SplitText initialized », « Loaded », « Analyzing 20 characters »,
+      « Will remove N characters ». Aucune `TypeError`. Rechargée, la page se comporte de
+      même.
+      — **Ce qui n'a pas été constaté** : la disparition des lettres elle-même. `mangelettres`
+      étale son effet sur la durée du morceau — 157 secondes ici — et le titre est encore
+      entier au chargement. La tâche demandait « visuellement » ; ce qui est établi est que
+      le script part et programme son travail, pas qu'on l'ait vu aboutir.
+      — **Relevé à l'occasion, et qui nuance `preciser-aleatoire-des-desastres`** : deux
+      chargements de la même adresse annoncent « Will remove 10 characters » puis « 6 ». Le
+      tirage serveur est bien figé par le cache, mais la réalisation côté client tire à
+      nouveau. « Deux visiteurs voient le même effet » est donc vrai de la recette, pas de
+      son rendu.
 
 ## 4. Portée laissée ouverte
 
