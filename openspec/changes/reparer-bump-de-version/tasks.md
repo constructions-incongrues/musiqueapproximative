@@ -38,4 +38,30 @@
       — L'instrument fonctionne, et il a servi le jour même : c'est ce `?v=` qui a permis
       d'affirmer que le correctif XSPF de `v1.10.1` était bien en ligne avant de le
       mesurer. Le dépôt sait désormais lire ce qu'il sert.
-- [ ] 3.6 Constater qu'une ressource statique modifiée parvient bien aux visiteurs de retour, et non depuis leur cache. C'est l'objet du dispositif, resté sans effet depuis le 23 janvier
+- [x] 3.6 Constater qu'une ressource statique modifiée parvient bien aux visiteurs de retour, et non depuis leur cache. C'est l'objet du dispositif, resté sans effet depuis le 23 janvier
+      — **constaté, et le constat est négatif.** Le 7 août 2026, la production servait
+      `?v=1.10.2` et, sous cette adresse, un `mangelettre.js` de 2 439 octets — celui de
+      `main`, portant une garde ajoutée après la publication. Le même fichier au tag
+      `v1.10.2` en fait 2 048 et ne la porte pas.
+
+      | | Taille | Garde |
+      |---|---|---|
+      | `v1.10.2` (le tag) | 2 048 o | non |
+      | `main` | 2 439 o | oui |
+      | **servi en production, sous `?v=1.10.2`** | **2 439 o** | **oui** |
+
+      — Le contenu déployé suit `main`, le marqueur suit `src/VERSION`, et `src/VERSION` ne
+      bouge qu'à la publication. Toute ressource modifiée entre deux publications arrive
+      donc en ligne sous une adresse inchangée. Les en-têtes rendent la chose durable :
+      `cache-control: max-age=2678400`, trente et un jours.
+      — Le cas de test n'a pas été fabriqué : trois fichiers JavaScript modifiés le soir même
+      par `reparer-injection-des-options` ont suffi à démentir l'hypothèse implicite du
+      dispositif — que les ressources ne changent qu'aux publications.
+      — **Décidé : la limite est actée plutôt que corrigée.** Le dispositif fait ce pour quoi
+      il a été mesuré en 3.1 et 3.5 — le marqueur change à chaque publication. Il ne protège
+      pas du cas ci-dessus, et rien dans le corpus ne le disait. C'est désormais écrit, sous
+      la capacité `ressources-statiques`, scénario « Ressource modifiée hors publication ».
+      — Les deux corrections envisagées et écartées : une empreinte du contenu (`?v=<md5>`),
+      correcte par construction mais plus coûteuse ; un déploiement par tag plutôt que par
+      `main`, qui rendrait le marqueur exact sans toucher au dispositif, mais qui est une
+      décision de politique de déploiement et non de cette tâche.
