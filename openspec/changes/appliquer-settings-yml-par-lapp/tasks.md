@@ -122,7 +122,7 @@
       aurait dû rapporter `clean` » : la protection existait bel et bien, sous forme de
       ruleset. `blocked` était la réponse correcte. Il n'y a pas de règle d'organisation à
       écarter.
-- [ ] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
+- [x] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
       revues, historique linéaire. C'est la dernière inconnue : une exigence qui ne peut
       jamais être satisfaite expliquerait à elle seule que la fusion automatique n'ait
       jamais abouti en une quinzaine de pull requests
@@ -137,6 +137,15 @@
       d'ici — mais le blocage a cédé, ce qui suffit à valider le raisonnement. Reste à
       consigner la configuration retenue, pour qu'elle cesse d'être une connaissance
       orale : c'est l'objet de 3.4ter.
+      — **relevé le 7 août 2026 par l'API**, `GET /repos/:owner/:repo/rulesets/20204602`,
+      qui est bien accessible depuis `gh`. Les deux candidats tombent : *Required
+      approvals* vaut **0**, et la liste des contextes requis contient exactement
+      `Trunk Check`, `Build et Push Docker` et `Validation du code` — aucun contexte
+      fantôme. Le ruleset porte par ailleurs `deletion`, `non_fast_forward`,
+      `required_linear_history`, une règle `code_scanning` (CodeQL, seuil `errors`) et,
+      surtout, une règle **`merge_queue`** que ni cette tâche ni 3.6quater n'avaient
+      envisagée. Voir `reparer-fusion-automatique` 3.6quater : c'est elle qui explique le
+      `blocked`.
 - [x] 3.4ter Consigner dans le dépôt la configuration du ruleset `main` — contextes requis,
       approbations exigées, liste de contournement. Sans quoi la prochaine dérive
       silencieuse mettra encore six mois à se voir. Un fichier de documentation, pas un

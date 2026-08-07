@@ -88,8 +88,12 @@
 - [x] 4.4 Demander `/post/:slug?quickos` un jour qui n'est ni le 24 ni le 25 décembre, et vérifier la redirection. C'est la vérification qui débloque la tâche 4.4 de `reparer-imports-desastres`, restée ouverte faute de pouvoir attendre décembre
 - [x] 4.5 Demander `/post/:slug?bleu&noir` et vérifier que **les deux** désastres sont appliqués
 - [x] 4.6 Demander un déclencheur avec une valeur — `?danse=1`, `?danse=true`, `?danse=nimportequoi` — et vérifier que les trois se comportent comme `?danse` seul
-- [ ] 4.7 Marquer temporairement une recette `enabled: false`, forcer sa règle, et vérifier qu'elle n'est **pas** appliquée : le forçage porte sur la sélection de la règle, jamais sur l'activation d'une recette. Rétablir ensuite
-      — **laissée ouverte à dessein.** Désactiver une recette en production pour observer le
-      résultat n'est pas un geste raisonnable. À faire sur une instance locale.
+- [x] 4.7 Marquer temporairement une recette `enabled: false`, forcer sa règle, et vérifier qu'elle n'est **pas** appliquée : le forçage porte sur la sélection de la règle, jamais sur l'activation d'une recette. Rétablir ensuite
+      — **menée sur instance locale**, comme la prudence l'exigeait. Recette `bleu` passée à
+      `enabled: false`, puis `/post/:slug?bleu` : aucun asset de désastre n'est injecté,
+      alors que la même requête servait `bleu/stylesheets/bleu.css` recette activée. La page
+      reste servie normalement. Le constat porte sur l'asset injecté, non sur la taille de
+      la page — d'autres recettes tirent au sort en parallèle et la font varier. Recette
+      rétablie, `bleu.css` de retour, aucun écart au dépôt.
 - [x] 4.8 Parcourir les **dix-neuf** déclencheurs un à un et cocher cette tâche seulement quand les dix-neuf ont été constatés. Si l'un d'eux ne produit rien, l'écrire ici plutôt que cocher — c'est exactement le genre de panne silencieuse que ce changement existe pour rendre visible
 - [x] 4.9 Demander `/posts/feed?danse`, `/post/:slug?format=json&danse` et `/oembed?url=...&danse`, et vérifier qu'aucun désastre n'est injecté : les recettes ne s'appliquent qu'aux réponses `text/html`

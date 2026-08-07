@@ -163,7 +163,7 @@
       — Ce qui subsiste est un fait sans explication : **un ruleset entièrement
       satisfaisable, une CI intégralement verte, et `mergeable_state: blocked`**, observé
       quatre fois. Reporté en 3.6quater.
-- [ ] 3.6quater Élucider ce qui reste : le ruleset lu est satisfaisable de bout en bout, et
+- [x] 3.6quater Élucider ce qui reste : le ruleset lu est satisfaisable de bout en bout, et
       la pull request reste pourtant `blocked`. Deux pistes, aucune vérifiée :
       **« Require branches to be up to date before merging »**, sous-option de
       « Require status checks to pass » située juste au-dessus de la liste des contextes,
@@ -180,6 +180,23 @@
       `Réglages → Rules → Rulesets` suffit : s'il n'y figure qu'une ligne, il faudra
       chercher ailleurs — et se garder de conclure « il ne reste que ça », erreur déjà
       commise quatre fois dans cette enquête.
+      — **la seconde piste tombe elle aussi**, le 7 août 2026, lue et non déduite.
+      `GET /repos/:owner/:repo/rulesets?includes_parents=true` ne renvoie qu'une ligne, le
+      ruleset `main` du dépôt, et `GET /repos/:owner/:repo/rules/branches/main` — qui
+      énumère les règles applicables quelle qu'en soit la source — les rapporte toutes
+      comme venant du dépôt. Aucun ruleset d'organisation. La liste ne comportait bien
+      qu'une ligne, et il fallait donc chercher ailleurs, comme la tâche le prévoyait.
+      — **Ailleurs, c'était la règle `merge_queue`**, présente dans le ruleset et jamais
+      nommée dans cette enquête. Une branche protégée par une file de fusion rapporte
+      `mergeable_state: blocked` tant que la pull request n'a pas traversé la file : ce
+      n'est pas une panne, c'est la réponse attendue. La file est réglée sur
+      `min_entries_to_merge_wait_minutes: 5` et `grouping_strategy: ALLGREEN`, ce qui rend
+      compte au mot près de l'observation de la PR #98 — « restée `blocked` plusieurs
+      minutes avant d'être fusionnée sans qu'on puisse dire si l'automatisme a joué ».
+      L'automatisme avait joué ; il attendait la file.
+      — La leçon de l'enquête vaut une dernière fois, et contre elle-même : les deux pistes
+      nommées ont été écartées par mesure, et la cause était une troisième que personne
+      n'avait listée. Une énumération close n'est jamais une preuve.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.
