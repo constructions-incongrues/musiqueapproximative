@@ -122,6 +122,12 @@
       aurait dû rapporter `clean` » : la protection existait bel et bien, sous forme de
       ruleset. `blocked` était la réponse correcte. Il n'y a pas de règle d'organisation à
       écarter.
+      — **la PR #119 lève le symptôme sans clore le test**, le 7 août. Ses neuf checks au
+      vert, elle passe à `mergeStateStatus: CLEAN` : une pull request verte n'est plus
+      bloquée. Mais la fusion automatique n'a pas été armée avant que la CI ne verdisse,
+      et l'armer ensuite ne prouve rien — le déclenchement *seul, une fois la CI verte*
+      reste donc à constater sur une pull request où l'automatisme précède les checks.
+      Cette tâche reste ouverte pour cela, et pour cela seulement.
 - [x] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
       revues, historique linéaire. C'est la dernière inconnue : une exigence qui ne peut
       jamais être satisfaite expliquerait à elle seule que la fusion automatique n'ait
@@ -144,8 +150,9 @@
       fantôme. Le ruleset porte par ailleurs `deletion`, `non_fast_forward`,
       `required_linear_history`, une règle `code_scanning` (CodeQL, seuil `errors`) et,
       surtout, une règle **`merge_queue`** que ni cette tâche ni 3.6quater n'avaient
-      envisagée. Voir `reparer-fusion-automatique` 3.6quater : c'est elle qui explique le
-      `blocked`.
+      envisagée. Voir `reparer-fusion-automatique` 3.6quater : elle y a d'abord été portée
+      comme la cause du `blocked`, puis ramenée au rang d'hypothèse — la PR #119 passe de
+      `BLOCKED` à `CLEAN` dès sa CI verte, sans reproduire l'anomalie.
 - [x] 3.4ter Consigner dans le dépôt la configuration du ruleset `main` — contextes requis,
       approbations exigées, liste de contournement. Sans quoi la prochaine dérive
       silencieuse mettra encore six mois à se voir. Un fichier de documentation, pas un

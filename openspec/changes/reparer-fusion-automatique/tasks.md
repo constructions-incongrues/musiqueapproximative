@@ -186,17 +186,24 @@
       énumère les règles applicables quelle qu'en soit la source — les rapporte toutes
       comme venant du dépôt. Aucun ruleset d'organisation. La liste ne comportait bien
       qu'une ligne, et il fallait donc chercher ailleurs, comme la tâche le prévoyait.
-      — **Ailleurs, c'était la règle `merge_queue`**, présente dans le ruleset et jamais
-      nommée dans cette enquête. Une branche protégée par une file de fusion rapporte
-      `mergeable_state: blocked` tant que la pull request n'a pas traversé la file : ce
-      n'est pas une panne, c'est la réponse attendue. La file est réglée sur
-      `min_entries_to_merge_wait_minutes: 5` et `grouping_strategy: ALLGREEN`, ce qui rend
-      compte au mot près de l'observation de la PR #98 — « restée `blocked` plusieurs
-      minutes avant d'être fusionnée sans qu'on puisse dire si l'automatisme a joué ».
-      L'automatisme avait joué ; il attendait la file.
-      — La leçon de l'enquête vaut une dernière fois, et contre elle-même : les deux pistes
-      nommées ont été écartées par mesure, et la cause était une troisième que personne
-      n'avait listée. Une énumération close n'est jamais une preuve.
+      — Le ruleset porte une règle **`merge_queue`** que l'enquête n'avait jamais nommée,
+      réglée sur `min_entries_to_merge_wait_minutes: 5` et `grouping_strategy: ALLGREEN`.
+      Une file de fusion peut rendre compte d'un `blocked` prolongé, et le délai de cinq
+      minutes ressemble à l'observation de la PR #98. **Cette piste a d'abord été portée
+      ici comme la cause. C'était une déduction — « la seule règle que personne n'avait
+      listée » — et la mesure suivante l'a affaiblie.**
+      — **La PR #119 ne reproduit pas l'anomalie.** Ouverte le 7 août, elle passe
+      `BLOCKED` tant que ses checks tournent, puis `CLEAN` dès qu'ils sont verts, sans
+      délai ni file visible. Une pull request verte n'est donc plus bloquée aujourd'hui.
+      La `merge_queue` n'explique pas à elle seule les quatre observations passées, et
+      l'hypothèse la plus économique reste que la correction du ruleset du 2 août — celle
+      qui a débloqué la PR #105 — avait déjà réglé l'affaire.
+      — Ce qui est acquis tient à la lecture, non à la déduction : les deux pistes nommées
+      sont écartées, aucun ruleset d'organisation n'existe, et une pull request verte
+      fusionne. Ce qui reste est une cause historique non identifiée, sur un symptôme
+      disparu. La leçon de l'enquête aura servi une dernière fois, et contre le rédacteur
+      de ces lignes : une énumération close n'est jamais une preuve, et « il ne restait
+      que ça » s'est trompé une cinquième fois.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.
