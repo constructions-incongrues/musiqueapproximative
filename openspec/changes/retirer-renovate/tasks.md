@@ -23,10 +23,34 @@ request fermée se rouvre.
 - [x] 2.3 Dire dans chaque fermeture pourquoi la pull request est sans objet, pour que
       Dependabot ne la recrée pas sans que la raison soit lisible
       — commentaire posté sur chacune avant fermeture.
-- [ ] 2.4 Décider d'une règle `ignore` sur les montées majeures de l'écosystème `docker`
+- [x] 2.4 Décider d'une règle `ignore` sur les montées majeures de l'écosystème `docker`
       dans `.github/dependabot.yml`. Sans elle, Dependabot rouvrira une montée de `php`
       au prochain `php:8.x`, et la #88 sera à refermer. Relevé à l'occasion, hors
       périmètre de ce changement — `.github/dependabot.yml` n'y est pas touché
+      — **décidé le 7 août 2026 : une règle sur `php` seul, pas sur l'écosystème.**
+      — La nuisance était réelle et chiffrée : quatre pull requests entre janvier et avril
+      2026, une par mois, suivant les sorties de PHP 8.5.
+
+      | PR | Date | Montée |
+      |---|---|---|
+      | #74 | 24 janvier | `php` 7.4.33 → 8.5.2 |
+      | #82 | 21 février | → 8.5.3 |
+      | #87 | 14 mars | → 8.5.4 |
+      | #88 | 11 avril | → 8.5.5 |
+
+      — Aucune ne pouvait aboutir : le `Dockerfile` épingle `php:7.4.33`, `src/composer.json`
+      exige `php: ^7.4`, et le socle Symfony 1.5 / Doctrine 1.4 ne passe pas en 8.x sans
+      réécriture.
+      — La règle porte sur `dependency-name: "php"` et les majeures seulement, plutôt que sur
+      tout l'écosystème `docker`. Le second choix aurait été plus court à écrire mais aurait
+      bloqué un futur `composer:3` sans raison, `composer:2` étant l'autre image du
+      `Dockerfile`.
+      — **Ce que cette règle ne fait pas est écrit dans le fichier**, et vaut d'être répété
+      ici : PHP 7.4 est en fin de vie depuis novembre 2022, ne reçoit plus de correctif de
+      sécurité, et l'image est publiée sur `ghcr.io`. Ces pull requests mensuelles étaient
+      pénibles, mais elles constituaient le dernier rappel automatique que le socle est
+      périmé — le scan Trivy qui aurait pu prendre le relais a été retiré en août. La règle
+      écarte une montée impossible ; elle n'écarte pas le problème qu'elle signalait.
 
 ## 3. Vérification manuelle
 
