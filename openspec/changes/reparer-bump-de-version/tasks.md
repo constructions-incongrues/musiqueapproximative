@@ -26,6 +26,16 @@
       valeur. Le filtre s'exécute donc bien à chaque requête.
 - [x] 3.3 Contrôler que les autres pages — morceau, liste, flux — restent servies normalement, le filtre s'exécutant sur chaque requête
       — morceau, liste, flux, `json` et `xspf` répondent tous `200` avec leur type propre.
-- [ ] 3.4 **À la prochaine publication** : vérifier que la pull request de release-please modifie `src/VERSION`, ce qu'elle n'a jamais fait. C'est le contrôle qui valide l'annotation
-- [ ] 3.5 **Après cette publication** : vérifier que le `?v=` servi en production a suivi. C'est du même coup le premier instrument de mesure du déploiement dont ce dépôt dispose — jusqu'ici, rien ne permettait de savoir ce qui était en ligne
+- [x] 3.4 **À la prochaine publication** : vérifier que la pull request de release-please modifie `src/VERSION`, ce qu'elle n'a jamais fait. C'est le contrôle qui valide l'annotation
+      — **la publication a eu lieu le 7 août 2026, et le contrôle passe.** La pull request
+      de release #117 portait trois fichiers, `src/VERSION` compris, avec le diff attendu :
+      `1.10.0` → `1.10.1`. L'annotation `x-release-please-version` produit donc bien son
+      effet. Après fusion, `main` porte `1.10.1` et le tag `v1.10.1` existe.
+- [x] 3.5 **Après cette publication** : vérifier que le `?v=` servi en production a suivi. C'est du même coup le premier instrument de mesure du déploiement dont ce dépôt dispose — jusqu'ici, rien ne permettait de savoir ce qui était en ligne
+      — **il a suivi.** `https://www.musiqueapproximative.net/posts` sert `?v=1.10.1`,
+      quinze occurrences, moins de vingt minutes après la fusion de la release. Le
+      déploiement s'est fait sans intervention.
+      — L'instrument fonctionne, et il a servi le jour même : c'est ce `?v=` qui a permis
+      d'affirmer que le correctif XSPF de `v1.10.1` était bien en ligne avant de le
+      mesurer. Le dépôt sait désormais lire ce qu'il sert.
 - [ ] 3.6 Constater qu'une ressource statique modifiée parvient bien aux visiteurs de retour, et non depuis leur cache. C'est l'objet du dispositif, resté sans effet depuis le 23 janvier

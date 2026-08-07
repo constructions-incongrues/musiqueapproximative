@@ -94,6 +94,10 @@
       cachait encore l'erreur. Renommé en `_xspfPlaylist.xspf.php`.
       — après renommage : `200`, `application/xspf+xml; charset=utf-8`, racine
       `{http://xspf.org/ns/0/}playlist`, 6102 pistes.
+      — **confirmé en production** après la publication de `v1.10.1`, le 7 août : `200`,
+      même type, **8093 pistes**, document bien formé. Le format fonctionne en ligne pour
+      la première fois depuis sa panne — les deux corrections précédentes avaient été crues
+      réparées sans jamais être mesurées ailleurs qu'en raisonnement.
 - [x] 4.2 Demander `/posts?c=<contributeur>&format=xspf` et vérifier que le titre de la playlist nomme ce contributeur
       — **constaté en échec** : `listSuccess.xspf.php` lisait `getParameter('contributor')`,
       un paramètre qui n'existe nulle part. Le routing, l'action et tous les autres
@@ -101,6 +105,7 @@
       morceaux ». Corrigé.
       — après correction, `?c=bertier&format=xspf` : 757 pistes, titre « Musique
       Approximative : Morceaux postés par Michel Bertier ».
+      — **confirmé en production** : 993 pistes, même titre.
 - [x] 4.3 Demander `/posts?q=<terme>&format=xspf` et vérifier que le titre reprend le terme
       — **constaté en échec** : `?q=rock&roll` produisait
       `terme &amp;quot;rock&amp;amp;roll&amp;quot;`, soit un double échappement. Mesuré
@@ -110,10 +115,16 @@
       partiel. Corrigé par `sfOutputEscaper::unescape()` sur les deux, avant l'échappement
       XML.
       — après correction : `terme "rock&roll"`, échappé une seule fois.
+      — **confirmé en production** : `?q=love` sert 124 pistes et un titre échappé une
+      seule fois.
 - [x] 4.4 Demander `/post/:slug?format=xspf` et vérifier une playlist d'un seul élément, servie en `200`
       — `200`, une piste, titre « Musique Approximative : Kossoy Sisters — What will we do
       with the baby O ».
-- [ ] 4.5 Ouvrir le document produit dans un lecteur qui lit le XSPF — VLC le fait — et vérifier que les morceaux se chargent depuis leur `location`
+      — **confirmé en production** : `200`, une piste, « Break — Electric Boozaloo ».
+- [x] 4.5 Ouvrir le document produit dans un lecteur qui lit le XSPF — VLC le fait — et vérifier que les morceaux se chargent depuis leur `location`
+      — **vérifié par le mainteneur dans VLC**, le 7 août 2026, sur le flux servi en
+      production. C'est la seule tâche de ce changement qu'aucun outil en ligne de commande
+      ne pouvait clore : un document bien formé se mesure, une piste qui se charge s'écoute.
 - [x] 4.6 Sur un morceau dont le titre ou le corps contient des guillemets, une esperluette ou un chevron, vérifier que le document reste bien formé. C'est ce que l'échappement de `File_XSPF` assurait, et le point le plus facile à casser en s'en passant
       — **constaté en échec, mais pas pour la raison attendue.** Guillemets, esperluettes
       et chevrons passaient ; le document restait pourtant illisible. 81 octets de
