@@ -2,7 +2,7 @@
 
 require_once dirname(__FILE__).'/../../bootstrap/unit.php';
 
-$t = new lime_test(7);
+$t = new lime_test(11);
 
 sfConfig::set('app_urls_tracks', '//example.net/tracks');
 
@@ -46,7 +46,35 @@ $t->is(
 
 sfConfig::set('app_urls_tracks', 'https://cdn.example.net/tracks/');
 $t->is(
+  Post::buildTrackUrl('simple.mp3'),
+  'https://cdn.example.net/tracks/simple.mp3',
+  '->buildTrackUrl() retire la barre oblique finale de la base'
+);
+
+sfConfig::set('app_urls_tracks', 'https://cdn.example.net/tracks');
+$t->is(
   Post::buildTrackUrl('simple.mp3', 'https'),
   'https://cdn.example.net/tracks/simple.mp3',
-  '->buildTrackUrl() ne double pas le schema ni la barre finale'
+  '->buildTrackUrl() ne double pas le schema sur une base deja absolue'
+);
+
+sfConfig::set('app_urls_tracks', 'http://cdn.example.net/tracks');
+$t->is(
+  Post::buildTrackUrl('simple.mp3', 'https'),
+  'http://cdn.example.net/tracks/simple.mp3',
+  '->buildTrackUrl() ne reecrit pas le schema d\'une base deja absolue avec un schema different'
+);
+
+sfConfig::set('app_urls_tracks', '/tracks');
+$t->is(
+  Post::buildTrackUrl('simple.mp3', 'https'),
+  'https:///tracks/simple.mp3',
+  '->buildTrackUrl() rend absolue une base sans aucun schema'
+);
+
+sfConfig::set('app_urls_tracks', '');
+$t->is(
+  Post::buildTrackUrl('simple.mp3', 'https'),
+  'https:///simple.mp3',
+  '->buildTrackUrl() rend absolue une base vide'
 );

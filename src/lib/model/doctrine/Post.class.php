@@ -27,16 +27,35 @@ class Post extends BasePost
    *
    * @param string      $filename Nom du fichier dans web/tracks/
    * @param string|null $scheme   'http' ou 'https' pour forcer une URL absolue.
-   *                              Null conserve app_urls_tracks tel quel
-   *                              (relatif au protocole par defaut).
+   *                              Null conserve app_urls_tracks tel quel.
+   *
+   *                              Si app_urls_tracks n'a pas de schema du tout
+   *                              (base relative au protocole, ex: "//cdn...",
+   *                              ou base totalement relative, ex: "/tracks"
+   *                              ou ""), $scheme est utilise pour produire une
+   *                              URL absolue.
+   *
+   *                              Si app_urls_tracks a deja son propre schema
+   *                              (ex: "http://cdn..."), $scheme est ignore :
+   *                              reecrire le schema d'une URL deja absolue et
+   *                              explicitement configuree serait surprenant.
    * @return string
    */
   public static function buildTrackUrl($filename, $scheme = null)
   {
     $base = rtrim(sfConfig::get('app_urls_tracks'), '/');
 
-    if (null !== $scheme && 0 === strpos($base, '//')) {
-      $base = $scheme.':'.$base;
+    if (null !== $scheme) {
+      if (0 === strpos($base, '//')) {
+        // Base relative au protocole : on prefixe le schema demande.
+        $base = $scheme.':'.$base;
+      } elseif (!preg_match('#^[a-z][a-z0-9+.-]*://#i', $base)) {
+        // Base sans aucun schema (chemin relatif, eventuellement vide) :
+        // on la rend absolue sous le schema demande.
+        $base = $scheme.'://'.$base;
+      }
+      // Sinon, la base est deja absolue avec son propre schema : no-op
+      // volontaire, voir docblock ci-dessus.
     }
 
     return sprintf('%s/%s', $base, rawurlencode($filename));

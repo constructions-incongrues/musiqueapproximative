@@ -51,7 +51,11 @@ class postActions extends sfActions
     $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
-    $urlTrack = $post->getTrackUrl($request->isSecure() ? 'https' : 'http');
+    // og:video / og:video:secure_url below embed http:// and https:// SWF URLs
+    // side by side, regardless of the request's own scheme, so the track URL
+    // inside each must carry the matching scheme explicitly.
+    $urlTrackHttp = $post->getTrackUrl('http');
+    $urlTrackHttps = $post->getTrackUrl('https');
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
@@ -74,7 +78,7 @@ class postActions extends sfActions
       sprintf(
         'http://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
         sfConfig::get('app_domain'),
-        $urlTrack,
+        $urlTrackHttp,
         $urlImg
       )
     );
@@ -83,7 +87,7 @@ class postActions extends sfActions
       sprintf(
         'https://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
         sfConfig::get('app_domain'),
-        $urlTrack,
+        $urlTrackHttps,
         $urlImg
       )
     );
