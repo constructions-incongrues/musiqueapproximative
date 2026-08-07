@@ -1,0 +1,77 @@
+# TODOS
+
+## Frontend
+
+### Corriger le double-encodage XML de `executeOembed`
+
+**What:** Supprimer l'appel à `htmlentities()` avant `addChild()` dans `executeOembed`.
+
+**Why:** `SimpleXMLElement::addChild()` échappe déjà sa valeur. Le pré-échappement produit `&amp;amp;` — la sortie oEmbed XML consommée par les sites qui embarquent des posts est double-encodée aujourd'hui.
+
+**Context:** `src/apps/frontend/modules/post/actions/actions.class.php:262`, boucle `foreach ($data as $key => $value) { $xml->addChild($key, htmlentities($value)); }`. Même famille de bug que celui traité dans le sérialiseur Subsonic (`docs/superpowers/specs/2026-08-07-subsonic-api-support-design.md`, section Sérialisation), sur un endpoint que la branche Subsonic ne touche pas. Le correctif est de passer `$value` brut. Vérifier avec un titre contenant `&`.
+
+**Effort:** S
+**Priority:** P2
+**Depends on:** None
+
+### Réparer la génération d'avatars dans `Post::postSave`
+
+**What:** Réactiver la génération d'avatars et corriger la parenthèse mal placée du test d'existence.
+
+**Why:** Les avatars n'existent pour ainsi dire pour aucun post. L'API Subsonic exposera donc le logo du thème comme pochette de tous les albums, ce qui donne une grille d'albums entièrement identique dans les clients.
+
+**Context:** `src/lib/model/doctrine/Post.class.php`, méthode `postSave`. Deux problèmes : `$process->run()` est commenté, et le garde-fou au-dessus s'écrit `file_exists(sprintf('%s/avatars/%s.png'), $webDir, $postId)` — les arguments partent dans `file_exists` au lieu de `sprintf`, donc le test ne teste rien. Prérequis à établir avant de commencer : l'outil `bndrimg` est-il encore installé sur l'hôte de production, et `convert` (ImageMagick) l'est-il aussi ? Si non, la tâche devient « choisir un autre générateur », pas « décommenter une ligne ».
+
+**Effort:** M
+**Priority:** P2
+**Depends on:** Confirmer la présence de `bndrimg` et d'ImageMagick sur l'hôte de production
+
+### Supprimer ou réécrire `postActionsTest.php`
+
+**What:** Le stub de test fonctionnel généré interroge une route inexistante.
+
+**Why:** C'est le seul test fonctionnel du dépôt et il ne teste rien. Une suite qui paraît peuplée alors qu'elle est vide est pire qu'une suite vide : elle décourage d'en écrire.
+
+**Context:** `src/test/functional/frontend/postActionsTest.php` fait `get('/post/index')` et vérifie `module=post, action=index`. Aucune route `post/index` n'existe dans `src/apps/frontend/config/routing.yml`. Soit le supprimer, soit le réécrire contre `@post_show` ou `@post_list`. La branche Subsonic ajoute une vraie infrastructure de test (connexion `test:` et fixtures Doctrine YAML) qui rend la réécriture peu coûteuse.
+
+**Effort:** S
+**Priority:** P3
+**Depends on:** None
+
+### Porter le correctif N+1 de `search3` vers la recherche du site
+
+**What:** Remplacer la boucle « une requête par résultat » de `PostTable::search()` par un unique `WHERE id IN (…)`.
+
+**Why:** `/posts?q=` déclenche aujourd'hui une requête par résultat, sans borne. La branche Subsonic contourne le problème pour son propre `search3` mais laisse la recherche du site intacte.
+
+**Context:** `src/lib/model/doctrine/PostTable.class.php:158-172`. `parent::search()` renvoie des identifiants classés, puis chaque identifiant déclenche un `getOnlinePostById()`. Le patron de remplacement est écrit et éprouvé dans le code Subsonic : collecter les identifiants, découper à la fenêtre demandée, charger en une requête via `buildOnlinePostsQuery()`. À faire tant que c'est frais.
+
+**Effort:** S
+**Priority:** P2
+**Depends on:** La branche Subsonic (`buildOnlinePostsQuery()` publique et paramétrable)
+
+## Infrastructure
+
+### L'image ghcr publiée n'a pas de dépendances
+
+**What:** Ajouter `RUN composer install --no-dev` au `Dockerfile`.
+
+**Why:** L'image publiée à chaque tag ne peut pas faire tourner l'application : elle n'embarque aucun vendor. L'image n'est donc pas un chemin de déploiement viable, ce que rien n'indique.
+
+**Context:** Le `Dockerfile` copie `./src` puis s'arrête ; `composer install` n'est lancé que par la commande de démarrage de `docker-compose`, jamais à la construction. `/src/vendor` est gitignoré, donc le `COPY` n'emporte rien. Le déploiement réel passe par `make deploy` (rsync), ce qui masque le problème. Antérieur à la branche Subsonic et sans rapport avec elle. Attention à l'ordre : `composer install` doit venir après le `COPY` des sources et avant le passage à l'utilisateur non privilégié.
+
+**Effort:** S
+**Priority:** P2
+**Depends on:** None
+
+### `getRandomPost` trie la table entière
+
+**What:** Remplacer `orderBy('rand()')` par un tirage borné.
+
+**Why:** MySQL matérialise et trie toutes les lignes pour un `ORDER BY RAND()`. Sans effet perceptible à quelques milliers de lignes, mais la table ne fait que croître, et `getAlbumList2?type=random` de l'API Subsonic hérite du même chemin.
+
+**Context:** `src/lib/model/doctrine/PostTable.class.php:188`. Utilisé par `/posts/random` et, après la branche Subsonic, par `getAlbumList2?type=random` et `getRandomSongs`. Approche habituelle : tirer un décalage aléatoire sur le nombre de lignes en ligne, puis `LIMIT 1 OFFSET n`. Honnêtement : ce n'est pas lent aujourd'hui, c'est noté pour ne pas le redécouvrir.
+
+**Effort:** S
+**Priority:** P4
+**Depends on:** None
