@@ -12,6 +12,18 @@ if (params.hasOwnProperty("noredirect")) {
 } else {
   // Redirect to option.url after option.delay seconds
   document.addEventListener("DOMContentLoaded", function () {
+    // Vérifier que les options sont présentes
+    if (!window.DesastreOptions || !window.DesastreOptions.redirect) {
+      console.error(
+        "[desastres/redirect] ERROR: Options not found in window.DesastreOptions.redirect",
+      );
+      console.log(
+        "[desastres/redirect] Available options:",
+        window.DesastreOptions,
+      );
+      return;
+    }
+
     const url = window.DesastreOptions.redirect.url;
     const delay = parseInt(window.DesastreOptions.redirect.seconds);
     console.log(
