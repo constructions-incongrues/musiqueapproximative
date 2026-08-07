@@ -8,8 +8,15 @@ security: ~
 version:
   class: VersionFilter
 
+cache: ~
+
+# `desastre` est déclaré SOUS `cache`, et l'ordre compte à l'envers de ce qu'on lit.
+# La chaîne de filtres se déroule vers l'intérieur puis remonte : au retour, un filtre
+# déclaré plus bas s'exécute avant un filtre déclaré plus haut. Déclaré au-dessus de
+# `cache`, `sfDesastreFilter` injectait ses options après que `sfCacheFilter` avait écrit
+# l'entrée — le bloc `window.DesastreOptions` n'était donc servi qu'au premier visiteur,
+# et les suivants recevaient les scripts du désastre privés de leur configuration.
 desastre:
   class: sfDesastreFilter
 
-cache: ~
 execution: ~
