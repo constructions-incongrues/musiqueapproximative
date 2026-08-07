@@ -46,11 +46,36 @@
 - [x] 3.7 **Distinguer le tirage des règles de celui des recettes.** Relevé le 7 août 2026
       dans un navigateur, sur une page de production servie depuis le cache : deux
       chargements de la même adresse annoncent « Will remove 10 characters » puis « 6 ».
-      — Six recettes sur quatorze appellent `Math.random()` à l'exécution — `light`, `mamie`,
-      `mangelettres`, `musique`, `postillons`, `tts`. Dans `mangelettres` c'est
-      `Math.random() < rate` par caractère.
+      — Dix-neuf recettes sont déclarées, treize portent du JavaScript, et **six de
+      celles-là** appellent `Math.random()` à l'exécution — `light`, `mamie`, `mangelettres`,
+      `musique`, `postillons`, `tts`. Dans `mangelettres` c'est `Math.random() < rate` par
+      caractère.
       — Le tirage figé par le cache est donc celui des **règles**, c'est-à-dire des recettes
       appliquées. Le rendu de ces recettes, lui, se retire à chaque chargement. « Deux
       visiteurs voient le même effet » était vrai de la recette et faux de son rendu ; les
       scénarios sont corrigés en conséquence.
-- [ ] 3.6 Décider si le comportement doit changer. Ce changement ne le tranche pas : il rend la question posable sur une base exacte. Toute correction passerait par le cache — exclusion d'actions, cache par fragment, ou injection côté client — et devra peser le coût sur la charge d'un site dont `post/show` et `post/list` font l'essentiel du trafic
+- [x] 3.6 Décider si le comportement doit changer. Ce changement ne le tranche pas : il rend la question posable sur une base exacte. Toute correction passerait par le cache — exclusion d'actions, cache par fragment, ou injection côté client — et devra peser le coût sur la charge d'un site dont `post/show` et `post/list` font l'essentiel du trafic
+      — **décidé le 7 août 2026 : le comportement ne change pas.**
+      — Le coût, enfin pesé plutôt que supposé. Mesuré sur instance locale, cache vidé :
+
+      | Route | Sans cache | Avec cache | Facteur |
+      |---|---|---|---|
+      | `/post/:slug` | 40–310 ms | 11–46 ms | 3 à 7× |
+      | `/posts` | 2 600 ms | 175 ms | 15× |
+
+      La tâche traitait `post/show` et `post/list` ensemble ; ce sont deux problèmes
+      distincts. La liste construit six mille morceaux, la page de morceau non. Une
+      exclusion du cache limitée à `post/show` était donc envisageable, contrairement à ce
+      que la formulation laissait croire — elle n'est pas retenue, mais elle existait.
+      — **Ce qui a emporté la décision est ailleurs** : la tâche 3.7 montre que six recettes
+      tirent au sort dans le navigateur. Le cache fige *quel* désastre s'applique, pas
+      *comment il se joue*. Un visiteur qui revient revoit `mangelettres`, mais pas les
+      mêmes lettres. La variation existe déjà.
+      — Ce qui restait à corriger était un défaut, pas un choix : un désastre ne s'appliquait
+      qu'au premier visiteur. `reparer-injection-des-options` l'a réglé. Le reste est une
+      question de goût, et rien ne justifie de payer du temps de rendu pour la trancher.
+      — Écartées, et pourquoi : raccourcir la durée de vie paierait sur les pages chaudes,
+      les plus coûteuses, pour un gain borné ; le cache par fragment n'a pas de fragment à
+      isoler, le désastre touchant `<head>` et contenu ; le tirage côté client demanderait
+      de charger les ressources après coup et d'exporter au navigateur des règles qui
+      s'évaluent sur du contexte serveur.
