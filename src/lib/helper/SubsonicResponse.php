@@ -7,11 +7,17 @@
  *   - valeur scalaire    -> attribut XML / cle JSON
  *   - tableau associatif -> element enfant unique
  *   - tableau indexe     -> elements repetes (XML) / tableau (JSON)
+ *   - valeur null        -> omise (attribut XML absent, cle JSON absente),
+ *     y compris a l'interieur d'une liste repetable (ex: un element non-
+ *     tableau glisse dans 'song' est ignore plutot que transmis tel quel :
+ *     voir toXml()/toJsonValue()).
  *
  * Les collections repetables sont declarees dans self::$repeatable. Sans cette
  * liste, une collection vide est indistinguable d'un objet vide en PHP (les
  * deux valent []), et json_encode() emet [] la ou les clients strictement
- * types attendent {}.
+ * types attendent {}. Une collection *non vide* mais absente de la liste est
+ * en revanche detectable et leve une exception (voir assertDeclared()) :
+ * seule la variante vide echappe a ce garde-fou, faute d'un autre signal.
  *
  * @see http://www.subsonic.org/pages/api.jsp
  */
@@ -63,13 +69,30 @@ class SubsonicResponse
   /**
    * @param array       $body     Resultat de ::ok() ou ::error()
    * @param string      $format   'xml', 'json' ou 'jsonp'
-   * @param string|null $callback Nom de la fonction JSONP
+   * @param string|null $callback Nom de la fonction JSONP. Contraint a un
+   *                              identifiant JavaScript simple ; toute autre
+   *                              valeur est remplacee par "callback" (un
+   *                              callback arbitraire serait execute par le
+   *                              navigateur : c'est une injection XSS sinon).
    * @return string
+   *
+   * Une valeur null, a n'importe quel niveau -- y compris a l'interieur
+   * d'une liste repetable -- est omise du rendu plutot que serialisee.
+   *
+   * @throws InvalidArgumentException si $body contient une liste non vide
+   *         sous une cle absente de self::$repeatable (voir assertDeclared).
+   * @throws RuntimeException si l'encodage JSON ou le rendu XML echoue
+   *         (typiquement des octets non UTF-8 dans les donnees).
    */
   public static function render(array $body, $format = 'xml', $callback = null)
   {
     $status = isset($body['status']) ? $body['status'] : 'ok';
-    unset($body['status']);
+
+    // Les cles de l'enveloppe sont reservees : un $body qui en porterait une
+    // par erreur (ex: 'version') ne doit jamais l'ecraser.
+    foreach (['status', 'version', 'type'] as $reserved) {
+      unset($body[$reserved]);
+    }
 
     $envelope = array_merge(
       [
@@ -83,7 +106,15 @@ class SubsonicResponse
     if ('json' === $format || 'jsonp' === $format) {
       $json = json_encode(['subsonic-response' => self::toJsonValue($envelope)]);
 
+      if (false === $json) {
+        throw new RuntimeException('SubsonicResponse : echec de l\'encodage JSON.');
+      }
+
       if ('jsonp' === $format && $callback) {
+        if (!preg_match('/^[A-Za-z_$][A-Za-z0-9_$]*$/', $callback)) {
+          $callback = 'callback';
+        }
+
         return sprintf('%s(%s);', $callback, $json);
       }
 
@@ -96,7 +127,12 @@ class SubsonicResponse
     ));
     self::toXml($envelope, $xml);
 
-    return $xml->asXML();
+    $rendered = $xml->asXML();
+    if (false === $rendered) {
+      throw new RuntimeException('SubsonicResponse : echec du rendu XML.');
+    }
+
+    return $rendered;
   }
 
   public static function contentType($format)
@@ -112,18 +148,59 @@ class SubsonicResponse
   }
 
   /**
-   * Un tableau associatif vide devient un objet, sauf si sa cle est declaree
-   * repetable — auquel cas il reste un tableau.
+   * Une liste (tableau indexe 0..n-1) non vide sous une cle absente de
+   * self::$repeatable produirait du XML invalide (des elements nommes "0",
+   * "1"...) et, en JSON, un objet {} qui masquerait silencieusement des
+   * donnees -- exactement le defaut que cette classe existe pour eviter. On
+   * leve donc une exception plutot que de laisser passer.
+   *
+   * Une liste *vide* n'a pas ce probleme en XML (rien n'est omis) mais reste
+   * indiscernable d'un objet vide en JSON : ce cas ne peut pas etre detecte
+   * ici. self::$repeatable reste le seul recours pour lui.
+   *
+   * @throws InvalidArgumentException
    */
-  private static function toJsonValue($value, $name = null)
+  private static function assertDeclared($key, array $value)
+  {
+    if (self::isRepeatable($key) || [] === $value) {
+      return;
+    }
+
+    if (array_keys($value) === range(0, count($value) - 1)) {
+      throw new InvalidArgumentException(sprintf(
+        'Element "%s" est une liste mais n\'est pas declare dans SubsonicResponse::$repeatable.',
+        $key
+      ));
+    }
+  }
+
+  /**
+   * Un tableau associatif vide devient un objet, sauf si sa cle est declaree
+   * repetable -- auquel cas il reste un tableau.
+   *
+   * $key est le nom sous lequel $value est range chez son parent (null a la
+   * racine). Meme concept que la variable $key de toXml(), pour que les deux
+   * methodes se lisent comme des jumelles.
+   */
+  private static function toJsonValue($value, $key = null)
   {
     if (!is_array($value)) {
       return $value;
     }
 
-    if (null !== $name && self::isRepeatable($name)) {
+    if (null !== $key && self::isRepeatable($key)) {
       $items = [];
       foreach ($value as $item) {
+        if (!is_array($item)) {
+          // Element non-tableau (ex: null issu d'un array_map qui a rate
+          // une correspondance) : ignore comme n'importe quelle valeur
+          // null, pour ne pas diverger du comportement de toXml() qui,
+          // lui, fatalerait sur le typehint array de la recursion.
+          continue;
+        }
+        // Pas de $key transmis ici : un element de la liste "song" n'est
+        // pas lui-meme une liste "song" -- en transmettre le nom ferait
+        // perdre un niveau au prochain appel.
         $items[] = self::toJsonValue($item);
       }
 
@@ -131,11 +208,14 @@ class SubsonicResponse
     }
 
     $out = [];
-    foreach ($value as $key => $item) {
+    foreach ($value as $childKey => $item) {
       if (null === $item) {
         continue;
       }
-      $out[$key] = self::toJsonValue($item, $key);
+      if (is_array($item)) {
+        self::assertDeclared($childKey, $item);
+      }
+      $out[$childKey] = self::toJsonValue($item, $childKey);
     }
 
     return empty($out) ? new stdClass() : $out;
@@ -153,6 +233,11 @@ class SubsonicResponse
 
       if (is_array($value) && self::isRepeatable($key)) {
         foreach ($value as $item) {
+          if (!is_array($item)) {
+            // Cf. toJsonValue() : un element non-tableau est ignore plutot
+            // que de faire fataler addChild()/toXml() sur son typehint array.
+            continue;
+          }
           $child = $parent->addChild($key);
           self::toXml($item, $child);
         }
@@ -160,6 +245,7 @@ class SubsonicResponse
       }
 
       if (is_array($value)) {
+        self::assertDeclared($key, $value);
         $child = $parent->addChild($key);
         self::toXml($value, $child);
         continue;
