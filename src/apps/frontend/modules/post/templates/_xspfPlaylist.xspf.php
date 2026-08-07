@@ -17,19 +17,36 @@
  * n'y sont disponibles — voir `get_partial()`, qui n'appelle que `setPartialVars()`.
  * D'où `$baseUrl`, calculé par l'appelant.
  *
- * @var array  $posts   Morceaux bruts, hors décorateur d'échappement
- * @var string $title   Titre de la playlist
+ * Les variables d'un partiel arrivent en revanche échappées : `$posts` sous forme
+ * de `sfOutputEscaperArrayDecorator`, `$title` en chaîne déjà passée par
+ * `htmlspecialchars`. Les réécrire ici en HTML donnait un double échappement —
+ * `&quot;` ressortait en `&amp;quot;` — d'où le retour aux valeurs brutes avant de
+ * les échapper une fois, pour le XML cette fois.
+ *
+ * @var array  $posts   Morceaux, sous décorateur d'échappement
+ * @var string $title   Titre de la playlist, échappé pour le HTML
  * @var string $baseUrl Préfixe absolu du site, sans barre oblique finale
  */
+
+$posts = sfOutputEscaper::unescape($posts);
+$title = sfOutputEscaper::unescape($title);
 
 /**
  * Échappe une valeur pour un nœud texte XML.
  *
  * ENT_XML1 échappe les cinq entités du XML sans introduire d'entités HTML, que
  * le XSPF ne connaît pas.
+ *
+ * Les caractères de contrôle C0 sont retirés avant : XML 1.0 les interdit dans un
+ * document, y compris sous forme d'entité numérique. Certains corps de morceaux en
+ * contiennent — reliquats d'un import binaire — et un seul suffit à rendre toute la
+ * playlist illisible. Le retrait porte sur des octets isolés, jamais sur une amorce
+ * de séquence UTF-8, d'où l'absence de modificateur `u`.
  */
 $xspfEscape = function ($value) {
-  return htmlspecialchars((string) $value, ENT_QUOTES | ENT_XML1, 'UTF-8');
+  $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', (string) $value);
+
+  return htmlspecialchars($value, ENT_QUOTES | ENT_XML1, 'UTF-8');
 };
 
 $xspfTitle = '';

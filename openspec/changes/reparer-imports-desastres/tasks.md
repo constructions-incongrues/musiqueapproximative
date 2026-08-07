@@ -65,11 +65,13 @@
 
 - [x] 4.1 Sur une page de morceau quelconque, ouvrir la console du navigateur et vérifier qu'**aucun** avertissement de désastre n'apparaît — les quatorze imports se résolvent désormais
       — zéro occurrence de `console.warn` ou d'un avertissement d'import dans le HTML servi.
-- [ ] 4.2 Introduire volontairement une faute dans un chemin d'import, recharger une page de morceau, et vérifier que la console nomme le chemin fautif **et** que la page reste servie normalement. Rétablir le chemin ensuite
-      — **non menée, et laissée ouverte à dessein.** Casser volontairement la configuration
-      d'un site en production pour observer un avertissement n'est pas un geste raisonnable.
-      À faire sur une instance locale. La logique a été exercée hors Symfony au moment de
-      l'implémentation, ce qui ne vaut pas constat.
+- [x] 4.2 Introduire volontairement une faute dans un chemin d'import, recharger une page de morceau, et vérifier que la console nomme le chemin fautif **et** que la page reste servie normalement. Rétablir le chemin ensuite
+      — **menée sur instance locale**, comme la prudence l'exigeait. `misc.yml` remplacé par
+      `misc-inexistant.yml` dans `desastres.yml` : la page de morceau répond `200`, un seul
+      `console.warn` est injecté — « 1 import(s) déclaré(s) dans desastres.yml ne désignent
+      aucun fichier » — et il nomme le chemin fautif. Le journal du serveur le nomme aussi :
+      « [sfDesastreManager] WARNING: Import file not found ». Chemin rétabli, avertissement
+      disparu, aucun écart au dépôt.
 - [x] 4.3 Trouver un morceau dont l'artiste contient `catani`, demander `/post/:slug`, et vérifier dans le HTML servi que les ressources du désastre `splitouine` sont injectées avant `</head>`. La règle déclare `probability: 1` : elle doit se déclencher à chaque fois, sans exception. C'est la preuve que `regles/splitouine.yml` et `recettes/splitouine.yml` se chargent enfin. Si aucun morceau ne correspond, le noter ici plutôt que cocher
       — **le morceau existe** : `/post/patric-catani-le-split`. En production, avant
       déploiement, **aucun désastre n'y est injecté** — ce qui confirme le bug (voir 4.8).

@@ -163,7 +163,7 @@
       — Ce qui subsiste est un fait sans explication : **un ruleset entièrement
       satisfaisable, une CI intégralement verte, et `mergeable_state: blocked`**, observé
       quatre fois. Reporté en 3.6quater.
-- [ ] 3.6quater Élucider ce qui reste : le ruleset lu est satisfaisable de bout en bout, et
+- [x] 3.6quater Élucider ce qui reste : le ruleset lu est satisfaisable de bout en bout, et
       la pull request reste pourtant `blocked`. Deux pistes, aucune vérifiée :
       **« Require branches to be up to date before merging »**, sous-option de
       « Require status checks to pass » située juste au-dessus de la liste des contextes,
@@ -180,6 +180,49 @@
       `Réglages → Rules → Rulesets` suffit : s'il n'y figure qu'une ligne, il faudra
       chercher ailleurs — et se garder de conclure « il ne reste que ça », erreur déjà
       commise quatre fois dans cette enquête.
+      — **la seconde piste tombe elle aussi**, le 7 août 2026, lue et non déduite.
+      `GET /repos/:owner/:repo/rulesets?includes_parents=true` ne renvoie qu'une ligne, le
+      ruleset `main` du dépôt, et `GET /repos/:owner/:repo/rules/branches/main` — qui
+      énumère les règles applicables quelle qu'en soit la source — les rapporte toutes
+      comme venant du dépôt. Aucun ruleset d'organisation. La liste ne comportait bien
+      qu'une ligne, et il fallait donc chercher ailleurs, comme la tâche le prévoyait.
+      — Le ruleset porte une règle **`merge_queue`** que l'enquête n'avait jamais nommée,
+      réglée sur `min_entries_to_merge_wait_minutes: 5` et `grouping_strategy: ALLGREEN`.
+      Une file de fusion peut rendre compte d'un `blocked` prolongé, et le délai de cinq
+      minutes ressemble à l'observation de la PR #98. **Cette piste a d'abord été portée
+      ici comme la cause. C'était une déduction — « la seule règle que personne n'avait
+      listée » — et la mesure suivante l'a affaiblie.**
+      — **La PR #119 ne reproduit pas l'anomalie.** Ouverte le 7 août, elle passe
+      `BLOCKED` tant que ses checks tournent, puis `CLEAN` dès qu'ils sont verts, sans
+      délai ni file visible. Une pull request verte n'est donc plus bloquée aujourd'hui.
+      La `merge_queue` n'explique pas à elle seule les quatre observations passées, et
+      l'hypothèse la plus économique reste que la correction du ruleset du 2 août — celle
+      qui a débloqué la PR #105 — avait déjà réglé l'affaire.
+      — **La cause est établie, et la `merge_queue` y était bien pour quelque chose — mais
+      pas de la façon écrite plus haut.** La fusion automatique de la PR #119 a été armée
+      pendant que ses checks tournaient, ce qu'aucune tentative précédente n'avait fait.
+      Le journal de la pull request donne la suite : `auto_merge_enabled` à 18:40:31, puis
+      **`added_to_merge_queue` à 18:41:08**. L'automatisme se déclenche donc, et il a
+      toujours dû se déclencher. La pull request entre dans la file, la branche
+      `gh-readonly-queue/main/pr-119-…` est créée — et **rien ne s'y exécute**.
+      — Ni `pr.yml` ni `ci.yml` n'écoutent l'événement `merge_group`. La file attend sur la
+      branche d'attente les trois contextes exigés par le ruleset — `Trunk Check`,
+      `Build et Push Docker`, `Validation du code` — que rien ne produit. Elle patiente les
+      `check_response_timeout_minutes: 60` du ruleset, puis éjecte la pull request. Vu du
+      dehors : une CI verte, un état `CLEAN`, une fusion automatique armée, et rien qui se
+      passe. C'est mot pour mot le symptôme poursuivi depuis le début.
+      — Corrigé dans la foulée : `merge_group` ajouté aux deux workflows. Au passage, la
+      condition de publication de l'image Docker portait sur « tout sauf une pull
+      request », ce qui aurait fait publier depuis une branche de file d'attente ; elle est
+      restreinte aux tags.
+      — **Trois versions de cette note en une heure**, et la leçon de l'enquête vaut une
+      fois de plus contre son rédacteur. La première désignait la `merge_queue` par
+      déduction — « la seule règle que personne n'avait listée » — sans mécanisme ni
+      mesure. La deuxième la rétractait en voyant la PR #119 passer `CLEAN`, confondant
+      « la file n'empêche pas d'atteindre `CLEAN` » avec « la file n'est pas en cause ».
+      La troisième tient parce qu'on a enfin regardé le journal de la pull request au lieu
+      de raisonner sur son état. La conclusion juste n'a jamais manqué de candidats : elle
+      manquait d'une observation.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.

@@ -17,5 +17,12 @@
 - [x] 2.3 Vérifier que le README et la page d'accueil de la documentation ne comportent plus de badge mort
       — vérifié sur `main` : zéro occurrence de `security.yml` dans `README.adoc` et dans
       `docs/modules/ROOT/pages/index.adoc`, et le fichier de workflow n'existe plus.
-- [ ] 2.4 Traiter le badge mort préexistant de `docs/modules/ROOT/pages/index.adoc`, qui pointe vers `lint.yml` — ce workflow n'existe pas dans le dépôt. Repéré à l'occasion, hors périmètre de ce changement
-- [ ] 2.5 Vérifier que les alertes déjà remontées par Trivy restent consultables dans l'onglet Security, ou acter leur disparition
+- [x] 2.4 Traiter le badge mort préexistant de `docs/modules/ROOT/pages/index.adoc`, qui pointe vers `lint.yml` — ce workflow n'existe pas dans le dépôt. Repéré à l'occasion, hors périmètre de ce changement
+      — corrigé : le badge vise désormais `pr.yml`, comme celui du `README.adoc`, qui portait
+      déjà la bonne cible sous le même libellé « Lint ». Les deux fichiers sont alignés. Le
+      dépôt ne contient aucun `lint.yml` ; `pr.yml` est bien le workflow qui exécute le
+      contrôle.
+- [x] 2.5 Vérifier que les alertes déjà remontées par Trivy restent consultables dans l'onglet Security, ou acter leur disparition
+      — elles restent consultables. L'API de code scanning rapporte 2143 alertes, dont
+      certaines de l'outil `Trivy`, aux côtés de `CodeQL`, `PHPMD` et `Scorecard`. Retirer
+      le workflow n'efface pas ce qu'il avait remonté.

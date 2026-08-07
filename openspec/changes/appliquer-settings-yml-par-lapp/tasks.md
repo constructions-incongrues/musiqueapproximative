@@ -113,7 +113,7 @@
       — jamais fait, et désormais sans urgence : l'app est désinstallée, plus rien
       n'applique le fichier. Un écart éventuel resterait figé plutôt que réappliqué.
       L'audit garde un intérêt documentaire, il n'en a plus de préventif.
-- [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
+- [x] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
       verts, les quatre contextes requis compris, et la pull request est restée
       `blocked` plusieurs minutes avant d'être fusionnée sans qu'on puisse dire si
@@ -122,7 +122,14 @@
       aurait dû rapporter `clean` » : la protection existait bel et bien, sous forme de
       ruleset. `blocked` était la réponse correcte. Il n'y a pas de règle d'organisation à
       écarter.
-- [ ] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
+      — **la PR #119 clôt le test, le 7 août, et par la négative.** La fusion automatique a
+      été armée pendant que ses checks tournaient — la configuration que ce test réclame et
+      qu'aucune tentative précédente n'avait produite. Elle s'est déclenchée seule :
+      `auto_merge_enabled` à 18:40:31, `added_to_merge_queue` à 18:41:08. L'automatisme
+      n'a donc jamais été en cause. Ce qui manquait était en aval : les workflows
+      n'écoutaient pas `merge_group`, et la file attendait des contextes que rien ne
+      produisait sur sa branche d'attente. Voir `reparer-fusion-automatique` 3.6quater.
+- [x] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
       revues, historique linéaire. C'est la dernière inconnue : une exigence qui ne peut
       jamais être satisfaite expliquerait à elle seule que la fusion automatique n'ait
       jamais abouti en une quinzaine de pull requests
@@ -137,6 +144,16 @@
       d'ici — mais le blocage a cédé, ce qui suffit à valider le raisonnement. Reste à
       consigner la configuration retenue, pour qu'elle cesse d'être une connaissance
       orale : c'est l'objet de 3.4ter.
+      — **relevé le 7 août 2026 par l'API**, `GET /repos/:owner/:repo/rulesets/20204602`,
+      qui est bien accessible depuis `gh`. Les deux candidats tombent : *Required
+      approvals* vaut **0**, et la liste des contextes requis contient exactement
+      `Trunk Check`, `Build et Push Docker` et `Validation du code` — aucun contexte
+      fantôme. Le ruleset porte par ailleurs `deletion`, `non_fast_forward`,
+      `required_linear_history`, une règle `code_scanning` (CodeQL, seuil `errors`) et,
+      surtout, une règle **`merge_queue`** que ni cette tâche ni 3.6quater n'avaient
+      envisagée. Voir `reparer-fusion-automatique` 3.6quater : elle y a d'abord été portée
+      comme la cause du `blocked`, puis ramenée au rang d'hypothèse — la PR #119 passe de
+      `BLOCKED` à `CLEAN` dès sa CI verte, sans reproduire l'anomalie.
 - [x] 3.4ter Consigner dans le dépôt la configuration du ruleset `main` — contextes requis,
       approbations exigées, liste de contournement. Sans quoi la prochaine dérive
       silencieuse mettra encore six mois à se voir. Un fichier de documentation, pas un

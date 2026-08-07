@@ -85,15 +85,55 @@
       — `DOMDocument` a été écarté comme cause par mesure, non par supposition :
       `/oembed?format=xml` répond `200` en production et construit sa réponse avec
       `SimpleXMLElement`, donc l'extension XML est bien présente dans l'image.
-- [ ] 4.1 Demander `/posts?format=xspf` et vérifier un code `200`, le type `application/xspf+xml`, et un corps non vide dont la racine est une playlist XSPF
-- [ ] 4.2 Demander `/posts?c=<contributeur>&format=xspf` et vérifier que le titre de la playlist nomme ce contributeur
-- [ ] 4.3 Demander `/posts?q=<terme>&format=xspf` et vérifier que le titre reprend le terme
-- [ ] 4.4 Demander `/post/:slug?format=xspf` et vérifier une playlist d'un seul élément, servie en `200`
+- [x] 4.1 Demander `/posts?format=xspf` et vérifier un code `200`, le type `application/xspf+xml`, et un corps non vide dont la racine est une playlist XSPF
+      — **d'abord constaté en échec, sur instance locale au commit `e28e8b7`** : `500`,
+      corps vide. Journal du serveur : « The template "_xspfPlaylist.xspf.php" does not
+      exist or is unreadable ». Le partiel s'appelait `_xspfPlaylist.php`, or symfony 1
+      résout un partiel avec l'extension du format courant. La troisième correction
+      échouait donc sur un nom de fichier, jamais sur son contenu — et le corps vide
+      cachait encore l'erreur. Renommé en `_xspfPlaylist.xspf.php`.
+      — après renommage : `200`, `application/xspf+xml; charset=utf-8`, racine
+      `{http://xspf.org/ns/0/}playlist`, 6102 pistes.
+- [x] 4.2 Demander `/posts?c=<contributeur>&format=xspf` et vérifier que le titre de la playlist nomme ce contributeur
+      — **constaté en échec** : `listSuccess.xspf.php` lisait `getParameter('contributor')`,
+      un paramètre qui n'existe nulle part. Le routing, l'action et tous les autres
+      gabarits emploient `c`. Une playlist pourtant filtrée s'annonçait « Tous les
+      morceaux ». Corrigé.
+      — après correction, `?c=bertier&format=xspf` : 757 pistes, titre « Musique
+      Approximative : Morceaux postés par Michel Bertier ».
+- [x] 4.3 Demander `/posts?q=<terme>&format=xspf` et vérifier que le titre reprend le terme
+      — **constaté en échec** : `?q=rock&roll` produisait
+      `terme &amp;quot;rock&amp;amp;roll&amp;quot;`, soit un double échappement. Mesuré
+      par sonde plutôt que déduit : les variables d'un partiel arrivent échappées —
+      `$title` en chaîne déjà passée par `htmlspecialchars`, `$posts` sous
+      `sfOutputEscaperArrayDecorator`. La prémisse inverse était écrite dans l'en-tête du
+      partiel. Corrigé par `sfOutputEscaper::unescape()` sur les deux, avant l'échappement
+      XML.
+      — après correction : `terme "rock&roll"`, échappé une seule fois.
+- [x] 4.4 Demander `/post/:slug?format=xspf` et vérifier une playlist d'un seul élément, servie en `200`
+      — `200`, une piste, titre « Musique Approximative : Kossoy Sisters — What will we do
+      with the baby O ».
 - [ ] 4.5 Ouvrir le document produit dans un lecteur qui lit le XSPF — VLC le fait — et vérifier que les morceaux se chargent depuis leur `location`
-- [ ] 4.6 Sur un morceau dont le titre ou le corps contient des guillemets, une esperluette ou un chevron, vérifier que le document reste bien formé. C'est ce que l'échappement de `File_XSPF` assurait, et le point le plus facile à casser en s'en passant
-- [ ] 4.7 Vérifier que `/posts?format=json`, `/posts?format=max` et `/posts/feed` répondent exactement comme avant — mêmes types de contenu, mêmes tailles à peu de chose près
-- [ ] 4.8 Sur une page de liste servie en HTML, vérifier que les trois `<link rel="alternate">` sont présents et que seuls `json` et `xspf` figurent dans les liens visibles du pied de page
-- [ ] 4.9 Sur une page de morceau servie en HTML, vérifier que `json` est le seul format annoncé, tout en restant accessible par `?format=xspf` et `?format=max`
+- [x] 4.6 Sur un morceau dont le titre ou le corps contient des guillemets, une esperluette ou un chevron, vérifier que le document reste bien formé. C'est ce que l'échappement de `File_XSPF` assurait, et le point le plus facile à casser en s'en passant
+      — **constaté en échec, mais pas pour la raison attendue.** Guillemets, esperluettes
+      et chevrons passaient ; le document restait pourtant illisible. 81 octets de
+      contrôle C0, reliquats d'imports binaires dans le corps de quelques morceaux — dont
+      « Trevor Wishart — Red Bird ». XML 1.0 les interdit, y compris sous forme d'entité
+      numérique : les échapper ne suffit pas, il faut les retirer. Un seul morceau fautif
+      rendait les 6102 autres inexploitables.
+      — après retrait dans `$xspfEscape` : les quatre morceaux à guillemet, esperluette ou
+      chevron sont bien formés, et la playlist entière se parse.
+- [x] 4.7 Vérifier que `/posts?format=json`, `/posts?format=max` et `/posts/feed` répondent exactement comme avant — mêmes types de contenu, mêmes tailles à peu de chose près
+      — `json` et `max` sont identiques à l'octet près avant et après les corrections
+      (5 761 286 et 1 750 648). `feed` varie de 97 octets d'une requête à l'autre, sa date
+      de publication étant recalculée.
+- [x] 4.8 Sur une page de liste servie en HTML, vérifier que les trois `<link rel="alternate">` sont présents et que seuls `json` et `xspf` figurent dans les liens visibles du pied de page
+      — les trois y sont : `application/json`, `application/maxmsp+text`,
+      `application/xspf+xml`. Les liens visibles ne portent que `json` et `xspf`, aux deux
+      endroits où ils apparaissent — `max` a bien `display: false`.
+- [x] 4.9 Sur une page de morceau servie en HTML, vérifier que `json` est le seul format annoncé, tout en restant accessible par `?format=xspf` et `?format=max`
+      — seul `application/json` est annoncé, et seul `json` est visible. `?format=xspf` et
+      `?format=max` répondent `200` avec leur type propre.
 - [x] 4.0bis **Constater que la deuxième correction ne fonctionnait pas non plus, et en
       tirer la leçon**
       — relevé le 7 août, cinq jours après la fusion : `?format=xspf` répond toujours `500`
