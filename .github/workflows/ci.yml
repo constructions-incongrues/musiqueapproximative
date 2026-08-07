@@ -94,7 +94,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build et Push de l'image Docker
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           # Seul un tag publie. La condition portait sur « tout sauf une pull
