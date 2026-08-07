@@ -16,7 +16,7 @@ updates:
       # reçoit plus de correctif de sécurité, alors que l'image est publiée sur
       # ghcr.io. Le rappel automatique disparaît ici ; le socle reste à reprendre.
       - dependency-name: php
-        update-types: [version:semver-major]
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: composer
     directory: /src
