@@ -31,5 +31,26 @@
 - [x] 3.4 Relever la configuration du cache
       — `src/apps/frontend/config/cache.yml` : `enabled: true`, `with_layout: true`,
       `lifetime: 86400`. Toutes les actions, avec habillage, pendant vingt-quatre heures.
-- [ ] 3.5 Établir l'ordre exact entre l'écriture du cache et le filtre `sfDesastreFilter`, qui injecte après le rendu. Le résultat mesuré ne dépend pas de cette réponse, mais elle conditionne toute tentative future de rétablir un tirage par visiteur — et elle ne s'obtient pas de l'extérieur
+- [x] 3.5 Établir l'ordre exact entre l'écriture du cache et le filtre `sfDesastreFilter`, qui injecte après le rendu. Le résultat mesuré ne dépend pas de cette réponse, mais elle conditionne toute tentative future de rétablir un tirage par visiteur — et elle ne s'obtient pas de l'extérieur
+      — **établi le 7 août 2026**, et il était bien celui que la tâche redoutait : le filtre
+      injectait **après** l'écriture du cache. La chaîne de filtres de symfony 1 remonte en
+      ordre inverse de la déclaration, et `desastre` était déclaré au-dessus de `cache`.
+      — La conséquence dépassait la question posée : la représentation mise en cache portait
+      les ressources du désastre mais pas son bloc d'options, et un désastre ne s'appliquait
+      donc qu'au premier visiteur. Corrigé par `reparer-injection-des-options`, en déplaçant
+      la déclaration sous `cache`.
+      — L'ordre est désormais l'inverse : injection puis écriture. Une tentative future de
+      rétablir un tirage par visiteur devra donc porter sur le cache lui-même, comme 3.6 le
+      prévoit, et non sur la position du filtre.
+
+- [x] 3.7 **Distinguer le tirage des règles de celui des recettes.** Relevé le 7 août 2026
+      dans un navigateur, sur une page de production servie depuis le cache : deux
+      chargements de la même adresse annoncent « Will remove 10 characters » puis « 6 ».
+      — Six recettes sur quatorze appellent `Math.random()` à l'exécution — `light`, `mamie`,
+      `mangelettres`, `musique`, `postillons`, `tts`. Dans `mangelettres` c'est
+      `Math.random() < rate` par caractère.
+      — Le tirage figé par le cache est donc celui des **règles**, c'est-à-dire des recettes
+      appliquées. Le rendu de ces recettes, lui, se retire à chaque chargement. « Deux
+      visiteurs voient le même effet » était vrai de la recette et faux de son rendu ; les
+      scénarios sont corrigés en conséquence.
 - [ ] 3.6 Décider si le comportement doit changer. Ce changement ne le tranche pas : il rend la question posable sur une base exacte. Toute correction passerait par le cache — exclusion d'actions, cache par fragment, ou injection côté client — et devra peser le coût sur la charge d'un site dont `post/show` et `post/list` font l'essentiel du trafic
