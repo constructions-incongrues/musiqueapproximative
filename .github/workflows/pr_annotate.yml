@@ -12,6 +12,20 @@ jobs:
   trunk_check_annotate_pr:
     name: Trunk Check PR Annotation
     runs-on: ubuntu-latest
+    # Ce workflow n'a de raison d'être que pour les pull requests venant d'un fork.
+    # `trunk-action` ne téléverse l'artefact `trunk-annotations` que dans ce cas —
+    # son option `save-annotations` vaut `auto`, qui détecte les forks — parce
+    # qu'un fork n'a pas le droit d'écrire des annotations lui-même. Pour une
+    # branche du dépôt, `Trunk Check` pose les siennes directement.
+    #
+    # Sans cette condition, le workflow s'exécutait sur toutes les pull requests.
+    # L'étape de téléchargement ne trouve pas l'artefact et réussit quand même
+    # — son script teste `if (matchArtifact)` — mais l'étape suivante lance
+    # `unzip annotations.zip` sans condition, et sort en 9. D'où un rouge
+    # permanent sur `main` depuis février 2026.
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name != github.repository
     permissions:
       checks: write
 
