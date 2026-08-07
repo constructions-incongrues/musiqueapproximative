@@ -30,22 +30,35 @@ request fermée se rouvre.
 
 ## 3. Vérification manuelle
 
-- [ ] 3.1 Sur la pull request de ce changement, vérifier que le check `Trunk Check` passe
+- [x] 3.1 Sur la pull request de ce changement, vérifier que le check `Trunk Check` passe
       au vert — c'est l'un des trois contextes requis du ruleset `main`, avec
       `Build et Push Docker` et `Validation du code`
-- [ ] 3.2 Après fusion, vérifier depuis la racine du dépôt que `grep -ri renovate .` ne
+      — PR #114 : neuf checks, huit `SUCCESS` et un `SKIPPED` (« Créer alias de version »),
+      aucun échec. Les trois contextes requis sont au vert.
+- [x] 3.2 Après fusion, vérifier depuis la racine du dépôt que `grep -ri renovate .` ne
       remonte plus que `repomix-output.xml` et `build/`, tous deux générés, plus les
       artefacts OpenSpec de ce changement et les mentions historiques dans
       `openspec/changes/retirer-scan-trivy/proposal.md` et
       `openspec/changes/reparer-fusion-automatique/tasks.md`. Aucune occurrence ne doit
       subsister dans `docs/modules/ROOT/pages/`, `.trunk/` ou à la racine
-- [ ] 3.3 Vérifier que la documentation publiée sur
+      — six fichiers, tous prévus, plus un non listé : `repomix-output.xml`, les deux
+      artefacts de ce changement, `retirer-scan-trivy/proposal.md`,
+      `reparer-fusion-automatique/tasks.md`, et
+      `openspec/changes/archive/2026-08-01-mettre-a-jour-trivy-action/proposal.md` —
+      mention historique elle aussi. `build/` n'existe pas dans le plan de travail. Rien
+      dans `docs/modules/ROOT/pages/`, `.trunk/` ni à la racine.
+- [x] 3.3 Vérifier que la documentation publiée sur
       https://constructions-incongrues.github.io/musiqueapproximative ne comporte plus de
       page Renovate sous CI/CD, et qu'aucun lien de navigation ne mène à une 404
+      — aucune mention de Renovate sur le site publié, aucune entrée de navigation vers
+      une telle page. Les liens de la documentation pointent tous vers des pages
+      existantes. Relevé à l'occasion et traité ailleurs : le badge « Lint » de la page
+      d'accueil visait `lint.yml`, workflow inexistant — voir `retirer-scan-trivy` 2.4.
 - [x] 3.4 Vérifier que les pull requests #84 et #88 sont bien fermées, et que les cinq
       autres — #73, #75, #83, #85, #86 — sont toujours ouvertes
       — vérifié le 2 août 2026 : la liste des pull requests ouvertes ne comporte plus ni
       #84 ni #88, et les cinq autres y figurent toujours.
-- [ ] 3.5 Vérifier qu'aucune issue « Dependency Dashboard » n'apparaît dans le dépôt dans
+- [x] 3.5 Vérifier qu'aucune issue « Dependency Dashboard » n'apparaît dans le dépôt dans
       les jours qui suivent : ce serait le signe que l'app Renovate a été installée entre
       temps, et que ce changement a été pris à contre-pied
+      — le dépôt ne comporte aucune issue, ouverte ou fermée. L'app n'a pas été installée.

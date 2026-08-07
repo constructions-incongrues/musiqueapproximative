@@ -5,6 +5,10 @@ on:
     tags: [v*]
   pull_request:
     branches: [main]
+  # `Validation du code` et `Build et Push Docker` sont deux des trois contextes
+  # exigés par le ruleset `main`. La file de fusion les attend sur la branche
+  # `gh-readonly-queue/…` ; sans ce déclencheur elle patiente en vain.
+  merge_group:
 
 permissions:
   contents: read
@@ -93,7 +97,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
+          # Seul un tag publie. La condition portait sur « tout sauf une pull
+          # request », ce qui aurait fait publier une image depuis une branche
+          # de file de fusion.
+          push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

@@ -1,6 +1,11 @@
 name: Pull Request
 
-on: [pull_request, workflow_dispatch]
+# `merge_group` est requis : `Trunk Check` est un contexte exigé par le ruleset
+# `main`, et la file de fusion l'attend sur la branche `gh-readonly-queue/…`.
+# Sans ce déclencheur, rien n'y tourne, la file patiente soixante minutes puis
+# éjecte la pull request — ce qui a fait passer la fusion automatique pour
+# inopérante pendant des mois.
+on: [pull_request, workflow_dispatch, merge_group]
 
 concurrency:
   group: ${{ github.head_ref || github.run_id }}
