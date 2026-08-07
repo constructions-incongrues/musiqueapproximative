@@ -268,16 +268,16 @@
         },
         {
             "name": "lexpress/doctrine1",
-            "version": "v1.4.4",
+            "version": "v1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony1/doctrine1.git",
-                "reference": "02063859b7dc9b1a4213770be0ed97dbca504d48"
+                "reference": "bc713421ba46a373dac7bd2c97a966ce5ac17824"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony1/doctrine1/zipball/02063859b7dc9b1a4213770be0ed97dbca504d48",
-                "reference": "02063859b7dc9b1a4213770be0ed97dbca504d48",
+                "url": "https://api.github.com/repos/FriendsOfSymfony1/doctrine1/zipball/bc713421ba46a373dac7bd2c97a966ce5ac17824",
+                "reference": "bc713421ba46a373dac7bd2c97a966ce5ac17824",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +329,7 @@
                 "source": "https://github.com/FriendsOfSymfony1/doctrine1"
             },
             "abandoned": "friendsofsymfony1/doctrine1",
-            "time": "2025-12-03T15:00:30+00:00"
+            "time": "2026-05-26T14:06:22+00:00"
         },
         {
             "name": "lexpress/symfony1",
