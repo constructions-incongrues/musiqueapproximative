@@ -114,3 +114,22 @@ External service `https://gliche.constructions-incongrues.net/` is hit with `see
 - Cache dir (`src/cache/`) and logs (`src/log/`) are gitignored and may need to be wiped after config changes: `docker-compose exec php php symfony cache:clear`.
 - The legacy JW Player (Flash SWF) under `src/web/swf/mediaplayer-5.9/` is still referenced but broken in modern browsers; treat as legacy.
 - `docs/memory-bank/README.adoc` holds a fuller project knowledge dump (in French) — consult it for domain context (contributors, desastres inventory, external services, deployment history).
+
+## Skill routing
+
+When the user's request matches an available skill, invoke it via the Skill tool. When in doubt, invoke the skill.
+
+Key routing rules:
+- Product ideas/brainstorming → invoke /office-hours
+- Strategy/scope → invoke /plan-ceo-review
+- Architecture → invoke /plan-eng-review
+- Design system/plan review → invoke /design-consultation or /plan-design-review
+- Full review pipeline → invoke /autoplan
+- Bugs/errors → invoke /investigate
+- QA/testing site behavior → invoke /qa or /qa-only
+- Code review/diff check → invoke /review
+- Visual polish → invoke /design-review
+- Ship/deploy/PR → invoke /ship or /land-and-deploy
+- Save progress → invoke /context-save
+- Resume context → invoke /context-restore
+- Author a backlog-ready spec/issue → invoke /spec
