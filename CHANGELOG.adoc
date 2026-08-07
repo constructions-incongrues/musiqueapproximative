@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.2](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.10.1...v1.10.2) (2026-08-07)
+
+
+### Corrections de bugs
+
+* **desastres:** fait entrer les options dans la représentation mise en cache ([#124](https://github.com/constructions-incongrues/musiqueapproximative/issues/124)) ([aa232b1](https://github.com/constructions-incongrues/musiqueapproximative/commit/aa232b1c7aab4340bf8c9b123ee6ba7623e5fc64))
+
+
+### Documentation
+
+* **openspec:** archive six changements clos et verse leurs specs ([#121](https://github.com/constructions-incongrues/musiqueapproximative/issues/121)) ([879dbe1](https://github.com/constructions-incongrues/musiqueapproximative/commit/879dbe14b0eb2e557da163b1585298eaae0c9814))
+
 ## [1.10.1](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.10.0...v1.10.1) (2026-08-07)
 
 
