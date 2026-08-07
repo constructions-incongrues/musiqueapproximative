@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.10.1](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.10.0...v1.10.1) (2026-08-07)
+
+
+### Corrections de bugs
+
+* **ci:** réserve l'annotation Trunk aux pull requests de fork ([#120](https://github.com/constructions-incongrues/musiqueapproximative/issues/120)) ([934f7c4](https://github.com/constructions-incongrues/musiqueapproximative/commit/934f7c46cc59a6906cea8c00deb811bd5b14533b))
+* **formats:** retire DOMDocument du gabarit XSPF et rend l'échec observable ([#118](https://github.com/constructions-incongrues/musiqueapproximative/issues/118)) ([aaff860](https://github.com/constructions-incongrues/musiqueapproximative/commit/aaff8606dfbabfabee4252010741d735b963668f))
+* **release:** fait que release-please écrive enfin src/VERSION ([#116](https://github.com/constructions-incongrues/musiqueapproximative/issues/116)) ([768aa3c](https://github.com/constructions-incongrues/musiqueapproximative/commit/768aa3c04446f4caf710cfe332d2fe3c5afd5d46))
+
 ## [1.10.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.9.0...v1.10.0) (2026-08-02)
 
 
