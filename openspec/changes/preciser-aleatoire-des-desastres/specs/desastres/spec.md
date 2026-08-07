@@ -1,5 +1,44 @@
 ## MODIFIED Requirements
 
+### Requirement: Déclenchement conditionnel
+
+Le système SHALL évaluer, à chaque production d'une page de morceau ou de liste, un jeu de
+règles déclarées en configuration, et SHALL appliquer les recettes des règles retenues. Une
+page servie depuis le cache SHALL porter les recettes retenues lors de sa production, sans
+nouvelle évaluation.
+
+#### Scénario : Évaluation sur une page de morceau
+
+- **QUAND** une page de morceau est produite
+- **ALORS** les règles sont évaluées avec, en contexte, l'artiste, le titre du morceau et
+  le contributeur
+
+#### Scénario : Évaluation sur une page de liste
+
+- **QUAND** une page de liste est produite
+- **ALORS** les règles sont évaluées avec, en contexte, les termes de recherche et le
+  contributeur demandés
+
+#### Scénario : Consultation servie depuis le cache
+
+- **QUAND** une page est servie depuis le cache
+- **ALORS** aucune règle n'est évaluée
+- **ET** la page porte les recettes retenues lors de sa production
+
+#### Scénario : Paramètres de la requête pris en compte
+
+- **QUAND** les règles sont évaluées pour une production de page
+- **ALORS** les paramètres de la requête sont joints au contexte d'évaluation, ce qui
+  permet de déclencher un désastre par l'URL
+- **ET** le déclenchement vaut pour toutes les consultations de cette URL, ses paramètres
+  faisant partie de ce qui distingue une entrée de cache d'une autre
+
+#### Scénario : Aucune règle satisfaite
+
+- **QUAND** aucune règle ne correspond
+- **ALORS** la page est servie sans altération
+- **ET** elle le reste pour toutes les consultations servies depuis cette entrée de cache
+
 ### Requirement: Part d'aléatoire
 
 Une règle SHALL pouvoir ne se déclencher qu'une fois sur plusieurs. Le tirage SHALL être

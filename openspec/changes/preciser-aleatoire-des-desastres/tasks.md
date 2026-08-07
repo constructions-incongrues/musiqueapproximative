@@ -10,7 +10,25 @@
 - [x] 2.1 Vérifier qu'aucune autre exigence ne suppose un aléa par visiteur ou par consultation
       — aucune. Les cinq autres capacités décrivent des réponses déterministes ; seule
       `desastres` introduit du hasard.
-- [ ] 2.2 Relire les quatre scénarios de « Déclenchement conditionnel » à la lumière du cache — ils portent sur l'évaluation d'une règle, non sur sa fréquence, et devraient rester valides. À confirmer plutôt qu'à supposer
+- [x] 2.2 Relire les quatre scénarios de « Déclenchement conditionnel » à la lumière du cache — ils portent sur l'évaluation d'une règle, non sur sa fréquence, et devraient rester valides. À confirmer plutôt qu'à supposer
+      — **la supposition était fausse, et c'est bien pour cela que la tâche demandait de
+      confirmer.** Mesuré le 7 août 2026 par une sonde temporaire dans `getDisaster` :
+      **trois demandes d'une même adresse ne produisent qu'une seule évaluation.** Les règles
+      ne sont pas évaluées à chaque affichage, mais à chaque production de page.
+      — L'exigence elle-même portait le mot fautif : « à chaque **affichage** ». Corrigée en
+      « à chaque **production** », avec une phrase disant ce qu'une page servie depuis le
+      cache porte.
+      — Scénarios 1 et 2, « QUAND un visiteur consulte… ALORS les règles sont évaluées » :
+      faux sur une consultation servie depuis le cache. Reformulés sur la production de page,
+      et un scénario « Consultation servie depuis le cache » est ajouté pour dire ce qui se
+      passe alors — rien.
+      — Scénario 3, le déclenchement par l'URL : **le résultat tient**, mesuré — `?bleu`
+      donne le désastre aux trois demandes. Mais pas pour la raison écrite : les paramètres
+      ne rejoignent le contexte d'évaluation qu'au remplissage du cache. S'ils continuent de
+      fonctionner, c'est qu'ils distinguent une entrée de cache d'une autre. Le scénario le
+      dit désormais.
+      — Scénario 4, aucune règle satisfaite : **tient**, mesuré. Une URL sans désastre reste
+      sans désastre aux trois demandes. Complété de la même précision.
 
 ## 3. Vérification manuelle
 
