@@ -15,8 +15,8 @@ updates:
       # qu'elle signalait : PHP 7.4 est en fin de vie depuis novembre 2022 et ne
       # reçoit plus de correctif de sécurité, alors que l'image est publiée sur
       # ghcr.io. Le rappel automatique disparaît ici ; le socle reste à reprendre.
-      - dependency-name: "php"
-        update-types: ["version:semver-major"]
+      - dependency-name: php
+        update-types: [version:semver-major]
 
   - package-ecosystem: composer
     directory: /src
