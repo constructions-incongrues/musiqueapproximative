@@ -82,6 +82,8 @@ leur rendu SHALL pouvoir différer d'un visiteur à l'autre sur une même repré
 - **ET** il faut soit forcer la règle par son déclencheur, soit faire varier l'adresse pour
   provoquer autant de productions de page que de tirages souhaités
 
+## ADDED Requirements
+
 ### Requirement: Granularité du tirage
 
 Le hasard des désastres SHALL porter sur l'adresse demandée et sur le moment, et non sur le
