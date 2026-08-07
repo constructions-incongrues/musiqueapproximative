@@ -49,16 +49,21 @@
 
 ## 4. Vérification manuelle
 
-> **Une première correction a été déployée et n'a pas fonctionné.** Le détail est en 4.0 :
-> un partiel symfony 1 n'hérite d'aucune variable de son appelant, et le mien attendait
-> `$sf_request`. Corrigé, mais **non redéployé** à l'heure où ces lignes sont écrites.
+> **Deux corrections successives ont été déployées, et aucune n'a fonctionné.** La
+> première attendait `$sf_request` dans un partiel qui n'hérite de rien — détail en 4.0.
+> La seconde dépendait de `DOMDocument`, dont rien n'établissait la présence — détail en
+> 4.0bis.
 >
-> Toutes les cases ci-dessous restent donc ouvertes, et le resteront jusqu'à la prochaine
-> mise en ligne. **Elle est automatique** : Plesk tire `main` à chaque poussée, il n'y a pas
-> de geste de déploiement — le `make deploy` par rsync du Makefile est déprécié. Fusionner
-> cette pull request, c'est donc mettre en production. Ce qui a été fait à la place — un banc d'essai reproduisant cette fois
-> l'isolement du partiel, sept assertions vertes, et l'échec attendu sans la variable — ne
-> les remplace pas. Le premier banc était vert lui aussi.
+> La troisième supprime toute dépendance et rend l'échec observable. **Elle n'est pas
+> encore déployée**, donc toutes les cases ci-dessous restent ouvertes.
+>
+> La mise en ligne est automatique : Plesk tire `main` à chaque poussée, le `make deploy`
+> par rsync du Makefile est déprécié. Fusionner cette pull request, c'est mettre en
+> production.
+>
+> Ce qui a été fait à la place — dix-sept contrôles hors Symfony, tous verts, dont quatre
+> sur le mode dégradé — ne remplace aucune de ces vérifications. **Les deux bancs
+> précédents étaient verts eux aussi.**
 
 - [x] 4.0 **Constater que la première correction ne fonctionnait pas, et trouver pourquoi**
       — relevé après déploiement : `?format=xspf` répondait toujours `500` avec un corps
@@ -89,3 +94,39 @@
 - [ ] 4.7 Vérifier que `/posts?format=json`, `/posts?format=max` et `/posts/feed` répondent exactement comme avant — mêmes types de contenu, mêmes tailles à peu de chose près
 - [ ] 4.8 Sur une page de liste servie en HTML, vérifier que les trois `<link rel="alternate">` sont présents et que seuls `json` et `xspf` figurent dans les liens visibles du pied de page
 - [ ] 4.9 Sur une page de morceau servie en HTML, vérifier que `json` est le seul format annoncé, tout en restant accessible par `?format=xspf` et `?format=max`
+- [x] 4.0bis **Constater que la deuxième correction ne fonctionnait pas non plus, et en
+      tirer la leçon**
+      — relevé le 7 août, cinq jours après la fusion : `?format=xspf` répond toujours `500`
+      avec un corps vide, sur les deux routes, tandis que `json` et `max` répondent `200`.
+      Le délai de déploiement n'est plus une explication possible, et le marqueur de version
+      le confirme — la production sert `?v=1.10.0`.
+      — **Cause probable : `DOMDocument`.** En PHP 7, une classe introuvable lève une
+      `Error` non capturée, donc une erreur fatale au corps vide. Or **aucun autre fichier
+      du dépôt n'utilise `DOMDocument`**, et `src/composer.json` ne déclare aucune
+      extension. Rien n'établissait sa présence.
+      — **J'avais écarté ce candidat par un raisonnement faux.** `/oembed?format=xml`
+      fonctionne et construit sa réponse avec `SimpleXMLElement` : j'en avais conclu que
+      « l'extension XML est présente ». Mais `ext-simplexml` et `ext-dom` sont deux
+      extensions distinctes. J'ai pris une mesure pour une preuve, et c'est la même faute
+      qu'aux quatre conclusions précédentes de cette séance — sauf qu'ici je l'ai commise
+      en croyant l'éviter, puisque j'avais écrit « écarté par mesure et non par
+      supposition ».
+      — **C'est aussi la faute reprochée à PEAR, reproduite d'un cran plus bas.** Le
+      changement retirait `File_XSPF` parce que c'était « une dépendance système absente du
+      `composer.json`, invisible de qui lit les dépendances déclarées, et dont l'échec est
+      muet ». `DOMDocument` cochait les trois cases.
+      — **Correction retenue : aucune dépendance.** Le document est écrit directement, et
+      `htmlspecialchars($v, ENT_QUOTES | ENT_XML1, 'UTF-8')` assure l'échappement.
+      `ENT_XML1` évite d'introduire des entités HTML que le XSPF ne connaît pas.
+      — **Et l'échec devient observable**, ce que l'exigence de ce changement réclamait
+      déjà : « un format déclaré SHALL aboutir, il ne peut ni échouer, ni servir un corps
+      vide ». Une défaillance en cours de route produit désormais une playlist bien formée,
+      amputée des morceaux fautifs, portant la cause en commentaire XML et dans les
+      journaux. Un troisième échec muet est devenu impossible.
+      — Dix-sept contrôles hors Symfony, tous verts, dont quatre sur le mode dégradé :
+      document bien formé malgré une défaillance, morceau valide conservé, cause portée en
+      commentaire, sortie non vide.
+      — **Ce que je ne sais toujours pas** : que `DOMDocument` était bien la cause. Je l'ai
+      supprimée sans pouvoir l'observer. Si le 500 persiste après déploiement, le
+      commentaire XML donnera cette fois la réponse — et c'est le seul progrès dont je sois
+      certain.
