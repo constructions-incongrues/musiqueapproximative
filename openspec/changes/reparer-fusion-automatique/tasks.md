@@ -198,12 +198,31 @@
       La `merge_queue` n'explique pas à elle seule les quatre observations passées, et
       l'hypothèse la plus économique reste que la correction du ruleset du 2 août — celle
       qui a débloqué la PR #105 — avait déjà réglé l'affaire.
-      — Ce qui est acquis tient à la lecture, non à la déduction : les deux pistes nommées
-      sont écartées, aucun ruleset d'organisation n'existe, et une pull request verte
-      fusionne. Ce qui reste est une cause historique non identifiée, sur un symptôme
-      disparu. La leçon de l'enquête aura servi une dernière fois, et contre le rédacteur
-      de ces lignes : une énumération close n'est jamais une preuve, et « il ne restait
-      que ça » s'est trompé une cinquième fois.
+      — **La cause est établie, et la `merge_queue` y était bien pour quelque chose — mais
+      pas de la façon écrite plus haut.** La fusion automatique de la PR #119 a été armée
+      pendant que ses checks tournaient, ce qu'aucune tentative précédente n'avait fait.
+      Le journal de la pull request donne la suite : `auto_merge_enabled` à 18:40:31, puis
+      **`added_to_merge_queue` à 18:41:08**. L'automatisme se déclenche donc, et il a
+      toujours dû se déclencher. La pull request entre dans la file, la branche
+      `gh-readonly-queue/main/pr-119-…` est créée — et **rien ne s'y exécute**.
+      — Ni `pr.yml` ni `ci.yml` n'écoutent l'événement `merge_group`. La file attend sur la
+      branche d'attente les trois contextes exigés par le ruleset — `Trunk Check`,
+      `Build et Push Docker`, `Validation du code` — que rien ne produit. Elle patiente les
+      `check_response_timeout_minutes: 60` du ruleset, puis éjecte la pull request. Vu du
+      dehors : une CI verte, un état `CLEAN`, une fusion automatique armée, et rien qui se
+      passe. C'est mot pour mot le symptôme poursuivi depuis le début.
+      — Corrigé dans la foulée : `merge_group` ajouté aux deux workflows. Au passage, la
+      condition de publication de l'image Docker portait sur « tout sauf une pull
+      request », ce qui aurait fait publier depuis une branche de file d'attente ; elle est
+      restreinte aux tags.
+      — **Trois versions de cette note en une heure**, et la leçon de l'enquête vaut une
+      fois de plus contre son rédacteur. La première désignait la `merge_queue` par
+      déduction — « la seule règle que personne n'avait listée » — sans mécanisme ni
+      mesure. La deuxième la rétractait en voyant la PR #119 passer `CLEAN`, confondant
+      « la file n'empêche pas d'atteindre `CLEAN` » avec « la file n'est pas en cause ».
+      La troisième tient parce qu'on a enfin regardé le journal de la pull request au lieu
+      de raisonner sur son état. La conclusion juste n'a jamais manqué de candidats : elle
+      manquait d'une observation.
 - [x] 3.7 Vérifier que le badge « Security Scan » du README repasse au vert, son résultat étant figé au 11 avril 2026
       — le run #202 de « Security Checks », déclenché à la main sur `main`, a abouti.
       Le badge affiche la conclusion du dernier run sur la branche par défaut.

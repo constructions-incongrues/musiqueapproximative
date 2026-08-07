@@ -113,7 +113,7 @@
       — jamais fait, et désormais sans urgence : l'app est désinstallée, plus rien
       n'applique le fichier. Un écart éventuel resterait figé plutôt que réappliqué.
       L'audit garde un intérêt documentaire, il n'en a plus de préventif.
-- [ ] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
+- [x] 3.4 Ouvrir une pull request de contrôle et vérifier que la fusion automatique se déclenche seule une fois la CI verte — c'est le test qui clôt `reparer-fusion-automatique`
       — première tentative sur la PR #98 : **non concluante**. Les dix checks étaient
       verts, les quatre contextes requis compris, et la pull request est restée
       `blocked` plusieurs minutes avant d'être fusionnée sans qu'on puisse dire si
@@ -122,12 +122,13 @@
       aurait dû rapporter `clean` » : la protection existait bel et bien, sous forme de
       ruleset. `blocked` était la réponse correcte. Il n'y a pas de règle d'organisation à
       écarter.
-      — **la PR #119 lève le symptôme sans clore le test**, le 7 août. Ses neuf checks au
-      vert, elle passe à `mergeStateStatus: CLEAN` : une pull request verte n'est plus
-      bloquée. Mais la fusion automatique n'a pas été armée avant que la CI ne verdisse,
-      et l'armer ensuite ne prouve rien — le déclenchement *seul, une fois la CI verte*
-      reste donc à constater sur une pull request où l'automatisme précède les checks.
-      Cette tâche reste ouverte pour cela, et pour cela seulement.
+      — **la PR #119 clôt le test, le 7 août, et par la négative.** La fusion automatique a
+      été armée pendant que ses checks tournaient — la configuration que ce test réclame et
+      qu'aucune tentative précédente n'avait produite. Elle s'est déclenchée seule :
+      `auto_merge_enabled` à 18:40:31, `added_to_merge_queue` à 18:41:08. L'automatisme
+      n'a donc jamais été en cause. Ce qui manquait était en aval : les workflows
+      n'écoutaient pas `merge_group`, et la file attendait des contextes que rien ne
+      produisait sur sa branche d'attente. Voir `reparer-fusion-automatique` 3.6quater.
 - [x] 3.4bis Relever ce que le ruleset `main` exige — contextes de vérification requis,
       revues, historique linéaire. C'est la dernière inconnue : une exigence qui ne peut
       jamais être satisfaite expliquerait à elle seule que la fusion automatique n'ait
