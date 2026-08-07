@@ -1,6 +1,19 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   window.DesastreAudio.onReady(function (audio) {
     console.log("[desastres/mangelettres] Loaded");
+
+    // Vérifier que les options sont présentes
+    if (!window.DesastreOptions || !window.DesastreOptions.mangelettres) {
+      console.error(
+        "[desastres/mangelettres] ERROR: Options not found in window.DesastreOptions.mangelettres",
+      );
+      console.log(
+        "[desastres/mangelettres] Available options:",
+        window.DesastreOptions,
+      );
+      return;
+    }
+
     gsap.registerPlugin(SplitText);
     let split = SplitText.create(
       window.DesastreOptions.mangelettres.selector || "section.content",

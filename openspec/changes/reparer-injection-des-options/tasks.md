@@ -46,5 +46,38 @@
 
 ## 4. Portée laissée ouverte
 
-- [ ] 4.1 Décider si les scripts de désastre doivent malgré tout se garder contre l'absence d'options. Ce changement dit que la garde ne remplace pas le correctif ; il ne dit pas qu'elle est inutile. Un désastre qui échoue devrait le signaler plutôt que mourir sur une `TypeError` silencieuse
-- [ ] 4.2 Relire les autres recettes de `src/web/desastres/` : `mangelettres` a servi de cas de mesure, rien ne dit que les treize autres déréférencent leurs options de la même façon, ni qu'elles échouent aussi discrètement
+- [x] 4.1 Décider si les scripts de désastre doivent malgré tout se garder contre l'absence d'options. Ce changement dit que la garde ne remplace pas le correctif ; il ne dit pas qu'elle est inutile. Un désastre qui échoue devrait le signaler plutôt que mourir sur une `TypeError` silencieuse
+      — **il n'y avait pas d'arbitrage à rendre : le dépôt avait déjà tranché.** Quatre
+      recettes sur sept portent une garde, et trois d'entre elles écrivent un
+      `console.error` nommant la recette absente. La convention existe ; `mangelettres`,
+      `redirect` et `splitouine` ne la suivaient pas. Elles y sont alignées, à l'identique.
+- [x] 4.1bis **Ne pas confondre ce qui est lu avec ce qui est vu.** Ce changement a affirmé,
+      dans sa proposition comme dans son message de commit, que le script « lève une
+      `TypeError` ». **Cela n'a jamais été observé.** C'est une lecture de code : la ligne
+      déréférence sans garde, donc elle doit lever. Les deux tentatives de constat ont
+      échoué pour des raisons opposées — en local le corps de la recette ne s'exécute pas,
+      faute de fichiers audio dans les fixtures (`readyState` reste à `0`, donc
+      `DesastreAudio.onReady` ne se déclenche jamais) ; en production il s'exécute, mais le
+      défaut y est corrigé depuis. Ce qui est mesuré reste solide — l'absence du bloc
+      d'options, sa réapparition après correctif. Ce qui ne l'est pas, c'est la forme exacte
+      de l'échec côté client.
+- [x] 4.2 Relire les autres recettes de `src/web/desastres/` : `mangelettres` a servi de cas de mesure, rien ne dit que les treize autres déréférencent leurs options de la même façon, ni qu'elles échouent aussi discrètement
+      — sept recettes lisent `window.DesastreOptions`. Relevé le 7 août 2026, vérifié à la
+      main après qu'une détection automatique eut produit un faux positif sur `splitouine` :
+
+      | Recette | Garde avant | Sans options |
+      |---|---|---|
+      | `amour` | oui | ne fait rien |
+      | `mamie` | oui | `console.error` |
+      | `postillons` | oui | `console.error` |
+      | `tts` | oui | `console.error` |
+      | `mangelettres` | **non** | échec silencieux |
+      | `redirect` | **non** | la redirection n'a pas lieu |
+      | `splitouine` | **non** | échec silencieux |
+
+      `mangelettres` n'était donc pas un cas isolé : trois recettes sur sept partageaient le
+      défaut. Les trois sont alignées sur la convention des quatre autres.
+      — Le faux positif mérite d'être noté : `splitouine` teste bien `!window.DesastreOptions
+      .splitouine.tween.configuration.duration`, mais c'est un test de propriété interne, pas
+      un test de présence. Une recherche de motif l'a compté comme une garde. Les sept ont été
+      relues une à une.

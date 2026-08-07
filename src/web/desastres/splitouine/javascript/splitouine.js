@@ -28,6 +28,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
   window.DesastreAudio.onReady(function (audio) {
     console.log("[desastres/splitouine] Loaded");
 
+    // Vérifier que les options sont présentes
+    if (!window.DesastreOptions || !window.DesastreOptions.splitouine) {
+      console.error(
+        "[desastres/splitouine] ERROR: Options not found in window.DesastreOptions.splitouine",
+      );
+      console.log(
+        "[desastres/splitouine] Available options:",
+        window.DesastreOptions,
+      );
+      return;
+    }
+
     // Enregistrer le plugin SplitText de GSAP
     gsap.registerPlugin(SplitText);
 
