@@ -1,4 +1,4 @@
 <?php for ($i = 0; $i < count($posts); $i++): ?>
 <?php $post = $posts[$i] ?>
-<?php echo $i ?>, "<?php echo str_replace('"', '', html_entity_decode($post->track_author)) ?>" "<?php echo str_replace('"', '', html_entity_decode($post->track_title)) ?>" "<?php echo $post->getTrackUrl() ?>" "<?php echo url_for('@post_show?slug='.$post->slug, true) ?>" "<?php echo html_entity_decode($post->getSfGuardUser()->username) ?>" "<?php echo count($posts)?>" "<?php echo str_replace(array('"', "\n", '&#039;'), array('', ' ', "'"), html_entity_decode($post->body))?>";
+<?php echo $i ?>, "<?php echo str_replace('"', '', html_entity_decode($post->track_author)) ?>" "<?php echo str_replace('"', '', html_entity_decode($post->track_title)) ?>" "<?php echo $post->getTrackUrl($sf_request->isSecure() ? 'https' : 'http') ?>" "<?php echo url_for('@post_show?slug='.$post->slug, true) ?>" "<?php echo html_entity_decode($post->getSfGuardUser()->username) ?>" "<?php echo count($posts)?>" "<?php echo str_replace(array('"', "\n", '&#039;'), array('', ' ', "'"), html_entity_decode($post->body))?>";
 <?php endfor; ?>

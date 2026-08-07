@@ -29,33 +29,32 @@ class Post extends BasePost
    * @param string|null $scheme   'http' ou 'https' pour forcer une URL absolue.
    *                              Null conserve app_urls_tracks tel quel.
    *
-   *                              Si app_urls_tracks n'a pas de schema du tout
-   *                              (base relative au protocole, ex: "//cdn...",
-   *                              ou base totalement relative, ex: "/tracks"
-   *                              ou ""), $scheme est utilise pour produire une
-   *                              URL absolue.
+   *                              Seule une base relative au protocole
+   *                              (ex: "//cdn...") peut etre qualifiee : elle
+   *                              porte deja l'autorite (l'hote), donc prefixer
+   *                              le schema suffit a la rendre absolue.
    *
    *                              Si app_urls_tracks a deja son propre schema
    *                              (ex: "http://cdn..."), $scheme est ignore :
    *                              reecrire le schema d'une URL deja absolue et
    *                              explicitement configuree serait surprenant.
+   *
+   *                              Une base sans autorite du tout (chemin
+   *                              relatif, ex: "/tracks", ou vide) n'a pas
+   *                              d'hote a qualifier : $scheme ne peut pas en
+   *                              faire une URL absolue (il manquerait
+   *                              l'autorite), donc la base est renvoyee
+   *                              inchangee. Ce n'est pas un manque : tous les
+   *                              profils livres configurent
+   *                              tracks: //${APP_DOMAIN}/tracks.
    * @return string
    */
   public static function buildTrackUrl($filename, $scheme = null)
   {
     $base = rtrim(sfConfig::get('app_urls_tracks'), '/');
 
-    if (null !== $scheme) {
-      if (0 === strpos($base, '//')) {
-        // Base relative au protocole : on prefixe le schema demande.
-        $base = $scheme.':'.$base;
-      } elseif (!preg_match('#^[a-z][a-z0-9+.-]*://#i', $base)) {
-        // Base sans aucun schema (chemin relatif, eventuellement vide) :
-        // on la rend absolue sous le schema demande.
-        $base = $scheme.'://'.$base;
-      }
-      // Sinon, la base est deja absolue avec son propre schema : no-op
-      // volontaire, voir docblock ci-dessus.
+    if (null !== $scheme && 0 === strpos($base, '//')) {
+      $base = $scheme.':'.$base;
     }
 
     return sprintf('%s/%s', $base, rawurlencode($filename));

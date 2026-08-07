@@ -63,10 +63,22 @@ class postActions extends sfActions
     // Glitch logo ?
     $this->is_glitch_active = (rand(1, sfConfig::get('app_glitch_divisor', 10)) == 1);
 
+    // http/https variants of the request's own URI prefix, so that the
+    // image= sub-resource embedded below in og:video / og:video:secure_url
+    // can be kept scheme-consistent with each meta, same reasoning as
+    // $urlTrackHttp/$urlTrackHttps above.
+    $uriPrefixHttp = preg_replace('#^https?#', 'http', $request->getUriPrefix(), 1);
+    $uriPrefixHttps = preg_replace('#^https?#', 'https', $request->getUriPrefix(), 1);
+
     if (sfConfig::get('app_theme') == 'musiqueapproximative' && $this->is_glitch_active) {
       $urlImg = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(0, 100), $request->getUriPrefix());
+      // The glitch service is https-only regardless of scheme requested.
+      $urlImgHttp = $urlImg;
+      $urlImgHttps = $urlImg;
     } else {
       $urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
+      $urlImgHttp = sprintf('%s/theme/%s/images/logo_500.png', $uriPrefixHttp, sfConfig::get('app_theme'));
+      $urlImgHttps = sprintf('%s/theme/%s/images/logo_500.png', $uriPrefixHttps, sfConfig::get('app_theme'));
     }
     $this->getResponse()->addMeta('og:image', $urlImg);
     $this->getResponse()->addMeta('og:image:type', 'image/png');
@@ -79,7 +91,7 @@ class postActions extends sfActions
         'http://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
         sfConfig::get('app_domain'),
         $urlTrackHttp,
-        $urlImg
+        $urlImgHttp
       )
     );
     $this->getResponse()->addMeta(
@@ -88,7 +100,7 @@ class postActions extends sfActions
         'https://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
         sfConfig::get('app_domain'),
         $urlTrackHttps,
-        $urlImg
+        $urlImgHttps
       )
     );
     $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');

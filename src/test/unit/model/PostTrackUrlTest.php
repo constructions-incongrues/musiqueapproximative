@@ -68,13 +68,13 @@ $t->is(
 sfConfig::set('app_urls_tracks', '/tracks');
 $t->is(
   Post::buildTrackUrl('simple.mp3', 'https'),
-  'https:///tracks/simple.mp3',
-  '->buildTrackUrl() rend absolue une base sans aucun schema'
+  '/tracks/simple.mp3',
+  '->buildTrackUrl() laisse une base sans autorite inchangee : sans hote, un schema ne peut pas la rendre absolue'
 );
 
 sfConfig::set('app_urls_tracks', '');
 $t->is(
   Post::buildTrackUrl('simple.mp3', 'https'),
-  'https:///simple.mp3',
-  '->buildTrackUrl() rend absolue une base vide'
+  '/simple.mp3',
+  '->buildTrackUrl() laisse une base vide inchangee, pour la meme raison'
 );
