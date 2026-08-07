@@ -1,11 +1,14 @@
 <?php
 $posts = $sf_data->getRaw('posts');
 
-if ($sf_request->getParameter('contributor')) {
+// Le contributeur passe par `c`, comme partout ailleurs — routing, action et les
+// autres formats. Ce gabarit lisait `contributor`, un paramètre qui n'existe pas :
+// une playlist filtrée s'annonçait donc « Tous les morceaux ».
+if ($sf_request->getParameter('c')) {
   if (count($posts)) {
     $name = $posts[0]->getContributorDisplayName();
   } else {
-    $name = $sf_request->getParameter('contributor');
+    $name = $sf_request->getParameter('c');
   }
   $title = 'Musique Approximative : Morceaux postés par ' . $name;
 } else if ($sf_request->getParameter('q')) {
