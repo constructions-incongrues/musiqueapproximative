@@ -20,6 +20,38 @@ class Post extends BasePost
   }
 
   /**
+   * Construit l'URL canonique d'un fichier audio.
+   *
+   * Seul le nom de fichier est encode, et avec rawurlencode : dans un segment
+   * de chemin, urlencode() produirait un « + » la ou il faut « %20 ».
+   *
+   * @param string      $filename Nom du fichier dans web/tracks/
+   * @param string|null $scheme   'http' ou 'https' pour forcer une URL absolue.
+   *                              Null conserve app_urls_tracks tel quel
+   *                              (relatif au protocole par defaut).
+   * @return string
+   */
+  public static function buildTrackUrl($filename, $scheme = null)
+  {
+    $base = rtrim(sfConfig::get('app_urls_tracks'), '/');
+
+    if (null !== $scheme && 0 === strpos($base, '//')) {
+      $base = $scheme.':'.$base;
+    }
+
+    return sprintf('%s/%s', $base, rawurlencode($filename));
+  }
+
+  /**
+   * @param string|null $scheme voir self::buildTrackUrl()
+   * @return string
+   */
+  public function getTrackUrl($scheme = null)
+  {
+    return self::buildTrackUrl($this->track_filename, $scheme);
+  }
+
+  /**
    * @see http://jsonapi.org/format/#url-based-json-api
    */
   public function toJson(sfWebRequest $request, sfContext $context, $postPrevious = null, $postNext = null)
@@ -50,12 +82,7 @@ class Post extends BasePost
 
     // Track
     $post['track'] = array(
-      'href' =>  sprintf(
-        '%s%s/tracks/%s',
-        $request->getUriPrefix(),
-        $request->getRelativeUrlRoot(),
-        urlencode($post['track_filename'])
-      ),
+      'href'   => $this->getTrackUrl($request->isSecure() ? 'https' : 'http'),
       'title'  => $post['track_title'],
       'author' => $post['track_author'],
       'md5'    => $post['track_md5']

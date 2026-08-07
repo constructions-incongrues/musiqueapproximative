@@ -51,7 +51,7 @@ class postActions extends sfActions
     $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
-    $urlTrack = rawurlencode(sprintf('%s/%s', sfConfig::get('app_urls_tracks'), $post->track_filename));
+    $urlTrack = $post->getTrackUrl($request->isSecure() ? 'https' : 'http');
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
@@ -214,7 +214,7 @@ class postActions extends sfActions
       $publish_timestamp = mktime($strf['tm_hour'], $strf['tm_min'], $strf['tm_sec'], $strf['tm_mon'] + 1, $strf['tm_mday'], $strf['tm_year'] + 1900);
 
       // Canonical URL to post's associated file
-      $track_file_url = htmlspecialchars(sprintf('%s/tracks/%s', sfConfig::get('app_url_root'), rawurlencode($post->track_filename)));
+      $track_file_url = htmlspecialchars($post->getTrackUrl($request->isSecure() ? 'https' : 'http'));
 
       // Make sure no errors are generated when files do not exist (useful in dev mode)
       if (!is_readable(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename))

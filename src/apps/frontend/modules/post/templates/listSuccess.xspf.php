@@ -32,7 +32,7 @@ foreach ($posts as $post) {
 	$track->setAnnotation($post->body);
 	$track->setInfo(url_for('@post_show?slug='.$post->slug, true));
 	$location = new File_XSPF_Location();
-	$location->setUrl(sprintf('%s%s/tracks/%s', $sf_request->getUriPrefix(), $sf_request->getRelativeUrlRoot(), rawurlencode($post->track_filename)));
+	$location->setUrl($post->getTrackUrl($sf_request->isSecure() ? 'https' : 'http'));
 	$track->addLocation($location);
 	$playlist->addTrack($track);
 }
