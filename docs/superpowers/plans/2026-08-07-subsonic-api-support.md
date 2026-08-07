@@ -18,6 +18,12 @@
 - Code style in this repo: 2-space indent, `array()` long syntax in `lib/model/`, `[]` short syntax in `lib/helper/`. Match the file you are editing.
 - Commit after every task. Conventional Commits, message body in French.
 
+**Test invocation.** `test:unit` and `test:functional` take the path **without** the `Test` suffix: the file `test/unit/helper/ApiResponseTest.php` runs as `test:unit helper/ApiResponse`. Passing `helper/ApiResponseTest` prints `no tests found` and exits 0 — a silent false pass. (The example in `CLAUDE.md` has this wrong.)
+
+**Local URLs.** The plan writes `http://localhost:8080`. That is the Nginx port from `docker-compose.yml`; if another stack of this project already holds it, yours will be elsewhere. Confirm with `docker-compose ps` and substitute. The JSON list is `/posts?format=json` — `/posts.json` is a 404, format is a query parameter, not a suffix.
+
+**Known red test before you start.** `test:unit filter/JsonApiFilter` fails 2 assertions and errors on a third. It is pre-existing — introduced in `chore: init gsd`, unrelated to this branch. Do not attribute it to your work and do not fix it unless your task says to.
+
 ## File structure
 
 | File | Responsibility |
@@ -107,7 +113,7 @@ Note the `é` escape above is literal source text to avoid encoding surprises in
 - [ ] **Step 2: Run the test to verify it fails**
 
 ```bash
-docker-compose exec php php symfony test:unit model/PostTrackUrlTest
+docker-compose exec php php symfony test:unit model/PostTrackUrl
 ```
 
 Expected: FAIL — `Call to undefined method Post::buildTrackUrl()`.
@@ -153,7 +159,7 @@ In `src/lib/model/doctrine/Post.class.php`, add immediately after `getContributo
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:unit model/PostTrackUrlTest
+docker-compose exec php php symfony test:unit model/PostTrackUrl
 ```
 
 Expected: PASS, 7/7.
@@ -326,7 +332,7 @@ $t->ok(substr($raw, -2) === ');', 'JSONP : parenthese fermante');
 - [ ] **Step 2: Run the test to verify it fails**
 
 ```bash
-docker-compose exec php php symfony test:unit helper/SubsonicResponseTest
+docker-compose exec php php symfony test:unit helper/SubsonicResponse
 ```
 
 Expected: FAIL — file not found / class not found.
@@ -516,7 +522,7 @@ class SubsonicResponse
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:unit helper/SubsonicResponseTest
+docker-compose exec php php symfony test:unit helper/SubsonicResponse
 ```
 
 Expected: PASS, 16/16.
@@ -599,7 +605,7 @@ Type the real accented names (`Sigur Rós`, `Björk`, `Café Tacvba`) when creat
 - [ ] **Step 2: Run the test to verify it fails**
 
 ```bash
-docker-compose exec php php symfony test:unit helper/SubsonicIdTest
+docker-compose exec php php symfony test:unit helper/SubsonicId
 ```
 
 Expected: FAIL — class not found.
@@ -737,7 +743,7 @@ class SubsonicId
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:unit helper/SubsonicIdTest
+docker-compose exec php php symfony test:unit helper/SubsonicId
 ```
 
 Expected: PASS, 15/15.
@@ -820,7 +826,7 @@ Expected: `online_publish_idx` and `track_author_idx` listed.
 - [ ] **Step 5: Verify the site still works**
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/posts.json
+curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/posts?format=json
 ```
 
 Expected: `200`.
@@ -1068,7 +1074,7 @@ Use the accented forms consistently with the fixtures.
 - [ ] **Step 2: Run the test to verify it fails**
 
 ```bash
-docker-compose exec php php symfony test:unit model/PostTableSubsonicTest
+docker-compose exec php php symfony test:unit model/PostTableSubsonic
 ```
 
 Expected: FAIL — `getMonths()` undefined.
@@ -1298,7 +1304,7 @@ Append to the same class, before the closing brace:
 - [ ] **Step 6: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:unit model/PostTableSubsonicTest
+docker-compose exec php php symfony test:unit model/PostTableSubsonic
 ```
 
 Expected: PASS, 9/9.
@@ -1306,7 +1312,7 @@ Expected: PASS, 9/9.
 - [ ] **Step 7: Verify the site still works**
 
 ```bash
-curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/posts.json
+curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/posts?format=json
 curl -s -o /dev/null -w '%{http_code}\n' http://localhost:8080/posts/feed
 ```
 
@@ -1393,7 +1399,7 @@ $t->ok(!in_array('al-2099-01', $months), 'aucun mois issu d un post futur');
 - [ ] **Step 2: Run the test to verify it fails**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 Expected: FAIL — 404 on `/rest/ping.view`.
@@ -1667,7 +1673,7 @@ class SubsonicException extends Exception
 
 ```bash
 docker-compose exec php php symfony cache:clear
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 Expected: the ping, error, and read-only assertions pass. The final `getAlbumList2` assertion still fails — that method arrives in Task 9.
@@ -1687,7 +1693,7 @@ Expected: two different bodies. If the second returns the ping response, `module
 The review flagged that `sfDesastreFilter` touches `sfUser` on every request, which starts a session. Symfony 1 has no per-module session switch, so establish whether this is new or pre-existing:
 
 ```bash
-curl -sI 'http://localhost:8080/posts.json' | grep -i set-cookie || echo "pas de cookie sur /posts.json"
+curl -sI 'http://localhost:8080/posts?format=json' | grep -i set-cookie || echo "pas de cookie sur la liste JSON"
 curl -sI 'http://localhost:8080/rest/ping.view' | grep -i set-cookie || echo "pas de cookie sur /rest"
 ```
 
@@ -1757,7 +1763,7 @@ $t->ok(!array_key_exists('size', $song), 'taille absente plutot que nulle');
 - [ ] **Step 2: Run the test to verify it fails**
 
 ```bash
-docker-compose exec php php symfony test:unit helper/SubsonicMapperTest
+docker-compose exec php php symfony test:unit helper/SubsonicMapper
 ```
 
 Expected: FAIL — class not found.
@@ -1925,7 +1931,7 @@ class SubsonicMapper
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:unit helper/SubsonicMapperTest
+docker-compose exec php php symfony test:unit helper/SubsonicMapper
 ```
 
 Expected: PASS, 12/12.
@@ -1999,7 +2005,7 @@ $t->is($json['subsonic-response']['error']['code'], 70, 'getSong : id inconnu ->
 - [ ] **Step 2: Run to verify the new assertions fail**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 Expected: the new assertions fail with error 70 (method not found).
@@ -2112,7 +2118,7 @@ Add to `restActions`, before `readOnly()`:
 
 ```bash
 docker-compose exec php php symfony cache:clear
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 Expected: all assertions pass, including the earlier `al-2099-01` exclusion.
@@ -2171,7 +2177,7 @@ Adjust `'Sigur Ros'` and `'Fantome'` to the accented forms used in the fixtures.
 - [ ] **Step 2: Run to verify the new assertions fail**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 Expected: error 70, method not found.
@@ -2234,7 +2240,7 @@ Add to `restActions`:
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 Expected: all pass.
@@ -2286,7 +2292,7 @@ $t->is(count($json['subsonic-response']['searchResult3']['song']), 0, 'search3 :
 - [ ] **Step 2: Run to verify the new assertions fail**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 - [ ] **Step 3: Implement**
@@ -2362,7 +2368,7 @@ Delete the earlier `subsonicGetRandomSongs()` stub — this replaces it.
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 - [ ] **Step 5: Commit**
@@ -2410,7 +2416,7 @@ Alice has three posts in the fixtures, one offline and one future-dated — so t
 - [ ] **Step 2: Run to verify the new assertions fail**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 - [ ] **Step 3: Implement**
@@ -2467,7 +2473,7 @@ docker-compose exec php php symfony test:functional frontend/restActionsTest
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 - [ ] **Step 5: Commit**
@@ -2515,7 +2521,7 @@ $t->like($browser->getResponse()->getHttpHeader('Location'), '#logo_500\.png$#',
 - [ ] **Step 2: Run to verify the new assertions fail**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 - [ ] **Step 3: Implement**
@@ -2589,7 +2595,7 @@ docker-compose exec php php symfony test:functional frontend/restActionsTest
 - [ ] **Step 4: Run the test to verify it passes**
 
 ```bash
-docker-compose exec php php symfony test:functional frontend/restActionsTest
+docker-compose exec php php symfony test:functional frontend/restActions
 ```
 
 - [ ] **Step 5: Verify by hand against a real file**
