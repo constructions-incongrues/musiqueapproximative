@@ -23,6 +23,18 @@ Cas réel : le post `hyacinthe-retour-d-emeute-piege`. C'est la même famille d'
 **Priority:** P1
 **Depends on:** None
 
+### `/post/md5/<hash>` sert les posts programmés
+
+**What:** Ajouter le filtre `publish_on` à `PostTable::getByMd5sum()`, et consolider les six méthodes historiques sur la constante `WHERE_ONLINE`.
+
+**Why:** `getByMd5sum()` ne filtre que sur `is_online`. Un post daté dans le futur est donc servi par `/post/md5/<hash>` avant sa date de publication, avec tout son contenu. Portée réelle limitée — il faut connaître le md5 du fichier, qui n'est exposé par l'API que pour les posts déjà publiés — mais c'est bien une fuite, et elle contredit la règle appliquée partout ailleurs.
+
+**Context:** `src/lib/model/doctrine/PostTable.class.php`. La branche Subsonic a introduit `WHERE_ONLINE`, la règle de visibilité complète (`is_online`, `publish_on <= now()+2h`, slug non vide) en un seul endroit, et y a routé toutes ses nouvelles requêtes. Les six méthodes antérieures — `getLastPost`, `getOnlinePostBySlug`, `getOnlinePostById`, `getNextPost`, `getPreviousPost`, `getRandomPost` — portent encore chacune leur copie du prédicat, et `getByMd5sum` une version incomplète. Les consolider est mécanique mais change le comportement de pages en production : `getByMd5sum` se mettrait à filtrer sur la date, et `getPreviousPost` gagnerait le filtre sur le slug. À faire d'un bloc, avec les tests de la base de test désormais disponible (`src/test/bootstrap/database.php`).
+
+**Effort:** M
+**Priority:** P2
+**Depends on:** La branche Subsonic (constante `WHERE_ONLINE` et base de test)
+
 ### Corriger le double-encodage XML de `executeOembed`
 
 **What:** Supprimer l'appel à `htmlentities()` avant `addChild()` dans `executeOembed`.
