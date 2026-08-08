@@ -35,9 +35,12 @@ Post:
       type: integer(4)
       notnull: true
   indexes:
-    online_publish_idx:
+    # Doctrine 1 suffixe automatiquement « _idx » : ces cles produisent
+    # online_publish_idx et track_author_idx, qui sont les noms appliques en
+    # production. Ne pas les renommer avec le suffixe, on obtiendrait _idx_idx.
+    online_publish:
       fields: [is_online, publish_on]
-    track_author_idx:
+    track_author:
       fields:
         track_author:
           length: 191

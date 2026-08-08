@@ -427,10 +427,9 @@ l'attribut correspondant tant que la valeur manque.
           length: 191
 ```
 
-`Post` ne porte aujourd'hui aucun index hors celui du slug. Les six méthodes
-existantes de `PostTable` filtrent et trient toutes sur `publish_on` : l'index
-composite accélère le site entier, pas seulement les nouveaux endpoints, et il
-arrive sur une migration qu'on exécute de toute façon.
+`Post` ne porte aujourd'hui aucun index hors celui du slug. Les clés du bloc
+`indexes:` s'écrivent **sans** suffixe `_idx` : Doctrine 1 l'ajoute lui-même,
+et `online_publish_idx:` produirait `online_publish_idx_idx`.
 
 La longueur de préfixe sur `track_author` n'est pas décorative : la colonne est
 `varchar(2000)` en latin1, soit 2000 octets. C'est sous la limite de 3072
@@ -438,9 +437,30 @@ octets de MySQL 5.7 en format `DYNAMIC`, donc l'index passe ici — mais la
 version de MySQL de l'hôte de production n'est documentée nulle part, et un
 préfixe de 191 ne coûte rien.
 
-**Cet index n'accélère pas `getArtists`.** Un `SELECT DISTINCT` sur cette
-colonne construit une table temporaire quoi qu'il arrive. Il sert les filtres
-`LIKE` de `search3` et les recherches par artiste exact.
+### Ce que ces index achètent, mesuré
+
+Sur les 6 155 lignes actuelles, `EXPLAIN` donne :
+
+| Requête | Résultat |
+| --- | --- |
+| `WHERE is_online=1 AND publish_on<=NOW() ORDER BY publish_on DESC LIMIT 1` | `online_publish_idx`, **Using index** (couvrant) |
+| `WHERE is_online=1 AND track_author = ?` | `track_author_idx`, `rows=1` |
+| `GROUP BY DATE_FORMAT(publish_on,'%Y-%m')` | parcours complet, `key=NULL` |
+| `GROUP BY track_author` / `DISTINCT track_author` | parcours complet, `key=NULL` |
+
+Les deux premières formes couvrent l'essentiel du trafic existant du site —
+`executeShow`, `executeNext`, `executePrev`, la home — ainsi que
+`getPostsByArtist` et les filtres exacts de `search3`. C'est le vrai gain.
+
+Les deux agrégats, eux, **ne bénéficient d'aucun index et n'en bénéficieront
+pas** : `is_online = 1` couvre 99 % des lignes, donc l'optimiseur préfère à
+juste titre le parcours complet ; et un index de préfixe ne peut pas servir un
+`GROUP BY` ou un `DISTINCT`, seulement des égalités et des intervalles.
+
+C'est assumé. À 6 155 lignes un parcours complet est bon marché, et le corpus
+croît d'une ligne par jour. Le jour où ça se mesure, la réponse sera une
+colonne générée indexée sur le mois, pas un index supplémentaire sur
+`publish_on`.
 
 ### Remplissage
 
