@@ -2,6 +2,27 @@
 
 ## Frontend
 
+### L'API JSON sert aujourd'hui du JSON invalide
+
+**What:** Supprimer l'appel à `html_entity_decode()` dans `listSuccess.json.php` (et le même motif dans `showSuccess.json.php` s'il y figure).
+
+**Why:** `/posts?format=json` ne se parse pas. Vérifié sur la base de production : `json.loads()` échoue sur `Invalid \escape`. Tout consommateur de l'API qui valide sa réponse est cassé, aujourd'hui, silencieusement.
+
+**Context:** `src/apps/frontend/modules/post/templates/listSuccess.json.php` applique `html_entity_decode()` au résultat de `$post->toJson()`, c'est-à-dire à un document **déjà sérialisé**. Toute entité HTML présente dans le corps rendu et se décodant en `\` ou en `"` atterrit alors brute à l'intérieur d'une chaîne JSON. Mécanisme reproduit isolément :
+
+```php
+$json = json_encode(['html' => 'Chaque &#92; epoque']);
+// {"html":"Chaque &#92; epoque"}  -- valide
+html_entity_decode($json);
+// {"html":"Chaque \ epoque"}      -- json_decode() renvoie null
+```
+
+Cas réel : le post `hyacinthe-retour-d-emeute-piege`. C'est la même famille d'erreur que le double-encodage de `executeOembed` — post-traiter une sortie déjà encodée — et exactement ce que le sérialiseur `SubsonicResponse` de la branche Subsonic est conçu pour rendre impossible. Le `html_entity_decode` visait probablement à défaire l'échappement de sortie de Symfony 1 (`escaping_strategy: true`) ; la bonne correction est de récupérer les valeurs brutes via `$sf_data->getRaw()` en amont de `toJson()`, pas de nettoyer le JSON en aval.
+
+**Effort:** S
+**Priority:** P1
+**Depends on:** None
+
 ### Corriger le double-encodage XML de `executeOembed`
 
 **What:** Supprimer l'appel à `htmlentities()` avant `addChild()` dans `executeOembed`.
