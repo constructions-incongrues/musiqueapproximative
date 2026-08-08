@@ -242,6 +242,59 @@ class restActions extends sfActions
     return SubsonicResponse::ok(['album' => $album]);
   }
 
+  /**
+   * Regroupe les artistes distincts en index par initiale, tries
+   * alphabetiquement (le groupe « # » se retrouve avant « A », son code
+   * ASCII etant plus petit -- sans consequence, aucun client Subsonic ne
+   * suppose un ordre particulier entre les deux).
+   */
+  protected function subsonicGetArtists(sfWebRequest $request)
+  {
+    $table   = Doctrine_Core::getTable('Post');
+    $indices = [];
+
+    foreach ($table->getDistinctArtists() as $artist) {
+      $letter = SubsonicMapper::indexLetter($artist['track_author']);
+      $indices[$letter][] = SubsonicMapper::artist($artist);
+    }
+
+    ksort($indices);
+
+    $index = [];
+    foreach ($indices as $letter => $artists) {
+      $index[] = ['name' => $letter, 'artist' => $artists];
+    }
+
+    return SubsonicResponse::ok(['artists' => ['ignoredArticles' => '', 'index' => $index]]);
+  }
+
+  protected function subsonicGetArtist(sfWebRequest $request)
+  {
+    $id     = $this->requireParameter($request, 'id');
+    $author = SubsonicId::parseArtist($id);
+
+    if (null === $author) {
+      throw new SubsonicException('Artist not found.', 70);
+    }
+
+    $table  = Doctrine_Core::getTable('Post');
+    $months = $table->getMonthsByArtist($author);
+
+    if (!$months) {
+      throw new SubsonicException('Artist not found.', 70);
+    }
+
+    $artist = SubsonicMapper::artist(['track_author' => $author, 'album_count' => count($months)]);
+
+    $albums = [];
+    foreach ($months as $month) {
+      $albums[] = SubsonicMapper::album($month);
+    }
+    $artist['album'] = $albums;
+
+    return SubsonicResponse::ok(['artist' => $artist]);
+  }
+
   protected function subsonicGetSong(sfWebRequest $request)
   {
     $post = $this->findPost($this->requireParameter($request, 'id'));

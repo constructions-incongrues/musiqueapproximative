@@ -164,3 +164,60 @@ $browser->get('/rest/getSong.view?f=json&id=4');
 $json = json_decode($browser->getResponse()->getContent(), true);
 $t->is($json['subsonic-response']['error']['code'], 70, 'getSong : morceau invisible -> 70, jamais le morceau');
 $t->ok(!isset($json['subsonic-response']['song']), 'getSong : aucune cle song dans la reponse d erreur');
+
+// --- getArtists ----------------------------------------------------------
+//
+// Fixtures : AC/DC, Carol Solo et Sigur Rós sont visibles ; Fantôme ne l'est
+// jamais (ses quatre posts sont tous invisibles, cf. subsonic.sql). C'est
+// l'assertion la plus importante de la tache : elle verifie que la regle de
+// visibilite atteint la dimension artiste, pas seulement les morceaux.
+
+$browser->get('/rest/getArtists.view?f=json');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$index = $json['subsonic-response']['artists']['index'];
+
+$names = [];
+foreach ($index as $group) {
+  foreach ($group['artist'] as $artist) {
+    $names[] = $artist['name'];
+  }
+}
+sort($names);
+$t->is($names, ['AC/DC', 'Carol Solo', 'Sigur Rós'], 'getArtists : les trois artistes visibles, jamais Fantôme');
+
+$byName = [];
+foreach ($index as $group) {
+  foreach ($group['artist'] as $artist) {
+    $byName[$artist['name']] = $artist;
+  }
+}
+$t->is($byName['Sigur Rós']['albumCount'], 2, 'getArtists : albumCount de Sigur Rós = 2 (deux mois)');
+
+$byLetter = [];
+foreach ($index as $group) {
+  $byLetter[$group['name']] = array_map(function ($artist) { return $artist['name']; }, $group['artist']);
+}
+$t->ok(in_array('AC/DC', $byLetter['A']), 'getArtists : AC/DC dans l index A');
+$t->ok(in_array('Sigur Rós', $byLetter['S']), 'getArtists : Sigur Rós dans l index S');
+
+$letters = array_map(function ($group) { return $group['name']; }, $index);
+$sortedLetters = $letters;
+sort($sortedLetters);
+$t->is($letters, $sortedLetters, 'getArtists : index trie par lettre');
+
+// --- getArtist -------------------------------------------------------------
+
+$sigurId = SubsonicId::forArtist('Sigur Rós');
+$browser->get('/rest/getArtist.view?f=json&id='.urlencode($sigurId));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$artist = $json['subsonic-response']['artist'];
+$t->is(count($artist['album']), 2, 'getArtist : Sigur Rós a deux albums (deux mois)');
+
+$fantomeId = SubsonicId::forArtist('Fantôme');
+$browser->get('/rest/getArtist.view?f=json&id='.urlencode($fantomeId));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getArtist : artiste sans post visible (Fantôme) -> 70');
+
+$browser->get('/rest/getArtist.view?f=json&id=nimportequoi');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getArtist : id malforme -> 70');
