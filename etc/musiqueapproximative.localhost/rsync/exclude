@@ -1,0 +1,3 @@
+# Fichiers exclus du deploiement rsync.
+# Vide : tout src/ part, y compris src/vendor (gitignore mais necessaire en
+# production, cf. la cible deploy du Makefile).

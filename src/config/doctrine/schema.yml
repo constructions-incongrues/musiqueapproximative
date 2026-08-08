@@ -12,32 +12,48 @@ Post:
       autoincrement: true
       primary: true
       notnull: true
-    body: 
-      type:    string
+    body:
+      type: string
       notnull: true
     track_title: string
     track_author: string
     track_filename: string
     track_md5: string(32)
+    track_duration:
+      type: integer
+      comment: Duree du morceau en secondes, nulle tant que non calculee
+    track_size:
+      type: integer
+      comment: Taille du fichier en octets, nulle tant que non calculee
     buy_url: string(255)
     svn_revision: integer
-    publish_on: 
+    publish_on:
       type: datetime
-      notnull: true 
+      notnull: true
     is_online: boolean
-    contributor_id: 
+    contributor_id:
       type: integer(4)
       notnull: true
+  indexes:
+    # Doctrine 1 suffixe automatiquement « _idx » : ces cles produisent
+    # online_publish_idx et track_author_idx, qui sont les noms appliques en
+    # production. Ne pas les renommer avec le suffixe, on obtiendrait _idx_idx.
+    online_publish:
+      fields: [is_online, publish_on]
+    track_author:
+      fields:
+        track_author:
+          length: 191
   relations:
     sfGuardUser:
       local: contributor_id
 
 UserProfile:
   columns:
-    user_id:          { type: integer(4), notnull: true }
-    display_name:     { type: string(255) }
-    email:            { type: string(255) }
-    website_url:      { type: string(255) }
+    user_id: { type: integer(4), notnull: true }
+    display_name: { type: string(255) }
+    email: { type: string(255) }
+    website_url: { type: string(255) }
   indexes:
     email_index:
       fields: [email]
@@ -51,4 +67,3 @@ UserProfile:
       foreign: id
       onDelete: cascade
       foreignAlias: UserProfile
-

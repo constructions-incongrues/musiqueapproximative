@@ -1,0 +1,2 @@
+# Fichiers explicitement inclus, evalues avant les exclusions.
+# Vide : aucune exception a declarer tant que exclude l'est aussi.

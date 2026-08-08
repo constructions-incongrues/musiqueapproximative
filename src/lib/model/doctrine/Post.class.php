@@ -20,6 +20,56 @@ class Post extends BasePost
   }
 
   /**
+   * Construit l'URL canonique d'un fichier audio.
+   *
+   * Seul le nom de fichier est encode, et avec rawurlencode : dans un segment
+   * de chemin, urlencode() produirait un « + » la ou il faut « %20 ».
+   *
+   * @param string      $filename Nom du fichier dans web/tracks/
+   * @param string|null $scheme   'http' ou 'https' pour forcer une URL absolue.
+   *                              Null conserve app_urls_tracks tel quel.
+   *
+   *                              Seule une base relative au protocole
+   *                              (ex: "//cdn...") peut etre qualifiee : elle
+   *                              porte deja l'autorite (l'hote), donc prefixer
+   *                              le schema suffit a la rendre absolue.
+   *
+   *                              Si app_urls_tracks a deja son propre schema
+   *                              (ex: "http://cdn..."), $scheme est ignore :
+   *                              reecrire le schema d'une URL deja absolue et
+   *                              explicitement configuree serait surprenant.
+   *
+   *                              Une base sans autorite du tout (chemin
+   *                              relatif, ex: "/tracks", ou vide) n'a pas
+   *                              d'hote a qualifier : $scheme ne peut pas en
+   *                              faire une URL absolue (il manquerait
+   *                              l'autorite), donc la base est renvoyee
+   *                              inchangee. Ce n'est pas un manque : tous les
+   *                              profils livres configurent
+   *                              tracks: //${APP_DOMAIN}/tracks.
+   * @return string
+   */
+  public static function buildTrackUrl($filename, $scheme = null)
+  {
+    $base = rtrim(sfConfig::get('app_urls_tracks'), '/');
+
+    if (null !== $scheme && 0 === strpos($base, '//')) {
+      $base = $scheme.':'.$base;
+    }
+
+    return sprintf('%s/%s', $base, rawurlencode($filename));
+  }
+
+  /**
+   * @param string|null $scheme voir self::buildTrackUrl()
+   * @return string
+   */
+  public function getTrackUrl($scheme = null)
+  {
+    return self::buildTrackUrl($this->track_filename, $scheme);
+  }
+
+  /**
    * @see http://jsonapi.org/format/#url-based-json-api
    */
   public function toJson(sfWebRequest $request, sfContext $context, $postPrevious = null, $postNext = null)
@@ -50,12 +100,7 @@ class Post extends BasePost
 
     // Track
     $post['track'] = array(
-      'href' =>  sprintf(
-        '%s%s/tracks/%s',
-        $request->getUriPrefix(),
-        $request->getRelativeUrlRoot(),
-        urlencode($post['track_filename'])
-      ),
+      'href'   => $this->getTrackUrl($request->isSecure() ? 'https' : 'http'),
       'title'  => $post['track_title'],
       'author' => $post['track_author'],
       'md5'    => $post['track_md5']
@@ -130,6 +175,92 @@ class Post extends BasePost
   }
 
   /**
+   * Chemin absolu du fichier audio, que le fichier existe ou non.
+   *
+   * Meme convention que le reste du code (executeMd5, le flux RSS) :
+   * sf_web_dir . '/tracks/' . track_filename, jamais un chemin relatif a
+   * __DIR__ comme le faisait l'ancienne tache rebuild-md5.
+   *
+   * @return string
+   */
+  public function getTrackPath()
+  {
+    return sfConfig::get('sf_web_dir').'/tracks/'.$this->track_filename;
+  }
+
+  /**
+   * Renseigne track_size et track_duration a partir du fichier audio.
+   *
+   * - track_size vient de filesize().
+   * - track_duration vient de getID3 (playtime_seconds, arrondi a la
+   *   seconde) : getID3 sait lire les en-tetes Xing/VBRI et gerer le VBR,
+   *   ce qu'un parseur de frames maison ferait mal.
+   *
+   * Ne fait rien (et renvoie false) si le fichier est illisible : sur
+   * l'archive de production, une partie des fichiers references en base a
+   * disparu, et ce n'est pas une erreur qui doit interrompre un traitement
+   * par lots.
+   *
+   * Ne fait rien non plus (et renvoie false) si les deux colonnes sont deja
+   * renseignees, sauf si $force vaut true : evite de rouvrir et
+   * re-analyser inutilement un fichier au fil des sauvegardes repetees d'un
+   * post existant.
+   *
+   * Si getID3 ne parvient pas a analyser le fichier comme un flux audio
+   * (playtime_seconds absent), track_size est tout de meme renseigne mais
+   * track_duration reste NULL : une degradation correcte, pas un echec.
+   *
+   * @param  bool $force Recalcule meme si track_size et track_duration
+   *                      sont deja tous les deux renseignes.
+   * @return bool         true si track_size et/ou track_duration ont change.
+   */
+  public function fillTrackMetadata($force = false)
+  {
+    if (!$force && null !== $this->track_size && null !== $this->track_duration) {
+      return false;
+    }
+
+    $path = $this->getTrackPath();
+
+    if (!is_readable($path)) {
+      return false;
+    }
+
+    $changed = false;
+
+    $size = filesize($path);
+    if (false !== $size && $size !== $this->track_size) {
+      $this->track_size = $size;
+      $changed = true;
+    }
+
+    $getID3 = new getID3();
+    $info = $getID3->analyze($path);
+
+    if (isset($info['playtime_seconds'])) {
+      $duration = (int) round($info['playtime_seconds']);
+      if ($duration !== $this->track_duration) {
+        $this->track_duration = $duration;
+        $changed = true;
+      }
+    }
+
+    return $changed;
+  }
+
+  /**
+   * Renseigne la duree et la taille du morceau avant l'ecriture en base,
+   * pour qu'un nouveau post les porte des son premier INSERT et n'exige pas
+   * un second aller-retour vers la base. Un fichier qui arrive apres coup
+   * (post deja cree, fichier televerse plus tard) est rattrape par la tache
+   * musiqueapproximative:scan-tracks, pas ici.
+   */
+  public function preSave($event)
+  {
+    $this->fillTrackMetadata();
+  }
+
+  /**
    * Actions performed after post has been successfully saved to database.
    * - Delete frontend template cache
    * - Generate track picture
@@ -144,10 +275,24 @@ class Post extends BasePost
     );
 
     // Generate track picture from logo
+    //
+    // Bug preexistant corrige au passage (decouvert en verifiant la tache
+    // scan-tracks : tout ->save() y compris hors de cette branche feature
+    // levait une TypeError non rattrapee ici, avant meme d'atteindre la
+    // purge du cache ci-dessous) :
+    //  - file_exists(sprintf(...), $webDir, $postId) : la parenthese
+    //    fermante de sprintf() etait mal placee, ce qui produisait
+    //    toujours false (sprintf() sans arguments de substitution) et
+    //    faisait donc toujours regenerer l'avatar.
+    //  - new Process($commandeString) : symfony/process ^5.4 n'accepte
+    //    plus une commande sous forme de chaine dans le constructeur (seul
+    //    un tableau d'arguments est accepte) ; Process::fromShellCommandline()
+    //    est l'equivalent officiellement supporte pour une chaine shell,
+    //    sans changer le comportement (run()/start() restent tels quels).
     $webDir = sfConfig::get('sf_web_dir');
     $postId = $event->getInvoker()->id;
-    if (!file_exists(sprintf('%s/avatars/%s.png'), $webDir, $postId)) {
-      $process = new Process(
+    if (!file_exists(sprintf('%s/avatars/%s.png', $webDir, $postId))) {
+      $process = Process::fromShellCommandline(
         sprintf(
           'bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
           $webDir,
@@ -161,7 +306,7 @@ class Post extends BasePost
 
       // 10% chance to get a colored avatar
       if (in_array(random_int(0, 9), range(0, 9))) {
-        $process = new Process(
+        $process = Process::fromShellCommandline(
           sprintf(
             'convert -type Grayscale %s/avatars/%s.png %s/avatars/%s.png',
             $webDir,
@@ -176,7 +321,7 @@ class Post extends BasePost
 
     // Delete frontend cache *asynchronously*
     // @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
-    $process = new Process(sprintf('rm -rf %s/*', $frontendCacheDir));
+    $process = Process::fromShellCommandline(sprintf('rm -rf %s/*', $frontendCacheDir));
     $process->start();
   }
 }

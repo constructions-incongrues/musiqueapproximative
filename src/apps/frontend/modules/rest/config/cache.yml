@@ -1,0 +1,6 @@
+# Le cache.yml applicatif declare default: { enabled: true, lifetime: 86400 }
+# et s'applique a TOUS les modules. Sa cle de cache ne contient que les
+# parametres de route : id, query, size, offset, f et callback en sont absents,
+# donc getAlbum?id=al-2024-06 et ?id=al-2019-03 partageraient la meme entree.
+default:
+  enabled: false
