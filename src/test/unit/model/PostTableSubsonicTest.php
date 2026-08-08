@@ -13,7 +13,7 @@
 
 require_once dirname(__FILE__).'/../../bootstrap/database.php';
 
-$t = new lime_test(47);
+$t = new lime_test(49);
 
 $table = Doctrine_Core::getTable('Post');
 
@@ -50,11 +50,16 @@ $t->is_deeply(
   array(),
   'getPostsByMonth(2099-01) exclut le post programme dans le futur'
 );
+$t->is_deeply(
+  subsonic_ids($table->getPostsByMonth('2024-04')),
+  array(9),
+  'getPostsByMonth(2024-04) renvoie tout de meme le morceau a auteur vide : le filtre qui l\'exclut de getDistinctArtists() ne retire que l\'artiste, pas le morceau'
+);
 
 $t->diag('getMonths()');
 
 $months = $table->getMonths();
-$t->is(count($months), 2, 'getMonths() renvoie deux mois (les invisibles ne forment pas de mois a eux seuls)');
+$t->is(count($months), 3, 'getMonths() renvoie trois mois (les invisibles ne forment pas de mois a eux seuls)');
 $t->is($months[0]['month'], '2024-06', 'par defaut, le mois le plus recent vient en premier');
 $t->is((int) $months[0]['song_count'], 3, 'juin 2024 compte trois morceaux visibles (alice x2, bob, carol)');
 $t->is((int) $months[0]['duration'], 485, 'la duree de juin 2024 est la somme de 245, 180 et 60');
@@ -63,11 +68,11 @@ $t->is($months[1]['duration'], null, 'SUM() sur l\'unique morceau de mai, sans d
 
 $t->diag('getMonths() : entrees limite/offset hors bornes (Fix 4 et 5 de la revue)');
 
-$t->is(count($table->getMonths(0)), 2, 'getMonths(0) omet le LIMIT et renvoie tout, sans planter');
-$t->is(count($table->getMonths(-1)), 2, 'getMonths(-1) degrade vers "pas de limite" plutot que de produire un LIMIT invalide (500)');
+$t->is(count($table->getMonths(0)), 3, 'getMonths(0) omet le LIMIT et renvoie tout, sans planter');
+$t->is(count($table->getMonths(-1)), 3, 'getMonths(-1) degrade vers "pas de limite" plutot que de produire un LIMIT invalide (500)');
 
 $offsetOnly = $table->getMonths(null, 1);
-$t->is(count($offsetOnly), 1, 'getMonths(null, 1) applique l\'offset meme sans limite explicite');
+$t->is(count($offsetOnly), 2, 'getMonths(null, 1) applique l\'offset meme sans limite explicite');
 $t->is($offsetOnly[0]['month'], '2024-05', 'cet offset saute bien le premier mois');
 
 $t->diag('getMonth()');
@@ -87,6 +92,10 @@ foreach ($table->getDistinctArtists() as $artist) {
 $t->is(isset($artists['Sigur Rós']) ? $artists['Sigur Rós'] : null, 2, 'Sigur Rós publie sur deux mois distincts : album_count = 2');
 $t->is(isset($artists['AC/DC']) ? $artists['AC/DC'] : null, 1, 'AC/DC publie sur un seul mois : album_count = 1');
 $t->ok(!array_key_exists('Fantôme', $artists), 'Fantôme, dont aucun post n\'est visible, n\'apparait pas du tout');
+$t->ok(
+  !array_key_exists('', $artists),
+  'getDistinctArtists() ne renvoie aucune entree pour un track_author vide (post 9) : sinon SubsonicId::forArtist(\'\') produirait l\'id "ar-", que parseArtist() refuse'
+);
 
 $t->diag('getDistinctArtists() : entree "0" et metacaracteres LIKE (Fix 1 et 3 de la revue)');
 
@@ -145,8 +154,8 @@ $contributors = array();
 foreach ($table->getContributors() as $c) {
   $contributors[$c['username']] = $c;
 }
-$t->is((int) $contributors['alice']['song_count'], 2, 'alice a deux morceaux visibles (les trois autres lui appartenant sont exclus)');
-$t->is((int) $contributors['alice']['duration'], 245, 'la duree d\'alice ignore le morceau sans duree (SUM saute les NULL)');
+$t->is((int) $contributors['alice']['song_count'], 3, 'alice a trois morceaux visibles (les quatre autres lui appartenant sont exclus)');
+$t->is((int) $contributors['alice']['duration'], 335, 'la duree d\'alice est la somme de 245 et 90 ; le morceau sans duree est ignore (SUM saute les NULL)');
 $t->is($contributors['alice']['display_name'], 'Alice', 'alice a un profil : son display_name vient de user_profile');
 $t->is((int) $contributors['bob']['song_count'], 1, 'bob a un morceau visible');
 $t->is((int) $contributors['bob']['duration'], 180, 'la duree de bob correspond a son unique morceau');
@@ -163,7 +172,7 @@ $t->diag('searchSongs()');
 $t->is_deeply(subsonic_ids($table->searchSongs('Rock')), array(1), 'searchSongs(Rock) trouve le post 1 par son titre');
 $t->is_deeply(
   subsonic_ids($table->searchSongs('')),
-  array(8, 2, 1, 3),
+  array(8, 2, 1, 3, 9),
   'une recherche vide renvoie l\'ensemble pagine des posts visibles, du plus recent au plus ancien (ordre herite du builder, pas casse par un orderBy local)'
 );
 $t->is_deeply(

@@ -360,7 +360,16 @@ class PostTable extends Doctrine_Table
         p.track_author,
         COUNT(DISTINCT DATE_FORMAT(p.publish_on, '%Y-%m')) AS album_count
       FROM post p
-      WHERE ".self::WHERE_ONLINE;
+      WHERE ".self::WHERE_ONLINE."
+        AND p.track_author IS NOT NULL AND TRIM(p.track_author) <> ''";
+
+    // Un auteur vide ne rend pas le post invisible — le morceau reste
+    // parfaitement ecoutable — mais il ne constitue pas un artiste
+    // adressable : SubsonicId::forArtist('') produit l'identifiant « ar- »,
+    // que parseArtist() refuse a juste titre. Sans ce filtre, getArtists
+    // exposait une entree fantome, sans nom, qui repondait 70 des qu'un
+    // client l'ouvrait. La production compte 12 posts dans ce cas.
+    // Le filtre est donc ici, et non dans WHERE_ONLINE.
 
     $params = array();
 

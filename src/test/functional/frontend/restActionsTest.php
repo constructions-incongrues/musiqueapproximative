@@ -106,12 +106,12 @@ $t->ok(count($json['subsonic-response']['albumList2']['album']) <= 500, 'getAlbu
 $browser->get('/rest/getAlbumList2.view?f=json&type=alphabeticalByName&size=500');
 $json = json_decode($browser->getResponse()->getContent(), true);
 $albums = $json['subsonic-response']['albumList2']['album'];
-$t->is($albums[0]['id'], 'al-2024-05', 'getAlbumList2 : alphabeticalByName trie par ordre croissant');
+$t->is($albums[0]['id'], 'al-2024-04', 'getAlbumList2 : alphabeticalByName trie par ordre croissant');
 
 $browser->get('/rest/getAlbumList2.view?f=json&type=byYear&size=500');
 $json = json_decode($browser->getResponse()->getContent(), true);
 $albums = $json['subsonic-response']['albumList2']['album'];
-$t->is($albums[0]['id'], 'al-2024-05', 'getAlbumList2 : byYear trie par ordre croissant');
+$t->is($albums[0]['id'], 'al-2024-04', 'getAlbumList2 : byYear trie par ordre croissant');
 
 $browser->get('/rest/getAlbumList2.view?f=json&type=random&size=500');
 $json = json_decode($browser->getResponse()->getContent(), true);
@@ -120,7 +120,7 @@ foreach ($json['subsonic-response']['albumList2']['album'] as $album) {
   $ids[] = $album['id'];
 }
 sort($ids);
-$t->is($ids, array('al-2024-05', 'al-2024-06'), 'getAlbumList2 : random retourne les memes mois, sans en perdre');
+$t->is($ids, array('al-2024-04', 'al-2024-05', 'al-2024-06'), 'getAlbumList2 : random retourne les memes mois, sans en perdre');
 
 // --- getAlbum --------------------------------------------------------------
 
@@ -184,6 +184,20 @@ foreach ($index as $group) {
 }
 sort($names);
 $t->is($names, ['AC/DC', 'Carol Solo', 'Sigur Rós'], 'getArtists : les trois artistes visibles, jamais Fantôme');
+
+// post 9 (auteur vide, cf. subsonic.sql) ne doit produire ni une entree au
+// nom vide, ni l'id "ar-" que SubsonicId::forArtist('') fabriquerait et que
+// parseArtist() refuserait ensuite (erreur 70 a l'ouverture) : c'est le
+// regression test cote HTTP du fix de getDistinctArtists().
+$hasEmptyOrDeadArtist = false;
+foreach ($index as $group) {
+  foreach ($group['artist'] as $artist) {
+    if ('' === $artist['name'] || 'ar-' === $artist['id']) {
+      $hasEmptyOrDeadArtist = true;
+    }
+  }
+}
+$t->ok(!$hasEmptyOrDeadArtist, 'getArtists : aucun artiste au nom vide, aucun id "ar-" (l\'auteur vide du post 9 ne doit jamais y figurer)');
 
 $byName = [];
 foreach ($index as $group) {

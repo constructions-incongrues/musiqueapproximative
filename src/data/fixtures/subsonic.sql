@@ -48,6 +48,15 @@ INSERT INTO post (id, body, track_title, track_author, track_filename, track_md5
   (2, 'Deuxieme morceau de juin', 'A < B', 'AC/DC', 'café & the beat.mp3', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 180, 4300000, '2024-06-15 12:00:00', 1, 2, 'acdc-a-b', '2024-06-15 12:00:00', '2024-06-15 12:00:00'),
   (8, 'Morceau de carol, sans profil', 'Solo', 'Carol Solo', 'solo.mp3', 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', 60, 1500000, '2024-06-20 12:00:00', 1, 3, 'carol-sans-profil', '2024-06-20 12:00:00', '2024-06-20 12:00:00');
 
+-- --- 2024-04 : un morceau visible dont l'auteur est vide ---------------------
+-- Il doit rester ecoutable et figurer dans son album, mais ne pas produire
+-- d'entree dans getArtists : SubsonicId::forArtist('') donne « ar- », que
+-- parseArtist() refuse, donc l'entree serait un cul-de-sac. La production
+-- compte 12 posts dans ce cas. Place dans un mois qui n'appartient qu'a lui,
+-- pour ne pas fausser les comptes et les sommes de juin.
+INSERT INTO post (id, body, track_title, track_author, track_filename, track_md5, track_duration, track_size, publish_on, is_online, contributor_id, slug, created_at, updated_at) VALUES
+  (9, 'Auteur vide', 'Anonyme', '', 'anonyme.mp3', 'iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii', 90, 2000000, '2024-04-05 12:00:00', 1, 1, 'anonyme', '2024-04-05 12:00:00', '2024-04-05 12:00:00');
+
 -- --- 2024-05 : un morceau visible, sans duree -------------------------------
 -- Sigur Rós apparait donc dans deux mois : albumCount doit valoir 2.
 -- Duree et taille nulles : c'est le cas ou l'attribut doit etre omis.
