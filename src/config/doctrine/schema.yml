@@ -19,15 +19,28 @@ Post:
     track_author: string
     track_filename: string
     track_md5: string(32)
+    track_duration:
+      type: integer
+      comment: Duree du morceau en secondes, nulle tant que non calculee
+    track_size:
+      type: integer
+      comment: Taille du fichier en octets, nulle tant que non calculee
     buy_url: string(255)
     svn_revision: integer
-    publish_on: 
+    publish_on:
       type: datetime
-      notnull: true 
+      notnull: true
     is_online: boolean
-    contributor_id: 
+    contributor_id:
       type: integer(4)
       notnull: true
+  indexes:
+    online_publish_idx:
+      fields: [is_online, publish_on]
+    track_author_idx:
+      fields:
+        track_author:
+          length: 191
   relations:
     sfGuardUser:
       local: contributor_id
