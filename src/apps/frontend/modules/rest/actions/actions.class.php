@@ -384,7 +384,13 @@ class restActions extends sfActions
       $month  = Doctrine_Core::getTable('Post')->getMonth($cover['value']);
       $postId = $month ? $month['cover_post_id'] : null;
     } else {
-      $postId = $cover['value'];
+      // Passe par findPost() plutot que d'utiliser l'identifiant brut : la
+      // pochette d'un post hors ligne ou programme ne doit pas etre plus
+      // accessible que son audio. Sans effet aujourd'hui, la generation
+      // d'avatars etant desactivee et le repli public — mais le jour ou elle
+      // est reparee, l'identifiant se devine et la regle de visibilite doit
+      // deja etre la.
+      $postId = $this->findPost($cover['value'])->id;
     }
 
     $webDir = sfConfig::get('sf_web_dir');

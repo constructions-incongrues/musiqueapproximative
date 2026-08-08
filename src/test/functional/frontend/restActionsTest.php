@@ -479,3 +479,11 @@ $t->like($browser->getResponse()->getHttpHeader('Location'), '#logo_500\.png$#',
 $browser->get('/rest/getCoverArt.view?f=json&id=nimportequoi');
 $json = json_decode($browser->getResponse()->getContent(), true);
 $t->is($json['subsonic-response']['error']['code'], 70, 'getCoverArt : id malforme -> 70');
+
+// La pochette d'un post invisible ne doit pas etre plus accessible que son
+// audio : aujourd'hui sans effet (pas d'avatars, repli public), mais la regle
+// doit etre en place avant que la generation d'avatars soit reparee.
+$browser->get('/rest/getCoverArt.view?f=json&id=co-4');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getCoverArt : pochette d\'un post hors ligne -> 70');
+$t->is($browser->getResponse()->getHttpHeader('Location'), null, 'getCoverArt : pas de redirection pour un post hors ligne');
