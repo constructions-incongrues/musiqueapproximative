@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.11.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.10.2...v1.11.0) (2026-08-08)
+
+
+### Fonctionnalités
+
+* support de l'API Subsonic ([#145](https://github.com/constructions-incongrues/musiqueapproximative/issues/145)) ([404d978](https://github.com/constructions-incongrues/musiqueapproximative/commit/404d978cd58add2852b22c9f1cb16db161d9a910))
+
+
+### Corrections de bugs
+
+* **dependabot:** corrige le jeton d'exclusion, qui invalidait la configuration ([#132](https://github.com/constructions-incongrues/musiqueapproximative/issues/132)) ([16f2c60](https://github.com/constructions-incongrues/musiqueapproximative/commit/16f2c605c730103f7d5972cbcec9814d25c23056))
+* **dependabot:** retire des guillemets que yamllint refuse ([#131](https://github.com/constructions-incongrues/musiqueapproximative/issues/131)) ([2d50556](https://github.com/constructions-incongrues/musiqueapproximative/commit/2d5055636a41496614870861ab2c8bcc6ca18cf7))
+* **desastres:** aligne trois recettes sur la garde que les autres portent déjà ([#127](https://github.com/constructions-incongrues/musiqueapproximative/issues/127)) ([3f43962](https://github.com/constructions-incongrues/musiqueapproximative/commit/3f4396256f40fcc612a0c7944828b93c83581b25))
+* rétablit le champ de recherche en version mobile ([#146](https://github.com/constructions-incongrues/musiqueapproximative/issues/146)) ([f062b4f](https://github.com/constructions-incongrues/musiqueapproximative/commit/f062b4f31c0720761eb57b78084f247fe9dfeb53))
+
+
+### Documentation
+
+* **openspec:** acte que le correctif des options tient en production ([#125](https://github.com/constructions-incongrues/musiqueapproximative/issues/125)) ([d56ef64](https://github.com/constructions-incongrues/musiqueapproximative/commit/d56ef64ab3bd2dc2044e6cd4d1d3bd002c840797))
+* **openspec:** acte que le marqueur de version n'invalide pas tout ([#129](https://github.com/constructions-incongrues/musiqueapproximative/issues/129)) ([7f287a0](https://github.com/constructions-incongrues/musiqueapproximative/commit/7f287a066768b655143ec5e5014ec7c9879cbd11))
+* **openspec:** archive les quatre derniers changements actifs ([#140](https://github.com/constructions-incongrues/musiqueapproximative/issues/140)) ([c6feaaf](https://github.com/constructions-incongrues/musiqueapproximative/commit/c6feaafb6245bee844836aa18aa8960f1db20946))
+
 ## [1.10.2](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.10.1...v1.10.2) (2026-08-07)
 
 
