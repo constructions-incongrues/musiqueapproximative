@@ -175,6 +175,92 @@ class Post extends BasePost
   }
 
   /**
+   * Chemin absolu du fichier audio, que le fichier existe ou non.
+   *
+   * Meme convention que le reste du code (executeMd5, le flux RSS) :
+   * sf_web_dir . '/tracks/' . track_filename, jamais un chemin relatif a
+   * __DIR__ comme le faisait l'ancienne tache rebuild-md5.
+   *
+   * @return string
+   */
+  public function getTrackPath()
+  {
+    return sfConfig::get('sf_web_dir').'/tracks/'.$this->track_filename;
+  }
+
+  /**
+   * Renseigne track_size et track_duration a partir du fichier audio.
+   *
+   * - track_size vient de filesize().
+   * - track_duration vient de getID3 (playtime_seconds, arrondi a la
+   *   seconde) : getID3 sait lire les en-tetes Xing/VBRI et gerer le VBR,
+   *   ce qu'un parseur de frames maison ferait mal.
+   *
+   * Ne fait rien (et renvoie false) si le fichier est illisible : sur
+   * l'archive de production, une partie des fichiers references en base a
+   * disparu, et ce n'est pas une erreur qui doit interrompre un traitement
+   * par lots.
+   *
+   * Ne fait rien non plus (et renvoie false) si les deux colonnes sont deja
+   * renseignees, sauf si $force vaut true : evite de rouvrir et
+   * re-analyser inutilement un fichier au fil des sauvegardes repetees d'un
+   * post existant.
+   *
+   * Si getID3 ne parvient pas a analyser le fichier comme un flux audio
+   * (playtime_seconds absent), track_size est tout de meme renseigne mais
+   * track_duration reste NULL : une degradation correcte, pas un echec.
+   *
+   * @param  bool $force Recalcule meme si track_size et track_duration
+   *                      sont deja tous les deux renseignes.
+   * @return bool         true si track_size et/ou track_duration ont change.
+   */
+  public function fillTrackMetadata($force = false)
+  {
+    if (!$force && null !== $this->track_size && null !== $this->track_duration) {
+      return false;
+    }
+
+    $path = $this->getTrackPath();
+
+    if (!is_readable($path)) {
+      return false;
+    }
+
+    $changed = false;
+
+    $size = filesize($path);
+    if (false !== $size && $size !== $this->track_size) {
+      $this->track_size = $size;
+      $changed = true;
+    }
+
+    $getID3 = new getID3();
+    $info = $getID3->analyze($path);
+
+    if (isset($info['playtime_seconds'])) {
+      $duration = (int) round($info['playtime_seconds']);
+      if ($duration !== $this->track_duration) {
+        $this->track_duration = $duration;
+        $changed = true;
+      }
+    }
+
+    return $changed;
+  }
+
+  /**
+   * Renseigne la duree et la taille du morceau avant l'ecriture en base,
+   * pour qu'un nouveau post les porte des son premier INSERT et n'exige pas
+   * un second aller-retour vers la base. Un fichier qui arrive apres coup
+   * (post deja cree, fichier televerse plus tard) est rattrape par la tache
+   * musiqueapproximative:scan-tracks, pas ici.
+   */
+  public function preSave($event)
+  {
+    $this->fillTrackMetadata();
+  }
+
+  /**
    * Actions performed after post has been successfully saved to database.
    * - Delete frontend template cache
    * - Generate track picture
