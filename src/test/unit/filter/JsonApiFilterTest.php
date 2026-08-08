@@ -188,7 +188,11 @@ $t->like($contentType, '/application\/vnd\.api\+json/', 'post/show with format=j
 
 $t->diag('Filter handles edge cases');
 
-$context = new sfContext();
+// MockContext et non sfContext : ce dernier ne s'instancie pas nu, son
+// getResponse() vaut null et le test tombait en erreur fatale plutot que de
+// verifier quoi que ce soit.
+$context = new MockContext();
+$context->getRequest()->setRequestFormat(null);
 $response = $context->getResponse();
 $response->setContentType('application/json');
 $filter = new JsonApiFilter($context);

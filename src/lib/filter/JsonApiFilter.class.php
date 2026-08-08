@@ -13,14 +13,29 @@ class JsonApiFilter extends sfFilter
   {
     $filterChain->execute();
 
-    // Le module rest sert du Subsonic : ses reponses JSON doivent rester
-    // application/json, pas application/vnd.api+json.
-    if ('rest' === $this->context->getModuleName()) {
+    $request  = $this->context->getRequest();
+    $response = $this->context->getResponse();
+
+    if (null === $request || null === $response) {
       return;
     }
 
-    $request  = $this->context->getRequest();
-    $response = $this->context->getResponse();
+    // Deux surfaces servent du JSON qui n'est pas du JSON:API et dont le
+    // Content-Type est impose par leur propre specification :
+    //  - le module rest, qui parle Subsonic ;
+    //  - l'action oembed, la specification oEmbed exigeant application/json.
+    // Les reecrire en application/vnd.api+json casse leurs consommateurs.
+    $module = $this->context->getModuleName();
+
+    // Requete non attribuable a un module : on ne reecrit rien plutot que de
+    // reecrire a l'aveugle.
+    if (null === $module || '' === $module) {
+      return;
+    }
+
+    if ('rest' === $module || 'oembed' === $request->getParameter('action')) {
+      return;
+    }
 
     // Only apply to JSON format requests that already have a JSON content type
     $requestFormat = $request->getRequestFormat();
