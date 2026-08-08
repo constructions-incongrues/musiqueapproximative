@@ -8,7 +8,7 @@ $t->diag('Plomberie de la base de test');
 
 $connection = Doctrine_Manager::getInstance()->getCurrentConnection();
 $t->is($connection->fetchOne('SELECT DATABASE()'), 'musiqueapproximative_test', 'les tests parlent bien a la base de test');
-$t->is((int) $connection->fetchOne('SELECT COUNT(*) FROM post'), 6, 'les six posts des fixtures sont charges');
+$t->is((int) $connection->fetchOne('SELECT COUNT(*) FROM post'), 8, 'les huit posts des fixtures sont charges');
 
 $t->diag('Regle de visibilite, via le modele');
 
@@ -18,6 +18,6 @@ foreach (Doctrine_Core::getTable('Post')->getOnlinePosts() as $post) {
 }
 sort($slugs);
 
-$t->is($slugs, array('acdc-a-b', 'sigur-ros-ancien', 'sigur-ros-rock-roll'), 'seuls les trois posts visibles remontent');
+$t->is($slugs, array('acdc-a-b', 'carol-sans-profil', 'sigur-ros-ancien', 'sigur-ros-rock-roll'), 'seuls les quatre posts visibles remontent');
 $t->ok(!in_array('fantome-retire', $slugs), 'le post hors ligne est exclu');
 $t->ok(!in_array('fantome-demain', $slugs), 'le post date dans le futur est exclu');
