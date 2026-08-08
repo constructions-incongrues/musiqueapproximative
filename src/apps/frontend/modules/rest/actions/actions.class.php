@@ -402,6 +402,64 @@ class restActions extends sfActions
     return SubsonicResponse::ok(['randomSongs' => ['song' => $songs]]);
   }
 
+  // --- Playlists ----------------------------------------------------------
+  // Une playlist Subsonic, ici, c'est un contributeur : les morceaux qu'il a
+  // postes. Pas de playlist creee cote client (cf. section "Refusees").
+
+  protected function subsonicGetPlaylists(sfWebRequest $request)
+  {
+    $playlists = [];
+
+    foreach (Doctrine_Core::getTable('Post')->getContributors() as $contributor) {
+      $playlists[] = SubsonicMapper::playlist($contributor);
+    }
+
+    return SubsonicResponse::ok(['playlists' => ['playlist' => $playlists]]);
+  }
+
+  /**
+   * Pas de pagination ici : le protocole n'en prevoit pas pour getPlaylist,
+   * d'ou l'importance de FIELDS_SUBSONIC (cf. findContributor()/PostTable) --
+   * la playlist d'un contributeur prolifique peut compter plusieurs
+   * centaines de morceaux, et charger `body` (TEXT) pour chacun d'eux serait
+   * pure perte, cette colonne n'etant jamais serialisee.
+   */
+  protected function subsonicGetPlaylist(sfWebRequest $request)
+  {
+    $contributor = $this->findContributor($this->requireParameter($request, 'id'));
+    $playlist    = SubsonicMapper::playlist($contributor);
+
+    $entries = [];
+    foreach (Doctrine_Core::getTable('Post')->buildOnlinePostsQuery($contributor['username'], null, PostTable::FIELDS_SUBSONIC)->execute() as $post) {
+      $entries[] = SubsonicMapper::song($post);
+    }
+    $playlist['entry'] = $entries;
+
+    return SubsonicResponse::ok(['playlist' => $playlist]);
+  }
+
+  /**
+   * @throws SubsonicException code 70 si l'id est invalide ou si le
+   *                            contributeur n'a aucun post visible
+   * @return array Ligne issue de PostTable::getContributors()
+   */
+  protected function findContributor($id)
+  {
+    $username = SubsonicId::parsePlaylist($id);
+
+    if (null === $username) {
+      throw new SubsonicException('Playlist not found.', 70);
+    }
+
+    foreach (Doctrine_Core::getTable('Post')->getContributors() as $contributor) {
+      if ($contributor['username'] === $username) {
+        return $contributor;
+      }
+    }
+
+    throw new SubsonicException('Playlist not found.', 70);
+  }
+
   // --- Refusees -----------------------------------------------------------
   // Serveur en lecture seule : toute methode d'ecriture repond l'erreur 50.
 

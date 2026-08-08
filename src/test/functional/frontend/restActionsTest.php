@@ -352,3 +352,71 @@ foreach ($songs as $song) {
   }
 }
 $t->ok(!$hasInvisible, 'getRandomSongs : jamais un post invisible');
+
+// --- getPlaylists -----------------------------------------------------------
+//
+// Fixtures (src/data/fixtures/subsonic.sql) : trois contributeurs ont au
+// moins un post visible.
+//   alice : posts 1, 3, 9 -> songCount 3, duration 245 + NULL + 90 = 335
+//   bob   : post 2        -> songCount 1, duration 180
+//   carol : post 8, sans ligne user_profile -> nom replie sur le username
+// Alice possede aussi les posts 4 a 7, tous invisibles : ils ne doivent
+// jamais compter dans son songCount/duration.
+
+$browser->get('/rest/getPlaylists.view?f=json');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$playlists = $json['subsonic-response']['playlists']['playlist'];
+$t->is(count($playlists), 3, 'getPlaylists : trois playlists, une par contributeur visible');
+
+$byOwner = [];
+foreach ($playlists as $playlist) {
+  $byOwner[$playlist['owner']] = $playlist;
+}
+
+$t->is($byOwner['alice']['songCount'], 3, 'getPlaylists : alice songCount = 3 (les posts 4 a 7 sont invisibles)');
+$t->is($byOwner['alice']['duration'], 335, 'getPlaylists : alice duration = 335 (SUM ignore le NULL du post 3)');
+$t->is($byOwner['bob']['songCount'], 1, 'getPlaylists : bob songCount = 1');
+$t->is($byOwner['bob']['duration'], 180, 'getPlaylists : bob duration = 180');
+$t->is($byOwner['carol']['songCount'], 1, 'getPlaylists : carol songCount = 1');
+$t->is($byOwner['carol']['name'], 'La playlist de carol', 'getPlaylists : carol, sans profil, repli sur le username (COALESCE)');
+
+foreach ($playlists as $playlist) {
+  $t->ok(isset($playlist['songCount']), 'getPlaylists : songCount present sur '.$playlist['owner']);
+}
+
+// --- getPlaylist -------------------------------------------------------------
+
+$aliceId = SubsonicId::forPlaylist('alice');
+$browser->get('/rest/getPlaylist.view?f=json&id='.urlencode($aliceId));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$playlist = $json['subsonic-response']['playlist'];
+$t->is($playlist['songCount'], 3, 'getPlaylist : alice, songCount = 3');
+$t->is(count($playlist['entry']), 3, 'getPlaylist : alice, trois morceaux dans entry');
+
+$entryIds = array_map(function ($entry) { return $entry['id']; }, $playlist['entry']);
+sort($entryIds);
+$t->is($entryIds, ['1', '3', '9'], 'getPlaylist : alice, exactement les posts 1, 3, 9');
+
+foreach (['4', '5', '6', '7'] as $invisibleId) {
+  $t->ok(!in_array($invisibleId, $entryIds, true), 'getPlaylist : alice, jamais le post invisible '.$invisibleId);
+}
+
+// Les numeros de piste n'ont de sens que dans un album (un mois) : une
+// playlist n'en porte pas.
+$t->ok(!isset($playlist['entry'][0]['track']), 'getPlaylist : un morceau de la playlist ne porte pas d attribut track');
+
+$carolId = SubsonicId::forPlaylist('carol');
+$browser->get('/rest/getPlaylist.view?f=json&id='.urlencode($carolId));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['playlist']['name'], 'La playlist de carol', 'getPlaylist : carol, nom replie sur le username');
+
+$browser->get('/rest/getPlaylist.view?f=json&id=nimportequoi');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getPlaylist : id malforme -> 70');
+
+// Aucun contributeur "personne" dans les fixtures : username invente, sans
+// aucun post, pour verifier le cas "contributeur sans post visible".
+$personneId = SubsonicId::forPlaylist('personne');
+$browser->get('/rest/getPlaylist.view?f=json&id='.urlencode($personneId));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getPlaylist : contributeur sans post visible -> 70');
