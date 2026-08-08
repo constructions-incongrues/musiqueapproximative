@@ -13,6 +13,17 @@
  * sert telle quelle ; sinon on passe la main au controleur frontal.
  */
 
+// Ce fichier n'a de sens que comme script de routage de `php -S`. En
+// production il est servi par Apache comme n'importe quel fichier reel — la
+// regle de reecriture ne s'applique qu'aux chemins qui n'existent pas — et
+// offrirait donc un second point d'entree non voulu vers le controleur
+// frontal. On refuse tout ce qui ne vient pas du serveur integre.
+if ('cli-server' !== PHP_SAPI) {
+  http_response_code(404);
+
+  return;
+}
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $file = __DIR__.$path;
 

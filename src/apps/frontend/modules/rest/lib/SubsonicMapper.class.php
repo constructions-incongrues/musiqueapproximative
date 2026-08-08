@@ -52,8 +52,6 @@ class SubsonicMapper
       'parent'      => SubsonicId::forAlbum($month),
       'isDir'       => false,
       'title'       => $get('track_title'),
-      'artist'      => $get('track_author'),
-      'artistId'    => SubsonicId::forArtist($get('track_author')),
       'album'       => self::ALBUM_PREFIX.$month,
       'albumId'     => SubsonicId::forAlbum($month),
       'coverArt'    => SubsonicId::forSongCover($get('id')),
@@ -64,6 +62,19 @@ class SubsonicMapper
       'path'        => sprintf('%s/%s', $month, $get('track_filename')),
       'type'        => 'music',
     ];
+
+    // Meme regle que pour album() : pas de reference vers un artiste que
+    // getArtists() ne rendra jamais. getDistinctArtists() exclut les auteurs
+    // vides — forArtist('') donne « ar- », que parseArtist() refuse — donc un
+    // morceau sans auteur ne doit porter ni artist ni artistId, sous peine
+    // d'offrir aux clients un lien qui repond 70. La production compte douze
+    // posts dans ce cas.
+    $author = (string) $get('track_author');
+
+    if ('' !== trim($author)) {
+      $song['artist']   = $author;
+      $song['artistId'] = SubsonicId::forArtist($author);
+    }
 
     // Attribut absent plutot que valeur nulle : un client gere bien mieux
     // l'absence d'un attribut qu'un 0 qui laisserait croire a un morceau de

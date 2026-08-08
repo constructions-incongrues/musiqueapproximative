@@ -3,7 +3,10 @@
 include(dirname(__FILE__).'/../../bootstrap/functional.php');
 require_once dirname(__FILE__).'/../../bootstrap/database.php';
 
-$browser = new sfTestFunctional(new sfBrowser());
+// Plan explicite : sans lui, lime prend le nombre d'assertions executees pour
+// le nombre attendu, et une sortie prematuree — une exception, un fatal a
+// mi-parcours — se lit comme un succes.
+$browser = new sfTestFunctional(new sfBrowser(), new lime_test(157));
 
 $t = $browser->test();
 
@@ -487,3 +490,74 @@ $browser->get('/rest/getCoverArt.view?f=json&id=co-4');
 $json = json_decode($browser->getResponse()->getContent(), true);
 $t->is($json['subsonic-response']['error']['code'], 70, 'getCoverArt : pochette d\'un post hors ligne -> 70');
 $t->is($browser->getResponse()->getHttpHeader('Location'), null, 'getCoverArt : pas de redirection pour un post hors ligne');
+
+// --- Les quatre raisons d'invisibilite, sur les trois endpoints adressables ---
+//
+// La regle de visibilite est la frontiere de securite de cette API ouverte.
+// Ne la sonder qu'avec le post hors ligne (id 4) laisserait passer une
+// reecriture de findPost() en « WHERE is_online = 1 AND id = ? » : id 4
+// repondrait toujours 70 et la suite resterait verte pendant que l'audio
+// programme deviendrait diffusable en devinant un identifiant.
+$invisibles = array(
+  4 => 'hors ligne',
+  5 => 'date dans le futur',
+  6 => 'slug vide',
+  7 => 'slug NULL',
+);
+
+foreach ($invisibles as $id => $raison)
+{
+  foreach (array('getSong', 'stream', 'download', 'getCoverArt') as $methode)
+  {
+    $parametre = 'getCoverArt' === $methode ? 'co-'.$id : $id;
+    $browser->get(sprintf('/rest/%s.view?f=json&id=%s', $methode, $parametre));
+    $json = json_decode($browser->getResponse()->getContent(), true);
+
+    $t->is(
+      isset($json['subsonic-response']['error']['code']) ? $json['subsonic-response']['error']['code'] : null,
+      70,
+      sprintf('%s : post %s (%s) -> 70', $methode, $id, $raison)
+    );
+    $t->is(
+      $browser->getResponse()->getHttpHeader('Location'),
+      null,
+      sprintf('%s : post %s (%s) -> aucune redirection', $methode, $id, $raison)
+    );
+  }
+}
+
+// --- Un morceau sans auteur ne porte ni artist ni artistId ---
+//
+// getDistinctArtists() exclut les auteurs vides, donc emettre artistId="ar-"
+// offrirait un lien vers un artiste que getArtists() ne rend jamais et qui
+// repond 70. Le post 9 est le cas dans les fixtures ; la production en compte
+// douze.
+$browser->get('/rest/getSong.view?f=json&id=9');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$morceau = $json['subsonic-response']['song'];
+
+$t->ok(!array_key_exists('artistId', $morceau), 'getSong : auteur vide -> pas d artistId pendant');
+$t->ok(!array_key_exists('artist', $morceau), 'getSong : auteur vide -> pas d artist vide');
+$t->is($morceau['id'], '9', 'getSong : le morceau sans auteur reste servi normalement');
+
+// --- En-tetes et forme XML sur un endpoint reel ---
+$browser->get('/rest/getAlbum.view?id=al-2024-06');
+$t->like($browser->getResponse()->getContentType(), '#text/xml#', 'getAlbum : Content-Type XML par defaut');
+$t->is($browser->getResponse()->getHttpHeader('Cache-Control'), 'no-store', 'getAlbum : Cache-Control no-store');
+
+$xml = simplexml_load_string($browser->getResponse()->getContent());
+$t->ok(false !== $xml, 'getAlbum : XML bien forme');
+$t->ok(false === strpos($browser->getResponse()->getContent(), '&amp;amp;'), 'getAlbum : aucun double encodage');
+
+// --- Erreur 10 par HTTP, et non par reflexion ---
+$browser->get('/rest/getAlbum.view?f=json');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 10, 'getAlbum sans id -> 10 (parametre requis manquant)');
+
+// --- Les cinq methodes d'ecriture sont refusees, pas seulement star ---
+foreach (array('star', 'unstar', 'createPlaylist', 'updatePlaylist', 'deletePlaylist') as $methode)
+{
+  $browser->get(sprintf('/rest/%s.view?f=json&id=1', $methode));
+  $json = json_decode($browser->getResponse()->getContent(), true);
+  $t->is($json['subsonic-response']['error']['code'], 50, sprintf('%s -> 50 (lecture seule)', $methode));
+}

@@ -565,8 +565,15 @@ site**, pas seulement l'API : chaque page lèverait
 
 Ordre imposé :
 
-1. `ALTER TABLE post ADD COLUMN track_duration INT NULL, ADD COLUMN track_size INT NULL;`
-   puis les deux index, exécutés **sur la base de production d'abord** ;
+1. sur la base de production **d'abord**, colonnes et index d'un seul bloc :
+
+   ```sql
+   ALTER TABLE post
+     ADD COLUMN track_duration INT NULL COMMENT 'Duree du morceau en secondes',
+     ADD COLUMN track_size INT NULL COMMENT 'Taille du fichier en octets',
+     ADD INDEX online_publish_idx (is_online, publish_on),
+     ADD INDEX track_author_idx (track_author(191));
+   ```
 2. `composer install` en local, puis `make deploy` (le rsync emporte
    `src/vendor`, dont getid3) ;
 3. `php symfony cache:clear` sur l'hôte ;

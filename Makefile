@@ -28,6 +28,13 @@ database-import: ## Récupération de la base de donnée de production
 	ssh musiqueapproxima@ftp.pastis-hosting.net mysqldump -h127.0.0.1 -umusiqueapproxima -pmusiqueapproxi musiqueapproxima > ./src/data/fixtures/musiqueapproximative.sql
 
 deploy: ## Configure et déploie l'application
+	@echo ""
+	@echo "  ATTENTION : une migration de schéma doit avoir été exécutée sur la base"
+	@echo "  de production AVANT cette synchronisation, faute de quoi tout le site"
+	@echo "  lève « Unknown column 'p.track_duration' » — pages, flux et écritures"
+	@echo "  de l'administration comprises."
+	@echo "  Voir docs/modules/ROOT/pages/deploiement.adoc"
+	@echo ""
 	PROFILE=$(PROFILE) docker-compose run --rm --entrypoint fixuid php make configure
 	# src/vendor est gitignoré mais part bien par rsync, les fichiers
 	# d'exclusion étant vides. Sans cette étape le déploiement n'emporte les

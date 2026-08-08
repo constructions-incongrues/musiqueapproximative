@@ -9,7 +9,7 @@
 require_once dirname(__FILE__).'/../../bootstrap/unit.php';
 require_once sfConfig::get('sf_root_dir').'/apps/frontend/modules/rest/lib/SubsonicMapper.class.php';
 
-$t = new lime_test(56);
+$t = new lime_test(60);
 
 // ---------------------------------------------------------------------
 // song() -- a partir d'un tableau associatif (ligne FIELDS_SUBSONIC)
@@ -173,3 +173,34 @@ $t->is(SubsonicMapper::indexLetter('Étoile filante'), '#', 'nom accentue : hors
 $t->is(SubsonicMapper::indexLetter('2 Chainz'), '#', 'nom commencant par un chiffre : #');
 $t->is(SubsonicMapper::indexLetter('!!!'), '#', 'nom commencant par une ponctuation : #');
 $t->is(SubsonicMapper::indexLetter(''), '#', 'nom vide : #, sans avertissement ni exception');
+
+$t->diag('Auteur vide : ni artist ni artistId');
+
+// getDistinctArtists() exclut les auteurs vides, donc emettre artistId="ar-"
+// offrirait un lien vers un artiste que getArtists() ne rend jamais. C'est la
+// meme regle que celle appliquee a album(), qui n'emet pas d'artistId non plus.
+$sansAuteur = SubsonicMapper::song(array(
+  'id'             => 9,
+  'track_title'    => 'Anonyme',
+  'track_author'   => '',
+  'track_filename' => 'anonyme.mp3',
+  'track_duration' => 90,
+  'track_size'     => 2000000,
+  'publish_on'     => '2024-04-05 12:00:00',
+));
+
+$t->ok(!array_key_exists('artistId', $sansAuteur), 'auteur vide : pas d artistId pendant');
+$t->ok(!array_key_exists('artist', $sansAuteur), 'auteur vide : pas d artist vide');
+$t->is($sansAuteur['title'], 'Anonyme', 'auteur vide : le reste du morceau est intact');
+
+$espaces = SubsonicMapper::song(array(
+  'id'             => 10,
+  'track_title'    => 'Espaces',
+  'track_author'   => '   ',
+  'track_filename' => 'espaces.mp3',
+  'track_duration' => null,
+  'track_size'     => null,
+  'publish_on'     => '2024-04-06 12:00:00',
+));
+
+$t->ok(!array_key_exists('artistId', $espaces), 'auteur uniquement blanc : traite comme vide');
