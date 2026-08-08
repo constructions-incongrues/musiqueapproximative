@@ -16,6 +16,9 @@ class SubsonicId
   const PREFIX_PLAYLIST = 'pl-';
   const PREFIX_COVER    = 'co-';
 
+  const TYPE_SONG  = 'song';
+  const TYPE_ALBUM = 'album';
+
   public static function forSong($postId)
   {
     return (string) $postId;
@@ -27,6 +30,15 @@ class SubsonicId
     return self::PREFIX_ALBUM.$month;
   }
 
+  /**
+   * @param string $author Un track_author potentiellement vide.
+   *
+   * Un $author vide produit tout de meme un id ('ar-'), mais ::parseArtist()
+   * le refuse (voir plus bas) : il n'y a pas d'artiste a nommer, donc pas
+   * d'id qui resout. C'est a l'appelant de filtrer les auteurs vides en
+   * amont, a la requete (cf. getDistinctArtists()) plutot que de laisser
+   * apparaitre un artiste fantome dans la liste.
+   */
   public static function forArtist($author)
   {
     return self::PREFIX_ARTIST.self::encode($author);
@@ -47,7 +59,17 @@ class SubsonicId
     return self::PREFIX_COVER.self::PREFIX_ALBUM.$month;
   }
 
-  /** @return int|null */
+  /**
+   * @return int|null
+   *
+   * Seul parseur sans prefixe : il matche tout ce qui est numerique, y
+   * compris des ids d'autres types encodes par erreur (cf. son usage en
+   * repli dans ::parseCover(), apres l'essai du prefixe album). Sans
+   * consequence tant que chaque methode Subsonic sait quel type elle attend
+   * et n'appelle qu'un seul parseur -- mais un futur ::parse() generique qui
+   * ne saurait pas a l'avance quel type attendre devrait tester ce
+   * prefixe-la en dernier.
+   */
   public static function parseSong($id)
   {
     return ctype_digit((string) $id) ? (int) $id : null;
@@ -101,17 +123,18 @@ class SubsonicId
     $rest = substr($id, strlen(self::PREFIX_COVER));
 
     if (null !== ($month = self::parseAlbum($rest))) {
-      return ['type' => 'album', 'value' => $month];
+      return ['type' => self::TYPE_ALBUM, 'value' => $month];
     }
 
     if (null !== ($postId = self::parseSong($rest))) {
-      return ['type' => 'song', 'value' => $postId];
+      return ['type' => self::TYPE_SONG, 'value' => $postId];
     }
 
     return null;
   }
 
-  public static function encode($value)
+  /** Base64url sans padding : voir ::decode() pour le sens inverse. */
+  private static function encode($value)
   {
     return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
   }
@@ -128,7 +151,7 @@ class SubsonicId
    *
    * @return string|null
    */
-  public static function decode($value)
+  private static function decode($value)
   {
     $decoded = base64_decode(strtr($value, '-_', '+/'), true);
 

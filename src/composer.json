@@ -9,6 +9,7 @@
     }
   ],
   "require": {
+    "ext-mbstring": "*",
     "lexpress/doctrine1": "1.4.*",
     "lexpress/symfony1": "1.5.*",
     "nyholm/psr7": "^1.8",
