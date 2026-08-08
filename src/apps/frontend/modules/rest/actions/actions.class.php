@@ -213,6 +213,16 @@ class restActions extends sfActions
     return SubsonicResponse::ok(['albumList2' => ['album' => $albums]]);
   }
 
+  /** Alias legacy de getAlbumList2 : meme contenu, conteneur "albumList". */
+  protected function subsonicGetAlbumList(sfWebRequest $request)
+  {
+    $body = $this->subsonicGetAlbumList2($request);
+    $body['albumList'] = $body['albumList2'];
+    unset($body['albumList2']);
+
+    return $body;
+  }
+
   protected function subsonicGetAlbum(sfWebRequest $request)
   {
     $id    = $this->requireParameter($request, 'id');
@@ -324,6 +334,72 @@ class restActions extends sfActions
     }
 
     return $post;
+  }
+
+  // --- Recherche et alea ------------------------------------------------
+
+  /**
+   * PostTable::search() (Doctrine Searchable) n'est pas reutilisable ici :
+   * elle ne renvoie que des ids de posts classes par pertinence -- jamais
+   * d'artiste, alors que le protocole l'exige -- et refait une requete par
+   * resultat, sans aucune borne. Sur cette surface non authentifiee,
+   * interrogee en saisie incrementale, c'est de l'amplification gratuite.
+   * getDistinctArtists() et searchSongs() sont bornees et en LIKE, toutes
+   * deux construites pour cet usage (cf. PostTable).
+   */
+  protected function subsonicSearch3(sfWebRequest $request)
+  {
+    $query = (string) $request->getParameter('query', '');
+    $table = Doctrine_Core::getTable('Post');
+
+    $artistCount = $this->boundedSize($request, 'artistCount', 20);
+    $songCount   = $this->boundedSize($request, 'songCount', 20);
+
+    $artists = [];
+    foreach ($table->getDistinctArtists('' === $query ? null : $query, $artistCount, $this->offset($request, 'artistOffset')) as $row) {
+      $artists[] = SubsonicMapper::artist($row);
+    }
+
+    $songs = [];
+    foreach ($table->searchSongs($query, $songCount, $this->offset($request, 'songOffset')) as $post) {
+      $songs[] = SubsonicMapper::song($post);
+    }
+
+    return SubsonicResponse::ok(['searchResult3' => [
+      'artist' => $artists,
+      // Un "album" ici est un mois de publication ("2024-06") : rien de
+      // pertinent a faire correspondre a une requete textuelle. Toujours
+      // vide, par conception -- pas un oubli.
+      'album'  => [],
+      'song'   => $songs,
+    ]]);
+  }
+
+  /** Alias legacy de search3 : meme contenu, conteneur "searchResult2". */
+  protected function subsonicSearch2(sfWebRequest $request)
+  {
+    $body = $this->subsonicSearch3($request);
+    $body['searchResult2'] = $body['searchResult3'];
+    unset($body['searchResult3']);
+
+    return $body;
+  }
+
+  protected function subsonicGetRandomSongs(sfWebRequest $request)
+  {
+    $size  = $this->boundedSize($request);
+    $posts = Doctrine_Core::getTable('Post')
+      ->buildOnlinePostsQuery(null, null, PostTable::FIELDS_SUBSONIC)
+      ->orderBy('RAND()')
+      ->limit($size)
+      ->execute();
+
+    $songs = [];
+    foreach ($posts as $post) {
+      $songs[] = SubsonicMapper::song($post);
+    }
+
+    return SubsonicResponse::ok(['randomSongs' => ['song' => $songs]]);
   }
 
   // --- Refusees -----------------------------------------------------------

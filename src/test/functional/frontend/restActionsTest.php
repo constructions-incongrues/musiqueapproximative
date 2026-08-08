@@ -235,3 +235,120 @@ $t->is($json['subsonic-response']['error']['code'], 70, 'getArtist : artiste san
 $browser->get('/rest/getArtist.view?f=json&id=nimportequoi');
 $json = json_decode($browser->getResponse()->getContent(), true);
 $t->is($json['subsonic-response']['error']['code'], 70, 'getArtist : id malforme -> 70');
+
+// --- search3 -----------------------------------------------------------
+//
+// Fixtures (src/data/fixtures/subsonic.sql), morceaux visibles seulement :
+//   1 Rock & Roll  / Sigur Rós  / 2024-06
+//   2 A < B        / AC/DC      / 2024-06
+//   8 Solo         / Carol Solo / 2024-06
+//   3 Ancien       / Sigur Rós  / 2024-05
+//   9 Anonyme      / (vide)     / 2024-04
+// Les posts 4 a 7 (Fantôme) sont tous invisibles. Une requete vide rend les
+// cinq, du plus recent au plus ancien : 8, 2, 1, 3, 9 (cf. searchSongs()).
+
+$browser->get('/rest/search3.view?f=json&query=Rock');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$songs = $json['subsonic-response']['searchResult3']['song'];
+$t->is(count($songs), 1, 'search3 : trouve le morceau par titre');
+$t->is($songs[0]['id'], '1', 'search3 : c est bien le morceau 1 (Rock & Roll)');
+
+// Sigur Rós est l'artiste de deux morceaux visibles (posts 1 et 3) : c'est le
+// cas qui justifie de ne pas reutiliser PostTable::search() (recherche par
+// titre de post uniquement, aucun resultat "artist" possible).
+$browser->get('/rest/search3.view?f=json&query=Sigur');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$result = $json['subsonic-response']['searchResult3'];
+$t->is(count($result['artist']), 1, 'search3 : trouve l artiste Sigur Rós');
+$t->is($result['artist'][0]['name'], 'Sigur Rós', 'search3 : le bon artiste');
+$t->is(count($result['song']), 2, 'search3 : trouve aussi ses deux morceaux visibles');
+
+$browser->get('/rest/search3.view?f=json&query=');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$songs = $json['subsonic-response']['searchResult3']['song'];
+$t->is(count($songs), 5, 'search3 : requete vide = tout parcourir (pagine)');
+$ids = array_map(function ($s) { return $s['id']; }, $songs);
+$t->is($ids, array('8', '2', '1', '3', '9'), 'search3 : requete vide, ordre du plus recent au plus ancien');
+
+// Fantôme n'a que des posts invisibles : la recherche ne doit jamais les
+// faire remonter, ni cote morceau ni cote artiste.
+$browser->get('/rest/search3.view?f=json&query=Fantome');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$result = $json['subsonic-response']['searchResult3'];
+$t->is(count($result['song']), 0, 'search3 : morceaux de Fantôme (invisible) jamais remontes');
+$t->is(count($result['artist']), 0, 'search3 : Fantôme absent aussi cote artiste');
+
+// --- search3 : zero resultat serialise en objet, jamais en tableau -------
+//
+// json_decode(..., true) confond {} et [] : on decode donc en objets (sans
+// $assoc) pour distinguer les deux, comme le test getGenres plus haut.
+
+$browser->get('/rest/search3.view?f=json&query=zzzzzzz');
+$raw = $browser->getResponse()->getContent();
+$t->ok(false === strpos($raw, '"searchResult3":[]'), 'search3 : zero resultat, jamais searchResult3 serialise en tableau vide');
+
+$decoded = json_decode($raw);
+$result = $decoded->{'subsonic-response'}->searchResult3;
+$t->ok(is_object($result), 'search3 : conteneur searchResult3 toujours un objet JSON, meme sans resultat');
+$t->ok(isset($result->album) && is_array($result->album) && 0 === count($result->album), 'search3 : album present mais toujours vide (pas de correspondance textuelle pertinente)');
+
+// --- search3 : songCount / songOffset -------------------------------------
+
+$browser->get('/rest/search3.view?f=json&query=&songCount=2');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is(count($json['subsonic-response']['searchResult3']['song']), 2, 'search3 : songCount respecte');
+
+$browser->get('/rest/search3.view?f=json&query=&songCount=2&songOffset=1');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$songs = $json['subsonic-response']['searchResult3']['song'];
+$t->is(array_map(function ($s) { return $s['id']; }, $songs), array('2', '1'), 'search3 : songOffset respecte');
+
+// --- search3 : "%" et "_" traites comme des caracteres litteraux ---------
+//
+// Ni le titre ni l'auteur d'aucun morceau visible ne contient un "%" ou un
+// "_" litteral : un client qui saisirait l'un de ces caracteres ne doit
+// jamais obtenir "tout" en retour (ce que produirait un joker LIKE non
+// echappe), mais bien zero resultat.
+
+$browser->get('/rest/search3.view?f=json&query='.urlencode('%'));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is(count($json['subsonic-response']['searchResult3']['song']), 0, 'search3 : "%" traite comme un caractere litteral, pas comme un joker');
+
+$browser->get('/rest/search3.view?f=json&query='.urlencode('_'));
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is(count($json['subsonic-response']['searchResult3']['song']), 0, 'search3 : "_" traite comme un caractere litteral, pas comme un joker');
+
+// --- search2 : alias legacy de search3, sous "searchResult2" -------------
+
+$browser->get('/rest/search2.view?f=json&query=Rock');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is(count($json['subsonic-response']['searchResult2']['song']), 1, 'search2 : meme donnees que search3');
+$t->is($json['subsonic-response']['searchResult2']['song'][0]['id'], '1', 'search2 : c est bien le morceau 1');
+$t->ok(!isset($json['subsonic-response']['searchResult3']), 'search2 : pas de cle searchResult3 residuelle');
+
+// --- getAlbumList : alias legacy de getAlbumList2, sous "albumList" ------
+
+$browser->get('/rest/getAlbumList.view?f=json&type=newest');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['albumList']['album'][0]['id'], 'al-2024-06', 'getAlbumList : meme donnees que getAlbumList2');
+$t->ok(!isset($json['subsonic-response']['albumList2']), 'getAlbumList : pas de cle albumList2 residuelle');
+
+// --- getRandomSongs --------------------------------------------------------
+
+$browser->get('/rest/getRandomSongs.view?f=json&size=2');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is(count($json['subsonic-response']['randomSongs']['song']), 2, 'getRandomSongs : size respecte');
+
+// size=10 depasse le nombre de morceaux visibles (5) : jamais plus que ce
+// qui existe, et jamais un des quatre posts invisibles de Fantôme (4 a 7).
+$browser->get('/rest/getRandomSongs.view?f=json&size=10');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$songs = $json['subsonic-response']['randomSongs']['song'];
+$t->is(count($songs), 5, 'getRandomSongs : jamais plus que le nombre de morceaux visibles');
+$hasInvisible = false;
+foreach ($songs as $song) {
+  if (in_array($song['id'], array('4', '5', '6', '7'), true)) {
+    $hasInvisible = true;
+  }
+}
+$t->ok(!$hasInvisible, 'getRandomSongs : jamais un post invisible');
