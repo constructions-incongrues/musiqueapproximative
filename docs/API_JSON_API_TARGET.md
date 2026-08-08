@@ -7,7 +7,7 @@
 
 All JSON responses MUST use:
 
-```
+```http
 Content-Type: application/vnd.api+json; charset=utf-8
 ```
 
@@ -227,20 +227,20 @@ It should remain unchanged — this is an industry-standard format used by third
 
 ## Migration Path (Phase 3)
 
-| Current | Target | Helper |
-|---------|--------|--------|
-| `{ "posts": [...] }` | `{ "data": [...] }` | `ApiResponse::collection()` |
-| Flat resource object | `{ "type": "posts", "id": "...", "attributes": {...} }` | `ApiResponse::resource()` |
-| Embedded sub-objects | `relationships` + `included` | `ApiResponse::resource()` per related type |
-| No meta | `"meta": { "total": N }` | `ApiResponse::data($data, $meta)` |
-| No top-level links | `"links": { "self": "..." }` | `ApiResponse::data($data, [], $links)` |
-| `application/json` | `application/vnd.api+json` | `JsonApiFilter` (already active) |
-| No error format | `{ "errors": [...] }` | `ApiErrorResponse::format()` |
+| Current              | Target                                                  | Helper                                     |
+| -------------------- | ------------------------------------------------------- | ------------------------------------------ |
+| `{ "posts": [...] }` | `{ "data": [...] }`                                     | `ApiResponse::collection()`                |
+| Flat resource object | `{ "type": "posts", "id": "...", "attributes": {...} }` | `ApiResponse::resource()`                  |
+| Embedded sub-objects | `relationships` + `included`                            | `ApiResponse::resource()` per related type |
+| No meta              | `"meta": { "total": N }`                                | `ApiResponse::data($data, $meta)`          |
+| No top-level links   | `"links": { "self": "..." }`                            | `ApiResponse::data($data, [], $links)`     |
+| `application/json`   | `application/vnd.api+json`                              | `JsonApiFilter` (already active)           |
+| No error format      | `{ "errors": [...] }`                                   | `ApiErrorResponse::format()`               |
 
 ## Infrastructure Classes
 
-| File | Class | Purpose |
-|------|-------|---------|
-| `src/lib/helper/ApiResponse.php` | `ApiResponse` | Build JSON API resources, data, collections |
-| `src/lib/helper/ApiErrorResponse.php` | `ApiErrorResponse` | Build JSON API error responses |
-| `src/lib/filter/JsonApiFilter.class.php` | `JsonApiFilter` | Auto-set `application/vnd.api+json` header |
+| File                                     | Class              | Purpose                                     |
+| ---------------------------------------- | ------------------ | ------------------------------------------- |
+| `src/lib/helper/ApiResponse.php`         | `ApiResponse`      | Build JSON API resources, data, collections |
+| `src/lib/helper/ApiErrorResponse.php`    | `ApiErrorResponse` | Build JSON API error responses              |
+| `src/lib/filter/JsonApiFilter.class.php` | `JsonApiFilter`    | Auto-set `application/vnd.api+json` header  |

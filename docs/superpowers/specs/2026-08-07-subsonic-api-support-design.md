@@ -63,13 +63,13 @@ tâche batch.
 Les identifiants Subsonic sont des chaînes opaques. On les rend **réversibles**,
 ce qui évite toute table de correspondance et toute requête de résolution.
 
-| Entité   | Identifiant                     | Résolution                                     |
-| -------- | ------------------------------- | ---------------------------------------------- |
-| Morceau  | `<post.id>`                     | clé primaire directe                           |
-| Album    | `al-2024-06`                    | `publish_on` dans le mois                      |
-| Artiste  | `ar-<base64url(track_author)>`  | décodage → `WHERE track_author = ?`            |
-| Playlist | `pl-<username>`                 | `WHERE u.username = ?`                         |
-| Pochette | `co-<post.id>` / `co-al-2024-06`| fichier avatar                                 |
+| Entité   | Identifiant                      | Résolution                          |
+| -------- | -------------------------------- | ----------------------------------- |
+| Morceau  | `<post.id>`                      | clé primaire directe                |
+| Album    | `al-2024-06`                     | `publish_on` dans le mois           |
+| Artiste  | `ar-<base64url(track_author)>`   | décodage → `WHERE track_author = ?` |
+| Playlist | `pl-<username>`                  | `WHERE u.username = ?`              |
+| Pochette | `co-<post.id>` / `co-al-2024-06` | fichier avatar                      |
 
 Le base64url pour les artistes (`strtr(base64_encode($a), '+/', '-_')` sans
 padding) évite le hachage, qui aurait imposé de parcourir tous les
@@ -79,24 +79,24 @@ Un identifiant malformé ou non résoluble renvoie l'erreur `70`.
 
 ### Champs d'un morceau
 
-| Champ Subsonic | Source                                            |
-| -------------- | ------------------------------------------------- |
-| `id`           | `post.id`                                         |
-| `title`        | `track_title`                                     |
-| `artist`       | `track_author`                                    |
-| `artistId`     | `ar-<base64url(track_author)>`                    |
-| `album`        | `Musique Approximative — YYYY-MM`                 |
-| `albumId`      | `al-YYYY-MM`                                      |
+| Champ Subsonic | Source                                             |
+| -------------- | -------------------------------------------------- |
+| `id`           | `post.id`                                          |
+| `title`        | `track_title`                                      |
+| `artist`       | `track_author`                                     |
+| `artistId`     | `ar-<base64url(track_author)>`                     |
+| `album`        | `Musique Approximative — YYYY-MM`                  |
+| `albumId`      | `al-YYYY-MM`                                       |
 | `track`        | rang dans le mois — **uniquement dans `getAlbum`** |
-| `year`         | année de `publish_on`                             |
-| `created`      | `publish_on` au format ISO 8601                   |
-| `suffix`       | extension de `track_filename`                     |
-| `contentType`  | déduit de l'extension (`audio/mpeg`…)             |
-| `duration`     | `track_duration` — **omis si nul**                |
-| `size`         | `track_size` — **omis si nul**                    |
-| `coverArt`     | `co-<post.id>`                                    |
-| `isDir`        | `false`                                           |
-| `path`         | `<YYYY-MM>/<track_filename>`                      |
+| `year`         | année de `publish_on`                              |
+| `created`      | `publish_on` au format ISO 8601                    |
+| `suffix`       | extension de `track_filename`                      |
+| `contentType`  | déduit de l'extension (`audio/mpeg`…)              |
+| `duration`     | `track_duration` — **omis si nul**                 |
+| `size`         | `track_size` — **omis si nul**                     |
+| `coverArt`     | `co-<post.id>`                                     |
+| `isDir`        | `false`                                            |
+| `path`         | `<YYYY-MM>/<track_filename>`                       |
 
 Un attribut absent est mieux géré par les clients qu'une valeur `0` : `duration`
 et `size` sont omis tant que les colonnes ne sont pas remplies.
@@ -297,7 +297,7 @@ connexion. Le XML n'est pas concerné.
 
 **XML : `SimpleXMLElement` + `addAttribute()`, valeurs brutes, aucun
 pré-échappement.** `addAttribute()` échappe déjà. Le seul précédent du dépôt,
-`executeOembed` (`actions.class.php:262`), applique `htmlentities()` *puis*
+`executeOembed` (`actions.class.php:262`), applique `htmlentities()` _puis_
 `addChild()` et produit du double-encodage ; il ne doit pas servir de modèle.
 Un test avec `&` et `<` dans un titre de morceau verrouille le comportement.
 
@@ -306,13 +306,13 @@ Un test avec `&` et `<` dans un titre de morceau verrouille le comportement.
 Une méthode `Post::getTrackUrl()` devient la seule définition, et **les cinq
 sites d'appel passent par elle** :
 
-| Site | État actuel |
-| --- | --- |
-| `Post::toJson()` (`Post.class.php:47`) | `urlencode` sur un segment de chemin → espace encodé en `+`, URL non résoluble |
-| `executeShow` (`actions.class.php:56`) | `rawurlencode` sur l'URL entière → `%2F%2Fdomain%2Ftracks%2F…` |
-| `listSuccess.xspf.php:33` | correct |
-| `executeFeed` (`actions.class.php:204`) | correct, mais base d'URL différente |
-| Subsonic `stream`/`download` | nouveau |
+| Site                                    | État actuel                                                                    |
+| --------------------------------------- | ------------------------------------------------------------------------------ |
+| `Post::toJson()` (`Post.class.php:47`)  | `urlencode` sur un segment de chemin → espace encodé en `+`, URL non résoluble |
+| `executeShow` (`actions.class.php:56`)  | `rawurlencode` sur l'URL entière → `%2F%2Fdomain%2Ftracks%2F…`                 |
+| `listSuccess.xspf.php:33`               | correct                                                                        |
+| `executeFeed` (`actions.class.php:204`) | correct, mais base d'URL différente                                            |
+| Subsonic `stream`/`download`            | nouveau                                                                        |
 
 Règle : `rawurlencode` sur le **nom de fichier seul**, base d'URL unique. Sur
 un site français, les noms de fichiers contiennent des espaces et des accents :
@@ -365,7 +365,7 @@ query string. Aucun n'est visible en développement.
 
 **1. Cache de pages Symfony.** `apps/frontend/config/cache.yml` déclare
 `default: { enabled: true, with_layout: true, lifetime: 86400 }` — un
-`cache.yml` au niveau application s'applique à *tous* les modules — et
+`cache.yml` au niveau application s'applique à _tous_ les modules — et
 `settings.yml` active `cache: true` en production. La clé de cache est
 construite depuis `getCurrentInternalUri()`, c'est-à-dire les paramètres de
 **route** uniquement : `id`, `query`, `size`, `offset`, `f`, `callback` n'y
@@ -408,8 +408,8 @@ une garde : sortie immédiate si le module courant est `rest`.
 ### Colonnes
 
 ```yaml
-    track_duration: integer   # secondes
-    track_size:     integer   # octets
+track_duration: integer # secondes
+track_size: integer # octets
 ```
 
 Nullables volontairement : le rattrapage peut être progressif, et l'API omet
@@ -418,13 +418,13 @@ l'attribut correspondant tant que la valeur manque.
 ### Index
 
 ```yaml
-  indexes:
-    online_publish_idx:
-      fields: [is_online, publish_on]
-    track_author_idx:
-      fields:
-        track_author:
-          length: 191
+indexes:
+  online_publish_idx:
+    fields: [is_online, publish_on]
+  track_author_idx:
+    fields:
+      track_author:
+        length: 191
 ```
 
 `Post` ne porte aujourd'hui aucun index hors celui du slug. Les clés du bloc
@@ -441,12 +441,12 @@ préfixe de 191 ne coûte rien.
 
 Sur les 6 155 lignes actuelles, `EXPLAIN` donne :
 
-| Requête | Résultat |
-| --- | --- |
+| Requête                                                                    | Résultat                                         |
+| -------------------------------------------------------------------------- | ------------------------------------------------ |
 | `WHERE is_online=1 AND publish_on<=NOW() ORDER BY publish_on DESC LIMIT 1` | `online_publish_idx`, **Using index** (couvrant) |
-| `WHERE is_online=1 AND track_author = ?` | `track_author_idx`, `rows=1` |
-| `GROUP BY DATE_FORMAT(publish_on,'%Y-%m')` | parcours complet, `key=NULL` |
-| `GROUP BY track_author` / `DISTINCT track_author` | parcours complet, `key=NULL` |
+| `WHERE is_online=1 AND track_author = ?`                                   | `track_author_idx`, `rows=1`                     |
+| `GROUP BY DATE_FORMAT(publish_on,'%Y-%m')`                                 | parcours complet, `key=NULL`                     |
+| `GROUP BY track_author` / `DISTINCT track_author`                          | parcours complet, `key=NULL`                     |
 
 Les deux premières formes couvrent l'essentiel du trafic existant du site —
 `executeShow`, `executeNext`, `executePrev`, la home — ainsi que
@@ -486,12 +486,12 @@ les succès.
 `SubsonicResponse::error($code, $message)` produit l'enveloppe
 `status="failed"` contenant un élément `error`.
 
-| Code | Usage                                                  |
-| ---- | ------------------------------------------------------ |
-| `0`  | erreur générique                                       |
-| `10` | paramètre requis manquant                              |
-| `50` | opération non autorisée (`star`, `createPlaylist`…)    |
-| `70` | introuvable — identifiant ou méthode inconnus          |
+| Code | Usage                                               |
+| ---- | --------------------------------------------------- |
+| `0`  | erreur générique                                    |
+| `10` | paramètre requis manquant                           |
+| `50` | opération non autorisée (`star`, `createPlaylist`…) |
+| `70` | introuvable — identifiant ou méthode inconnus       |
 
 Le code `40` (identifiants invalides) n'est jamais émis, l'authentification
 étant ouverte.
@@ -574,6 +574,7 @@ Ordre imposé :
      ADD INDEX online_publish_idx (is_online, publish_on),
      ADD INDEX track_author_idx (track_author(191));
    ```
+
 2. `composer install` en local, puis `make deploy` (le rsync emporte
    `src/vendor`, dont getid3) ;
 3. `php symfony cache:clear` sur l'hôte ;
@@ -646,6 +647,7 @@ préexistant, sans rapport avec cette branche, mais qui invalide l'image comme
 chemin de déploiement.
 
 ## Implementation Tasks
+
 Synthesized from this review's findings. Each task derives from a specific
 finding above. Run with Claude Code or Codex; checkbox as you ship.
 
@@ -712,14 +714,14 @@ finding above. Run with Claude Code or Codex; checkbox as you ship.
 
 ## Parallélisation
 
-| Étape | Modules touchés | Dépend de |
-| --- | --- | --- |
-| T1, T8, T10 | `lib/model/doctrine/` | — |
-| T2 | `lib/model/doctrine/`, `modules/post/` | — |
-| T3, T11 | `config/doctrine/`, `lib/model/doctrine/`, `lib/task/` | — |
-| T4, T5, T6, T7, T9 | `modules/rest/`, `lib/helper/`, `lib/filter/` | T1, T5 |
-| T12, T13 | `test/`, `config/` | T1–T11 |
-| T14, T15 | `Makefile`, `docs/` | — |
+| Étape              | Modules touchés                                        | Dépend de |
+| ------------------ | ------------------------------------------------------ | --------- |
+| T1, T8, T10        | `lib/model/doctrine/`                                  | —         |
+| T2                 | `lib/model/doctrine/`, `modules/post/`                 | —         |
+| T3, T11            | `config/doctrine/`, `lib/model/doctrine/`, `lib/task/` | —         |
+| T4, T5, T6, T7, T9 | `modules/rest/`, `lib/helper/`, `lib/filter/`          | T1, T5    |
+| T12, T13           | `test/`, `config/`                                     | T1–T11    |
+| T14, T15           | `Makefile`, `docs/`                                    | —         |
 
 **Lane A :** T1 → T8 → T10 (séquentiel, `PostTable` partagé)
 **Lane B :** T5 → T4 → T7 → T9 → T6 (séquentiel, module `rest` partagé ; démarre dès que T1 est fusionnée)
@@ -732,13 +734,13 @@ Ordre : lancer A, C et D en parallèle. Fusionner A, puis lancer B. T2 touche `l
 
 ## GSTACK REVIEW REPORT
 
-| Review | Trigger | Why | Runs | Status | Findings |
-|--------|---------|-----|------|--------|----------|
-| CEO Review | `/plan-ceo-review` | Scope & strategy | 0 | — | — |
-| Codex Review | `/codex review` | Independent 2nd opinion | 0 | — | — |
-| Eng Review | `/plan-eng-review` | Architecture & tests (required) | 1 | CLEAR (PLAN) | 20 issues, 0 critical gaps |
-| Design Review | `/plan-design-review` | UI/UX gaps | 0 | — | — |
-| DX Review | `/plan-devex-review` | Developer experience gaps | 0 | — | — |
+| Review        | Trigger               | Why                             | Runs | Status       | Findings                   |
+| ------------- | --------------------- | ------------------------------- | ---- | ------------ | -------------------------- |
+| CEO Review    | `/plan-ceo-review`    | Scope & strategy                | 0    | —            | —                          |
+| Codex Review  | `/codex review`       | Independent 2nd opinion         | 0    | —            | —                          |
+| Eng Review    | `/plan-eng-review`    | Architecture & tests (required) | 1    | CLEAR (PLAN) | 20 issues, 0 critical gaps |
+| Design Review | `/plan-design-review` | UI/UX gaps                      | 0    | —            | —                          |
+| DX Review     | `/plan-devex-review`  | Developer experience gaps       | 0    | —            | —                          |
 
 **OUTSIDE VOICE:** Codex unavailable (`gpt-5.1-codex-mini` unsupported on a ChatGPT account); ran as a Claude subagent. 12 findings, 8 confirmed on verification, 3 downgraded, 1 declined as already-decided. All confirmed findings folded in.
 

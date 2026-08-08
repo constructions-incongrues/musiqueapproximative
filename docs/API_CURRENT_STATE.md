@@ -5,17 +5,17 @@
 
 ## Endpoints Overview
 
-| Endpoint | Action | Format | Content-Type |
-|----------|--------|--------|--------------|
-| `GET /:slug.json` | `post/show` | json | `application/json` |
-| `GET /posts.json` | `post/list` | json | `application/json` |
-| `GET /posts.json?q=X` | `post/list` (search) | json | `application/json` |
-| `GET /posts.json?c=X` | `post/list` (contributor) | json | `application/json` |
-| `GET /md5/:md5sum` | `post/md5` | json (inline) | `application/json` |
-| `GET /random` | `post/random` | json (inline) | `application/json` |
-| `GET /next/:current` | `post/next` | json (inline) | `application/json` |
-| `GET /prev/:current` | `post/prev` | json (inline) | `application/json` |
-| `GET /oembed` | `post/oembed` | json/xml | `application/json` |
+| Endpoint              | Action                    | Format        | Content-Type       |
+| --------------------- | ------------------------- | ------------- | ------------------ |
+| `GET /:slug.json`     | `post/show`               | json          | `application/json` |
+| `GET /posts.json`     | `post/list`               | json          | `application/json` |
+| `GET /posts.json?q=X` | `post/list` (search)      | json          | `application/json` |
+| `GET /posts.json?c=X` | `post/list` (contributor) | json          | `application/json` |
+| `GET /md5/:md5sum`    | `post/md5`                | json (inline) | `application/json` |
+| `GET /random`         | `post/random`             | json (inline) | `application/json` |
+| `GET /next/:current`  | `post/next`               | json (inline) | `application/json` |
+| `GET /prev/:current`  | `post/prev`               | json (inline) | `application/json` |
+| `GET /oembed`         | `post/oembed`             | json/xml      | `application/json` |
 
 ## Response Structures
 
@@ -107,25 +107,26 @@ Standard oEmbed 1.0 format (not JSON API):
 
 ## Non-Compliance Issues
 
-| Issue | Details |
-|-------|---------|
-| No `data` key | Responses use `posts` instead of `data` |
-| No `type` field | Resources don't declare their type |
-| `id` uses slug | JSON API allows string IDs, but inconsistent (slug vs numeric) |
-| No `attributes` wrapper | Attributes are at root level of resource |
-| No `relationships` | Related resources (contributor, track) are embedded, not linked |
-| No `meta` | No pagination metadata |
-| No top-level `links` | No self/next/prev at document level |
-| Wrong Content-Type | Uses `application/json` instead of `application/vnd.api+json` |
-| Single resources in array | Show endpoint wraps single post in `posts[]` |
-| Mixed response formats | `/random`, `/next`, `/prev` use different structure |
-| No error format | No standardized error responses |
+| Issue                     | Details                                                         |
+| ------------------------- | --------------------------------------------------------------- |
+| No `data` key             | Responses use `posts` instead of `data`                         |
+| No `type` field           | Resources don't declare their type                              |
+| `id` uses slug            | JSON API allows string IDs, but inconsistent (slug vs numeric)  |
+| No `attributes` wrapper   | Attributes are at root level of resource                        |
+| No `relationships`        | Related resources (contributor, track) are embedded, not linked |
+| No `meta`                 | No pagination metadata                                          |
+| No top-level `links`      | No self/next/prev at document level                             |
+| Wrong Content-Type        | Uses `application/json` instead of `application/vnd.api+json`   |
+| Single resources in array | Show endpoint wraps single post in `posts[]`                    |
+| Mixed response formats    | `/random`, `/next`, `/prev` use different structure             |
+| No error format           | No standardized error responses                                 |
 
 ## Data Model (Post.toJson)
 
 Source: `src/lib/model/doctrine/Post.class.php`
 
 The `toJson()` method on the Post model builds the JSON representation by:
+
 1. Converting Doctrine record to array (`parent::toArray()`)
 2. Replacing numeric `id` with `slug`
 3. Building `href` via Symfony routing

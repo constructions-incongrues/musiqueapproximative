@@ -6,11 +6,11 @@ catalogue.
 
 ## Configuration d'un client
 
-| Champ | Valeur |
-| --- | --- |
+| Champ              | Valeur                                 |
+| ------------------ | -------------------------------------- |
 | Adresse du serveur | `https://www.musiqueapproximative.net` |
-| Nom d'utilisateur | n'importe lequel |
-| Mot de passe | n'importe lequel |
+| Nom d'utilisateur  | n'importe lequel                       |
+| Mot de passe       | n'importe lequel                       |
 
 L'authentification est ouverte : les fichiers audio sont déjà servis
 publiquement en statique depuis `/tracks/`, une authentification ne

@@ -26,16 +26,16 @@
 
 ## File structure
 
-| File | Responsibility |
-| --- | --- |
-| `src/lib/helper/SubsonicResponse.php` | Envelope + XML/JSON/JSONP serialisation. Knows nothing about posts. |
-| `src/lib/helper/SubsonicId.php` | Encode/decode the opaque ids. Pure functions. |
-| `src/lib/model/doctrine/Post.class.php` | Adds `buildTrackUrl()` / `getTrackUrl()`. |
-| `src/lib/model/doctrine/PostTable.class.php` | Owns the visibility rule and every Subsonic query. |
-| `src/apps/frontend/modules/rest/actions/actions.class.php` | Dispatcher + one `subsonicX()` method per API method. |
-| `src/apps/frontend/modules/rest/lib/SubsonicMapper.class.php` | Post/month/artist → Subsonic array. Keeps the actions thin. |
-| `src/apps/frontend/modules/rest/config/cache.yml` | Disables the page cache for this module. |
-| `src/lib/task/musiqueapproximativeScanTracksTask.class.php` | Batch metadata backfill. |
+| File                                                          | Responsibility                                                      |
+| ------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `src/lib/helper/SubsonicResponse.php`                         | Envelope + XML/JSON/JSONP serialisation. Knows nothing about posts. |
+| `src/lib/helper/SubsonicId.php`                               | Encode/decode the opaque ids. Pure functions.                       |
+| `src/lib/model/doctrine/Post.class.php`                       | Adds `buildTrackUrl()` / `getTrackUrl()`.                           |
+| `src/lib/model/doctrine/PostTable.class.php`                  | Owns the visibility rule and every Subsonic query.                  |
+| `src/apps/frontend/modules/rest/actions/actions.class.php`    | Dispatcher + one `subsonicX()` method per API method.               |
+| `src/apps/frontend/modules/rest/lib/SubsonicMapper.class.php` | Post/month/artist → Subsonic array. Keeps the actions thin.         |
+| `src/apps/frontend/modules/rest/config/cache.yml`             | Disables the page cache for this module.                            |
+| `src/lib/task/musiqueapproximativeScanTracksTask.class.php`   | Batch metadata backfill.                                            |
 
 ---
 
@@ -44,6 +44,7 @@
 Two shipped endpoints currently emit URLs that do not resolve. This task fixes both and gives the Subsonic code something correct to call.
 
 **Files:**
+
 - Modify: `src/lib/model/doctrine/Post.class.php`
 - Modify: `src/apps/frontend/modules/post/actions/actions.class.php` (lines 56, 204)
 - Modify: `src/apps/frontend/modules/post/templates/listSuccess.xspf.php` (line 33)
@@ -254,6 +255,7 @@ toJson(), et executeShow() encodait l'URL entiere y compris ses barres obliques.
 ## Task 2: `SubsonicResponse` — the serialiser
 
 **Files:**
+
 - Create: `src/lib/helper/SubsonicResponse.php`
 - Create: `src/test/unit/helper/SubsonicResponseTest.php`
 
@@ -539,6 +541,7 @@ git commit -m "feat: serialiseur de reponses Subsonic XML/JSON/JSONP"
 ## Task 3: `SubsonicId` — reversible opaque ids
 
 **Files:**
+
 - Create: `src/lib/helper/SubsonicId.php`
 - Create: `src/test/unit/helper/SubsonicIdTest.php`
 
@@ -760,6 +763,7 @@ git commit -m "feat: encodage reversible des identifiants Subsonic"
 ## Task 4: Schema — metadata columns and indexes
 
 **Files:**
+
 - Modify: `src/config/doctrine/schema.yml`
 - Regenerate: `src/lib/model/doctrine/base/BasePost.class.php`
 
@@ -768,26 +772,26 @@ git commit -m "feat: encodage reversible des identifiants Subsonic"
 In `src/config/doctrine/schema.yml`, inside the `Post:` block, add the two columns after `track_md5` and add an `indexes:` block between `columns:` and `relations:`:
 
 ```yaml
-    track_md5: string(32)
-    track_duration:
-      type: integer
-      comment: Duree du morceau en secondes, nulle tant que non calculee
-    track_size:
-      type: integer
-      comment: Taille du fichier en octets, nulle tant que non calculee
-    buy_url: string(255)
+track_md5: string(32)
+track_duration:
+  type: integer
+  comment: Duree du morceau en secondes, nulle tant que non calculee
+track_size:
+  type: integer
+  comment: Taille du fichier en octets, nulle tant que non calculee
+buy_url: string(255)
 ```
 
 and:
 
 ```yaml
-  indexes:
-    online_publish_idx:
-      fields: [is_online, publish_on]
-    track_author_idx:
-      fields:
-        track_author:
-          length: 191
+indexes:
+  online_publish_idx:
+    fields: [is_online, publish_on]
+  track_author_idx:
+    fields:
+      track_author:
+        length: 191
 ```
 
 The prefix length on `track_author` is not decorative: the column is `varchar(2000)` in latin1, i.e. 2000 bytes. That fits under MySQL 5.7's 3072-byte DYNAMIC limit, but the production server version is not recorded anywhere in this repo and 191 costs nothing.
@@ -845,6 +849,7 @@ git commit -m "feat: colonnes track_duration/track_size et index (is_online, pub
 Without a seeded database, the most important assertion on this branch — that an unpublished post is unreachable through Subsonic — cannot be written.
 
 **Files:**
+
 - Modify: `src/config/databases.yml-dist`
 - Modify: `etc/musiqueapproximative.localhost/.env-dist`
 - Create: `src/data/fixtures/subsonic.yml`
@@ -858,7 +863,7 @@ all:
   doctrine:
     class: sfDoctrineDatabase
     param:
-      dsn:      mysql:host=${DATABASE_HOST};dbname=${DATABASE_NAME}
+      dsn: mysql:host=${DATABASE_HOST};dbname=${DATABASE_NAME}
       username: ${DATABASE_USER}
       password: ${DATABASE_PASSWORD}
 
@@ -866,7 +871,7 @@ test:
   doctrine:
     class: sfDoctrineDatabase
     param:
-      dsn:      mysql:host=${DATABASE_HOST};dbname=${DATABASE_NAME_TEST}
+      dsn: mysql:host=${DATABASE_HOST};dbname=${DATABASE_NAME_TEST}
       username: ${DATABASE_USER}
       password: ${DATABASE_PASSWORD}
 ```
@@ -875,7 +880,7 @@ test:
 
 Append to `etc/musiqueapproximative.localhost/.env-dist`:
 
-```
+```dotenv
 DATABASE_NAME_TEST=musiqueapproximative_test
 ```
 
@@ -936,7 +941,7 @@ Post:
     track_md5: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     track_duration: 245
     track_size: 5900000
-    publish_on: '2024-06-01 12:00:00'
+    publish_on: "2024-06-01 12:00:00"
     is_online: true
     contributor_id: user_alice
     slug: sigur-ros-rock-roll
@@ -948,7 +953,7 @@ Post:
     track_md5: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     track_duration: 180
     track_size: 4300000
-    publish_on: '2024-06-15 12:00:00'
+    publish_on: "2024-06-15 12:00:00"
     is_online: true
     contributor_id: user_bob
     slug: acdc-a-b
@@ -958,7 +963,7 @@ Post:
     track_author: Sigur Ros
     track_filename: ancien.mp3
     track_md5: cccccccccccccccccccccccccccccccc
-    publish_on: '2024-05-10 12:00:00'
+    publish_on: "2024-05-10 12:00:00"
     is_online: true
     contributor_id: user_alice
     slug: sigur-ros-ancien
@@ -968,7 +973,7 @@ Post:
     track_author: Fantome
     track_filename: retire.mp3
     track_md5: dddddddddddddddddddddddddddddddd
-    publish_on: '2024-06-02 12:00:00'
+    publish_on: "2024-06-02 12:00:00"
     is_online: false
     contributor_id: user_alice
     slug: fantome-retire
@@ -978,7 +983,7 @@ Post:
     track_author: Fantome
     track_filename: demain.mp3
     track_md5: eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-    publish_on: '2099-01-01 12:00:00'
+    publish_on: "2099-01-01 12:00:00"
     is_online: true
     contributor_id: user_alice
     slug: fantome-demain
@@ -988,10 +993,10 @@ Post:
     track_author: Fantome
     track_filename: sans-slug.mp3
     track_md5: ffffffffffffffffffffffffffffffff
-    publish_on: '2024-06-03 12:00:00'
+    publish_on: "2024-06-03 12:00:00"
     is_online: true
     contributor_id: user_alice
-    slug: ''
+    slug: ""
 ```
 
 `post_june_1` deliberately has a space in its filename, `post_june_2` an ampersand — those are the cases Task 1 fixed. `Sigur Ros`, `Fantome` and `cafe` should carry their real accents (`Sigur Rós`, `Fantôme`, `café`) when you create the file.
@@ -1020,6 +1025,7 @@ hors ligne n'est pas atteignable » est impossible a ecrire."
 ## Task 6: `PostTable` — one visibility rule, one field contract
 
 **Files:**
+
 - Modify: `src/lib/model/doctrine/PostTable.class.php`
 - Create: `src/test/unit/model/PostTableSubsonicTest.php`
 
@@ -1334,6 +1340,7 @@ paresseux colonne par colonne de Doctrine 1."
 ## Task 7: The `rest` module — routes, dispatcher, configuration
 
 **Files:**
+
 - Modify: `src/apps/frontend/config/routing.yml`
 - Create: `src/apps/frontend/modules/rest/actions/actions.class.php`
 - Create: `src/apps/frontend/modules/rest/config/cache.yml`
@@ -1410,12 +1417,12 @@ At the **top** of `src/apps/frontend/config/routing.yml`, before `homepage:` (or
 
 ```yaml
 subsonic_view:
-  url:   /rest/:method.view
+  url: /rest/:method.view
   param: { module: rest, action: index }
   requirements: { method: \w+ }
 
 subsonic:
-  url:   /rest/:method
+  url: /rest/:method
   param: { module: rest, action: index }
   requirements: { method: \w+ }
 ```
@@ -1711,6 +1718,7 @@ git commit -m "feat: module rest, repartiteur Subsonic et sortie du cache de pag
 ## Task 8: `SubsonicMapper` — entities to protocol arrays
 
 **Files:**
+
 - Create: `src/apps/frontend/modules/rest/lib/SubsonicMapper.class.php`
 - Create: `src/test/unit/helper/SubsonicMapperTest.php`
 
@@ -1948,6 +1956,7 @@ git commit -m "feat: traduction des posts, mois et contributeurs vers les objets
 ## Task 9: Browsing — `getAlbumList2`, `getAlbum`, `getSong`
 
 **Files:**
+
 - Modify: `src/apps/frontend/modules/rest/actions/actions.class.php`
 - Modify: `src/test/functional/frontend/restActionsTest.php`
 
@@ -2135,6 +2144,7 @@ git commit -m "feat: getAlbumList2, getAlbum et getSong avec pagination plafonne
 ## Task 10: Artists — `getArtists`, `getArtist`
 
 **Files:**
+
 - Modify: `src/apps/frontend/modules/rest/actions/actions.class.php`
 - Modify: `src/test/functional/frontend/restActionsTest.php`
 
@@ -2257,6 +2267,7 @@ git commit -m "feat: getArtists indexe par initiale et getArtist"
 ## Task 11: `search3` and `getRandomSongs`
 
 **Files:**
+
 - Modify: `src/apps/frontend/modules/rest/actions/actions.class.php`
 - Modify: `src/test/functional/frontend/restActionsTest.php`
 
@@ -2387,6 +2398,7 @@ requete par resultat sans borne."
 ## Task 12: Playlists
 
 **Files:**
+
 - Modify: `src/apps/frontend/modules/rest/actions/actions.class.php`
 - Modify: `src/test/functional/frontend/restActionsTest.php`
 
@@ -2488,6 +2500,7 @@ git commit -m "feat: getPlaylists et getPlaylist avec songCount et duration"
 ## Task 13: `stream`, `download`, `getCoverArt`
 
 **Files:**
+
 - Modify: `src/apps/frontend/modules/rest/actions/actions.class.php`
 - Modify: `src/test/functional/frontend/restActionsTest.php`
 
@@ -2618,6 +2631,7 @@ git commit -m "feat: stream, download et getCoverArt en 302 vers une URL absolue
 ## Task 14: Metadata — getid3, `preSave`, `scan-tracks`
 
 **Files:**
+
 - Modify: `src/composer.json`
 - Modify: `src/lib/model/doctrine/Post.class.php`
 - Create: `src/lib/task/musiqueapproximativeScanTracksTask.class.php`
@@ -2858,6 +2872,7 @@ If nothing changed, skip. Otherwise fix, re-run `test:all`, and commit.
 ## Task 16: Deployment and documentation
 
 **Files:**
+
 - Modify: `Makefile`
 - Create: `docs/API_SUBSONIC.md`
 
@@ -2887,11 +2902,11 @@ catalogue.
 
 ## Configuration d'un client
 
-| Champ | Valeur |
-| --- | --- |
+| Champ              | Valeur                                 |
+| ------------------ | -------------------------------------- |
 | Adresse du serveur | `https://www.musiqueapproximative.net` |
-| Nom d'utilisateur | n'importe lequel |
-| Mot de passe | n'importe lequel |
+| Nom d'utilisateur  | n'importe lequel                       |
+| Mot de passe       | n'importe lequel                       |
 
 L'authentification est ouverte : les fichiers audio sont déjà servis
 publiquement, une authentification ne protégerait rien. Les clients exigeant un
@@ -2942,7 +2957,7 @@ par répertoires. Les clients modernes passent tous par la navigation ID3.
 
 - [ ] **Step 3: Add the deploy runbook to the spec**
 
-In `docs/superpowers/specs/2026-08-07-subsonic-api-support-design.md`, the section *Déploiement et exploitation → Ordre des opérations* already lists the four steps. Replace its step 1 with the exact statement from Task 4 so nobody retypes it:
+In `docs/superpowers/specs/2026-08-07-subsonic-api-support-design.md`, the section _Déploiement et exploitation → Ordre des opérations_ already lists the four steps. Replace its step 1 with the exact statement from Task 4 so nobody retypes it:
 
 ```sql
 ALTER TABLE post

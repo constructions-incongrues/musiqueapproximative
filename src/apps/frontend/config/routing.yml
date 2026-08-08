@@ -2,30 +2,30 @@
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
 subsonic_view:
-  url:   /rest/:method.view
+  url: /rest/:method.view
   param: { module: rest, action: index }
   requirements: { method: \w+ }
 
 subsonic:
-  url:   /rest/:method
+  url: /rest/:method
   param: { module: rest, action: index }
   requirements: { method: \w+ }
 
 # default rules
 homepage:
-  url:   /
+  url: /
   param: { module: post, action: home }
 
 post_oembed:
-  url:  /oembed
+  url: /oembed
   param: { module: post, action: oembed }
 
 post_md5:
-  url:  /post/md5/:md5sum
+  url: /post/md5/:md5sum
   param: { module: post, action: md5 }
 
 post_show:
-  url:  /post/:slug
+  url: /post/:slug
   param: { module: post, action: show }
 
 post_list:

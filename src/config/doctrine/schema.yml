@@ -12,8 +12,8 @@ Post:
       autoincrement: true
       primary: true
       notnull: true
-    body: 
-      type:    string
+    body:
+      type: string
       notnull: true
     track_title: string
     track_author: string
@@ -50,10 +50,10 @@ Post:
 
 UserProfile:
   columns:
-    user_id:          { type: integer(4), notnull: true }
-    display_name:     { type: string(255) }
-    email:            { type: string(255) }
-    website_url:      { type: string(255) }
+    user_id: { type: integer(4), notnull: true }
+    display_name: { type: string(255) }
+    email: { type: string(255) }
+    website_url: { type: string(255) }
   indexes:
     email_index:
       fields: [email]
@@ -67,4 +67,3 @@ UserProfile:
       foreign: id
       onDelete: cascade
       foreignAlias: UserProfile
-
