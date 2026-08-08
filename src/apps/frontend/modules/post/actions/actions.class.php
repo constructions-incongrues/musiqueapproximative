@@ -85,7 +85,8 @@ class postActions extends sfActions
     $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
-    $urlTrack = $this->toSecureUrl(sprintf('%s/%s', sfConfig::get('app_urls_tracks'), rawurlencode($post->track_filename)));
+    // Post::getTrackUrl() est la seule construction d'URL de morceau du projet.
+    $urlTrack = $post->getTrackUrl('https');
     $urlEmbed = $this->toSecureUrl(sprintf('%s?embed', $this->getController()->genUrl('@post_show?slug='.$post->slug, true)));
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     $this->getResponse()->addMeta('og:title', $title);
@@ -236,10 +237,10 @@ class postActions extends sfActions
       $publish_timestamp = mktime($strf['tm_hour'], $strf['tm_min'], $strf['tm_sec'], $strf['tm_mon'] + 1, $strf['tm_mday'], $strf['tm_year'] + 1900);
 
       // Canonical URL to post's associated file
-      $track_file_url = htmlspecialchars(sprintf('%s/tracks/%s', sfConfig::get('app_url_root'), rawurlencode($post->track_filename)));
+      $track_file_url = htmlspecialchars($post->getTrackUrl($request->isSecure() ? 'https' : 'http'));
 
       // Make sure no errors are generated when files do not exist (useful in dev mode)
-      $track_file_path = sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename;
+      $track_file_path = $post->getTrackPath();
       if (!is_readable($track_file_path))
       {
         $file_size = 0;

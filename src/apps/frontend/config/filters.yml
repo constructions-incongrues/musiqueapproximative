@@ -19,4 +19,11 @@ cache: ~
 desastre:
   class: sfDesastreFilter
 
+# Sous `cache` pour la meme raison que `desastre` : au retour de la chaine, un
+# filtre declare plus bas s'execute avant un filtre declare plus haut. Le
+# Content-Type doit etre reecrit avant que `sfCacheFilter` n'ecrive l'entree,
+# sinon la reponse mise en cache porte le type d'origine.
+json_api:
+  class: JsonApiFilter
+
 execution: ~

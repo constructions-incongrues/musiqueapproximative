@@ -1,0 +1,118 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Suite de tests
+    runs-on: ubuntu-latest
+
+    # MySQL 5.7 comme en production : les requetes d'agregat de l'API Subsonic
+    # dependent de ONLY_FULL_GROUP_BY, actif par defaut a partir de la 5.7, et
+    # l'absence de fonctions de fenetrage y est une contrainte assumee.
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: musiqueapproximative
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql
+          coverage: none
+
+      - name: Cache des dépendances Composer
+        uses: actions/cache@v5
+        with:
+          path: src/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('src/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Installer les dépendances
+        run: |
+          cd src
+          composer install --prefer-dist --no-progress
+
+      - name: Générer la configuration
+        # Rendu explicite plutôt que `make configure`. La cible du Makefile
+        # construit sa liste de variables à la volée et son résultat s'est
+        # révélé dépendre de la façon dont on l'invoque ; ici on veut un
+        # comportement déterministe et vérifiable, pas la commodité.
+        env:
+          APP_AUTOPLAY: "0"
+          APP_DOMAIN: localhost
+          APP_THEME: musiqueapproximative
+          APP_TITLE: Musique Approximative
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_NAME: musiqueapproximative
+          DATABASE_NAME_TEST: musiqueapproximative_test
+          DATABASE_USER: root
+          DATABASE_PASSWORD: root
+          CLOUDFLARE_API_TOKEN: ""
+          CLOUDFLARE_ZONE_ID: ""
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq gettext-base
+          find src -name '*-dist' -print0 | while IFS= read -r -d '' dist; do
+            envsubst < "$dist" > "${dist%-dist}"
+            echo "rendu : ${dist%-dist}"
+          done
+
+      - name: Vérifier la configuration rendue
+        # La substitution a déjà produit des valeurs tronquées dans un autre
+        # contexte : on ne fait pas confiance, on regarde.
+        run: |
+          cat src/config/databases.yml
+          grep -q 'dbname=musiqueapproximative_test' src/config/databases.yml \
+            || { echo "::error::la connexion de test est absente"; exit 1; }
+          grep -q 'username: root' src/config/databases.yml \
+            || { echo "::error::identifiant de connexion incorrect"; exit 1; }
+          grep -q 'domain: localhost' src/apps/frontend/config/app.yml \
+            || { echo "::error::app.yml mal rendu"; exit 1; }
+
+      - name: Créer la base de test
+        run: |
+          mysql -h 127.0.0.1 -uroot -proot \
+            -e "CREATE DATABASE IF NOT EXISTS musiqueapproximative_test CHARACTER SET utf8mb4;"
+
+      - name: Construire le schéma de test
+        run: |
+          cd src
+          php symfony doctrine:build --sql --env=test
+          php symfony doctrine:insert-sql --env=test
+
+      - name: Tests unitaires
+        run: |
+          cd src
+          php symfony test:unit
+
+      - name: Tests fonctionnels — frontend
+        run: |
+          cd src
+          php symfony test:functional frontend
+
+      - name: Tests fonctionnels — admin
+        run: |
+          cd src
+          php symfony test:functional admin

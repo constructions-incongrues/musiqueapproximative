@@ -29,7 +29,7 @@
 <?php end_slot() ?>
 
 <script>
-  window.trackUrl = '<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>';
+  window.trackUrl = <?php echo json_encode($post->getTrackUrl()) ?>;
 </script>
 
 <?php if (sfConfig::get('app_theme', 'musiqueapproximative') == 'musiqueapproximative' && $is_glitch_active): ?>
@@ -335,7 +335,7 @@
 
       <p class="author">
         <span title="Posté le <?php echo strftime('%d/%m/%Y', $post->getDateTimeObject('created_at')->getTimestamp()) ?> à <?php echo $post->getDateTimeObject('created_at')->format('H:i') ?>">Contribué par</span> : <a rel="author" href="<?php echo url_for('@homepage?c=' . $post->getSfGuardUser()->username) ?>" title="Écouter la playlist de <?php echo $post->getContributorDisplayName() ?>"><?php echo $post->getContributorDisplayName() ?></a><br />
-        <a id="download" href="<?php echo sfConfig::get('app_urls_tracks') ?>/<?php echo $post->track_filename ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
+        <a id="download" href="<?php echo $post->getTrackUrl() ?>" data-postid="<?php echo $post->id ?>">Télécharger</a>
         <?php if ($post->buy_url): ?>
           / <a href="<?php echo $post->buy_url ?>" title="Soutenez l'artiste !">Acheter</a>
         <?php endif ?>

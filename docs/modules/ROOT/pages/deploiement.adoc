@@ -1,6 +1,73 @@
 = Déploiement
 :description: Guide de déploiement de l'application
 
+[IMPORTANT]
+====
+**Une migration de schéma est en attente et son ordre est contraignant.**
+
+`PostTable::buildOnlinePostsQuery()` utilise `select('*')`, que Doctrine 1
+développe en la liste des colonnes *déclarées par le modèle*. Déployer le
+nouveau `BasePost` avant d'avoir exécuté l'`ALTER TABLE` fait donc lever
+`Unknown column 'p.track_duration'` à chaque requête qui l'emprunte.
+
+Ce que ça casse, et qui dépasse la seule API : `/posts`, le flux RSS, la
+playlist XSPF, **et toutes les écritures de l'administration** — `Post::preSave()`
+renseigne les deux nouvelles colonnes, donc elles figurent dans chaque INSERT
+et chaque UPDATE. Créer ou modifier un post échoue. Seules `/` et
+`/post/<slug>` survivent, parce qu'elles passent par `FIELDS_BASIC`, qui ne
+liste pas les nouvelles colonnes.
+
+Sur la base de production, **avant** de synchroniser les sources :
+
+[source,sql]
+----
+ALTER TABLE post
+  ADD COLUMN track_duration INT NULL COMMENT 'Duree du morceau en secondes',
+  ADD COLUMN track_size INT NULL COMMENT 'Taille du fichier en octets',
+  ADD INDEX online_publish_idx (is_online, publish_on),
+  ADD INDEX track_author_idx (track_author(191));
+----
+
+Sur MySQL 5.7 cette opération est `ALGORITHM=INPLACE, LOCK=NONE` et
+sub-seconde sur les ~7 000 lignes actuelles : pas de fenêtre de maintenance
+nécessaire.
+
+Détail complet et étapes suivantes : xref:API_SUBSONIC.adoc[] ou
+`docs/API_SUBSONIC.md`.
+====
+
+== Déploiement par rsync
+
+C'est le chemin réellement utilisé en production (l'image GHCR décrite plus bas
+ne construit pas ses dépendances, cf. `TODOS.md`).
+
+[source,bash]
+----
+# Simulation, valeur par défaut de RSYNC_PARAMETERS
+make deploy PROFILE=www.musiqueapproximative.net
+
+# Envoi réel
+make deploy PROFILE=www.musiqueapproximative.net RSYNC_PARAMETERS=
+----
+
+La cible enchaîne `make configure`, `composer install --no-dev` puis `rsync`.
+L'étape `composer install` est indispensable : `src/vendor` est gitignoré mais
+part bien par rsync, et sans elle la production se retrouve sans dépendances —
+`getID3` notamment, dont `Post::preSave()` a besoin à chaque enregistrement.
+
+Après synchronisation, sur l'hôte :
+
+[source,bash]
+----
+php symfony cache:clear
+php symfony musiqueapproximative:scan-tracks --env=prod --limit=200
+----
+
+Le rattrapage renseigne durées et tailles. Tant qu'il n'a pas tourné, aucun
+morceau n'a de durée et les clients Subsonic n'affichent ni barre de
+progression ni seek. Commencer par `--limit=200` pour mesurer avant de lancer
+les ~7 000 fichiers.
+
 == Déploiement avec Docker
 
 === Prérequis
