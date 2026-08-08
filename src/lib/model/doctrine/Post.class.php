@@ -189,10 +189,24 @@ class Post extends BasePost
     );
 
     // Generate track picture from logo
+    //
+    // Bug preexistant corrige au passage (decouvert en verifiant la tache
+    // scan-tracks : tout ->save() y compris hors de cette branche feature
+    // levait une TypeError non rattrapee ici, avant meme d'atteindre la
+    // purge du cache ci-dessous) :
+    //  - file_exists(sprintf(...), $webDir, $postId) : la parenthese
+    //    fermante de sprintf() etait mal placee, ce qui produisait
+    //    toujours false (sprintf() sans arguments de substitution) et
+    //    faisait donc toujours regenerer l'avatar.
+    //  - new Process($commandeString) : symfony/process ^5.4 n'accepte
+    //    plus une commande sous forme de chaine dans le constructeur (seul
+    //    un tableau d'arguments est accepte) ; Process::fromShellCommandline()
+    //    est l'equivalent officiellement supporte pour une chaine shell,
+    //    sans changer le comportement (run()/start() restent tels quels).
     $webDir = sfConfig::get('sf_web_dir');
     $postId = $event->getInvoker()->id;
-    if (!file_exists(sprintf('%s/avatars/%s.png'), $webDir, $postId)) {
-      $process = new Process(
+    if (!file_exists(sprintf('%s/avatars/%s.png', $webDir, $postId))) {
+      $process = Process::fromShellCommandline(
         sprintf(
           'bndrimg %s/images/logo_500.png --output=%s/avatars/%s.png --seed=%s',
           $webDir,
@@ -206,7 +220,7 @@ class Post extends BasePost
 
       // 10% chance to get a colored avatar
       if (in_array(random_int(0, 9), range(0, 9))) {
-        $process = new Process(
+        $process = Process::fromShellCommandline(
           sprintf(
             'convert -type Grayscale %s/avatars/%s.png %s/avatars/%s.png',
             $webDir,
@@ -221,7 +235,7 @@ class Post extends BasePost
 
     // Delete frontend cache *asynchronously*
     // @see https://symfony.com/doc/current/components/process.html#running-processes-asynchronously
-    $process = new Process(sprintf('rm -rf %s/*', $frontendCacheDir));
+    $process = Process::fromShellCommandline(sprintf('rm -rf %s/*', $frontendCacheDir));
     $process->start();
   }
 }
