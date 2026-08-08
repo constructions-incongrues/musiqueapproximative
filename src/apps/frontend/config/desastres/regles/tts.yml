@@ -5,6 +5,7 @@ regles:
   - probability: 1
     query: query.title ~ /.*(TTS).*/
     recettes: [tts_rapper]
+    trigger: tts_rapper
   - probability: 0.1
     query: context.date.minute == 0 || context.date.minute == 15 || context.date.minute == 30 || context.date.minute == 45
     recettes: [tts_jinglist]

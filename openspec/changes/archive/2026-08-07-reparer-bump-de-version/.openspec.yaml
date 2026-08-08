@@ -1,0 +1,5 @@
+schema: musique-approximative
+created: 2026-08-02
+goal: Faire que release-please mette réellement à jour src/VERSION, dont
+  dépendent l'invalidation du cache des assets et toute preuve de déploiement
+skip_specs: true

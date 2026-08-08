@@ -1,0 +1,4 @@
+schema: musique-approximative
+created: 2026-08-07
+goal: Faire entrer les options de désastre dans la représentation mise en cache,
+  qu'un seul visiteur sur toute la durée de vie du cache recevait jusqu'ici

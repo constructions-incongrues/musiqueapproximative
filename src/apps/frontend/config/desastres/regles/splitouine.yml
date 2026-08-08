@@ -4,3 +4,4 @@ regles:
   - probability: 1
     query: query.artist ~ /.*(catani).*/i
     recettes: [splitouine_titles_matchduration]
+    trigger: splitouine_titles_matchduration

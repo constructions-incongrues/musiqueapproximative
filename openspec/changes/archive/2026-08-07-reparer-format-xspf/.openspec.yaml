@@ -1,0 +1,4 @@
+schema: musique-approximative
+created: 2026-08-02
+goal: Réparer le format XSPF, qui renvoie une erreur 500 sur les deux routes, et
+  corriger l'exigence du corpus sur les formats annoncés

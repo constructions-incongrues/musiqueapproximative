@@ -1,6 +1,26 @@
-# Configuration du dépôt GitHub
-# Ce fichier peut être utilisé avec l'app GitHub Settings: https://github.com/apps/settings
-# Pour appliquer cette configuration automatiquement
+# ⚠️  CE FICHIER N'EST APPLIQUÉ PAR RIEN.
+#
+# Il décrit une intention, pas l'état du dépôt. Les réglages qui font foi sont ceux de
+# l'interface GitHub. Pour la protection de `main`, c'est Réglages → Rules → Rulesets —
+# et non Réglages → Branches, qui gouverne l'autre système, celui qui ne s'applique pas
+# ici.
+#
+# Il a été conçu pour l'app GitHub Settings (https://github.com/apps/settings), qui
+# l'appliquerait à chaque push sur la branche par défaut. Elle a été installée le
+# 1er août 2026, puis désinstallée le jour même, après trois tentatives infructueuses de
+# faire créer par elle la protection de branche déclarée ici.
+#
+# La raison a été comprise après coup : l'app n'écrit que la **protection classique**,
+# tandis que `main` est gouvernée par un **ruleset**. Deux systèmes distincts, deux API
+# distinctes. La section `branches` de ce fichier visait donc, depuis l'origine, un
+# mécanisme qui ne s'applique pas à cette branche. Elle a été retirée.
+#
+# Le fichier est conservé pour mémoire : c'est lui qui garde trace de ce que la
+# configuration du dépôt est censée être. Le lire comme une description de la réalité
+# serait une erreur — ce dépôt a déjà connu trois documents qui décrivaient sans
+# contraindre, et les trois avaient fini par mentir.
+#
+# Avant de réinstaller l'app, essayer sur un dépôt jetable.
 
 repository:
   name: musiqueapproximative
@@ -98,24 +118,18 @@ labels:
     color: 0366d6
     description: Mise à jour de dépendances
 
-# Protection des branches
-branches:
-  - name: main
-    protection:
-      required_pull_request_reviews:
-        required_approving_review_count: 1
-        dismiss_stale_reviews: true
-        require_code_owner_reviews: false
-
-      required_status_checks:
-        strict: true
-        contexts:
-          - Validation du code
-          - Build Docker
-          - Trunk Check
-          - Trivy Scan
-
-      enforce_admins: true
-      required_linear_history: true
-      allow_force_pushes: false
-      allow_deletions: false
+# La protection de la branche `main` n'est PAS gérée ici, et ne peut pas l'être.
+#
+# Elle est assurée par un **ruleset** — Réglages → Rules → Rulesets. Les rulesets sont un
+# système à part, avec leur propre API. L'app Settings ne sait écrire que la protection
+# *classique*, celle de Réglages → Branches. Quoi qu'on déclare dans une section
+# `branches` ici, cela ne peut donc ni créer, ni modifier, ni supprimer le ruleset qui
+# gouverne réellement `main`.
+#
+# La section a bien existé, et trois tentatives d'alignement sur la documentation de l'app
+# ont échoué à produire quoi que ce soit : ajout de `restrictions`, passage de
+# `required_pull_request_reviews` à `null`, retrait des clés non documentées. On cherchait
+# la panne dans le fichier alors qu'elle était dans le choix du système.
+#
+# Ne pas réintroduire de section `branches` : elle décrirait un mécanisme inactif sur ce
+# dépôt, et un lecteur pressé la prendrait pour la protection en vigueur.

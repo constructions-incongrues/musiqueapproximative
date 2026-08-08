@@ -1,0 +1,55 @@
+schema: musique-approximative
+
+context: |
+  Musique Approximative — playlist quotidienne collaborative du collectif
+  Constructions Incongrues. Site en production : https://www.musiqueapproximative.net
+
+  Stack : Symfony 1.5 (legacy, fin de vie) + Doctrine 1.3, PHP 7.4, MySQL,
+  templates PHP. jQuery côté client, lecteur audio jPlayer.
+  Dev sous Docker Compose (nginx :8080, PHP :8001). Déploiement **automatique** :
+  Plesk tire `main` à chaque poussée, il n'y a pas de geste de mise en ligne. Une
+  fusion sur `main` est donc une mise en production, et le `make deploy` par rsync
+  que décrit encore le Makefile est déprécié.
+
+  Deux applications : `src/apps/frontend` (public) et `src/apps/admin`.
+  Modèle central : `Post` (track_author, track_title, track_filename, body en Markdown,
+  slug, publish_on, contributeur `sfGuardUser`).
+  Plugin maison notable : `sfDesastrePlugin` (effets aléatoires, `desastres.yml`).
+
+  Contrat public à préserver — aucun test automatisé ne le couvre aujourd'hui.
+  Routes réelles, telles que définies dans `src/apps/frontend/config/routing.yml` :
+  `/` (redirection vers le dernier morceau), `/post/:slug`, `/post/md5/:md5sum`,
+  `/posts`, `/posts/feed`, `/posts/next`, `/posts/prev`, `/posts/random`, `/oembed`.
+  Formats de sortie : `json` (jsonapi.org), `xspf`, `max` (Max/MSP), flux RSS 2.01,
+  oEmbed (JSON et XML) ; métadonnées OpenGraph.
+
+  Ce contrat est spécifié en détail dans `openspec/specs/`, qui fait foi sur le
+  comportement observable. Une banque de mémoire tenue à la main a existé sous
+  `docs/memory-bank/` ; elle a été supprimée après avoir dérivé au point de
+  documenter cinq routes inexistantes et un lecteur audio abandonné. Ne pas la
+  recréer : le corpus de specs joue ce rôle, et il est validé par l'outil.
+
+  Conventions du dépôt :
+  - Commits : Conventional Commits (release-please gère version et CHANGELOG).
+  - Documentation de référence : AsciiDoc / Antora sous `docs/`. OpenSpec ne la
+    remplace pas — les artefacts décrivent un changement, `docs/` décrit l'état stable.
+  - Langue : tout est rédigé en français (artefacts, specs, tâches, commits).
+  - Le code legacy ne se refactore pas à l'occasion : un change ne touche que ce
+    qu'il annonce.
+
+# Les règles de rédaction — français, section « Hors périmètre », comportement
+# observable plutôt qu'implémentation, tâche de vérification manuelle, cache et
+# plugins tiers — sont désormais portées par le schéma `musique-approximative`,
+# dans `openspec/schemas/`. Les répéter ici créerait deux sources de vérité qui
+# divergeraient. Ne subsistent ci-dessous que les consignes que le schéma ne
+# couvre pas.
+
+rules:
+  proposal:
+    - Lorsqu'une contrainte du socle legacy oriente la solution retenue, la
+      documenter dans la section « Approche » plutôt que de la laisser implicite.
+
+operations:
+  archive:
+    guidance:
+      - Vérifier que `docs/` reflète le nouvel état stable avant d'archiver.

@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: "20"
 
@@ -30,7 +30,7 @@ jobs:
         run: npx -y repomix@latest
 
       - name: Upload Repomix output as artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: repomix-output-${{ github.sha }}
           path: repomix-output.xml

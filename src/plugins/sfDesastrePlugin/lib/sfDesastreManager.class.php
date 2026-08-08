@@ -16,6 +16,19 @@ class sfDesastreManager
   protected $ruleEngine = null;
 
   /**
+   * Chemins declares sous "imports" qui ne designent aucun fichier.
+   *
+   * Un import non resolu ne fait pas echouer le chargement : la page reste
+   * servie, avec les regles et recettes des imports valides. Il faut donc
+   * conserver la liste pour la signaler, faute de quoi une configuration
+   * partiellement invalide se comporte exactement comme une configuration
+   * complete.
+   *
+   * @var array
+   */
+  protected $unresolvedImports = array();
+
+  /**
    * Constructeur
    *
    * @param string|array $config Chemin vers le fichier YAML de configuration ou tableau de configuration
@@ -70,6 +83,8 @@ class sfDesastreManager
     $imports = isset($config['imports']) ? $config['imports'] : array();
     unset($config['imports']);
 
+    $this->unresolvedImports = array();
+
     // Initialiser les tableaux si non definis
     if (!isset($config['regles'])) {
       $config['regles'] = array();
@@ -90,6 +105,7 @@ class sfDesastreManager
         } else {
           // Log warning mais ne pas echouer
           error_log(sprintf('[sfDesastreManager] WARNING: Import file not found: %s', $fullPath));
+          $this->unresolvedImports[] = $importPath;
         }
       }
     }
@@ -106,11 +122,22 @@ class sfDesastreManager
           }
         } else {
           error_log(sprintf('[sfDesastreManager] WARNING: Import file not found: %s', $fullPath));
+          $this->unresolvedImports[] = $importPath;
         }
       }
     }
 
     return $config;
+  }
+
+  /**
+   * Retourne les chemins declares sous "imports" qui ne designent aucun fichier.
+   *
+   * @return array Tableau de chemins relatifs, vide si tous les imports resolvent
+   */
+  public function getUnresolvedImports()
+  {
+    return $this->unresolvedImports;
   }
 
   /**
@@ -216,6 +243,44 @@ class sfDesastreManager
     if (!empty($recettes)) {
       $this->applyRecettesToResponse($response, $recettes, $webRoot, $fsRoot, $context);
     }
+
+    // Signaler les imports non resolus, qu'une recette s'applique ou non :
+    // une configuration cassee doit se voir meme quand aucune regle ne matche.
+    $this->injectUnresolvedImportsWarning($context);
+  }
+
+  /**
+   * Emet un avertissement dans la console du navigateur pour chaque import non resolu.
+   *
+   * L'attribut est toujours ecrit, y compris a vide : les attributs utilisateur de
+   * Symfony 1.x persistent en session, et un avertissement d'une requete precedente
+   * survivrait sinon a la correction du chemin fautif.
+   *
+   * L'injection elle-meme est faite par sfDesastreFilter, qui n'ecrit que dans les
+   * reponses HTML : les formats json, xspf, max, le flux et oEmbed sont donc epargnes
+   * sans qu'il y ait rien a verifier ici.
+   *
+   * @param sfContext $context Contexte Symfony (optionnel)
+   */
+  protected function injectUnresolvedImportsWarning(sfContext $context = null)
+  {
+    if ($context === null) {
+      return;
+    }
+
+    $jsCode = null;
+
+    if (!empty($this->unresolvedImports)) {
+      $jsCode = '<script type="text/javascript">' . "\n";
+      $jsCode .= '/* Desastre - Auto-generated */' . "\n";
+      $jsCode .= 'console.warn(' . json_encode(sprintf(
+        'Désastres : %d import(s) déclaré(s) dans desastres.yml ne désignent aucun fichier. Les règles et recettes qu\'ils portent ne sont pas chargées.',
+        count($this->unresolvedImports)
+      )) . ', ' . json_encode(array_values($this->unresolvedImports)) . ');' . "\n";
+      $jsCode .= '</script>';
+    }
+
+    $context->getUser()->setAttribute('desastre_warnings_js', $jsCode);
   }
 
   /**

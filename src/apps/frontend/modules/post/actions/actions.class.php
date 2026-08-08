@@ -13,10 +13,44 @@ use Nyholm\Psr7\ServerRequest;
  */
 class postActions extends sfActions
 {
+  /**
+   * Dimensions du lecteur embarquable servi par /post/:slug?embed.
+   * Partagées par les métadonnées OpenGraph et la réponse oEmbed, qui doivent
+   * annoncer les mêmes valeurs.
+   */
+  const EMBED_WIDTH = 510;
+  const EMBED_HEIGHT = 220;
+
   private function getDisaster(sfWebRequest $request, sfWebResponse $response, array $query = [])
   {
     $this->getContext()->getConfiguration()->loadHelpers('Desastre');
     apply_desastre($request, $response, $query);
+  }
+
+  /**
+   * Force une URL absolue en HTTPS.
+   */
+  private function toSecureUrl($url)
+  {
+    return preg_replace('#^http://#i', 'https://', $url);
+  }
+
+  /**
+   * Type MIME d'un fichier de piste, déduit de son extension.
+   */
+  private function getTrackMimeType($filename)
+  {
+    $types = array(
+      'mp3'  => 'audio/mpeg',
+      'ogg'  => 'audio/ogg',
+      'oga'  => 'audio/ogg',
+      'm4a'  => 'audio/mp4',
+      'flac' => 'audio/flac',
+      'wav'  => 'audio/wav',
+    );
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    return isset($types[$extension]) ? $types[$extension] : 'audio/mpeg';
   }
 
   /**
@@ -51,11 +85,9 @@ class postActions extends sfActions
     $posts_count = Doctrine_Core::getTable('Post')->countOnlinePosts();
 
     // Define opengraph metadata (see http://ogp.me/)
-    // og:video / og:video:secure_url below embed http:// and https:// SWF URLs
-    // side by side, regardless of the request's own scheme, so the track URL
-    // inside each must carry the matching scheme explicitly.
-    $urlTrackHttp = $post->getTrackUrl('http');
-    $urlTrackHttps = $post->getTrackUrl('https');
+    // Post::getTrackUrl() est la seule construction d'URL de morceau du projet.
+    $urlTrack = $post->getTrackUrl('https');
+    $urlEmbed = $this->toSecureUrl(sprintf('%s?embed', $this->getController()->genUrl('@post_show?slug='.$post->slug, true)));
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
     $this->getResponse()->addMeta('og:title', $title);
     $this->getResponse()->addMeta('og:description', trim(strip_tags(Markdown($post->body))));
@@ -63,49 +95,24 @@ class postActions extends sfActions
     // Glitch logo ?
     $this->is_glitch_active = (rand(1, sfConfig::get('app_glitch_divisor', 10)) == 1);
 
-    // http/https variants of the request's own URI prefix, so that the
-    // image= sub-resource embedded below in og:video / og:video:secure_url
-    // can be kept scheme-consistent with each meta, same reasoning as
-    // $urlTrackHttp/$urlTrackHttps above.
-    $uriPrefixHttp = preg_replace('#^https?#', 'http', $request->getUriPrefix(), 1);
-    $uriPrefixHttps = preg_replace('#^https?#', 'https', $request->getUriPrefix(), 1);
-
     if (sfConfig::get('app_theme') == 'musiqueapproximative' && $this->is_glitch_active) {
       $urlImg = sprintf('https://gliche.constructions-incongrues.net/glitch?seed=%d&amount=%d&url=%s/images/logo_500.png', $post->id, rand(0, 100), $request->getUriPrefix());
-      // The glitch service is https-only regardless of scheme requested.
-      $urlImgHttp = $urlImg;
-      $urlImgHttps = $urlImg;
     } else {
       $urlImg = sprintf('%s/theme/%s/images/logo_500.png', $request->getUriPrefix(), sfConfig::get('app_theme'));
-      $urlImgHttp = sprintf('%s/theme/%s/images/logo_500.png', $uriPrefixHttp, sfConfig::get('app_theme'));
-      $urlImgHttps = sprintf('%s/theme/%s/images/logo_500.png', $uriPrefixHttps, sfConfig::get('app_theme'));
     }
     $this->getResponse()->addMeta('og:image', $urlImg);
     $this->getResponse()->addMeta('og:image:type', 'image/png');
     $this->getResponse()->addMeta('og:image:height', '476');
     $this->getResponse()->addMeta('og:image:width', '476');
-    $this->getResponse()->addMeta('og:type', 'video');
-    $this->getResponse()->addMeta(
-      'og:video',
-      sprintf(
-        'http://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
-        sfConfig::get('app_domain'),
-        $urlTrackHttp,
-        $urlImgHttp
-      )
-    );
-    $this->getResponse()->addMeta(
-      'og:video:secure_url',
-      sprintf(
-        'https://%s/player.swf?autostart=true&file=%s&height=476&width=476&image=%s',
-        sfConfig::get('app_domain'),
-        $urlTrackHttps,
-        $urlImgHttps
-      )
-    );
-    $this->getResponse()->addMeta('og:video:type', 'application/x-shockwave-flash');
-    $this->getResponse()->addMeta('og:video:height', '476');
-    $this->getResponse()->addMeta('og:video:width', '476');
+    $this->getResponse()->addMeta('og:type', 'music.song');
+    $this->getResponse()->addMeta('og:video', $urlEmbed);
+    $this->getResponse()->addMeta('og:video:secure_url', $urlEmbed);
+    $this->getResponse()->addMeta('og:video:type', 'text/html');
+    $this->getResponse()->addMeta('og:video:height', (string) self::EMBED_HEIGHT);
+    $this->getResponse()->addMeta('og:video:width', (string) self::EMBED_WIDTH);
+    $this->getResponse()->addMeta('og:audio', $urlTrack);
+    $this->getResponse()->addMeta('og:audio:secure_url', $urlTrack);
+    $this->getResponse()->addMeta('og:audio:type', $this->getTrackMimeType($post->track_filename));
     $this->getResponse()->addMeta('og:url', $this->getController()->genUrl('@post_show?slug='.$post->slug, true));
 
     // Gather common query parameters
@@ -233,13 +240,17 @@ class postActions extends sfActions
       $track_file_url = htmlspecialchars($post->getTrackUrl($request->isSecure() ? 'https' : 'http'));
 
       // Make sure no errors are generated when files do not exist (useful in dev mode)
-      if (!is_readable(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename))
+      $track_file_path = $post->getTrackPath();
+      if (!is_readable($track_file_path))
       {
         $file_size = 0;
       }
       else
       {
-        $file_size = strlen(file_get_contents(sfConfig::get('sf_web_dir').'/tracks/'.$post->track_filename));
+        // Taille demandée au système de fichiers : lire le fichier entier en mémoire
+        // pour n'en mesurer que la longueur coûtait une lecture complète par item et
+        // par requête sur le flux.
+        $file_size = filesize($track_file_path);
       }
 
       // Glitch logo ?
@@ -321,25 +332,32 @@ class postActions extends sfActions
       'type'          => 'rich',
       'provider_name' => 'MusiqueApproximative',
       'provider_url'  => sfConfig::get('app_url_root'),
-      'height'        => 220,
-      'width'         => 510,
+      'height'        => self::EMBED_HEIGHT,
+      'width'         => self::EMBED_WIDTH,
       'title'         => sprintf('%s - %s', $post->track_author, $post->track_title),
       'description'   => strip_tags(Markdown($post->body)),
-      'html'          => sprintf('<iframe width="510" height="220" scrolling="no" frameborder="no" src="%s?embed"></iframe>', $this->getController()->genUrl('@post_show?slug='.$post->slug, true))
+      'html'          => sprintf('<iframe width="%d" height="%d" scrolling="no" frameborder="no" src="%s?embed"></iframe>', self::EMBED_WIDTH, self::EMBED_HEIGHT, $this->getController()->genUrl('@post_show?slug='.$post->slug, true))
     );
 
     // Encode data depending on requested format
-    if ($request->getParameter('format', 'json') == 'json') {
+    $format = strtolower(trim($request->getParameter('format', 'json')));
+    if ($format == 'json') {
       $dataEncoded = json_encode($data);
-      // $this->getResponse()->setContentType('application/json+oembed');
-      $this->getResponse()->setContentType('application/json');
-    } else if ($request->getParameter('format', 'json') == 'xml') {
+      $this->getResponse()->setContentType('application/json+oembed');
+    } else if ($format == 'xml') {
       $xml = new SimpleXMLElement('<oembed/>');
       foreach ($data as $key => $value) {
         $xml->addChild($key, htmlentities($value));
       }
       $dataEncoded = $xml->asXml();
       $this->getResponse()->setContentType('text/xml+oembed');
+    } else {
+      // La spécification oEmbed demande 501 quand le format demandé n'est pas
+      // pris en charge. Auparavant la réponse partait vide, en 200.
+      $this->getResponse()->setStatusCode(501);
+      sfConfig::set('sf_web_debug', false);
+
+      return sfView::NONE;
     }
 
     // Pass data to view

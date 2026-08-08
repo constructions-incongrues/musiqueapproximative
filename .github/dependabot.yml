@@ -4,6 +4,19 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Le `Dockerfile` épingle `php:7.4.33`, et `src/composer.json` exige
+      # `php: ^7.4`. Le socle Symfony 1.5 / Doctrine 1.4 ne passe pas en 8.x sans
+      # réécriture, donc une montée majeure de `php` ne peut jamais aboutir. Quatre
+      # pull requests l'ont proposée entre janvier et avril 2026 — #74, #82, #87,
+      # #88 — et les quatre ont été fermées.
+      #
+      # Cette règle écarte une montée impossible. Elle n'écarte pas le problème
+      # qu'elle signalait : PHP 7.4 est en fin de vie depuis novembre 2022 et ne
+      # reçoit plus de correctif de sécurité, alors que l'image est publiée sur
+      # ghcr.io. Le rappel automatique disparaît ici ; le socle reste à reprendre.
+      - dependency-name: php
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: composer
     directory: /src

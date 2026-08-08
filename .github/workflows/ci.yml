@@ -5,6 +5,10 @@ on:
     tags: [v*]
   pull_request:
     branches: [main]
+  # `Validation du code` et `Build et Push Docker` sont deux des trois contextes
+  # exigés par le ruleset `main`. La file de fusion les attend sur la branche
+  # `gh-readonly-queue/…` ; sans ce déclencheur elle patiente en vain.
+  merge_group:
 
 permissions:
   contents: read
@@ -35,7 +39,7 @@ jobs:
           composer validate --strict
 
       - name: Cache des dépendances Composer
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: src/vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('src/composer.lock') }}
@@ -65,7 +69,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -76,7 +80,7 @@ jobs:
 
       - name: Extract metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -90,10 +94,13 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build et Push de l'image Docker
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
+          # Seul un tag publie. La condition portait sur « tout sauf une pull
+          # request », ce qui aurait fait publier une image depuis une branche
+          # de file de fusion.
+          push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha

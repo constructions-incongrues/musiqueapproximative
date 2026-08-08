@@ -1,6 +1,11 @@
 name: Pull Request
 
-on: [pull_request, workflow_dispatch]
+# `merge_group` est requis : `Trunk Check` est un contexte exigé par le ruleset
+# `main`, et la file de fusion l'attend sur la branche `gh-readonly-queue/…`.
+# Sans ce déclencheur, rien n'y tourne, la file patiente soixante minutes puis
+# éjecte la pull request — ce qui a fait passer la fusion automatique pour
+# inopérante pendant des mois.
+on: [pull_request, workflow_dispatch, merge_group]
 
 concurrency:
   group: ${{ github.head_ref || github.run_id }}
@@ -25,4 +30,9 @@ jobs:
       - name: Trunk Check
         uses: trunk-io/trunk-action@v1
         with:
-          post-annotations: true
+          # Désactivé : l'étape interne « Download annotations artifact » de
+          # trunk-action construit un appel github-script avec un run_id vide
+          # lorsque l'upload d'annotations est sauté, et le job échoue sur un
+          # SyntaxError alors que le lint est passé. Le workflow était rouge en
+          # continu depuis février 2026 pour cette raison.
+          post-annotations: false
