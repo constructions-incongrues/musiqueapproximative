@@ -120,14 +120,14 @@ abstract class BasePost extends sfDoctrineRecord
              ));
 
 
-        $this->index('online_publish_idx', array(
+        $this->index('online_publish', array(
              'fields' => 
              array(
               0 => 'is_online',
               1 => 'publish_on',
              ),
              ));
-        $this->index('track_author_idx', array(
+        $this->index('track_author', array(
              'fields' => 
              array(
               'track_author' => 
