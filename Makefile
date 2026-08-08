@@ -29,6 +29,10 @@ database-import: ## Récupération de la base de donnée de production
 
 deploy: ## Configure et déploie l'application
 	PROFILE=$(PROFILE) docker-compose run --rm --entrypoint fixuid php make configure
+	# src/vendor est gitignoré mais part bien par rsync, les fichiers
+	# d'exclusion étant vides. Sans cette étape le déploiement n'emporte les
+	# dépendances que si quelqu'un a pensé à les construire localement.
+	PROFILE=$(PROFILE) docker-compose run --rm --entrypoint fixuid php composer install --no-dev --optimize-autoloader
 	rsync -avzm $(RSYNC_PARAMETERS) --exclude-from=./etc/$(PROFILE)/rsync/exclude --include-from=./etc/$(PROFILE)/rsync/include -e "ssh -p $$RSYNC_SSH_PORT" "$$RSYNC_LOCAL_PATH" "$$RSYNC_REMOTE_USER@$$RSYNC_REMOTE_HOST:$$RSYNC_REMOTE_PATH"
 
 start: build ## Démarrage de l'application
