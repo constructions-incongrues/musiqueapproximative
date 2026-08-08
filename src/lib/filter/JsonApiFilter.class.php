@@ -13,6 +13,12 @@ class JsonApiFilter extends sfFilter
   {
     $filterChain->execute();
 
+    // Le module rest sert du Subsonic : ses reponses JSON doivent rester
+    // application/json, pas application/vnd.api+json.
+    if ('rest' === $this->context->getModuleName()) {
+      return;
+    }
+
     $request  = $this->context->getRequest();
     $response = $this->context->getResponse();
 

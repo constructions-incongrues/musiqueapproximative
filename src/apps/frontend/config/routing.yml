@@ -1,6 +1,16 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
+subsonic_view:
+  url:   /rest/:method.view
+  param: { module: rest, action: index }
+  requirements: { method: \w+ }
+
+subsonic:
+  url:   /rest/:method
+  param: { module: rest, action: index }
+  requirements: { method: \w+ }
+
 # default rules
 homepage:
   url:   /

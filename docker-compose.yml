@@ -11,7 +11,10 @@ services:
 
   php:
     build: .
-    command: [/bin/sh, -c, make configure && composer install && php -S 0.0.0.0:8000 -t web]
+    # Le script de routage est indispensable : sans lui, php -S traite tout
+    # chemin contenant un point comme un fichier statique et repond 404 sans
+    # atteindre Symfony, ce qui rend /rest/ping.view injoignable en local.
+    command: [/bin/sh, -c, make configure && composer install && php -S 0.0.0.0:8000 -t web web/router.php]
     depends_on:
       - db
     ports:

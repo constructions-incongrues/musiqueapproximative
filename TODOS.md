@@ -108,3 +108,15 @@ Cas réel : le post `hyacinthe-retour-d-emeute-piege`. C'est la même famille d'
 **Effort:** S
 **Priority:** P4
 **Depends on:** None
+
+### Une session est ouverte à chaque requête, y compris sur `/rest`
+
+**What:** Envisager une application `api` dédiée (sans `sfDesastreFilter` ni session) si le volume de fichiers de session devient un problème.
+
+**Why:** `sfDesastreFilter` lit `$this->context->getUser()->getAttribute(...)` avant même de vérifier le format de la réponse, ce qui instancie `sfUser` et démarre une session sur *toute* requête — y compris `/rest/ping`, appelé en boucle par les clients Subsonic (polling, `getNowPlaying`, etc.). Vérifié : `/posts?format=json` et `/rest/ping` posent tous les deux un `Set-Cookie: symfony=...`. Ce n'est pas une régression de la branche Subsonic — le comportement est identique sur `/posts` — mais le nouveau module `rest` en hérite et en amplifie l'usage (clients qui interrogent le serveur bien plus souvent qu'un navigateur).
+
+**Context:** Symfony 1 n'a pas de bascule de session par module. Le correctif propre serait une application `frontend`-bis dédiée à `/rest`, sans `sfDesastreFilter` dans `filters.yml` et avec `use_database`/session désactivés si possible. Non prioritaire tant que le volume de fichiers de session reste gérable.
+
+**Effort:** M
+**Priority:** P4
+**Depends on:** None

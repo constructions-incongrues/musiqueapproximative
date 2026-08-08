@@ -52,21 +52,35 @@ class MockContext
 {
   private $request;
   private $response;
-  
+  private $moduleName;
+
   public function __construct()
   {
     $this->request = new MockRequest();
     $this->response = new MockResponse();
   }
-  
+
   public function getRequest()
   {
     return $this->request;
   }
-  
+
   public function getResponse()
   {
     return $this->response;
+  }
+
+  public function setModuleName($moduleName)
+  {
+    $this->moduleName = $moduleName;
+  }
+
+  // JsonApiFilter::execute() now short-circuits on the 'rest' module (see
+  // the guard added for the Subsonic API) : the mock needs this method too,
+  // or every test using it fatals before reaching any assertion.
+  public function getModuleName()
+  {
+    return $this->moduleName;
   }
 }
 
@@ -83,7 +97,8 @@ class MockFilterChain
 function createFilterWithMockContext($module, $action, $requestFormat = 'json', $existingContentType = null)
 {
   $context = new MockContext();
-  
+  $context->setModuleName($module);
+
   // Set up request
   $request = $context->getRequest();
   $request->setParameter('module', $module);
