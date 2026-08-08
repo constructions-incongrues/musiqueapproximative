@@ -171,6 +171,108 @@ class restActions extends sfActions
     return SubsonicResponse::ok();
   }
 
+  // --- Navigation -----------------------------------------------------------
+
+  protected function subsonicGetAlbumList2(sfWebRequest $request)
+  {
+    $type   = $request->getParameter('type', 'newest');
+    $size   = $this->boundedSize($request);
+    $offset = $this->offset($request);
+    $table  = Doctrine_Core::getTable('Post');
+
+    switch ($type) {
+      case 'alphabeticalByName':
+      case 'byYear':
+        $months = $table->getMonths($size, $offset, 'ASC');
+        break;
+
+      case 'random':
+        // Pas de RAND() en SQL ici : il faudrait alors appliquer LIMIT/OFFSET
+        // apres le tri aleatoire, ce qui rendrait chaque page incoherente
+        // d'un appel a l'autre. On charge donc tous les mois (l'agregat
+        // reste petit : un par mois de publication) et on tire en PHP.
+        $all = $table->getMonths();
+        shuffle($all);
+        $months = array_slice($all, $offset, $size);
+        break;
+
+      // frequent et recent retombent sur newest : aucune statistique d'ecoute
+      // n'est collectee.
+      case 'newest':
+      case 'frequent':
+      case 'recent':
+      default:
+        $months = $table->getMonths($size, $offset, 'DESC');
+    }
+
+    $albums = [];
+    foreach ($months as $month) {
+      $albums[] = SubsonicMapper::album($month);
+    }
+
+    return SubsonicResponse::ok(['albumList2' => ['album' => $albums]]);
+  }
+
+  protected function subsonicGetAlbum(sfWebRequest $request)
+  {
+    $id    = $this->requireParameter($request, 'id');
+    $month = SubsonicId::parseAlbum($id);
+
+    if (null === $month) {
+      throw new SubsonicException('Album not found.', 70);
+    }
+
+    $table = Doctrine_Core::getTable('Post');
+    $row   = $table->getMonth($month);
+
+    if (null === $row) {
+      throw new SubsonicException('Album not found.', 70);
+    }
+
+    $album = SubsonicMapper::album($row);
+    $songs = [];
+    $track = 1;
+
+    foreach ($table->getPostsByMonth($month) as $post) {
+      $songs[] = SubsonicMapper::song($post, $track++);
+    }
+
+    $album['song'] = $songs;
+
+    return SubsonicResponse::ok(['album' => $album]);
+  }
+
+  protected function subsonicGetSong(sfWebRequest $request)
+  {
+    $post = $this->findPost($this->requireParameter($request, 'id'));
+
+    return SubsonicResponse::ok(['song' => SubsonicMapper::song($post)]);
+  }
+
+  /**
+   * @throws SubsonicException code 70 si l'id est invalide ou le post invisible
+   * @return Post
+   */
+  protected function findPost($id)
+  {
+    $postId = SubsonicId::parseSong($id);
+
+    if (null === $postId) {
+      throw new SubsonicException('Song not found.', 70);
+    }
+
+    $post = Doctrine_Core::getTable('Post')
+      ->buildOnlinePostsQuery(null, null, PostTable::FIELDS_SUBSONIC)
+      ->andWhere('p.id = ?', $postId)
+      ->fetchOne();
+
+    if (!$post) {
+      throw new SubsonicException('Song not found.', 70);
+    }
+
+    return $post;
+  }
+
   // --- Refusees -----------------------------------------------------------
   // Serveur en lecture seule : toute methode d'ecriture repond l'erreur 50.
 

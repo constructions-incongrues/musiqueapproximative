@@ -19,6 +19,11 @@
  * en revanche detectable et leve une exception (voir assertDeclared()) :
  * seule la variante vide echappe a ce garde-fou, faute d'un autre signal.
  *
+ * Un nom de $repeatable peut aussi porter un objet UNIQUE ailleurs dans
+ * l'arbre (le "album" de getAlbum, racine de la reponse, contre le "album"
+ * repete d'albumList2) : c'est alors la forme de la valeur -- liste indexee
+ * 0..n-1 ou non -- qui decide, pas seulement son nom (voir ::isList()).
+ *
  * @see http://www.subsonic.org/pages/api.jsp
  */
 class SubsonicResponse
@@ -42,6 +47,21 @@ class SubsonicResponse
   public static function isRepeatable($name)
   {
     return in_array($name, self::$repeatable, true);
+  }
+
+  /**
+   * Un nom declare dans self::$repeatable (« album », « song »...) sert dans
+   * deux roles distincts selon l'endroit ou il apparait : cle d'une liste
+   * (albumList2.album = plusieurs albums) ou cle d'un objet unique (le
+   * getAlbum de premier niveau = un seul album, dont les champs -- id, name,
+   * song... -- ne sont pas indexes 0..n-1). isRepeatable($key) seul ne peut
+   * pas distinguer les deux : c'est la forme de $value qui tranche. Sans ce
+   * garde-fou, un objet unique sous une cle repetable se ferait iterer champ
+   * par champ (ses scalaires disparaitraient, silencieusement, cf. Task 9).
+   */
+  private static function isList(array $value)
+  {
+    return [] === $value || array_keys($value) === range(0, count($value) - 1);
   }
 
   /**
@@ -188,7 +208,7 @@ class SubsonicResponse
       return $value;
     }
 
-    if (null !== $key && self::isRepeatable($key)) {
+    if (null !== $key && self::isRepeatable($key) && self::isList($value)) {
       $items = [];
       foreach ($value as $item) {
         if (!is_array($item)) {
@@ -231,7 +251,7 @@ class SubsonicResponse
         continue;
       }
 
-      if (is_array($value) && self::isRepeatable($key)) {
+      if (is_array($value) && self::isRepeatable($key) && self::isList($value)) {
         foreach ($value as $item) {
           if (!is_array($item)) {
             // Cf. toJsonValue() : un element non-tableau est ignore plutot

@@ -1,6 +1,7 @@
 <?php
 
 include(dirname(__FILE__).'/../../bootstrap/functional.php');
+require_once dirname(__FILE__).'/../../bootstrap/database.php';
 
 $browser = new sfTestFunctional(new sfBrowser());
 
@@ -74,3 +75,92 @@ $t->is($json['subsonic-response']['error']['code'], 50, 'star : code 50 (lecture
 $browser->get('/rest/getGenres.view?f=json');
 $decoded = json_decode($browser->getResponse()->getContent());
 $t->ok(is_object($decoded->{'subsonic-response'}->genres), 'getGenres : conteneur vide serialise en objet JSON, pas en tableau');
+
+// --- getAlbumList2 --------------------------------------------------------
+//
+// Fixtures (src/data/fixtures/subsonic.sql) : 2024-06 a trois morceaux
+// visibles (245 + 180 + 60 = 485s), 2024-05 en a un seul, sans duree.
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=newest');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$albums = $json['subsonic-response']['albumList2']['album'];
+$t->is($albums[0]['id'], 'al-2024-06', 'getAlbumList2 : le mois le plus recent en tete');
+$t->is($albums[0]['songCount'], 3, 'getAlbumList2 : songCount present');
+$t->is($albums[0]['artist'], 'Various Artists', 'getAlbumList2 : artiste de compilation');
+$t->ok(!isset($albums[0]['artistId']), 'getAlbumList2 : pas d artistId pendant');
+$t->is($albums[0]['duration'], 485, 'getAlbumList2 : duree cumulee du mois');
+$t->ok(!isset($albums[1]['duration']), 'getAlbumList2 : duree absente quand tous les morceaux du mois en sont depourvus');
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=newest&size=1');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is(count($json['subsonic-response']['albumList2']['album']), 1, 'getAlbumList2 : size respecte');
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=newest&size=1&offset=1');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['albumList2']['album'][0]['id'], 'al-2024-05', 'getAlbumList2 : offset respecte');
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=newest&size=99999');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->ok(count($json['subsonic-response']['albumList2']['album']) <= 500, 'getAlbumList2 : size plafonne a 500');
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=alphabeticalByName&size=500');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$albums = $json['subsonic-response']['albumList2']['album'];
+$t->is($albums[0]['id'], 'al-2024-05', 'getAlbumList2 : alphabeticalByName trie par ordre croissant');
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=byYear&size=500');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$albums = $json['subsonic-response']['albumList2']['album'];
+$t->is($albums[0]['id'], 'al-2024-05', 'getAlbumList2 : byYear trie par ordre croissant');
+
+$browser->get('/rest/getAlbumList2.view?f=json&type=random&size=500');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$ids = array();
+foreach ($json['subsonic-response']['albumList2']['album'] as $album) {
+  $ids[] = $album['id'];
+}
+sort($ids);
+$t->is($ids, array('al-2024-05', 'al-2024-06'), 'getAlbumList2 : random retourne les memes mois, sans en perdre');
+
+// --- getAlbum --------------------------------------------------------------
+
+$browser->get('/rest/getAlbum.view?f=json&id=al-2024-06');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$album = $json['subsonic-response']['album'];
+$t->is(count($album['song']), 3, 'getAlbum : les trois morceaux du mois');
+$t->is($album['song'][0]['id'], '1', 'getAlbum : premier morceau publie en tete');
+$t->is($album['song'][0]['track'], 1, 'getAlbum : numero de piste calcule');
+$t->is($album['song'][1]['track'], 2, 'getAlbum : deuxieme piste');
+$t->is($album['song'][2]['track'], 3, 'getAlbum : troisieme piste');
+$t->is($album['song'][0]['title'], 'Rock & Roll', 'getAlbum : titre avec « & » intact en JSON');
+
+$browser->get('/rest/getAlbum.view?f=json&id=al-2024-05');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->ok(!isset($json['subsonic-response']['album']['duration']), 'getAlbum : duree absente pour un album sans morceau chiffre');
+
+$browser->get('/rest/getAlbum.view?f=json&id=al-1999-01');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getAlbum : mois vide -> 70');
+
+$browser->get('/rest/getAlbum.view?f=json&id=nimportequoi');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getAlbum : id malforme -> 70');
+
+// --- getSong -----------------------------------------------------------------
+
+$browser->get('/rest/getSong.view?f=json&id=1');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['song']['id'], '1', 'getSong : renvoie le morceau');
+
+$browser->get('/rest/getSong.view?f=json&id=999999');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getSong : id inconnu -> 70');
+
+// id 4 : hors ligne (is_online = 0) -- doit rester invisible malgre un id
+// numerique valide. C'est l'assertion la plus importante de la tache : elle
+// verifie que findPost() passe bien par buildOnlinePostsQuery() et non par
+// une requete ad hoc qui ignorerait la regle de visibilite.
+$browser->get('/rest/getSong.view?f=json&id=4');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getSong : morceau invisible -> 70, jamais le morceau');
+$t->ok(!isset($json['subsonic-response']['song']), 'getSong : aucune cle song dans la reponse d erreur');
