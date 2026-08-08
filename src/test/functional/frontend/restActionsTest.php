@@ -420,3 +420,62 @@ $personneId = SubsonicId::forPlaylist('personne');
 $browser->get('/rest/getPlaylist.view?f=json&id='.urlencode($personneId));
 $json = json_decode($browser->getResponse()->getContent(), true);
 $t->is($json['subsonic-response']['error']['code'], 70, 'getPlaylist : contributeur sans post visible -> 70');
+
+// --- stream ------------------------------------------------------------------
+
+$browser->get('/rest/stream.view?id=1');
+$t->is($browser->getResponse()->getStatusCode(), 302, 'stream : redirection 302');
+
+$location = $browser->getResponse()->getHttpHeader('Location');
+$t->like($location, '#^https?://#', 'stream : Location absolue avec schema');
+$t->like($location, '#un%20titre\.mp3$#', 'stream : nom de fichier encode en %20');
+$t->unlike($location, '#\+#', 'stream : aucun + dans le chemin');
+
+// post 2 : "café & the beat.mp3" -- espace, accent et esperluette doivent
+// tous passer par rawurlencode() (cf. Post::buildTrackUrl()), jamais par
+// urlencode() qui produirait un "+" a la place d'un des espaces.
+$browser->get('/rest/stream.view?id=2');
+$location = $browser->getResponse()->getHttpHeader('Location');
+$t->like($location, '#caf%C3%A9%20%26%20the%20beat\.mp3$#', 'stream : "café & the beat.mp3" correctement pourcent-encode');
+$t->unlike($location, '#\+#', 'stream : toujours aucun + malgre l espace et l esperluette');
+
+// download : meme comportement que stream, par delegation.
+$browser->get('/rest/stream.view?id=1');
+$streamLocation = $browser->getResponse()->getHttpHeader('Location');
+
+$browser->get('/rest/download.view?id=1');
+$t->is($browser->getResponse()->getStatusCode(), 302, 'download : redirection 302');
+$t->is($browser->getResponse()->getHttpHeader('Location'), $streamLocation, 'download : meme Location que stream pour le meme id');
+
+$browser->get('/rest/stream.view?f=json&id=999999');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'stream : id inconnu -> 70');
+
+// id 4 : hors ligne. C'est l'assertion la plus importante de cette section --
+// sans elle, n'importe qui devinant un id pourrait ecouter un morceau non
+// publie.
+$browser->get('/rest/stream.view?f=json&id=4');
+$t->is($browser->getResponse()->getStatusCode(), 200, 'stream : morceau invisible -> HTTP 200 (erreur Subsonic, pas de redirection)');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'stream : morceau invisible -> 70, jamais de redirection');
+$t->ok(!$browser->getResponse()->getHttpHeader('Location'), 'stream : morceau invisible -> aucun en-tete Location');
+
+$browser->get('/rest/stream.view?f=json&id=nimportequoi');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'stream : id malforme -> 70');
+
+// --- getCoverArt ---------------------------------------------------------
+
+$browser->get('/rest/getCoverArt.view?id=co-1');
+$t->is($browser->getResponse()->getStatusCode(), 302, 'getCoverArt (morceau) : redirection');
+$t->like($browser->getResponse()->getHttpHeader('Location'), '#logo_500\.png$#', 'getCoverArt (morceau) : repli sur le logo, aucun avatar dans les fixtures');
+
+// al-2024-06 : cover_post_id = MIN(id) des posts visibles du mois = 1.
+// Sans avatar sur disque, repli sur le meme logo.
+$browser->get('/rest/getCoverArt.view?id=co-al-2024-06');
+$t->is($browser->getResponse()->getStatusCode(), 302, 'getCoverArt (album) : redirection');
+$t->like($browser->getResponse()->getHttpHeader('Location'), '#logo_500\.png$#', 'getCoverArt (album) : repli sur le logo, aucun avatar dans les fixtures');
+
+$browser->get('/rest/getCoverArt.view?f=json&id=nimportequoi');
+$json = json_decode($browser->getResponse()->getContent(), true);
+$t->is($json['subsonic-response']['error']['code'], 70, 'getCoverArt : id malforme -> 70');

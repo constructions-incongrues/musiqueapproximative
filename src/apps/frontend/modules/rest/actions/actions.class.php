@@ -336,6 +336,89 @@ class restActions extends sfActions
     return $post;
   }
 
+  // --- Fichiers ---------------------------------------------------------------
+
+  /**
+   * maxBitRate et format sont ignores : sans ffmpeg dans l'image Docker, le
+   * fichier original est toujours servi. Comportement legal cote protocole.
+   *
+   * Schema choisi via $request->isSecure() plutot que force en 'https' :
+   * c'est deja la convention du reste du code (Post::toJson(),
+   * postActions::executeShow()) et forcer 'https' casserait cet
+   * environnement de dev (http nu sur le port 8081). $request->isSecure()
+   * ne suit X-Forwarded-Proto que si trust_proxy est actif -- il ne l'est
+   * pas ici -- donc un client https derriere l'edge de prod (une pile
+   * differente de celle du dev) pourrait recevoir un Location http. C'est le
+   * meme compromis deja accepte partout ailleurs dans ce fichier plutot
+   * qu'un risque nouveau introduit par cette tache.
+   */
+  protected function subsonicStream(sfWebRequest $request)
+  {
+    $post = $this->findPost($this->requireParameter($request, 'id'));
+
+    return $this->redirectRaw($post->getTrackUrl($request->isSecure() ? 'https' : 'http'));
+  }
+
+  /** Meme comportement que stream : rien ne distingue les deux ici. */
+  protected function subsonicDownload(sfWebRequest $request)
+  {
+    return $this->subsonicStream($request);
+  }
+
+  /**
+   * La pochette d'un morceau est son propre avatar ; celle d'un album
+   * mensuel est l'avatar du post cover_post_id du mois (cf.
+   * PostTable::SELECT_MONTH_AGGREGATE). Les avatars sont quasi tous absents
+   * (generation desactivee dans Post::postSave) : le repli sur le logo du
+   * theme est le cas courant, pas l'exception.
+   */
+  protected function subsonicGetCoverArt(sfWebRequest $request)
+  {
+    $cover = SubsonicId::parseCover($this->requireParameter($request, 'id'));
+
+    if (null === $cover) {
+      throw new SubsonicException('Cover art not found.', 70);
+    }
+
+    if (SubsonicId::TYPE_ALBUM === $cover['type']) {
+      $month  = Doctrine_Core::getTable('Post')->getMonth($cover['value']);
+      $postId = $month ? $month['cover_post_id'] : null;
+    } else {
+      $postId = $cover['value'];
+    }
+
+    $webDir = sfConfig::get('sf_web_dir');
+
+    if ($postId && is_readable(sprintf('%s/avatars/%s.png', $webDir, $postId))) {
+      $path = sprintf('/avatars/%s.png', $postId);
+    } else {
+      $path = sprintf('/theme/%s/images/logo_500.png', sfConfig::get('app_theme'));
+    }
+
+    return $this->redirectRaw($request->getUriPrefix().$request->getRelativeUrlRoot().$path);
+  }
+
+  /**
+   * Redirection 302 sans passer par sfAction::redirect().
+   *
+   * sfWebController::genUrl() ne laisse passer une chaine telle quelle que si
+   * elle correspond a ^[a-z][a-z0-9+.\-]*:// ; app_urls_tracks vaut
+   * //${APP_DOMAIN}/tracks (relatif au protocole), qui echoue ce test et
+   * repart dans la generation de route -- produisant un Location relatif au
+   * site plutot que l'URL de piste voulue.
+   *
+   * @return null Signale au repartiteur que la reponse est deja emise.
+   */
+  protected function redirectRaw($url)
+  {
+    $response = $this->getResponse();
+    $response->setStatusCode(302);
+    $response->setHttpHeader('Location', $url);
+    $response->setHttpHeader('Cache-Control', 'no-store');
+
+    return null;
+  }
+
   // --- Recherche et alea ------------------------------------------------
 
   /**
