@@ -129,8 +129,8 @@ header h1 {
 .title {
   color: #fff;
   background-color: #000;
-  text-align: center!important;
-  padding: 20px 0 20px 0!important;
+  text-align: center !important;
+  padding: 20px 0 20px 0 !important;
 }
 
 /* ====== Liens ====== */
@@ -215,7 +215,7 @@ a:hover.all-tracks-l span span span {
 
 /* ====== Layout / Structure ====== */
 header {
-  display: flex!important;
+  display: flex !important;
   justify-content: space-between;
   align-items: center;
   min-height: 40px;
@@ -277,7 +277,7 @@ article {
   max-height: fit-content;
   position: relative;
 
-  p{
+  p {
     margin: 0;
     padding: 0;
   }
@@ -286,8 +286,8 @@ article {
 @media screen and (max-width: 768px) {
   .nav-l,
   .nav-r {
-    top:inherit!important;
-    transform:inherit!important;
+    top: inherit !important;
+    transform: inherit !important;
   }
 }
 /* Search */
@@ -468,7 +468,8 @@ img {
 
 /* Article headings */
 @media screen and (max-width: 768px) {
-  article h1, article h2 {
+  article h1,
+  article h2 {
     text-align: left;
   }
 
@@ -490,8 +491,46 @@ img {
 
 /* Header / Search */
 @media screen and (max-width: 768px) {
+  /* Le bandeau passe à la ligne : sur la même ligne que « Parcourir », il ne
+     resterait qu'une soixantaine de pixels de champ de saisie */
+  header {
+    flex-wrap: wrap;
+  }
+
+  /* min-width: 0 sur les deux niveaux : sans lui, la largeur intrinsèque du
+     champ l'emporte sur la largeur du bandeau et déborde de la page */
   .search-container {
-    display: none;
+    flex: 1 1 100%;
+    min-width: 0;
+    /* marge basse : sans elle le champ se colle au contenu, qui démarre
+       exactement au bas du bandeau et masque sa bordure */
+    margin: 8px 0;
+  }
+
+  #search {
+    display: flex;
+    align-items: stretch;
+    gap: 5px;
+  }
+
+  /* Bordure : sur sa propre ligne, le champ blanc se pose sur le fond blanc du
+     contenu et son contour disparaît. Le thème sombre la surcharge en blanc. */
+  #search input.search,
+  #search input.submit {
+    border: 1px solid #000;
+    min-height: 44px;
+  }
+
+  #search input.search {
+    flex: 1 1 auto;
+    min-width: 0;
+    /* 16px : en deçà, iOS met la page à l'échelle à la mise au point du champ */
+    font-size: 16px;
+  }
+
+  #search input.submit {
+    flex: 0 0 auto;
+    padding: 3px 10px;
   }
 }
 
