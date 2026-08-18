@@ -62,13 +62,44 @@ colonnes**. Toute installation neuve rencontre ce défaut — voir plus bas.
 - [ ] 3.5 Consigner : les **82 morceaux détruits le restent**. Le site cesse de détruire ;
   il ne répare rien de ce qui l'a été. C'est la story 20.
 
-### Un défaut d'amorçage, à porter au plan
+### Le défaut d'amorçage, corrigé dans le même geste
 
-Le dump monté par `docker-compose` — `src/data/fixtures/musiqueapproximative.sql`, suivi par
-git — date de 2021 et **précède les colonnes `track_duration` et `track_size`** que
-`schema.yml` déclare. Toute installation neuve obtient donc une base incomplète, sur laquelle
-toute requête touchant `Post` échoue en 1054.
+Le dump monté par `docker-compose` datait de 2021 et **précédait les colonnes
+`track_duration` et `track_size`** que `schema.yml` déclare : toute installation neuve
+obtenait une base sur laquelle chaque requête touchant `Post` échouait en 1054. Le défaut
+avait mordu deux fois dans cette session.
 
-C'est la deuxième fois que ce défaut mord dans cette session : une première en début de
-parcours, sur la base de développement, une seconde après le réamorçage sur MariaDB. Il n'est
-pas du périmètre de ce change et mérite sa story.
+Remplacé par un extrait de la production du 2026-08-18, **converti en `utf8mb4` comme elle**
+et **anonymisé avant versement**, le dépôt étant public.
+
+#### Ce que l'anonymisation a retiré, et pourquoi
+
+Le dump versionné jusqu'ici exposait, en clair dans un dépôt public, **179 empreintes de mots
+de passe et 173 adresses courriel**. Le dump frais en portait 210 et 200. Verser celui-ci tel
+quel aurait étendu une exposition préexistante.
+
+| donnée | traitement |
+| --- | --- |
+| `sf_guard_user.password` et `.salt` | remplacés — **1 seule empreinte** dans tout le fichier, contre 210 |
+| `user_profile.email` | `profil<id>@exemple.invalid` — 201 neutralisés, 0 réel restant |
+| `directus_users` | vidée, ainsi que sessions, activité, révisions |
+| `sf_guard_remember_key` | vidée |
+| **les 8 216 morceaux** | **conservés tels quels** — ils sont publics sur le site |
+
+`.invalid` est réservé par la RFC 2606 : aucun de ces domaines ne peut exister.
+
+Tous les comptes partagent désormais le mot de passe `motdepasse` avec le sel
+`developpement`, ce qui laisse un poste de développement se connecter.
+
+#### Vérifié sur une base neuve
+
+| | |
+| --- | --- |
+| jeu de caractères de `post` | `utf8mb4` d'emblée |
+| morceaux | 8 216 |
+| colonnes du schéma | 2/2 présentes |
+| accents | `Güyôm` préservé |
+
+**Reste à décider, et ce n'est pas ce change** : l'historique git conserve les anciens dumps,
+donc les 179 empreintes et 173 courriels de 2021 restent lisibles dans le dépôt public. Les
+en retirer demande une réécriture d'historique — une décision qui appartient à l'auteur.
