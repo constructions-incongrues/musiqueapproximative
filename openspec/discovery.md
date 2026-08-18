@@ -722,7 +722,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 · **Livrée** : 2026-08-18
   - **Change** : `2026-08-18-unifier-l-adresse-du-fichier-audio` — **livré le 2026-08-18**
 
-- [ ] 18. `porter-la-base-de-test-en-utf8mb4` — un titre cyrillique survit, et un test le prouve
+- [x] 18. `porter-la-base-de-test-en-utf8mb4` — un titre cyrillique survit, et un test le prouve
   - **Persona servi** : le mélomane fêlé
   - **Segment du parcours** : Poster (étape 1)
   - **MoSCoW** : Must — **squelette ambulant de l'axe Unicode**
@@ -744,7 +744,18 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/config/databases.yml-dist`, `src/data/fixtures/subsonic.sql`,
     `src/test/bootstrap/database.php`, `Makefile` (cible `test-init`)
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-porter-la-base-de-test-en-utf8mb4` — **livré le 2026-08-18**
+  - **Ce que sa livraison a corrigé au packet** : la base de test en `utf8` tenait **déjà**
+    le cyrillique, les idéogrammes et les latines étendues — tout le BMP. Elle ne rejetait
+    que les emoji, et **bruyamment** (erreur MySQL 1366), là où `latin1` détruit en silence.
+    Le manque principal n'était donc pas le jeu de caractères mais **le fait qu'aucune
+    fixture ne l'exerçait**. `utf8mb4` ne gagne que les emoji, plus l'alignement sur ce que
+    la story 19 posera.
+  - **Deux pièges rencontrés, qui valent pour la story 19** : le `charset=` du DSN **n'a
+    aucun effet** — Doctrine 1 analyse le DSN lui-même ; le levier est `encoding`, qui
+    produit un `SET NAMES`. Et ajouter des morceaux au fichier de fixtures partagé, même
+    avec des identifiants neufs, fait basculer **42 assertions** dans quatre suites qui
+    comptent des morceaux et des artistes.
 
 - [ ] 19. `migrer-la-base-en-utf8mb4` — le site cesse de détruire ce qu'on lui confie
   - **Persona servi** : le mélomane fêlé (principal), l'auditeur, l'intégrateur
