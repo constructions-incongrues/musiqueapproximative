@@ -28,6 +28,9 @@
 - 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail qui n'a
   touché aucune story de ce plan, mais en a déplacé le terrain : cinq changements archivés
   sur `desastres` et l'outillage de test. Voir « Ce que la session a changé pour ce plan ».
+- 2026-08-18 (sixième révision) — L'auteur tranche la question ouverte n°1 : **la
+  pagination borne à 50 par défaut**. Les stories 2 et 3 sont débloquées. Entrée du jour
+  également : la livraison de la story 1, premier amendement au contrat OpenAPI.
 - 2026-08-18 (cinquième révision) — Deux apports de l'auteur. D'abord une correction de
   portée : **ce plan est généraliste**, il ne se limite pas aux formats machine. Ensuite
   la promotion en Must du travail d'accès mobile. Entrée du jour également : la livraison
@@ -428,38 +431,36 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-retablir-le-type-de-contenu-json` — **livré le 2026-08-18**
 
-- [ ] 2. `borner-les-listes-de-morceaux` — on demande une tranche du catalogue, pas les 8 097 morceaux
-  - **Persona servi** : l'intégrateur, le DJ de soirée, le mélomane fêlé
-  - **Segment du parcours** : Récupérer (intégrateur, étape 3) · Parcourir (DJ, étape 3) ·
-    Montrer sa playlist (mélomane)
-  - **MoSCoW** : Must
-  - **Pourquoi celle-ci, pourquoi maintenant** : c'est la douleur mesurée de l'axe — 8,4 Mo
-    en JSON, 3,7 Mo en HTML, 16,5 s de génération à froid — et le câble est déjà posé :
-    `buildOnlinePostsQuery()` accepte un `$count` qu'`executeList` ne lui passe jamais. Le
-    coût est dans la décision de valeur par défaut, pas dans le code.
-  - **Dépend de** : rien
-  - **Périmètre** — dedans : paramètres `limit` et `offset` sur `executeList`, qui vaut donc
-    pour **tous** les formats qu'elle sert, HTML compris ; exposition du total ; comportement
-    quand ils sont absents, négatifs ou non numériques ; interaction avec `q` et `c`, qui
-    filtrent déjà. — dehors : l'**interface** de pagination du site — boutons « page
-    suivante », numéros de page — qui est une entrée « Could » distincte, dépendante de
-    cette story : on ne dessine pas de boutons avant que la convention de paramètre soit
-    tranchée ; les formats `xspf` et `max` (story 3).
-  - **Ce qui a élargi cette story** : *révision du 2026-08-18.* Elle excluait explicitement
-    la page HTML, au motif qu'elle relevait d'un autre axe. Le persona « DJ de soirée » a
-    rendu la ligne intenable : la page HTML est sa douleur principale (3,7 Mo sur le réseau
-    d'une salle), et c'est **la même action et le même paramètre** que le JSON. Exclure le
-    HTML revenait à ne pas brancher un paramètre là où il est déjà écrit. Ce qui reste
-    dehors, c'est l'interface de pagination — pas le paramètre.
-  - **Question ouverte à trancher dans la proposal** : la valeur par défaut. Voir
-    « Questions ouvertes », question 1 : elle porte maintenant sur trois personas.
-  - **Code concerné** : `src/apps/frontend/modules/post/actions/actions.class.php`
-    (`executeList`), `src/lib/model/doctrine/PostTable.class.php`
-    (`buildOnlinePostsQuery`, `countOnlinePosts`),
-    `src/apps/frontend/modules/post/templates/listSuccess.json.php`,
-    `src/apps/frontend/modules/post/templates/listSuccess.php`
-  - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18
-  - **Change** : _pas encore proposé_
+- [~] 2. `borner-les-listes-de-morceaux` — **en attente depuis le 2026-08-18**
+  - **Motif** : *un consommateur réel de la page non bornée a été identifié — l'auteur
+    lui-même.* Il se sert beaucoup de `/posts` en HTML **parce qu'on peut y faire Ctrl+F
+    efficacement**. C'est le premier usage réel qu'ait reçu ce plan : sa question ouverte
+    n°3 disait « aucun consommateur identifié », et cette réponse-là est arrivée par
+    l'auteur, pas par le code.
+  - **Pourquoi ce motif est plus fort qu'une préférence** : `listSuccess.php` rend chaque
+    ligne sous la forme `artiste — titre (contributeur)`. Or `Searchable` n'indexe que
+    `track_author` et `track_title` (`schema.yml`) : **le contributeur n'est pas cherchable
+    par la recherche du site**. Ctrl+F sur la page complète l'est, instantanément et sans
+    aller-retour réseau. La page non bornée est donc le **contournement d'une
+    fonctionnalité manquante** — celle-là même que ce plan porte en « Could » sous le nom
+    « une recherche qui couvre le corps et le contributeur ». La borner retirerait le
+    contournement avant de livrer ce qu'il remplace.
+  - **Ce que ça retourne dans ce plan** : le persona « DJ de soirée » avait servi à élargir
+    cette story à la page HTML, au motif que 3,7 Mo sur le réseau d'une salle est un piège.
+    C'était une hypothèse. L'usage Ctrl+F est un fait, rapporté en première personne. Quand
+    une hypothèse et un fait se contredisent sur le même écran, c'est le fait qui décide —
+    et il décide **pour la page HTML seulement**.
+  - **Question qui reste ouverte** : le motif Ctrl+F ne vaut que pour le HTML. Aucun Ctrl+F
+    ne s'applique à `format=json`, `xspf` ou `max`, qui pèsent 8,4 / 3,5 / 1,8 Mo et n'ont
+    pas d'usage identifié. Faut-il les borner seuls ? Non tranché.
+  - **Ce qui est conservé** : la proposition écrite le 2026-08-18 est retirée de
+    `openspec/changes/` pour ne pas être prise par erreur comme prochaine story. Son
+    contenu reste dans l'historique — trois relevés y valent d'être repris si la story
+    repart : `search()` renvoie un tableau et non une requête ; les titres comptent les
+    morceaux servis et mentiraient une fois bornés ; une limite négative vaut aujourd'hui
+    « aucune limite » et contournerait le bornage.
+  - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18 · **Mise en attente** : 2026-08-18
+  - **Change** : `borner-les-listes-de-morceaux`, proposé puis retiré le 2026-08-18
 
 - [ ] 3. `borner-le-xspf` — la playlist XSPF cesse de coûter 3,1 secondes
   - **Persona servi** : l'auditeur sur le site (principal), l'intégrateur, le mélomane fêlé
@@ -470,8 +471,12 @@ Chaque story est une tranche verticale : elle se démontre seule.
     La spec `formats-de-sortie` impose qu'il figure parmi les **liens visibles proposés au
     visiteur** sur une page de liste. Un humain clique dessus et attend 2,7 à 3,1 s pour
     3,5 Mo. C'est la seule latence de cet axe sur un chemin humain.
-  - **Dépend de** : story 2 (elle réutilise la convention de paramètre et la valeur par
-    défaut qui y auront été tranchées)
+  - **Dépend de** : ~~story 2~~ — **plus rien, depuis le 2026-08-18.** La story 2 est en
+    attente, sa convention de paramètre n'existera donc pas. Le motif qui l'a suspendue —
+    Ctrl+F sur la page complète — **ne s'applique pas au XSPF** : c'est un fichier de
+    playlist, on n'y cherche pas au clavier, et sa douleur est une latence de 2,7 à 3,1 s
+    sur un lien qu'un humain clique. Cette story peut donc partir seule, en tranchant sa
+    propre convention.
   - **Périmètre** — dedans : `limit`/`offset` sur `format=xspf` ; le titre de playlist, que
     `formats-de-sortie` spécifie, doit rester juste quand la liste est tronquée ; le cas
     `?c=<contributeur>`, qui sert la playlist personnelle d'un mélomane (440 ko pour 993
@@ -486,7 +491,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
-- [ ] 4. `aligner-la-route-md5-sur-la-forme-commune` — un morceau récupéré par empreinte a la forme des autres
+- [x] 4. `aligner-la-route-md5-sur-la-forme-commune` — un morceau récupéré par empreinte a la forme des autres
   - **Persona servi** : l'intégrateur
   - **Segment du parcours** : Récupérer (étape 3)
   - **MoSCoW** : Must
@@ -506,19 +511,26 @@ Chaque story est une tranche verticale : elle se démontre seule.
     n'est pas une incohérence à corriger mais le contrat interne du lecteur : l'aligner
     casserait la navigation du site. La story se réduit donc à `/md5`, et l'avertissement de
     taille tombe.
-  - **Ce que la story 10 a ajouté à son périmètre** : *2026-08-18.* Le relevé machine
-    montre que `/post/md5/` ne sert pas seulement l'objet nu : il expose `publish_on`,
-    `created_at`, `updated_at`, `track_duration` et `track_size`. Le scénario « Champs
-    jamais exposés » de `formats-de-sortie` dit ces champs absents. La story a donc deux
-    écarts à corriger, pas un — l'enveloppe et la fuite.
+  - **Correction du 2026-08-18, à la proposition** : la révision précédente affirmait que
+    `/post/md5/` exposait des champs que `formats-de-sortie` dit absents, et en tirait un
+    second écart à corriger. **C'était faux, et l'erreur venait du relevé de la story 10.**
+    Vérification faite en comparant les deux réponses : elles servent le **même objet, aux
+    mêmes clés** — `publish_on`, `created_at`, `updated_at`, `track_duration`, `track_size`
+    et `buy_url` figurent dans les deux, parce que les deux passent par `Post::toJson()`.
+    Rien n'est propre à `/md5`. Et rien n'est interdit : les trois prohibitions nommées par
+    le scénario « Champs jamais exposés » — mise en ligne, révision, objet utilisateur —
+    portent sur `is_online`, `svn_revision` et `sfGuardUser`, qui sont bien retirés. Les
+    autres champs ne sont pas interdits, ils ne sont pas décrits : c'est un manque de la
+    spec, qui relève de la story 6, non un défaut du code.
+    **La story 4 reste donc ce qu'elle était : l'enveloppe, et rien d'autre.**
   - **Code concerné** : `src/apps/frontend/modules/post/actions/actions.class.php`
     (`executeMd5`, `renderJsonPost`),
     `src/apps/frontend/modules/post/templates/md5Success.php`,
     `src/apps/frontend/templates/layout.php` (les quatre `$.get`, à ne pas casser)
   - **Ajoutée** : 2026-08-18 · **Resserrée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-aligner-la-route-md5-sur-la-forme-commune` — **livré le 2026-08-18**
 
-- [ ] 5. `servir-les-erreurs-en-json` — une erreur sur une route JSON revient en JSON
+- [x] 5. `servir-les-erreurs-en-json` — une erreur sur une route JSON revient en JSON
   - **Persona servi** : l'intégrateur
   - **Segment du parcours** : Encaisser l'erreur (étape 4)
   - **MoSCoW** : Should
@@ -542,7 +554,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/apps/frontend/modules/post/actions/actions.class.php`,
     `src/apps/frontend/config/settings.yml`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-servir-les-erreurs-en-json` — **livré le 2026-08-18**
 
 - [ ] 6. `specifier-les-routes-json-non-couvertes` — chaque route JSON servie est décrite par un scénario
   - **Persona servi** : le mainteneur
@@ -717,7 +729,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 (rétroactivement)
   - **Change** : `2026-08-18-fix-recherche-mobile` — **livré** en `f062b4f` (PR #146)
 
-- [ ] 14. `retirer-le-verrouillage-du-zoom` — le visiteur peut agrandir la page
+- [x] 14. `retirer-le-verrouillage-du-zoom` — le visiteur peut agrandir la page
   - **Persona servi** : le DJ de soirée, l'auditeur sur le site — et au premier chef
     quiconque a besoin d'agrandir pour lire
   - **Segment du parcours** : toutes les étapes servies en HTML
@@ -748,7 +760,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     une barrière. Voir « Ce que l'appareil de planification coûte ».
   - **Code concerné** : `src/apps/frontend/templates/layout.php` (ligne 7)
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-retirer-le-verrouillage-du-zoom` — **livré le 2026-08-18**
 
 ## Ordre d'exécution
 
@@ -759,7 +771,7 @@ coup et gardent leur numéro pour que rien ne se perde. La séquence réelle est
   10  publier-le-contrat-openapi          ◄── squelette ambulant, ne dépend de rien
    │
    ├─ 1  retablir-le-type-de-contenu-json     premier amendement au contrat
-   ├─ 2  borner-les-listes-de-morceaux        bloquée par la question ouverte n°1
+   ├─ 2  borner-les-listes-de-morceaux        débloquée — défaut tranché à 50
    ├─ 3  borner-le-xspf                       ← 2
    ├─ 4  aligner-la-route-md5                 ← 1
    ├─ 5  servir-les-erreurs-en-json           ← 4
@@ -808,7 +820,7 @@ obtiennent par accident**, entre la fusion et la mise en ligne.
 Formulée comme une règle plutôt que comme une story :
 
 > « À compter de la prochaine poussée, tout appelant de `/posts?format=json` qui ne
-> demande rien recevra vingt morceaux au lieu de huit mille, sans préavis, sans version,
+> demande rien recevra cinquante morceaux au lieu de huit mille, sans préavis, sans version,
 > et sans moyen de s'en plaindre. »
 
 L'aurait-on votée ainsi ? La réponse honnête est qu'on ne sait pas, parce que personne n'a
@@ -846,6 +858,10 @@ Trois façons de rendre la règle contestable, par coût croissant :
 2. **Borner sur demande explicite d'abord, par défaut ensuite.** Le paramètre existe, le
    défaut ne bouge pas ; on observe qui l'utilise avant de trancher. Répond directement à
    la question ouverte n°1 sans la trancher à l'aveugle.
+   *(Cette option n'a pas été retenue : l'auteur a tranché le défaut à 50 le 2026-08-18,
+   sans phase d'observation préalable. La conclusion inconfortable ci-dessous a donc été
+   lue et écartée, ce qui est le sort normal d'un argument — mais il faut que ce soit
+   visible plutôt que silencieux.)*
 3. **Versionner la sortie.** Le coût réel, et sans doute disproportionné pour ce projet.
 
 ### Le point d'inconfort
@@ -1017,25 +1033,39 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
 
 ## Questions ouvertes
 
-1. **La valeur par défaut de la pagination** (bloque les stories 2 et 3). Borner par défaut
-   règle le poids pour tout le monde mais change ce que reçoit un appelant existant. Ne pas
-   borner préserve le contrat et laisse la douleur à qui ignore le nouveau paramètre.
-   Deux arguments se sont accumulés en révision du 2026-08-18, et ils poussent tous deux
-   vers le bornage par défaut :
-   - à froid, le JSON global met **16,5 s** à se générer. Ce n'est pas seulement du poids
-     sur le réseau, c'est du temps de calcul sur l'hôte à chaque expiration de cache ;
-   - le **DJ de soirée** ne connaîtra jamais le paramètre. Un défaut non borné ne protège
-     que les appelants qui lisent la documentation — c'est-à-dire pas lui, et pas le
-     visiteur. Le défaut est ce que reçoit celui qui ne demande rien.
-   La décision porte donc sur trois personas, dont deux ne sauront jamais qu'un paramètre
-   existe.
+1. ~~**La valeur par défaut de la pagination**~~ — **tranchée le 2026-08-18 par l'auteur :
+   50.** Elle débloque les stories 2 et 3.
+
+   La valeur n'est pas arbitraire et n'invente rien : **`/posts/feed` borne déjà à 50** par
+   son paramètre `count` (`actions.class.php:233`). C'est la seule route bornée du site.
+   La décision aligne donc le reste sur le seul précédent existant, plutôt que de créer un
+   second seuil à côté du premier.
+
+   Ce qu'elle promulgue, sans l'adoucir : un appelant de `/posts?format=json` qui ne
+   demande rien recevra **50 morceaux au lieu de 8 097**, sans préavis. Les arguments qui
+   avaient été accumulés en faveur du bornage tiennent — 16,5 s de génération à froid, et
+   deux personas sur trois qui ne connaîtront jamais le paramètre.
+
+   **Conséquence à ne pas perdre de vue** : par défaut, `/posts` en HTML n'affichera plus
+   que 50 morceaux, et l'**interface** de pagination est en « Could », pas dans la story 2.
+   Entre la livraison de la story 2 et celle de cette interface, le catalogue complet ne
+   sera atteignable qu'en connaissant le paramètre `offset`. Le DJ de soirée passe donc de
+   « 3,7 Mo qu'il abandonne » à « 50 morceaux au-delà desquels il ne peut pas aller ».
+   Ce n'est pas un argument contre la décision — c'est un argument pour promouvoir
+   l'interface de pagination une fois la story 2 livrée.
 
 2. ~~**Qui consomme `/posts/next|prev|random` ?**~~ — **tranchée le 2026-08-18.** Le site
    lui-même, via `layout.php` : quatre `$.get` qui lisent `data.url` et `data.title`, pour
    les raccourcis `j` / `k` / `r`, le bouton aléatoire et l'enchaînement du lecteur. Ces
    routes ne seront pas alignées ; leur divergence sera documentée. Voir story 4.
 
-3. **Qui consomme le JSON ?** — toujours ouverte, et sans candidat solide. La session du
+3. **Qui consomme le JSON ?** — toujours ouverte pour le JSON. **Mais la question voisine,
+   « qui consomme la page HTML complète », a reçu sa première réponse le 2026-08-18 :
+   l'auteur, par Ctrl+F.** C'est le premier usage réel qu'ait reçu ce plan, et il a
+   immédiatement mis une story en attente. Ce que ça enseigne dépasse la story 2 : quatre
+   heures de lecture de code n'avaient identifié aucun consommateur, et une phrase de
+   l'auteur en a produit un. Le code dit ce que le site fait, pas ce dont on se sert.
+   Pour le JSON proprement dit, rien de neuf : La session du
    2026-08-18 n'a rien apporté sur ce point, et c'est en soi un signal : quatre heures
    passées dans ce dépôt, à lire les filtres, les gabarits, les tests et la configuration,
    sans jamais croiser un appelant du JSON. Ce n'est pas une preuve d'absence, mais c'est
@@ -1053,6 +1083,34 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
    réponse est chez les contributeurs, pas dans le code.
 
 ## Change Log
+
+- 2026-08-18 (septième révision) — **La story 2 passe en attente**, à la demande de
+  l'auteur, et pour un motif qui vaut mieux qu'une préférence : il se sert de `/posts` non
+  bornée pour y faire Ctrl+F. Vérification faite dans `listSuccess.php`, chaque ligne rend
+  `artiste — titre (contributeur)` — et `Searchable` n'indexe pas le contributeur. La page
+  complète est donc le contournement d'une fonctionnalité que ce plan porte en « Could ».
+  La borner retirerait le contournement avant de livrer ce qu'il remplace.
+  Conséquences : la proposition est retirée de `openspec/changes/` pour ne pas être reprise
+  par erreur ; la story 3 perd sa dépendance à la story 2 et peut partir seule, le motif
+  Ctrl+F ne s'appliquant pas à un fichier de playlist ; la question ouverte n°3 enregistre
+  son premier consommateur identifié — **le premier de tout le plan**, et il est venu de
+  l'auteur, non du code.
+  Reste non tranché : borner les seuls formats machine, auxquels aucun Ctrl+F ne s'applique.
+
+- 2026-08-18 (sixième révision) — **La question ouverte n°1 est tranchée : 50.** C'était la
+  seule décision de produit en suspens du plan, et elle bloquait deux stories depuis sa
+  rédaction. La valeur aligne le catalogue sur `/posts/feed`, qui borne déjà à 50 et
+  était jusqu'ici la seule route bornée du site. La règle promulguée est mise à jour en
+  conséquence — cinquante morceaux, non vingt. L'option « borner sur demande d'abord, par
+  défaut ensuite », que l'analyse des modalités avançait comme la conclusion inconfortable,
+  a été écartée : c'est consigné là où elle est formulée, plutôt que retiré.
+  Une conséquence est versée à la question tranchée : avec un défaut à 50 et l'interface de
+  pagination en « Could », le catalogue complet ne sera atteignable qu'en connaissant
+  `offset` tant que cette interface n'existe pas. Argument pour la promouvoir après la
+  story 2, non contre la décision.
+  Enfin la **story 1 est livrée** (`2026-08-18-retablir-le-type-de-contenu-json`) : six
+  routes servent `application/json`, le contrat a reçu son premier amendement, et son test
+  a rendu cet amendement obligatoire — le dispositif de la story 10 a mordu comme annoncé.
 
 - 2026-08-18 (cinquième révision) — **Correction de portée par l'auteur : ce plan est
   généraliste.** Il se croyait cantonné à l'axe « tenir les formats machine » et rejetait
