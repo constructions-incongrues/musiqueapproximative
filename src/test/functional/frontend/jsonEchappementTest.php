@@ -65,13 +65,6 @@ $t->is(
   'la base restitue le corps avec ses antislashs : le caractere du defaut est bien pose'
 );
 
-// Requete de chauffe. Le premier rendu Markdown d'un processus emet des
-// E_DEPRECATED (markdown.php:910, syntaxe `{0}` en PHP 7.4) qui atterrissent
-// dans le corps de la reponse et la rendent inanalysable — ce qui ferait
-// echouer ce test pour une raison qui n'est pas la sienne. Meme contournement
-// que representationJsonTest.php et unicodeTest.php, et meme defaut consigne.
-$browser->get('/post/'.$slug);
-
 /**
  * Demande une URL et rend son corps decode, ou fait echouer l'assertion.
  */
