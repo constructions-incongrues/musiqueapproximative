@@ -431,39 +431,36 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-retablir-le-type-de-contenu-json` — **livré le 2026-08-18**
 
-- [ ] 2. `borner-les-listes-de-morceaux` — on demande une tranche du catalogue, pas les 8 097 morceaux
-  - **Persona servi** : l'intégrateur, le DJ de soirée, le mélomane fêlé
-  - **Segment du parcours** : Récupérer (intégrateur, étape 3) · Parcourir (DJ, étape 3) ·
-    Montrer sa playlist (mélomane)
-  - **MoSCoW** : Must
-  - **Pourquoi celle-ci, pourquoi maintenant** : c'est la douleur mesurée de l'axe — 8,4 Mo
-    en JSON, 3,7 Mo en HTML, 16,5 s de génération à froid — et le câble est déjà posé :
-    `buildOnlinePostsQuery()` accepte un `$count` qu'`executeList` ne lui passe jamais. Le
-    coût est dans la décision de valeur par défaut, pas dans le code.
-  - **Dépend de** : rien
-  - **Périmètre** — dedans : paramètres `limit` et `offset` sur `executeList`, qui vaut donc
-    pour **tous** les formats qu'elle sert, HTML compris ; exposition du total ; comportement
-    quand ils sont absents, négatifs ou non numériques ; interaction avec `q` et `c`, qui
-    filtrent déjà. — dehors : l'**interface** de pagination du site — boutons « page
-    suivante », numéros de page — qui est une entrée « Could » distincte, dépendante de
-    cette story : on ne dessine pas de boutons avant que la convention de paramètre soit
-    tranchée ; les formats `xspf` et `max` (story 3).
-  - **Ce qui a élargi cette story** : *révision du 2026-08-18.* Elle excluait explicitement
-    la page HTML, au motif qu'elle relevait d'un autre axe. Le persona « DJ de soirée » a
-    rendu la ligne intenable : la page HTML est sa douleur principale (3,7 Mo sur le réseau
-    d'une salle), et c'est **la même action et le même paramètre** que le JSON. Exclure le
-    HTML revenait à ne pas brancher un paramètre là où il est déjà écrit. Ce qui reste
-    dehors, c'est l'interface de pagination — pas le paramètre.
-  - **Valeur par défaut : 50** — tranchée par l'auteur le 2026-08-18. Alignée sur le
-    `count` de `/posts/feed`, seule route bornée du site à ce jour. La story n'a plus de
-    question ouverte ; elle est débloquée.
-  - **Code concerné** : `src/apps/frontend/modules/post/actions/actions.class.php`
-    (`executeList`), `src/lib/model/doctrine/PostTable.class.php`
-    (`buildOnlinePostsQuery`, `countOnlinePosts`),
-    `src/apps/frontend/modules/post/templates/listSuccess.json.php`,
-    `src/apps/frontend/modules/post/templates/listSuccess.php`
-  - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18
-  - **Change** : `borner-les-listes-de-morceaux` — proposé le 2026-08-18
+- [~] 2. `borner-les-listes-de-morceaux` — **en attente depuis le 2026-08-18**
+  - **Motif** : *un consommateur réel de la page non bornée a été identifié — l'auteur
+    lui-même.* Il se sert beaucoup de `/posts` en HTML **parce qu'on peut y faire Ctrl+F
+    efficacement**. C'est le premier usage réel qu'ait reçu ce plan : sa question ouverte
+    n°3 disait « aucun consommateur identifié », et cette réponse-là est arrivée par
+    l'auteur, pas par le code.
+  - **Pourquoi ce motif est plus fort qu'une préférence** : `listSuccess.php` rend chaque
+    ligne sous la forme `artiste — titre (contributeur)`. Or `Searchable` n'indexe que
+    `track_author` et `track_title` (`schema.yml`) : **le contributeur n'est pas cherchable
+    par la recherche du site**. Ctrl+F sur la page complète l'est, instantanément et sans
+    aller-retour réseau. La page non bornée est donc le **contournement d'une
+    fonctionnalité manquante** — celle-là même que ce plan porte en « Could » sous le nom
+    « une recherche qui couvre le corps et le contributeur ». La borner retirerait le
+    contournement avant de livrer ce qu'il remplace.
+  - **Ce que ça retourne dans ce plan** : le persona « DJ de soirée » avait servi à élargir
+    cette story à la page HTML, au motif que 3,7 Mo sur le réseau d'une salle est un piège.
+    C'était une hypothèse. L'usage Ctrl+F est un fait, rapporté en première personne. Quand
+    une hypothèse et un fait se contredisent sur le même écran, c'est le fait qui décide —
+    et il décide **pour la page HTML seulement**.
+  - **Question qui reste ouverte** : le motif Ctrl+F ne vaut que pour le HTML. Aucun Ctrl+F
+    ne s'applique à `format=json`, `xspf` ou `max`, qui pèsent 8,4 / 3,5 / 1,8 Mo et n'ont
+    pas d'usage identifié. Faut-il les borner seuls ? Non tranché.
+  - **Ce qui est conservé** : la proposition écrite le 2026-08-18 est retirée de
+    `openspec/changes/` pour ne pas être prise par erreur comme prochaine story. Son
+    contenu reste dans l'historique — trois relevés y valent d'être repris si la story
+    repart : `search()` renvoie un tableau et non une requête ; les titres comptent les
+    morceaux servis et mentiraient une fois bornés ; une limite négative vaut aujourd'hui
+    « aucune limite » et contournerait le bornage.
+  - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18 · **Mise en attente** : 2026-08-18
+  - **Change** : `borner-les-listes-de-morceaux`, proposé puis retiré le 2026-08-18
 
 - [ ] 3. `borner-le-xspf` — la playlist XSPF cesse de coûter 3,1 secondes
   - **Persona servi** : l'auditeur sur le site (principal), l'intégrateur, le mélomane fêlé
@@ -474,8 +471,12 @@ Chaque story est une tranche verticale : elle se démontre seule.
     La spec `formats-de-sortie` impose qu'il figure parmi les **liens visibles proposés au
     visiteur** sur une page de liste. Un humain clique dessus et attend 2,7 à 3,1 s pour
     3,5 Mo. C'est la seule latence de cet axe sur un chemin humain.
-  - **Dépend de** : story 2 (elle réutilise la convention de paramètre et la valeur par
-    défaut qui y auront été tranchées)
+  - **Dépend de** : ~~story 2~~ — **plus rien, depuis le 2026-08-18.** La story 2 est en
+    attente, sa convention de paramètre n'existera donc pas. Le motif qui l'a suspendue —
+    Ctrl+F sur la page complète — **ne s'applique pas au XSPF** : c'est un fichier de
+    playlist, on n'y cherche pas au clavier, et sa douleur est une latence de 2,7 à 3,1 s
+    sur un lien qu'un humain clique. Cette story peut donc partir seule, en tranchant sa
+    propre convention.
   - **Périmètre** — dedans : `limit`/`offset` sur `format=xspf` ; le titre de playlist, que
     `formats-de-sortie` spécifie, doit rester juste quand la liste est tronquée ; le cas
     `?c=<contributeur>`, qui sert la playlist personnelle d'un mélomane (440 ko pour 993
@@ -1058,7 +1059,13 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
    les raccourcis `j` / `k` / `r`, le bouton aléatoire et l'enchaînement du lecteur. Ces
    routes ne seront pas alignées ; leur divergence sera documentée. Voir story 4.
 
-3. **Qui consomme le JSON ?** — toujours ouverte, et sans candidat solide. La session du
+3. **Qui consomme le JSON ?** — toujours ouverte pour le JSON. **Mais la question voisine,
+   « qui consomme la page HTML complète », a reçu sa première réponse le 2026-08-18 :
+   l'auteur, par Ctrl+F.** C'est le premier usage réel qu'ait reçu ce plan, et il a
+   immédiatement mis une story en attente. Ce que ça enseigne dépasse la story 2 : quatre
+   heures de lecture de code n'avaient identifié aucun consommateur, et une phrase de
+   l'auteur en a produit un. Le code dit ce que le site fait, pas ce dont on se sert.
+   Pour le JSON proprement dit, rien de neuf : La session du
    2026-08-18 n'a rien apporté sur ce point, et c'est en soi un signal : quatre heures
    passées dans ce dépôt, à lire les filtres, les gabarits, les tests et la configuration,
    sans jamais croiser un appelant du JSON. Ce n'est pas une preuve d'absence, mais c'est
@@ -1076,6 +1083,19 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
    réponse est chez les contributeurs, pas dans le code.
 
 ## Change Log
+
+- 2026-08-18 (septième révision) — **La story 2 passe en attente**, à la demande de
+  l'auteur, et pour un motif qui vaut mieux qu'une préférence : il se sert de `/posts` non
+  bornée pour y faire Ctrl+F. Vérification faite dans `listSuccess.php`, chaque ligne rend
+  `artiste — titre (contributeur)` — et `Searchable` n'indexe pas le contributeur. La page
+  complète est donc le contournement d'une fonctionnalité que ce plan porte en « Could ».
+  La borner retirerait le contournement avant de livrer ce qu'il remplace.
+  Conséquences : la proposition est retirée de `openspec/changes/` pour ne pas être reprise
+  par erreur ; la story 3 perd sa dépendance à la story 2 et peut partir seule, le motif
+  Ctrl+F ne s'appliquant pas à un fichier de playlist ; la question ouverte n°3 enregistre
+  son premier consommateur identifié — **le premier de tout le plan**, et il est venu de
+  l'auteur, non du code.
+  Reste non tranché : borner les seuls formats machine, auxquels aucun Ctrl+F ne s'applique.
 
 - 2026-08-18 (sixième révision) — **La question ouverte n°1 est tranchée : 50.** C'était la
   seule décision de produit en suspens du plan, et elle bloquait deux stories depuis sa
