@@ -28,6 +28,9 @@
 - 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail qui n'a
   touché aucune story de ce plan, mais en a déplacé le terrain : cinq changements archivés
   sur `desastres` et l'outillage de test. Voir « Ce que la session a changé pour ce plan ».
+- 2026-08-18 (septième révision) — L'auteur apporte un axe neuf et le classe **Must** :
+  le support complet de l'Unicode. L'exploration a montré que ce n'est pas une question
+  d'affichage mais **d'encodage de la base de production**, avec des données déjà détruites.
 - 2026-08-18 (sixième révision) — L'auteur tranche la question ouverte n°1 : **la
   pagination borne à 50 par défaut**. Les stories 2 et 3 sont débloquées. Entrée du jour
   également : la livraison de la story 1, premier amendement au contrat OpenAPI.
@@ -287,6 +290,99 @@ Parcours du **mainteneur** :
 3. **Livrer** — **supporté**. Conventional Commits, release-please, déploiement automatique
    à la poussée sur `main`.
 
+## Ce que « support complet de l'Unicode » recouvre
+
+*Relevé du 2026-08-18, mesuré sur le dump de production et non déduit du code.*
+
+### La racine
+
+| | jeu de caractères |
+| --- | --- |
+| base de production | **`latin1` / `latin1_swedish_ci`** |
+| `post`, `post_index`, toutes les tables `sf_guard_*` | `latin1` |
+| `user_profile` | `utf8` — seule exception, incohérence en soi |
+| base de test | `utf8` — trois octets, **ne porte pas les emoji** |
+| DSN | **aucun `charset`** ; la connexion négocie `utf8` côté client, `latin1` côté base |
+
+MySQL **convertit** donc à chaque écriture : le client envoie de l'UTF-8, la base range du
+latin1. Les migrations Doctrine déclarent pourtant `'charset' => 'UTF8'` — l'intention était
+là, la production ne l'a jamais suivie.
+
+### Ce qui passe, et ce qui est détruit
+
+Le `latin1` de MySQL est en réalité cp1252, plus large qu'ISO-8859-1. Mesuré :
+
+| entrée | ce que la base en fait |
+| --- | --- |
+| `Sigur Rós`, `Björk`, `für Elise` | **intact** |
+| `—` cadratin, `…`, apostrophe courbe, `€` | **intact** |
+| `Сергей Прокофьев` | `?????? ?????????` |
+| `坂本龍一` | `????` |
+| `Δ Ω μ` | `? ? ?` |
+| `🎵` | `?` (octet `3F`) |
+
+La conversion est **silencieuse et irréversible**. Le `?` ne revient pas en arrière.
+
+### Les dégâts déjà faits
+
+**56 morceaux** portent un titre ou un auteur détruit — `?` en milieu de mot ou doublé, ce
+qui exclut la ponctuation légitime :
+
+```
+Ko?ysanka Kapitana                     ← polonais « Kołysanka » : le ł n'est pas dans cp1252
+????? — ??????                         ← titre entièrement cyrillique
+??????????? ????? ??????????? ??????   ← idem
+Andrei Rodionov & Tikhomirov Boris — ????????? ?????????
+```
+
+Ces données **ne sont pas récupérables depuis la base**. Migrer l'encodage empêchera les
+pertes futures ; il ne rendra pas celles-ci.
+
+### Pourquoi c'est un Must, et pourquoi c'est urgent
+
+Musique Approximative est une playlist quotidienne, **vivante** : 8 097 morceaux, du
+2008-06-10 au **17 août 2026**, dont 490 publiés en 2025-2026. Le cyrillique, le polonais,
+le roumain et le turc n'y sont pas des cas limites : ce sont des musiques que le collectif
+poste, et dont les titres sont effacés à la publication sans que personne n'en soit averti.
+
+**La destruction est en cours.** Mesurée sur le corpus servi en production :
+
+| | |
+| --- | --- |
+| morceaux au titre ou à l'auteur détruit | **81** |
+| contributeurs concernés | **37** |
+| détruits depuis 2022 | **22** |
+| détruits en 2026 | **5** |
+| caractères hors cp1252 dans les 8 097 morceaux servis | **0** |
+
+Ce dernier chiffre est le plus parlant : sur dix-huit ans et huit mille morceaux, **pas un
+seul caractère hors cp1252 n'a survécu**. Ce n'est pas que le collectif n'en poste pas —
+c'est qu'aucun ne peut passer.
+
+Échantillon de dégâts, où l'on voit la frontière de cp1252 passer au milieu d'un nom :
+
+```
+Pawe? Zadro?niak        ← Paweł Zadrożniak : ł et ż détruits
+Somnoroase P?s?rele     ← roumain
+Özdemir Erdo?an         ← le Ö passe (cp1252), le ğ turc non
+Los Piran?as
+????? ?????????         ← titre entièrement cyrillique
+```
+
+### Une erreur de méthode, consignée parce qu'elle se reproduira
+
+La première rédaction de cette section concluait que **le site était dormant** — « dernier
+morceau publié le 14 octobre 2021, zéro publication depuis » — et en tirait qu'il n'y avait
+pas d'urgence, seulement une archive à réparer. C'était faux, et l'auteur l'a corrigé.
+
+L'erreur venait de la source : la base de développement porte **un dump de production vieux
+de cinq ans** — 6 103 morceaux contre 8 097 en ligne, arrêté en 2021. Il a été lu comme s'il
+était la production.
+
+Ce qui doit rester de cet épisode, pour quiconque reprendra ce plan : **la base locale n'est
+pas la production, et l'écart se compte en années.** Toute mesure de volume, de date ou de
+contenu doit venir du site en ligne, comme celles du tableau ci-dessus.
+
 ## MoSCoW
 
 ### Must
@@ -312,6 +408,13 @@ Parcours du **mainteneur** :
   `/post/:slug` sert `{"posts":[…]}` et `/post/md5/:md5sum` sert l'objet nu : deux contrats
   pour le même objet, selon la façon dont on le désigne. `/posts/next|prev|random` sortent
   de ce compte : leur forme minimale est le contrat interne du lecteur du site. Étape 3.
+- **La base porte tout l'Unicode** — *ajouté le 2026-08-18, à la demande de l'auteur.*
+  La base de production est en `latin1` : tout caractère hors cp1252 est remplacé par `?`
+  à l'écriture, silencieusement et sans retour. **56 morceaux ont déjà un titre ou un
+  auteur détruit**, 37 contributeurs concernés, **22 depuis 2022 et 5 en 2026**. C'est le
+  seul défaut de ce plan qui **détruise de la donnée** plutôt que de mal la servir, et il
+  est en cours : le site publie quotidiennement. Sur 8 097 morceaux et dix-huit ans, **pas
+  un seul caractère hors cp1252 n'a survécu**.
 - **Le champ de recherche existe sur téléphone** — *inscrit rétroactivement le
   2026-08-18.* `main.css` le masquait sous 768 px. Le DJ de soirée n'avait pas de chemin
   vers `/posts?q=…` depuis son téléphone : son étape 2 était un gap complet, pas un
@@ -368,6 +471,12 @@ Parcours du **mainteneur** :
   donne pas les boutons « page suivante ». Un paramètre sans interface est un demi-service,
   et le DJ ne connaîtra jamais le paramètre. **Dépend de la story 2**, qui doit avoir
   tranché sa convention avant qu'on dessine des boutons dessus.
+- **Un garde-fou à la saisie** — *ajouté le 2026-08-18.* `track_title` et `track_author`
+  n'ont **aucun validateur** : le formulaire accepte un caractère que la base détruira, sans
+  rien dire. Un validateur qui le signale transformerait une mutilation silencieuse en
+  message. **Conditionnel** : le rythme est d'environ cinq morceaux par an et la story 19
+  supprime la cause — ce garde-fou n'a de sens que si la migration tarde. À promouvoir en
+  Must si elle glisse, à abandonner dès qu'elle est livrée.
 - **Corriger le `context:` de `openspec/config.yaml`** — il affirme qu'aucun test
   automatisé ne couvre le contrat public ; cinq routes le sont depuis. Une ligne.
 
@@ -612,6 +721,87 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `showSuccess.xspf.php`, `_xspfPlaylist.xspf.php`
   - **Ajoutée** : 2026-08-18 · **Livrée** : 2026-08-18
   - **Change** : `2026-08-18-unifier-l-adresse-du-fichier-audio` — **livré le 2026-08-18**
+
+- [ ] 18. `porter-la-base-de-test-en-utf8mb4` — un titre cyrillique survit, et un test le prouve
+  - **Persona servi** : le mélomane fêlé
+  - **Segment du parcours** : Poster (étape 1)
+  - **MoSCoW** : Must — **squelette ambulant de l'axe Unicode**
+  - **Pourquoi celle-ci, pourquoi maintenant** : aujourd'hui aucun test ne peut échouer sur
+    ce défaut, parce que la base de test est en `utf8` et les fixtures ne contiennent aucun
+    caractère hors cp1252. Cette story rend l'écart **exécutable** : elle produit le test qui
+    dit ce que le site devrait faire, avant qu'on touche à la production.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : la base de test passe en `utf8mb4` ; le DSN de test porte
+    `charset=utf8mb4` ; les fixtures gagnent un morceau au titre cyrillique, un au titre
+    japonais et un portant un emoji ; un test fonctionnel vérifie qu'ils traversent intacts
+    la page, le JSON, le XSPF et le `max`. — dehors : la base de production, qui ne bouge
+    pas ; les 56 morceaux déjà détruits.
+  - **Pourquoi `utf8mb4` et non `utf8`** : `utf8` de MySQL tient sur trois octets et ne porte
+    pas les emoji. La base de test est aujourd'hui en `utf8` — elle ne suffirait pas.
+  - **Ce que ça ne fait pas, et qu'il faut dire** : le test passera en environnement de test
+    et le site restera cassé en production. C'est voulu — l'écart devient constatable avant
+    d'être réparé, ce qui est la seule façon de démontrer ensuite que la réparation opère.
+  - **Code concerné** : `src/config/databases.yml-dist`, `src/data/fixtures/subsonic.sql`,
+    `src/test/bootstrap/database.php`, `Makefile` (cible `test-init`)
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
+- [ ] 19. `migrer-la-base-en-utf8mb4` — le site cesse de détruire ce qu'on lui confie
+  - **Persona servi** : le mélomane fêlé (principal), l'auditeur, l'intégrateur
+  - **Segment du parcours** : Poster (étape 1), et tout ce qui lit ensuite
+  - **MoSCoW** : Must
+  - **Pourquoi celle-ci, pourquoi maintenant** : c'est le seul défaut de ce plan qui
+    **détruise de la donnée**. Chaque morceau posté avec un caractère hors cp1252 perd son
+    titre à la seconde où il est enregistré, sans avertissement.
+  - **Dépend de** : story 18 — le test doit exister avant la migration, sans quoi rien
+    n'établira qu'elle a opéré.
+  - **Périmètre** — dedans : `charset=utf8mb4` au DSN ; `CONVERT TO CHARACTER SET utf8mb4`
+    sur `post`, `post_index`, `user_profile` et les tables `sf_guard_*` ; reconstruction de
+    l'index de recherche, dont la collation change ; vérification que le test de la story 18
+    passe désormais **contre la production**. — dehors : les 56 morceaux déjà détruits, qui
+    ne se réparent pas par une migration ; le passage du site à un autre SGBD.
+  - **Ce qui la dé-risque, et qui a été mesuré** : le corpus ne porte **aucune séquence
+    doublement encodée** — zéro occurrence de `Ã©`, `Ã¨` ou équivalent. Les octets stockés
+    sont donc du latin1 authentique, ce qui est le cas où `CONVERT TO CHARACTER SET` fait
+    exactement ce qu'il faut. Si ce n'était pas le cas, la migration aggraverait au lieu de
+    réparer.
+  - **Ce qui reste à trancher dans la proposal** : le geste de migration lui-même. Le
+    déploiement est automatique à la poussée sur `main`, et une migration de schéma ne l'est
+    pas — il faut dire qui la lance, quand, et ce qu'on fait si elle échoue à mi-parcours.
+  - **Code concerné** : `src/config/databases.yml-dist`, `src/lib/migration/doctrine/`,
+    `src/config/doctrine/schema.yml`
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
+- [ ] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
+  - **Persona servi** : le mélomane fêlé, le mainteneur
+  - **Segment du parcours** : Retrouver son morceau
+  - **MoSCoW** : Should
+  - **Pourquoi celle-ci, pourquoi maintenant** : la story 19 arrête l'hémorragie, elle ne
+    soigne pas la plaie. **56 morceaux** portent un titre ou un auteur irrécupérable depuis
+    la base. Les laisser sans inventaire, c'est décider de les oublier sans le dire.
+  - **Dépend de** : story 19 — inventorier avant d'avoir arrêté la destruction laisserait la
+    liste s'allonger sous l'inventaire.
+  - **Périmètre** — dedans : produire la liste, avec l'identifiant, la date de publication et
+    le contributeur de chacun ; établir si une sauvegarde antérieure au dommage existe ;
+    porter la question aux contributeurs concernés, qui sont les seuls à savoir ce qu'ils
+    avaient saisi. — dehors : deviner les titres, ce qui reviendrait à inventer des données.
+  - **Ce que le tableau des modalités a durci** : « le seul recours est humain » était une
+    hypothèse ; c'est maintenant chiffré. **81 morceaux, 37 contributeurs**, sur dix-huit
+    ans. Ils sont joignables — le collectif publie quotidiennement — mais se souvenir de ce
+    qu'on a saisi en 2009 n'est pas se souvenir de la semaine dernière. **22 des 81 datent
+    de 2022 ou après** : ceux-là ont une chance réelle d'être reconstitués, les autres
+    beaucoup moins. La story doit distinguer les deux.
+  - **Ce que la story doit donc prévoir** : le cas où personne ne répond. Marquer les
+    morceaux concernés comme altérés est le minimum, et c'est la seule forme de notification
+    encore possible — elle ne rend rien, elle cesse de faire passer une mutilation pour un
+    titre.
+  - **Question ouverte** : la restauration depuis une sauvegarde n'aidera pas. La destruction
+    a lieu **à l'écriture**, donc au moment du post : une sauvegarde ancienne porte les mêmes
+    `?`.
+  - **Code concerné** : aucun. C'est un travail de données et de conversation.
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
 
 - [ ] 16. `restreindre-les-tirages-aux-morceaux-publiables` — le hasard ne mène plus à une page morte
   - **Persona servi** : l'auditeur sur le site, le DJ de soirée — quiconque clique le bouton
@@ -859,6 +1049,10 @@ coup et gardent leur numéro pour que rien ne se perde. La séquence réelle est
    ├─ 4  aligner-la-route-md5                 ← 1
    ├─ 5  servir-les-erreurs-en-json           ← 4
    └─ 6  specifier-les-routes-json            ← 1 à 5
+
+  18  porter-la-base-de-test-en-utf8mb4   ◄── squelette ambulant de l'axe Unicode
+   ├─ 19  migrer-la-base-en-utf8mb4           ← 18
+   └─ 20  inventorier-les-morceaux-detruits   ← 19
 
   13  fix-recherche-mobile                ✅ livré hors plan, inscrit rétroactivement
    └─ 14  retirer-le-verrouillage-du-zoom     ← 13 · une ligne, ne dépend de rien d'autre
@@ -1166,6 +1360,32 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
    réponse est chez les contributeurs, pas dans le code.
 
 ## Change Log
+
+- 2026-08-18 (septième révision) — **L'auteur apporte l'axe Unicode et le classe Must.**
+  L'exploration a montré que la question n'est pas d'affichage mais d'encodage : la base de
+  production est en `latin1`, et tout caractère hors cp1252 y est remplacé par `?` à
+  l'écriture, silencieusement et sans retour. **56 morceaux ont déjà un titre ou un auteur
+  détruit** — du cyrillique, du polonais, du japonais. C'est le seul défaut de ce plan qui
+  détruise de la donnée au lieu de mal la servir, ce qui justifie le Must sans discussion.
+  Trois stories : la **18** rend l'écart exécutable en portant la base de test en `utf8mb4`
+  — `utf8` ne suffit pas, il ne porte pas les emoji ; la **19** migre la production ; la
+  **20** inventorie ce qui est perdu, puisque la migration n'y rendra rien.
+  Un fait mesuré dé-risque la 19 : le corpus ne porte aucune séquence doublement encodée,
+  donc `CONVERT TO CHARACTER SET` fera exactement ce qu'il faut.
+  **Une erreur de méthode a été commise et corrigée dans la même révision**, et elle est
+  consignée parce qu'elle se reproduira. Une première rédaction concluait que le site était
+  dormant — « dernier morceau le 14 octobre 2021 » — et en tirait qu'il n'y avait pas
+  d'urgence. L'auteur a corrigé : le site publie quotidiennement. La source était fautive,
+  non le raisonnement : **la base de développement porte un dump vieux de cinq ans**, 6 103
+  morceaux contre 8 097 en ligne. Toute mesure de volume, de date ou de contenu doit
+  désormais venir du site en ligne.
+  Les chiffres corrigés, relevés sur la production : **81 morceaux détruits, 37
+  contributeurs, 22 depuis 2022, 5 en 2026**, et **zéro caractère hors cp1252 survivant sur
+  8 097 morceaux et dix-huit ans**. La destruction est donc en cours.
+  Deux conséquences : un **garde-fou à la saisie** entre en « Could », conditionnel — il n'a
+  de sens que si la migration tarde, la story 19 supprimant la cause ; et la story 20
+  distingue désormais les 22 dégâts récents, reconstituables, des 59 anciens qui le sont
+  beaucoup moins.
 
 - 2026-08-18 (septième révision) — **La story 2 passe en attente**, à la demande de
   l'auteur, et pour un motif qui vaut mieux qu'une préférence : il se sert de `/posts` non
