@@ -556,7 +556,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-servir-les-erreurs-en-json` — **livré le 2026-08-18**
 
-- [~] 6. `specifier-les-routes-json-non-couvertes` — chaque route JSON servie est décrite par un scénario
+- [x] 6. `specifier-les-routes-json-non-couvertes` — chaque route JSON servie est décrite par un scénario
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Changer un format, Vérifier
   - **MoSCoW** : Should
@@ -585,8 +585,11 @@ Chaque story est une tranche verticale : elle se démontre seule.
     un problème de preuve**. La story continue sous le nom
     `verifier-les-representations-machine`.
   - **Ajoutée** : 2026-08-18 · **Reformulée** : 2026-08-18
-  - **Change** : `verifier-les-representations-machine` — proposé le 2026-08-18, groupe XSPF
-    et Max/MSP fait, le reste ouvert
+  - **Change** : `2026-08-18-verifier-les-representations-machine` — **livré le 2026-08-18**.
+    Couverture portée de ~12 à ~50 scénarios sur 59 ; 507 → 602 tests. Trois trouvailles :
+    l'adresse du fichier audio (corrigée, story 15), le tirage aléatoire qui peut servir une
+    page morte (**non corrigé**, story 16), et l'index de recherche vide en test (corrigé
+    dans le bootstrap).
 
 - [x] 15. `unifier-l-adresse-du-fichier-audio` — un fichier audio a une seule adresse
   - **Persona servi** : l'intégrateur, et quiconque suit une adresse de fichier
@@ -609,6 +612,54 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `showSuccess.xspf.php`, `_xspfPlaylist.xspf.php`
   - **Ajoutée** : 2026-08-18 · **Livrée** : 2026-08-18
   - **Change** : `2026-08-18-unifier-l-adresse-du-fichier-audio` — **livré le 2026-08-18**
+
+- [ ] 16. `restreindre-les-tirages-aux-morceaux-publiables` — le hasard ne mène plus à une page morte
+  - **Persona servi** : l'auditeur sur le site, le DJ de soirée — quiconque clique le bouton
+    aléatoire ou frappe `r`
+  - **Segment du parcours** : Enchaîner (auditeur, étape 3)
+  - **MoSCoW** : Must
+  - **Née d'une vérification** : trouvée en écrivant la couverture de la story 6. Le
+    scénario « Morceau aléatoire : le morceau tiré est publiable » y est marqué **non
+    vérifié**, non parce que le test manque mais parce que le site ne tient pas la promesse.
+  - **Le défaut** : `PostTable::WHERE_ONLINE` définit un morceau publiable par
+    `is_online = 1 AND publish_on <= … AND slug IS NOT NULL AND slug != ''`. Quatre méthodes
+    réécrivent cette condition **à la main** en omettant la clause de slug :
+    `getRandomPost` (`:228`), `getNextPost` (`:106`), `getPreviousPost` (`:136`) et
+    `getByMd5Sum` (`:251`). `/posts/random` peut donc servir `/post/`, une page morte.
+  - **Gravité** : deux des sept candidats des fixtures, **un sur 6 103 en production**. Rare,
+    mais le chemin est celui du bouton aléatoire et du raccourci `r`.
+  - **Périmètre** — dedans : les quatre méthodes utilisent `WHERE_ONLINE` au lieu de
+    réécrire ; le scénario passe de non vérifié à vérifié. — dehors : les autres requêtes
+    qui interpolent déjà la constante ; le morceau sans slug lui-même, qui est une donnée.
+  - **Dépend de** : rien
+  - **Code concerné** : `src/lib/model/doctrine/PostTable.class.php`,
+    `src/test/functional/frontend/catalogueEtNavigationTest.php`
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
+- [ ] 17. `assainir-les-avertissements-de-markdown` — les corps de réponse cessent de porter des avertissements PHP
+  - **Persona servi** : le mainteneur
+  - **Segment du parcours** : Vérifier
+  - **MoSCoW** : Should
+  - **Née d'une vérification** : c'est ce qui rendait erratiques les sondes de plusieurs
+    changes de cette session, selon l'ordre des requêtes.
+  - **Le défaut** : l'environnement de test déclare
+    `error_reporting: (E_ALL | E_STRICT) ^ E_NOTICE`, qui laisse passer `E_DEPRECATED`. La
+    bibliothèque PHP-Markdown vendorisée emploie `$matches[2]{0}` (`markdown.php:910`),
+    déprécié en PHP 7.4. Le premier rendu Markdown d'un processus émet donc des
+    avertissements **dans le corps de la réponse**, qui cesse d'être du JSON analysable.
+  - **Ce qui le rend plus qu'un désagrément** : cette syntaxe est **supprimée en PHP 8**.
+    C'est un verrou de montée de version, pas seulement du bruit de test.
+  - **Contourné aujourd'hui** par une requête de chauffe dans deux fichiers de test, nommée
+    comme telle. La production n'est pas touchée : huit échantillons y renvoient du JSON
+    valide.
+  - **Périmètre** — dedans : corriger la bibliothèque ou masquer `E_DEPRECATED` en test, et
+    retirer les requêtes de chauffe. — dehors : la montée en PHP 8 elle-même.
+  - **Dépend de** : rien
+  - **Code concerné** : `src/lib/vendor/PHP-Markdown/markdown.php`,
+    `src/apps/frontend/config/settings.yml`
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
 
 - [~] 7. ~~`paginer-getartists-subsonic`~~ — **supersédée le 2026-08-18**
   - **Raison** : son unique persona, « l'auditeur en client Subsonic », a été retiré du plan
