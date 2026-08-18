@@ -477,6 +477,10 @@ contenu doit venir du site en ligne, comme celles du tableau ci-dessus.
   message. **Conditionnel** : le rythme est d'environ cinq morceaux par an et la story 19
   supprime la cause — ce garde-fou n'a de sens que si la migration tarde. À promouvoir en
   Must si elle glisse, à abandonner dès qu'elle est livrée.
+- **Remplacer l'algorithme de hachage de sfGuard** — *ajouté le 2026-08-18.* `sha1` sans
+  étirement de clé, avec un sel par compte. Ce n'est pas ce qui a causé la fuite, mais c'est
+  ce qui la rend exploitable. Hors périmètre de la story 22, qui traite l'exposition et non
+  le stockage.
 - **Corriger le `context:` de `openspec/config.yaml`** — il affirme qu'aucun test
   automatisé ne couvre le contrat public ; cinq routes le sont depuis. Une ligne.
 
@@ -823,6 +827,35 @@ Chaque story est une tranche verticale : elle se démontre seule.
     2021, précédait les colonnes du schéma : toute installation neuve échouait en 1054.
     Remplacé par un extrait de la production converti et **anonymisé** — le dépôt étant
     public, le dump versionné exposait 179 empreintes de mots de passe et 173 courriels.
+
+- [ ] 22. `purger-les-identifiants-de-l-historique` — le dépôt public cesse de distribuer des mots de passe
+  - **Persona servi** : les 171 contributeurs dont l'adresse et l'empreinte de mot de passe
+    sont publiées, et qui ne le savent pas
+  - **Segment du parcours** : aucun — c'est une dette de sécurité, pas une fonctionnalité
+  - **MoSCoW** : Must
+  - **Née d'une vérification** : trouvée en remplaçant le dump d'amorçage. Le dépôt est
+    **public** et son historique porte **207 empreintes SHA1 distinctes et 171 courriels
+    réels**, sur cinq versions de deux dumps de production. L'anonymisation du 2026-08-18
+    règle l'avenir et rien du passé.
+  - **L'ordre est le fond de la story** : invalider les mots de passe d'abord, prévenir les
+    personnes ensuite, réécrire l'historique en dernier. Une réécriture **ne récupère
+    rien** — les objets sont clonés partout, présents dans **4 forks** qu'elle n'atteint
+    pas, et circulent depuis des années. Ce qui change l'exposition, c'est que les
+    empreintes cessent d'ouvrir un compte.
+  - **Ce qui aggrave** : `sf_guard_user.algorithm` vaut `sha1`, et le sel figure dans le
+    même dump. Ce sont des mots de passe à traiter comme lisibles, non comme protégés.
+  - **Coût de coordination mesuré** : 4 forks, 46 branches distantes, une PR de release en
+    cours, 7 observateurs.
+  - **Périmètre** — dedans : invalidation, notification, réécriture par `git filter-repo`,
+    demande de purge au support GitHub, information des propriétaires de forks. — dehors :
+    changer l'algorithme de hachage ; les copies hors du dépôt, qu'aucune réécriture
+    n'atteint et qu'il serait malhonnête de prétendre purger.
+  - **Dépend de** : rien
+  - **Code concerné** : l'historique git ; `src/data/fixtures/musiqueapproximative.sql` et
+    `src/data/fixtures/net_musiqueapproximative_www.dump.sql`, ce dernier supprimé depuis
+    mais présent dans l'historique
+  - **Ajoutée** : 2026-08-18
+  - **Change** : `purger-les-identifiants-de-l-historique` — proposé le 2026-08-18
 
 - [ ] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
   - **Persona servi** : le mélomane fêlé, le mainteneur
