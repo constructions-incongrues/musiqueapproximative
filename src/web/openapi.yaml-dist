@@ -41,9 +41,7 @@ info:
   description: |
     Représentations machine du catalogue de morceaux de Musique Approximative.
 
-    Ce contrat décrit l'état actuel du service, écarts compris. Un écart reste
-    connu et documenté ici plutôt que masqué : `/post/md5/{md5sum}` sert l'objet
-    nu quand `/post/{slug}?format=json` sert un objet enveloppé dans `posts`.
+    Ce contrat décrit l'état actuel du service, écarts compris.
 
     **Version.** `info.version` est celle du projet, incrémentée à chaque
     publication du site. Elle **ne signale pas** les changements de cette API :
@@ -143,8 +141,8 @@ paths:
       tags: [morceau]
       summary: Un morceau, désigné par l'empreinte de sa piste
       description: |
-        Sert l'objet **nu**, sans l'enveloppe `posts` que rend `/post/{slug}?format=json`.
-        Deux contrats pour le même objet ; c'est un écart connu.
+        Sert le morceau sous la même enveloppe `posts` que `/post/{slug}?format=json` :
+        un seul analyseur suffit à lire les deux.
 
         Une empreinte inconnue ne produit pas de `404` mais une erreur du serveur.
         Ce comportement n'est pas déclaré ici : le contrat ne décrit que les réponses
@@ -157,10 +155,10 @@ paths:
           schema: { type: string, pattern: '^[0-9a-f]{32}$' }
       responses:
         '200':
-          description: Le morceau, non enveloppé.
+          description: Le morceau, enveloppé comme sur les autres routes.
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/MorceauNu' }
+              schema: { $ref: '#/components/schemas/EnveloppeMorceaux' }
 
   /posts:
     get:
@@ -227,7 +225,9 @@ paths:
       description: |
         Consommée par le lecteur du site. Sa forme `{url, title}` est le contrat
         interne de ce lecteur, non une incohérence : elle ne sera pas alignée sur
-        la représentation complète d'un morceau.
+        la représentation complète d'un morceau. C'est, depuis l'alignement de
+        `/post/md5/{md5sum}`, la **seule** divergence de forme du service, et elle
+        est délibérée.
 
         `current` absent ou inconnu ne produit pas de `404` mais une erreur du
         serveur, non déclarée ici.

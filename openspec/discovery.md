@@ -491,7 +491,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
-- [ ] 4. `aligner-la-route-md5-sur-la-forme-commune` — un morceau récupéré par empreinte a la forme des autres
+- [x] 4. `aligner-la-route-md5-sur-la-forme-commune` — un morceau récupéré par empreinte a la forme des autres
   - **Persona servi** : l'intégrateur
   - **Segment du parcours** : Récupérer (étape 3)
   - **MoSCoW** : Must
@@ -528,7 +528,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/apps/frontend/modules/post/templates/md5Success.php`,
     `src/apps/frontend/templates/layout.php` (les quatre `$.get`, à ne pas casser)
   - **Ajoutée** : 2026-08-18 · **Resserrée** : 2026-08-18
-  - **Change** : `aligner-la-route-md5-sur-la-forme-commune` — proposé le 2026-08-18
+  - **Change** : `2026-08-18-aligner-la-route-md5-sur-la-forme-commune` — **livré le 2026-08-18**
 
 - [ ] 5. `servir-les-erreurs-en-json` — une erreur sur une route JSON revient en JSON
   - **Persona servi** : l'intégrateur

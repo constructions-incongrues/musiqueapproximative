@@ -156,7 +156,18 @@ class postActions extends sfActions
   {
     $post = Doctrine_Core::getTable('Post')->getByMd5Sum($request->getParameter('md5sum'));
     $this->getResponse()->setContentType('application/json');
-    echo $post->toJson($request, $this->getContext());
+
+    // Meme enveloppe que les autres routes qui rendent un morceau en JSON :
+    // « Even single ressources are displayed as lists », comme le disent
+    // showSuccess.json.php et listSuccess.json.php. Sans elle, cette route
+    // servait l'objet nu et imposait un second analyseur au consommateur.
+    //
+    // Volontairement SANS html_entity_decode, que ces deux gabarits appliquent :
+    // il desechappe le HTML que Markdown a echappe, et produit un body.html ou
+    // « & » figure nu. Le propager ici repandrait ce comportement au lieu de
+    // l'aligner. La difference porte sur le contenu, non sur la forme, et un
+    // seul analyseur suffit dans les deux cas.
+    echo sprintf('{ "posts": [%s] }', $post->toJson($request, $this->getContext()));
     sfConfig::set('sf_web_debug', false);
     return sfView::NONE;
   }
