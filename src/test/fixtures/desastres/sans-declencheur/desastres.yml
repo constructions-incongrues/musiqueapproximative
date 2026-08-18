@@ -1,0 +1,8 @@
+# Une regle ne declare aucun trigger ; deux autres partagent le meme.
+imports:
+  recettes:
+    - desastres/recettes-un.yml
+  regles:
+    - desastres/regles-un.yml
+regles: []
+recettes: {}
