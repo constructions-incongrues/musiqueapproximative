@@ -965,7 +965,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     Restent hors du change et nommés : écrire aux 37 contributeurs, et marquer les morceaux
     comme altérés si la conversation ne rend rien.
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `inventorier-les-morceaux-alteres` (archivé) — le packet disait `inventorier-les-morceaux-detruits`
 
 - [x] 16. `restreindre-les-tirages-aux-morceaux-publiables` — le hasard ne mène plus à une page morte
   - **Persona servi** : l'auditeur sur le site, le DJ de soirée — quiconque clique le bouton
@@ -1020,7 +1020,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/lib/vendor/PHP-Markdown/markdown.php`,
     `src/apps/frontend/config/settings.yml`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `assainir-le-rendu-markdown` (archivé) — le packet disait `assainir-les-avertissements-de-markdown`
 
 - [~] 7. ~~`paginer-getartists-subsonic`~~ — **supersédée le 2026-08-18**
   - **Raison** : son unique persona, « l'auditeur en client Subsonic », a été retiré du plan
@@ -1075,7 +1075,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `v1.4.6`, MySQL pour MariaDB 10.11, et le JSON donné pour du `jsonapi.org` alors que la
     conformité est écartée. L'élargissement est annoncé dans la proposition du change.
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `corriger-le-contexte-projet` (archivé) — le packet disait `corriger-le-contexte-openspec`
 
 - [x] 10. `publier-le-contrat-openapi` — l'API a un contrat lisible par machine, servi et vérifié
   - **Persona servi** : l'intégrateur
@@ -1146,7 +1146,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     matin même, était déjà orphelin le soir. La dérive n'était pas historique, elle était en
     cours. Un contrôle dans `Validation du code` nomme désormais toute page absente.
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `reparer-la-navigation-de-la-documentation` (archivé) — le packet disait `reparer-la-navigation-du-site`
 
 - [x] 12. `publier-la-page-subsonic` — l'auditeur en client Subsonic trouve comment se connecter
   - **Persona servi** : hors des cinq personas de ce plan — celui qui écoute depuis une
@@ -1171,7 +1171,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     Vérifié : la page existe, le Markdown d'origine est supprimé, la navigation la porte.
 
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `publier-la-documentation-subsonic` (archivé) — livrée en marge de la story 11
 
 - [x] 13. `fix-recherche-mobile` — le champ de recherche existe sur téléphone
   - **Persona servi** : le DJ de soirée (principal), le mélomane fêlé
@@ -1251,6 +1251,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/test/functional/frontend/openapiContractTest.php`,
     `.github/workflows/`
   - **Ajoutée** : 2026-08-18
+  - **Change** : `verifier-le-contrat-en-production` (archivé) — le packet disait `verifier-le-contrat-contre-la-production`
 
 - [x] 24. `auditer-les-fichiers-dist` — ce qui est en ligne cesse de diverger du dépôt
   - **Persona servi** : le mainteneur
@@ -1279,6 +1280,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Dépend de** : rien
   - **Code concerné** : tous les `*-dist` de `src/`, `src/Makefile`, `Makefile`
   - **Ajoutée** : 2026-08-18
+  - **Change** : `auditer-les-fichiers-dist` (archivé) — nom identique
 
 - [x] 25. `rendre-l-encodage-de-connexion-verifiable` — l'encodage cesse d'être invérifiable
   - **Persona servi** : le mainteneur, et derrière lui tout contributeur qui saisit un titre
@@ -1306,6 +1308,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/config/databases.yml-dist`,
     `src/lib/task/`, `.github/workflows/contrat-production.yml`
   - **Ajoutée** : 2026-08-18
+  - **Change** : `rendre-l-encodage-verifiable` (archivé) — le packet disait `rendre-l-encodage-de-connexion-verifiable`
 
 - [ ] 26. `empecher-make-configure-de-casser-le-serveur` — une commande cesse d'être un piège
   - **Persona servi** : le mainteneur
@@ -1518,6 +1521,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **MoSCoW** : Must — remplace la story 3 comme réponse à la latence
   - **Née d'un diagnostic, pas d'une intuition** : la story 3 attribuait 17,5 s au volume
     sérialisé. Mesuré en local sur 8 099 morceaux, identity map vidée entre les essais :
+  - **Change** : `hydrater-le-contributeur-en-une-requete` (archivé) — nom identique
 
     | | requêtes | durée |
     | --- | --- | --- |
