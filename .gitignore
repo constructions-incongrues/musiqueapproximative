@@ -45,3 +45,8 @@ vendor/
 coverage/
 .cache/
 tmp/
+
+# Outillage d'agents : les corps des compétences sont installés localement,
+# seul `skills-lock.json` est versionné — il déclare lesquelles, et à quelle version.
+.agents/
+.claude/skills/
