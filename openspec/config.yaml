@@ -37,6 +37,11 @@ context: |
   - Le code legacy ne se refactore pas à l'occasion : un change ne touche que ce
     qu'il annonce.
 
+  Backlog : `openspec/discovery.md` est le plan de release, produit par la
+  compétence discovery. Lorsqu'un change est demandé sans requête précise,
+  prendre la prochaine story non cochée de ce fichier et utiliser son packet
+  comme entrée. Une story par change, une seule à la fois.
+
 # Les règles de rédaction — français, section « Hors périmètre », comportement
 # observable plutôt qu'implémentation, tâche de vérification manuelle, cache et
 # plugins tiers — sont désormais portées par le schéma `musique-approximative`,
