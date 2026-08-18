@@ -33,6 +33,33 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql
           coverage: none
 
+      - name: Navigation de la documentation complète
+        # `docs/antora.yml` déclare `nav.adoc`. Quand ce fichier manquait, le site
+        # n'avait aucune barre latérale et la seule voie vers une page était un
+        # sommaire tenu à la main dans `index.adoc` — qui a dérivé jusqu'à laisser
+        # huit pages sur seize hors d'atteinte, dont trois expliquant comment monter
+        # l'environnement et lancer les tests. Une page publiée que personne ne peut
+        # trouver n'est pas publiée. Ce contrôle nomme celles qui manquent.
+        run: |
+          nav=docs/modules/ROOT/nav.adoc
+          test -f "$nav" || {
+            echo "::error::$nav est absent alors que docs/antora.yml le déclare"
+            exit 1
+          }
+          manquantes=0
+          pages=$(cd docs/modules/ROOT/pages && find . -name '*.adoc' | sed 's|^\./||' | sort)
+          for page in $pages; do
+            grep -q "xref:${page}\[" "$nav" || {
+              echo "::error file=docs/modules/ROOT/pages/${page}::page publiée absente de $nav"
+              manquantes=$((manquantes + 1))
+            }
+          done
+          test "$manquantes" -eq 0 || {
+            echo "::error::$manquantes page(s) publiée(s) hors de la navigation"
+            exit 1
+          }
+          echo "$(grep -c 'xref:' "$nav") entrées de navigation, aucune page orpheline"
+
       - name: Validate composer.json
         run: |
           cd src

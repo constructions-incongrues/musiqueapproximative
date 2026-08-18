@@ -1,0 +1,23 @@
+.Démarrer
+* xref:index.adoc[Documentation]
+* xref:guide-demarrage.adoc[Guide de démarrage rapide]
+* xref:architecture.adoc[Architecture du projet]
+
+.Développer
+* xref:developpement/environnement.adoc[Environnement de développement]
+* xref:developpement/commandes.adoc[Commandes utiles]
+* xref:developpement/tests.adoc[Tests]
+* xref:docker.adoc[Utilisation de Docker]
+
+.Déployer et exploiter
+* xref:deploiement.adoc[Déploiement]
+* xref:ghcr.adoc[GitHub Container Registry]
+* xref:migration-utf8mb4.adoc[Migration de la base en utf8mb4]
+* xref:cicd/github-actions.adoc[GitHub Actions]
+* xref:cicd/release-please.adoc[Release Please]
+
+.Contribuer
+* xref:inscription.adoc[Rejoindre le conventicule]
+* xref:desastres.adoc[Anatomie d'un Désastre]
+* xref:contribution.adoc[Contribuer au développement]
+* xref:README.adoc[Contribuer à la documentation]
