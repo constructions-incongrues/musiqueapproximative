@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-et-unième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-deuxième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1345,8 +1345,9 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `make configure` lancé depuis l'hôte détruisait la configuration locale de la même façon.
   - **Piège de méthode** : la première reproduction, sur macOS, n'a rien reproduit — `make`
     y échoue pour une autre raison. Il a fallu la refaire sous Linux.
+  - **Change** : `refuser-un-rendu-sans-variables` (archivé) — le packet disait `empecher-make-configure-de-casser-le-serveur`
 
-- [ ] 27. `relier-les-stories-a-leurs-changes` — le plan cesse de perdre ce qu'il a livré
+- [x] 27. `relier-les-stories-a-leurs-changes` — le plan cesse de perdre ce qu'il a livré
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Should — axe « tenir ce qu'on a livré »
@@ -1373,6 +1374,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `openspec/discovery.md`, `openspec/changes/archive/`,
     `.github/workflows/ci.yml`
   - **Ajoutée** : 2026-08-18
+  - **Change** : `relier-les-stories-a-leurs-changes` (archivé) — nom identique
 
 - [ ] 28. `auditer-la-compatibilite-php-8` — on sait enfin si la montée est atteignable
   - **Persona servi** : le mainteneur
@@ -2296,3 +2298,20 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   C'est la quatrième story de la journée dont la mesure contredit le packet. Le motif est
   constant : les packets sont écrits à partir de ce qui est lisible, et corrigés par ce qui
   est exécutable.
+
+- 2026-08-19 (vingt-deuxième révision) — **La story 27 est livrée, et elle a mordu sur son
+  premier passage réel.** Le contrôle, une fois sur `main`, a signalé la story **26** : je
+  l'avais cochée et archivée une heure plus tôt sans déclarer son change. Il l'a nommée, avec
+  un code de sortie non nul. C'est l'oubli exact qu'il existe pour empêcher, commis par celui
+  qui venait de l'écrire.
+  **Le défaut le plus courant n'était pas celui qu'on croyait.** Sur les neuf stories sans
+  lien exploitable, quatre n'avaient aucune ligne ; **cinq en portaient une restée à sa
+  valeur de gabarit**, `_pas encore proposé_`, des jours après la livraison. Une ligne jamais
+  mise à jour est plus difficile à voir qu'une ligne absente : le packet a l'air complet.
+  **L'asymétrie du contrôle est délibérée et mesurée** : il n'exige pas qu'une archive soit
+  citée par une story, 20 des 50 étant antérieures au plan. L'exiger produirait vingt fausses
+  alertes permanentes.
+  **Ce qu'il ne fera jamais**, et qui reste le défaut dominant de la journée : détecter un
+  packet dont les **chiffres** ont vieilli. Quatre l'ont été — le diagnostic Markdown, le
+  verrou `getid3`, le « 3,1 s » du XSPF, le `.env` de `make configure`. Un chiffre périmé est
+  syntaxiquement identique à un chiffre juste.
