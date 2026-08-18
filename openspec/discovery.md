@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18
+> Created: 2026-08-18 · Last revised: 2026-08-18 (huitième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -828,7 +828,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     Remplacé par un extrait de la production converti et **anonymisé** — le dépôt étant
     public, le dump versionné exposait 179 empreintes de mots de passe et 173 courriels.
 
-- [ ] 22. `purger-les-identifiants-de-l-historique` — le dépôt public cesse de distribuer des mots de passe
+- [~] 22. `purger-les-identifiants-de-l-historique` — **archivée le 2026-08-18 sans avoir atteint son objectif**
   - **Persona servi** : les 171 contributeurs dont l'adresse et l'empreinte de mot de passe
     sont publiées, et qui ne le savent pas
   - **Segment du parcours** : aucun — c'est une dette de sécurité, pas une fonctionnalité
@@ -855,7 +855,29 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/data/fixtures/net_musiqueapproximative_www.dump.sql`, ce dernier supprimé depuis
     mais présent dans l'historique
   - **Ajoutée** : 2026-08-18
-  - **Change** : `purger-les-identifiants-de-l-historique` — proposé le 2026-08-18
+  - **Change** : `2026-08-18-purger-les-identifiants-de-l-historique` — **archivé le
+    2026-08-18, 3 tâches sur 21.** Case laissée à `[~]` et non à `[x]` : le change est clos,
+    la story ne l'est pas. L'énoncé — « le dépôt public cesse de distribuer des mots de
+    passe » — est **faux à ce jour**.
+  - **Ce qui a été fait** : sauvegarde miroir vérifiée ; inventaire corrigé (trois dumps et
+    non deux, `vagrant.dump.sql` avait échappé au premier relevé) ; réécriture appliquée aux
+    **branches**, `main` passant de `4df38ae` à `a99802b` ; amorçage anonymisé rétabli en un
+    commit sans passé ; dépôt local réaligné.
+  - **Ce qui a bloqué** : les **33 étiquettes** ont été rejetées — `GH013 … Cannot update
+    this protected ref`. Un clone les récupérant par défaut et 14 d'entre elles portant
+    l'ancien historique, **l'exposition est inchangée : 207 empreintes, 171 courriels.** La
+    règle n'est lisible dans aucune API accessible ; la lever demande un accès
+    administrateur.
+  - **Effet de bord non anticipé, et il coûte** : la réécriture a changé toutes les
+    empreintes, or les étiquettes désignent toujours les anciennes. `v1.11.0` n'est plus un
+    ancêtre de `main`, release-please a perdu son ancre et proposait un changelog 1.12.0
+    contenant l'histoire entière du dépôt. Contourné par `last-release-sha` dans
+    `release-please-config.json` — **à retirer quand les étiquettes passeront**.
+  - **Reste à faire, hors travail technique** : lever la règle puis
+    `git push --force 'refs/tags/*:refs/tags/*'` ; invalider les 207 mots de passe ;
+    prévenir les 173 personnes (brouillon dans `notification.md` de l'archive) ; solliciter
+    le support GitHub ; informer les 4 forks. Ces gestes demandent des décisions du
+    collectif, pas du code.
 
 - [ ] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
   - **Persona servi** : le mélomane fêlé, le mainteneur
@@ -1603,3 +1625,22 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   de la story 10, pas un raffinement. Le relevé note aussi que le poste de valeur le plus
   solide est de forcer la question ouverte n°1, et non de servir des consommateurs dont
   aucun n'est identifié. Aucune story n'a été modifiée.
+
+- 2026-08-18 (huitième révision) — **Réconciliation du backlog après la session.** Douze
+  stories livrées et archivées ; la **22** est archivée sans avoir atteint son objectif et
+  passe à `[~]` plutôt qu'à `[x]` — les branches sont réécrites, les étiquettes rejetées,
+  l'exposition inchangée. La règle de protection qui les bloque n'est lisible dans aucune
+  API accessible.
+  Consigné aussi parce que ça se reproduira : **une réécriture d'historique dont les
+  étiquettes ne suivent pas casse release-please.** Toutes les empreintes changent, plus
+  aucune étiquette n'est atteignable depuis `main`, l'outil remonte au commit racine et
+  propose l'histoire entière comme changelog. Contourné par `last-release-sha`, à retirer
+  quand les étiquettes passeront.
+  **Cinq changes livrés ce jour ne correspondent à aucune story** et le plan ne les
+  couvrait pas : `preparer-la-base-de-test-en-local`, `activer-le-cache-en-test`,
+  `dedoublonner-regles-et-recettes`, `couvrir-la-configuration-des-desastres`,
+  `couvrir-l-invariance-des-desastres`. Les deux premiers sont déjà relevés en contexte —
+  ils ont rendu les autres moins chères. Les trois derniers sont du travail sur les
+  désastres, hors des axes de ce plan : ils sont nommés ici pour que le décompte
+  « 24 changes archivés » reste vérifiable, non pour être rétro-inscrits en stories.
+  Aucune story n'a été ajoutée ni supprimée.
