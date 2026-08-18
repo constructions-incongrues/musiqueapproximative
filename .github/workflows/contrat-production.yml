@@ -2,12 +2,11 @@ name: Contrat en production
 
 # Ce contrôle a son propre rendez-vous, et ce n'est pas une commodité.
 #
-# Il a d'abord été logé dans `nightly.yml`. Or ce workflow échoue en continu
-# depuis le 16 juin 2026 — deux mois — sur un `jq not installed` de
-# `trunk-action`. Une alerte posée dans un rendez-vous rouge en permanence est
-# une alerte déjà éteinte : son signal ne se distingue pas du bruit auquel on
-# s'est habitué. C'est exactement le mode de défaillance que ce contrôle
-# prétendait éviter.
+# Il a d'abord été logé dans `nightly.yml`. Or ce workflow n'est jamais passé au
+# vert : 122 exécutions depuis sa création le 2 janvier 2026, zéro succès. Une
+# alerte posée dans un rendez-vous rouge en permanence est une alerte déjà
+# éteinte : son signal ne se distingue pas du bruit auquel on s'est habitué.
+# C'est exactement le mode de défaillance que ce contrôle prétendait éviter.
 #
 # Il lui faut donc pouvoir passer au rouge tout seul.
 
