@@ -60,6 +60,63 @@ jobs:
           }
           echo "$(grep -c 'xref:' "$nav") entrées de navigation, aucune page orpheline"
 
+      - name: Chaque story livrée pointe un change existant
+        # Le 2026-08-18, trois stories livrées sont restées décochées : leur
+        # change avait été nommé autrement que leur packet. Le plan comptait
+        # dix-neuf stories livrées en croyant en compter seize.
+        #
+        # Le lien existe — chaque packet porte une ligne « **Change** : <nom> ».
+        # Ce qui manquait, c'est de le vérifier : la moitié des stories cochées
+        # avaient laissé cette ligne à sa valeur de gabarit, « pas encore
+        # proposé », des jours après la livraison.
+        #
+        # Le contrôle est ASYMÉTRIQUE, et délibérément. Il n'exige pas qu'un
+        # change archivé soit cité par une story : vingt des cinquante archives
+        # sont antérieures au plan, et le travail hors plan est légitime.
+        # Exiger la réciproque produirait vingt fausses alertes permanentes,
+        # c'est-à-dire un contrôle qu'on désactive.
+        run: |
+          python3 - <<'VERIF'
+          import os, re, sys
+
+          plan = 'openspec/discovery.md'
+          if not os.path.exists(plan):
+              print('::error::%s est absent' % plan); sys.exit(1)
+
+          racine = 'openspec/changes'
+          archives = set(os.listdir(os.path.join(racine, 'archive')))
+          actifs = {d for d in os.listdir(racine)
+                    if d != 'archive' and os.path.isdir(os.path.join(racine, d))}
+
+          def resout(nom):
+              return nom in actifs or any(a == nom or a.endswith('-' + nom) for a in archives)
+
+          contenu = open(plan, encoding='utf-8').read()
+          fautives = []
+          for bloc in re.split(r'\n(?=- \[[x~ ]\] \d+\. )', contenu):
+              entete = re.match(r'- \[x\] (\d+)\. `?([^`\s]+)', bloc)
+              if not entete:
+                  continue
+              numero, slug = entete.groups()
+              declares = re.findall(r'\*\*Change\*\* : `([a-z0-9-]+)`', bloc)
+              if not declares:
+                  fautives.append((numero, slug, 'ne declare aucun change'))
+              elif not any(resout(d) for d in declares):
+                  fautives.append((numero, slug, 'declare %s, qui n existe pas' % declares[0]))
+
+          for numero, slug, motif in fautives:
+              print('::error file=%s::story %s (%s) : %s' % (plan, numero, slug, motif))
+
+          if fautives:
+              print('::error::%d story(s) cochee(s) sans change resolvant.' % len(fautives))
+              print('Une story livree doit porter « **Change** : `<nom>` », verifie contre')
+              print('openspec/changes/ ou son archive — pas deduit du slug de la story.')
+              sys.exit(1)
+
+          cochees = len(re.findall(r'^\s*- \[x\] \d+\. ', contenu, re.M))
+          print('%d story(s) livree(s), toutes reliees a un change existant.' % cochees)
+          VERIF
+
       - name: Validate composer.json
         run: |
           cd src
