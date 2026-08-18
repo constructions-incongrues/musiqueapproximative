@@ -46,20 +46,59 @@ nouveau gabarit sans y penser produit un fichier absent en ligne — sans erreur
 et sans que rien ne le signale.
 ====
 
-== `make configure` ne s'exécute pas sur le serveur
+== `make configure` refuse plutôt que de détruire
 
 [CAUTION]
 ====
 *Ne pas lancer `make configure` sur le serveur de production.*
 
-La cible lit `./.env` depuis `src/`. Ce fichier n'existe pas sur le serveur : en
-développement, c'est un montage Docker de `etc/<profil>/.env`. Sans lui, la liste blanche
-de variables est vide, `envsubst` ne substitue **rien**, et tous les gabarits sont réécrits
-en l'état — `databases.yml` se retrouve avec `${DATABASE_HOST}`, la connexion échoue, et
-*chaque page du site répond 500*.
-
-C'est arrivé le 18 août 2026.
+Depuis le 19 août 2026, la cible **refuse** au lieu de détruire lorsqu'elle ne dispose
+d'aucune variable. Elle affiche ce qui manque et sort en erreur, sans toucher un seul
+fichier.
 ====
+
+=== Le mécanisme, mesuré
+
+Le diagnostic qui a circulé après l'incident du 18 août — « le fichier `.env` n'existe pas
+sur le serveur, donc la substitution échoue » — était **faux**, et l'inverse est vrai.
+Reproduit sous Linux dans un répertoire jetable :
+
+[cols="2,2,3",options="header"]
+|===
+|État de `src/.env` |`make configure` |Résultat
+
+|**Absent**
+|Refuse
+|`src/Makefile` l'inclut en ligne 1 et GNU make s'arrête. *Rien n'est écrit.* C'est le cas
+sûr.
+
+|**Vide, ou sans variable**
+|Réussissait
+|L'`include` passe, la liste blanche est vide, et `envsubst` recopie le gabarit *verbatim* :
+`databases.yml` se retrouve avec le nom de la variable au lieu de l'hôte. *C'est l'incident.*
+
+|Correct
+|Réussit
+|Rendu correct.
+|===
+
+[WARNING]
+====
+*Le piège n'est pas réservé au serveur.* Sur un poste de développement, `src/.env` est un
+fichier vide de zéro octet — le vrai fichier est monté par Docker dans le conteneur. Un
+`make configure` lancé depuis l'hôte détruisait donc la configuration locale de la même
+façon.
+====
+
+=== Ce que le garde-fou refuse
+
+Il porte sur la **liste de variables**, et non sur l'existence du fichier : celle-ci est déjà
+couverte par l'`include`, et garder dessus aurait laissé passer exactement le cas qui a
+cassé le site.
+
+La vérification a lieu **avant** la boucle d'écriture. Soit tous les gabarits sont rendus,
+soit aucun ne l'est — une configuration à moitié rendue serait plus difficile à diagnostiquer
+qu'une configuration entièrement fausse.
 
 Pour re-rendre la configuration de production, la rendre **localement** avec le profil
 voulu, puis envoyer le résultat :
