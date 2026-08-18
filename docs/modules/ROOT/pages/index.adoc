@@ -21,11 +21,10 @@ ____
 * xref:contribution.adoc[En contribuant au développement logiciel]
 
 == Documentation technique
-* xref:guide-demarrage.adoc[Guide de démarrage rapide]
-* xref:architecture.adoc[Architecture du projet]
-* xref:desastres.adoc[Anatomie d'un Désastre]
-* xref:deploiement.adoc[Déploiement]
-* xref:docker.adoc[Utilisation de Docker]
+
+La navigation, à gauche, mène à chacune des pages publiées : démarrer, développer,
+déployer, contribuer. Elle en est la liste de référence — cette page n'en tient pas
+une seconde, c'est ce qui l'avait fait dériver.
 
 == Statut du projet
 * https://github.com/constructions-incongrues/musiqueapproximative/releases[Journal des versions]

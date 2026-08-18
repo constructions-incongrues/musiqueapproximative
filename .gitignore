@@ -51,3 +51,9 @@ tmp/
 # seul `skills-lock.json` est versionné — il déclare lesquelles, et à quelle version.
 .agents/
 .claude/skills/
+
+# Résidu de construction Antora. L'extension kroki écrit ses diagrammes sous
+# `modules/ROOT/pages/_images/` relativement au répertoire d'où `antora` est
+# lancé — donc à la racine du dépôt, et non sous `docs/`. Un tel fichier a été
+# committé par mégarde et n'a été rattrapé que par le formateur SVG.
+/modules/
