@@ -28,6 +28,9 @@
 - 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail qui n'a
   touché aucune story de ce plan, mais en a déplacé le terrain : cinq changements archivés
   sur `desastres` et l'outillage de test. Voir « Ce que la session a changé pour ce plan ».
+- 2026-08-18 (sixième révision) — L'auteur tranche la question ouverte n°1 : **la
+  pagination borne à 50 par défaut**. Les stories 2 et 3 sont débloquées. Entrée du jour
+  également : la livraison de la story 1, premier amendement au contrat OpenAPI.
 - 2026-08-18 (cinquième révision) — Deux apports de l'auteur. D'abord une correction de
   portée : **ce plan est généraliste**, il ne se limite pas aux formats machine. Ensuite
   la promotion en Must du travail d'accès mobile. Entrée du jour également : la livraison
@@ -451,8 +454,9 @@ Chaque story est une tranche verticale : elle se démontre seule.
     d'une salle), et c'est **la même action et le même paramètre** que le JSON. Exclure le
     HTML revenait à ne pas brancher un paramètre là où il est déjà écrit. Ce qui reste
     dehors, c'est l'interface de pagination — pas le paramètre.
-  - **Question ouverte à trancher dans la proposal** : la valeur par défaut. Voir
-    « Questions ouvertes », question 1 : elle porte maintenant sur trois personas.
+  - **Valeur par défaut : 50** — tranchée par l'auteur le 2026-08-18. Alignée sur le
+    `count` de `/posts/feed`, seule route bornée du site à ce jour. La story n'a plus de
+    question ouverte ; elle est débloquée.
   - **Code concerné** : `src/apps/frontend/modules/post/actions/actions.class.php`
     (`executeList`), `src/lib/model/doctrine/PostTable.class.php`
     (`buildOnlinePostsQuery`, `countOnlinePosts`),
@@ -759,7 +763,7 @@ coup et gardent leur numéro pour que rien ne se perde. La séquence réelle est
   10  publier-le-contrat-openapi          ◄── squelette ambulant, ne dépend de rien
    │
    ├─ 1  retablir-le-type-de-contenu-json     premier amendement au contrat
-   ├─ 2  borner-les-listes-de-morceaux        bloquée par la question ouverte n°1
+   ├─ 2  borner-les-listes-de-morceaux        débloquée — défaut tranché à 50
    ├─ 3  borner-le-xspf                       ← 2
    ├─ 4  aligner-la-route-md5                 ← 1
    ├─ 5  servir-les-erreurs-en-json           ← 4
@@ -808,7 +812,7 @@ obtiennent par accident**, entre la fusion et la mise en ligne.
 Formulée comme une règle plutôt que comme une story :
 
 > « À compter de la prochaine poussée, tout appelant de `/posts?format=json` qui ne
-> demande rien recevra vingt morceaux au lieu de huit mille, sans préavis, sans version,
+> demande rien recevra cinquante morceaux au lieu de huit mille, sans préavis, sans version,
 > et sans moyen de s'en plaindre. »
 
 L'aurait-on votée ainsi ? La réponse honnête est qu'on ne sait pas, parce que personne n'a
@@ -846,6 +850,10 @@ Trois façons de rendre la règle contestable, par coût croissant :
 2. **Borner sur demande explicite d'abord, par défaut ensuite.** Le paramètre existe, le
    défaut ne bouge pas ; on observe qui l'utilise avant de trancher. Répond directement à
    la question ouverte n°1 sans la trancher à l'aveugle.
+   *(Cette option n'a pas été retenue : l'auteur a tranché le défaut à 50 le 2026-08-18,
+   sans phase d'observation préalable. La conclusion inconfortable ci-dessous a donc été
+   lue et écartée, ce qui est le sort normal d'un argument — mais il faut que ce soit
+   visible plutôt que silencieux.)*
 3. **Versionner la sortie.** Le coût réel, et sans doute disproportionné pour ce projet.
 
 ### Le point d'inconfort
@@ -1017,18 +1025,26 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
 
 ## Questions ouvertes
 
-1. **La valeur par défaut de la pagination** (bloque les stories 2 et 3). Borner par défaut
-   règle le poids pour tout le monde mais change ce que reçoit un appelant existant. Ne pas
-   borner préserve le contrat et laisse la douleur à qui ignore le nouveau paramètre.
-   Deux arguments se sont accumulés en révision du 2026-08-18, et ils poussent tous deux
-   vers le bornage par défaut :
-   - à froid, le JSON global met **16,5 s** à se générer. Ce n'est pas seulement du poids
-     sur le réseau, c'est du temps de calcul sur l'hôte à chaque expiration de cache ;
-   - le **DJ de soirée** ne connaîtra jamais le paramètre. Un défaut non borné ne protège
-     que les appelants qui lisent la documentation — c'est-à-dire pas lui, et pas le
-     visiteur. Le défaut est ce que reçoit celui qui ne demande rien.
-   La décision porte donc sur trois personas, dont deux ne sauront jamais qu'un paramètre
-   existe.
+1. ~~**La valeur par défaut de la pagination**~~ — **tranchée le 2026-08-18 par l'auteur :
+   50.** Elle débloque les stories 2 et 3.
+
+   La valeur n'est pas arbitraire et n'invente rien : **`/posts/feed` borne déjà à 50** par
+   son paramètre `count` (`actions.class.php:233`). C'est la seule route bornée du site.
+   La décision aligne donc le reste sur le seul précédent existant, plutôt que de créer un
+   second seuil à côté du premier.
+
+   Ce qu'elle promulgue, sans l'adoucir : un appelant de `/posts?format=json` qui ne
+   demande rien recevra **50 morceaux au lieu de 8 097**, sans préavis. Les arguments qui
+   avaient été accumulés en faveur du bornage tiennent — 16,5 s de génération à froid, et
+   deux personas sur trois qui ne connaîtront jamais le paramètre.
+
+   **Conséquence à ne pas perdre de vue** : par défaut, `/posts` en HTML n'affichera plus
+   que 50 morceaux, et l'**interface** de pagination est en « Could », pas dans la story 2.
+   Entre la livraison de la story 2 et celle de cette interface, le catalogue complet ne
+   sera atteignable qu'en connaissant le paramètre `offset`. Le DJ de soirée passe donc de
+   « 3,7 Mo qu'il abandonne » à « 50 morceaux au-delà desquels il ne peut pas aller ».
+   Ce n'est pas un argument contre la décision — c'est un argument pour promouvoir
+   l'interface de pagination une fois la story 2 livrée.
 
 2. ~~**Qui consomme `/posts/next|prev|random` ?**~~ — **tranchée le 2026-08-18.** Le site
    lui-même, via `layout.php` : quatre `$.get` qui lisent `data.url` et `data.title`, pour
@@ -1053,6 +1069,21 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
    réponse est chez les contributeurs, pas dans le code.
 
 ## Change Log
+
+- 2026-08-18 (sixième révision) — **La question ouverte n°1 est tranchée : 50.** C'était la
+  seule décision de produit en suspens du plan, et elle bloquait deux stories depuis sa
+  rédaction. La valeur aligne le catalogue sur `/posts/feed`, qui borne déjà à 50 et
+  était jusqu'ici la seule route bornée du site. La règle promulguée est mise à jour en
+  conséquence — cinquante morceaux, non vingt. L'option « borner sur demande d'abord, par
+  défaut ensuite », que l'analyse des modalités avançait comme la conclusion inconfortable,
+  a été écartée : c'est consigné là où elle est formulée, plutôt que retiré.
+  Une conséquence est versée à la question tranchée : avec un défaut à 50 et l'interface de
+  pagination en « Could », le catalogue complet ne sera atteignable qu'en connaissant
+  `offset` tant que cette interface n'existe pas. Argument pour la promouvoir après la
+  story 2, non contre la décision.
+  Enfin la **story 1 est livrée** (`2026-08-18-retablir-le-type-de-contenu-json`) : six
+  routes servent `application/json`, le contrat a reçu son premier amendement, et son test
+  a rendu cet amendement obligatoire — le dispositif de la story 10 a mordu comme annoncé.
 
 - 2026-08-18 (cinquième révision) — **Correction de portée par l'auteur : ce plan est
   généraliste.** Il se croyait cantonné à l'axe « tenir les formats machine » et rejetait
