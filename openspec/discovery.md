@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (treizième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (quatorzième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -896,7 +896,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     étiquettes passeront ». Les étiquettes ne passeront pas. **La clé est donc permanente**,
     et la retirer casserait la génération du changelog. C'est écrit dans `CLAUDE.md`.
 
-- [ ] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
+- [x] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
   - **Persona servi** : le mélomane fêlé, le mainteneur
   - **Segment du parcours** : Retrouver son morceau
   - **MoSCoW** : Should
@@ -923,6 +923,19 @@ Chaque story est une tranche verticale : elle se démontre seule.
     a lieu **à l'écriture**, donc au moment du post : une sauvegarde ancienne porte les mêmes
     `?`.
   - **Code concerné** : aucun. C'est un travail de données et de conversation.
+  - **Livrée le 2026-08-18** sous le nom `inventorier-les-morceaux-alteres`. Mesuré depuis
+    le catalogue public : **85 morceaux sur 8 098** (1,05 %), **37 contributeurs**, du
+    2008-06-19 au 2026-07-27. Séparés comme la story le demandait : **23 depuis 2022** chez
+    9 contributeurs, **62 avant**.
+    La question ouverte est tranchée : **une sauvegarde n'aide pas**, la destruction ayant
+    lieu à l'écriture.
+    Deux faits consignés dans la page publiée. **Aucun morceau du catalogue ne porte de
+    caractère hors cp1252** — zéro sur 8 098, sur dix-huit ans : le dommage était total.
+    Et par conséquent **la production n'a pas encore démontré que la migration fonctionne**,
+    aucun morceau posté depuis n'ayant demandé un tel caractère ; la preuve est dans la suite
+    de tests, pas en ligne.
+    Restent hors du change et nommés : écrire aux 37 contributeurs, et marquer les morceaux
+    comme altérés si la conversation ne rend rien.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
@@ -1011,7 +1024,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     OpenAPI dit la même chose, en vérifié.
   - **Ajoutée** : 2026-08-18 · **Supersédée** : 2026-08-18
 
-- [ ] 9. `corriger-le-contexte-openspec` — le contexte projet cesse d'affirmer un faux
+- [x] 9. `corriger-le-contexte-openspec` — le contexte projet cesse d'affirmer un faux
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Could
@@ -1028,6 +1041,11 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Périmètre** — dedans : la phrase fautive, mise à jour d'après la couverture réelle.
     — dehors : le reste du `context:`, vérifié exact.
   - **Code concerné** : `openspec/config.yaml`
+  - **Livrée le 2026-08-18** sous le nom `corriger-le-contexte-projet`. La story ne visait
+    qu'une phrase et déclarait le reste du contexte « vérifié exact » ; **cette vérification
+    était fausse**. Trois autres affirmations l'étaient : Doctrine annoncé en 1.3 pour
+    `v1.4.6`, MySQL pour MariaDB 10.11, et le JSON donné pour du `jsonapi.org` alors que la
+    conformité est écartée. L'élargissement est annoncé dans la proposition du change.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
@@ -1075,7 +1093,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     explicite, plus un garde-fou dans le test. **Contrainte à connaître pour tout futur
     `-dist` : un `$` non destiné à la substitution y est fragile.**
 
-- [ ] 11. `reparer-la-navigation-du-site` — les pages publiées deviennent atteignables
+- [x] 11. `reparer-la-navigation-du-site` — les pages publiées deviennent atteignables
   - **Persona servi** : le mainteneur, le contributeur, l'intégrateur — tout le monde
   - **Segment du parcours** : Découvrir (étape 1)
   - **MoSCoW** : Should
@@ -1093,6 +1111,12 @@ Chaque story est une tranche verticale : elle se démontre seule.
     lorsqu'une page n'est pas dans `nav.adoc` vaut-il son coût, ou accepte-t-on la dérive ?
   - **Code concerné** : `docs/antora.yml`, `docs/modules/ROOT/nav.adoc`,
     `docs/modules/ROOT/pages/index.adoc`
+  - **Livrée le 2026-08-18** sous le nom `reparer-la-navigation-de-la-documentation`.
+    Relevé final : **16 pages publiées, 7 atteignables, 8 orphelines**, dont trois
+    expliquant comment monter l'environnement et lancer les tests.
+    **Sa question ouverte s'est tranchée par un fait** : `migration-utf8mb4.adoc`, écrit le
+    matin même, était déjà orphelin le soir. La dérive n'était pas historique, elle était en
+    cours. Un contrôle dans `Validation du code` nomme désormais toute page absente.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
@@ -1814,3 +1838,19 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   pas réécrites — un `tasks.md` archivé est le relevé de ce qui a été fait à une date.
   **Reste ouvert** : les trois constructeurs de `src/vendor`, qu'un `composer install`
   effacerait, et l'audit PHP 8 lui-même, qui porte sur bien plus que deux syntaxes.
+
+- 2026-08-18 (quatorzième révision) — **Réconciliation : trois stories étaient livrées sans
+  être cochées.** Les 9, 11 et 20 ont chacune été implémentées sous un nom de change
+  légèrement différent de celui du packet — `corriger-le-contexte-projet`,
+  `reparer-la-navigation-de-la-documentation`, `inventorier-les-morceaux-alteres` — et le
+  rapprochement n'avait pas été fait. Le plan comptait dix-neuf stories livrées en croyant
+  en compter seize.
+  **Ce que ça dit du dispositif** : le nom du change est le seul lien entre une story et son
+  archive, et il dérive dès que la story est reformulée en cours de route. Aucun outil ne
+  signale l'écart ; il faut le chercher. C'est le même genre de dérive silencieuse que le
+  sommaire manuel de la documentation, corrigé par la story 11 elle-même.
+  **Cinq changes archivés ce jour ne correspondent à aucune story** et sont nommés ici pour
+  que le décompte reste vérifiable : `publier-un-viewer-du-contrat` et
+  `afficher-la-version-du-site`, demandés en séance ; `servir-du-json-analysable` et
+  `reparer-le-rendez-vous-nocturne`, menés en session de fond ; et
+  `reconcilier-les-dettes-php8`.
