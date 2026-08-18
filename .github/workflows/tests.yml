@@ -94,10 +94,16 @@ jobs:
             || { echo "::error::la connexion de test est absente"; exit 1; }
           grep -q 'username: root' src/config/databases.yml \
             || { echo "::error::identifiant de connexion incorrect"; exit 1; }
-          grep -q 'url: https://localhost' src/web/openapi.yaml \
-            || { echo "::error::le contrat OpenAPI n'a pas reçu son domaine"; exit 1; }
+          # Le contrat n'est plus rendu : il est versionné et servi tel quel.
+          # Ce qu'on vérifie n'est donc plus qu'il a reçu son domaine, mais que
+          # personne ne l'a retransformé en gabarit — un rendu serait ignoré par
+          # git, et le déploiement se fait par `git pull`.
+          test -f src/web/openapi.yaml-dist \
+            && { echo "::error::src/web/openapi.yaml-dist est réapparu : le contrat doit rester versionné, pas généré"; exit 1; }
+          grep -qE '\$\{[A-Z_]+\}' src/web/openapi.yaml \
+            && { echo "::error::le contrat OpenAPI porte une variable non substituée"; exit 1; }
           grep -q "\$ref: '#/components" src/web/openapi.yaml \
-            || { echo "::error::les références du contrat OpenAPI ont été mangées par envsubst"; exit 1; }
+            || { echo "::error::les références du contrat OpenAPI ont disparu"; exit 1; }
           grep -q 'domain: localhost' src/apps/frontend/config/app.yml \
             || { echo "::error::app.yml mal rendu"; exit 1; }
 

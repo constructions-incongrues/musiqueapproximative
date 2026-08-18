@@ -88,7 +88,7 @@ Almost all routes resolve to `frontend/modules/post`. See `src/apps/frontend/con
 
 ### JSON API conventions
 
-`JsonApiFilter` (registered in `src/apps/frontend/config/filters.yml`) rewrites the `Content-Type` of any JSON response to `application/vnd.api+json; charset=utf-8`. The response shapes themselves are **not** fully JSON:API 1.0 compliant yet. Before changing JSON output, read `src/web/openapi.yaml-dist` — the contract describing what every route actually serves, verified against the site by `src/test/functional/frontend/openapiContractTest.php`. `docs/API_JSON_API_TARGET.md` describes a migration target that was deliberately set aside (see `openspec/discovery.md`); it is an archive, not a plan.
+`JsonApiFilter` (registered in `src/apps/frontend/config/filters.yml`) rewrites the `Content-Type` of any JSON response to `application/vnd.api+json; charset=utf-8`. The response shapes themselves are **not** fully JSON:API 1.0 compliant yet. Before changing JSON output, read `src/web/openapi.yaml` — the contract describing what every route actually serves, verified against the site by `src/test/functional/frontend/openapiContractTest.php`. `docs/API_JSON_API_TARGET.md` describes a migration target that was deliberately set aside (see `openspec/discovery.md`); it is an archive, not a plan.
 
 Helper classes `ApiResponse` / `ApiErrorResponse` in `src/lib/helper/` are the path toward normalized responses.
 

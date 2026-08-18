@@ -55,7 +55,7 @@
         },
         {
           "type": "generic",
-          "path": "src/web/openapi.yaml-dist"
+          "path": "src/web/openapi.yaml"
         }
       ]
     }
