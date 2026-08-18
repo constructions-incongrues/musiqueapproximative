@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (dix-huitième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (dix-neuvième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1511,7 +1511,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 34. `hydrater-le-contributeur-en-une-requete` — le catalogue cesse de coûter 8 271 requêtes
+- [x] 34. `hydrater-le-contributeur-en-une-requete` — le catalogue cesse de coûter 8 271 requêtes
   - **Persona servi** : l'auditeur sur le site, l'intégrateur, le mélomane fêlé — tous ceux
     qui attendent une liste
   - **Segment du parcours** : toutes les étapes qui servent une liste
@@ -1540,7 +1540,13 @@ Chaque story est une tranche verticale : elle se démontre seule.
     l'autre. **Sans `$conn->clear()` entre les mesures, le N+1 est invisible.**
   - **Code concerné** : `src/lib/model/doctrine/PostTable.class.php`
     (`buildOnlinePostsQuery`), `src/lib/model/doctrine/Post.class.php` (`toJson`)
-  - **Ajoutée** : 2026-08-19
+  - **Ajoutée** : 2026-08-19 · **Livrée le 2026-08-19**
+  - **Mesuré en production, à cache froid** : `json` 17,5 → **5,49 s**, `max` 15,6 → **4,36 s**,
+    `html` 14,9 → **3,23 s**. Le `xspf`, qui ne lit pas le contributeur, **n'a pas gagné** —
+    c'était le témoin, et il a confirmé le diagnostic en ne bougeant pas.
+  - **Un coût introduit, mesuré et assumé** : le `xspf` a ralenti d'environ 0,5 s, passant par
+    la même requête et hydratant 8 098 profils qu'il ne lit jamais. Accepté contre −12 s sur
+    le `json`.
 
 ## Ordre d'exécution
 
@@ -2231,3 +2237,16 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   se trompait, l'identity map de Doctrine restant chaude entre les essais. **Sans
   `$conn->clear()`, le N+1 est invisible.** Trois vérifications successives ont été
   nécessaires pour arriver au bon chiffre.
+
+- 2026-08-19 (dix-neuvième révision) — **La story 34 est livrée, et son témoin a parlé.**
+  Mesuré en production à cache froid : `json` 17,5 → 5,49 s, `max` 15,6 → 4,36 s, `html`
+  14,9 → 3,23 s. Le `xspf` — le seul format qui ne lit pas le contributeur — **n'a pas
+  gagné**. C'était le point du dispositif : si les quatre s'étaient améliorés d'autant, la
+  cause n'aurait pas été celle qu'on croyait. Elle l'était.
+  **Un coût a été introduit et il est écrit plutôt que tu** : le `xspf` a ralenti d'environ
+  0,5 s, passant par la même requête et hydratant 8 098 profils qu'il ne lit jamais. Accepté
+  contre douze secondes gagnées sur le `json`. Le corriger demanderait une projection propre
+  à ce format, qui lit malgré tout le contributeur pour composer son titre filtré.
+  **Trois contributeurs n'ont pas de profil** dans les données réelles : le choix `leftJoin`
+  plutôt qu'`innerJoin` n'était pas une précaution théorique, il garde leurs morceaux au
+  catalogue.
