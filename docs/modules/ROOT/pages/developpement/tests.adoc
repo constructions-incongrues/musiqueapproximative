@@ -28,6 +28,14 @@ Cette commande est exécutée automatiquement dans le workflow CI.
 
 == Tests fonctionnels
 
+[NOTE]
+====
+Les tests fonctionnels et une partie des tests unitaires écrivent dans la base
+`musiqueapproximative_test`, qui doit exister et porter le schéma. Voir
+xref:developpement/environnement.adoc#_4_base_de_test[Base de test]. Sans elle, trois
+scripts échouent sur le refus du bootstrap de charger des fixtures.
+====
+
 === Tests Symfony
 
 [source,bash]
