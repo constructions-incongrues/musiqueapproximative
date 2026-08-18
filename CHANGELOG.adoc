@@ -1,5 +1,65 @@
 # Changelog
 
+## [1.12.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.11.0...v1.12.0) (2026-08-18)
+
+
+### Fonctionnalités
+
+* **a11y:** rend la page agrandissable, tranche la pagination à 50, propose deux changes ([#162](https://github.com/constructions-incongrues/musiqueapproximative/issues/162)) ([b0cdba7](https://github.com/constructions-incongrues/musiqueapproximative/commit/b0cdba71ad56612cf11c281debae47f1ce380538))
+* **api:** publie un contrat OpenAPI décrivant les routes servies ([#159](https://github.com/constructions-incongrues/musiqueapproximative/issues/159)) ([e249ffc](https://github.com/constructions-incongrues/musiqueapproximative/commit/e249ffc2aecfd834a323f99d8a675d1815ac370b))
+* **api:** publie une page de consultation du contrat, auto-hébergée ([#178](https://github.com/constructions-incongrues/musiqueapproximative/issues/178)) ([280d46a](https://github.com/constructions-incongrues/musiqueapproximative/commit/280d46a3ac2acf6c8808da7265b94bd9abe9401e))
+* **ci:** vérifie chaque nuit que le contrat est bien servi en production ([#186](https://github.com/constructions-incongrues/musiqueapproximative/issues/186)) ([bc1cd15](https://github.com/constructions-incongrues/musiqueapproximative/commit/bc1cd15a54523d626e0fc3daf91d4d7e9793bf68))
+* **migration:** livre le script de conversion en utf8mb4, sans l'exécuter ([#167](https://github.com/constructions-incongrues/musiqueapproximative/issues/167)) ([eaf0054](https://github.com/constructions-incongrues/musiqueapproximative/commit/eaf0054f23745e6c472ada2a1a36b429ec0754af))
+* **site:** affiche la version servie et lie ses notes de publication ([#192](https://github.com/constructions-incongrues/musiqueapproximative/issues/192)) ([0e3d4f9](https://github.com/constructions-incongrues/musiqueapproximative/commit/0e3d4f9797aba9d19b70f4060b14830032e01d6a))
+* **site:** expose le contrat OpenAPI dans la barre latérale, retire Ondes ([#174](https://github.com/constructions-incongrues/musiqueapproximative/issues/174)) ([c40ec74](https://github.com/constructions-incongrues/musiqueapproximative/commit/c40ec7430b58c44dc176a099d341b75a227432a0))
+* **unicode:** pose l'encodage de connexion en utf8mb4 ([#169](https://github.com/constructions-incongrues/musiqueapproximative/issues/169)) ([e61b38c](https://github.com/constructions-incongrues/musiqueapproximative/commit/e61b38c74396cbce16a05001ee17596acf54c3a3))
+
+
+### Corrections de bugs
+
+* **api:** sert le contrat OpenAPI tel quel, sans étape de rendu ([#175](https://github.com/constructions-incongrues/musiqueapproximative/issues/175)) ([2cad8a1](https://github.com/constructions-incongrues/musiqueapproximative/commit/2cad8a1e10b41cb62e8053ab3325ca657c86f0ab))
+* **api:** sert le JSON avec le type de contenu que la spec exige ([#161](https://github.com/constructions-incongrues/musiqueapproximative/issues/161)) ([51da853](https://github.com/constructions-incongrues/musiqueapproximative/commit/51da85354f1d4920aa55d8944969646c72d4f847))
+* **api:** sert un JSON analysable quel que soit le corps du morceau ([#187](https://github.com/constructions-incongrues/musiqueapproximative/issues/187)) ([fb49a1f](https://github.com/constructions-incongrues/musiqueapproximative/commit/fb49a1f2e0b2b3f5fb7932094091795e24796d21))
+* **catalogue:** restreint tous les chemins aux morceaux publiables ([#171](https://github.com/constructions-incongrues/musiqueapproximative/issues/171)) ([952b931](https://github.com/constructions-incongrues/musiqueapproximative/commit/952b931c1fc72f7530d9f236f17771cf80503ae3))
+* **ci:** isole le contrôle de production, une alerte dans un workflow rouge est éteinte ([#188](https://github.com/constructions-incongrues/musiqueapproximative/issues/188)) ([d643c2c](https://github.com/constructions-incongrues/musiqueapproximative/commit/d643c2c08b76fc976560e5a7abbde66d03711906))
+* **ci:** supprime le rendez-vous nocturne, il n'a jamais été vert ([#189](https://github.com/constructions-incongrues/musiqueapproximative/issues/189)) ([bd1d7e8](https://github.com/constructions-incongrues/musiqueapproximative/commit/bd1d7e8d1d9a4229d55e955aa8cdc98567d7c3a2))
+* **desastres:** n'évalue chaque règle qu'une fois et n'applique chaque recette qu'une fois ([#153](https://github.com/constructions-incongrues/musiqueapproximative/issues/153)) ([c40c6ca](https://github.com/constructions-incongrues/musiqueapproximative/commit/c40c6ca4359403faf003d2e0488ccec67f5fc4a6))
+* **docs:** publie la documentation Subsonic et répare le renvoi qui la visait ([#181](https://github.com/constructions-incongrues/musiqueapproximative/issues/181)) ([be587fa](https://github.com/constructions-incongrues/musiqueapproximative/commit/be587fa7b82ec9fc092ef21d22b7d7611963c859))
+* **docs:** rend atteignable chacune des seize pages publiées ([#179](https://github.com/constructions-incongrues/musiqueapproximative/issues/179)) ([b046350](https://github.com/constructions-incongrues/musiqueapproximative/commit/b046350746e345a585d4f528ae713cb55b0cdf7c))
+* **formats:** un fichier audio n'a plus qu'une seule adresse ([#163](https://github.com/constructions-incongrues/musiqueapproximative/issues/163)) ([18acb83](https://github.com/constructions-incongrues/musiqueapproximative/commit/18acb83ba6100bb677429031c6f23becc29ccae3))
+* **markdown:** retire les deux syntaxes supprimées en PHP 8, et les contournements ([#184](https://github.com/constructions-incongrues/musiqueapproximative/issues/184)) ([28932f8](https://github.com/constructions-incongrues/musiqueapproximative/commit/28932f8927dbdcff245ffa93f0f967e833048207))
+* **release:** réancre release-please sur la 1.11.0 après la réécriture ([#172](https://github.com/constructions-incongrues/musiqueapproximative/issues/172)) ([934a406](https://github.com/constructions-incongrues/musiqueapproximative/commit/934a4060207a6099ac529304616827f8684cf7d3))
+
+
+### Documentation
+
+* **api:** dit ce que porte le corps d'un morceau dans le contrat ([#191](https://github.com/constructions-incongrues/musiqueapproximative/issues/191)) ([f521c6e](https://github.com/constructions-incongrues/musiqueapproximative/commit/f521c6e97af0773ff2b2d855db694baa1edb9f68))
+* **exploitation:** audite les gabarits de configuration, et consigne le piège ([#185](https://github.com/constructions-incongrues/musiqueapproximative/issues/185)) ([794b61a](https://github.com/constructions-incongrues/musiqueapproximative/commit/794b61a3c49b1467d59ffac96d7bddb914f1d375))
+* **migration:** donne la commande de reconstruction de l'index, et son piège ([#168](https://github.com/constructions-incongrues/musiqueapproximative/issues/168)) ([8241099](https://github.com/constructions-incongrues/musiqueapproximative/commit/82410999063499cf4d9495db47fb8b86a499becb))
+* **openspec:** coche la story 12, corrige la 17, ouvre les stories 23 et 24 ([#183](https://github.com/constructions-incongrues/musiqueapproximative/issues/183)) ([033eb90](https://github.com/constructions-incongrues/musiqueapproximative/commit/033eb90a55a8f1917f9e428c45756a434fceff88))
+* **openspec:** consigne la clôture de la story 22 et la permanence de last-release-sha ([#177](https://github.com/constructions-incongrues/musiqueapproximative/issues/177)) ([fede796](https://github.com/constructions-incongrues/musiqueapproximative/commit/fede796ed371c4cec22d87044d7de41955a8dab8))
+* **openspec:** établit le plan de release des formats machine ([#148](https://github.com/constructions-incongrues/musiqueapproximative/issues/148)) ([5655f18](https://github.com/constructions-incongrues/musiqueapproximative/commit/5655f18f70e2921493368d1878d1905589a93e34))
+* **openspec:** met un contrat OpenAPI en tête du plan de release ([#158](https://github.com/constructions-incongrues/musiqueapproximative/issues/158)) ([3b673d9](https://github.com/constructions-incongrues/musiqueapproximative/commit/3b673d94f35cea8b7e0a8b04552ce3d063e8e100))
+* **openspec:** ouvre l'axe Unicode, la base détruisant ce qu'on lui confie ([#165](https://github.com/constructions-incongrues/musiqueapproximative/issues/165)) ([f4191a0](https://github.com/constructions-incongrues/musiqueapproximative/commit/f4191a02119d07f6c3bd9b7e0e6d5c19d551c931))
+* **openspec:** ouvre le plan de release au-delà des formats machine ([#160](https://github.com/constructions-incongrues/musiqueapproximative/issues/160)) ([6374f05](https://github.com/constructions-incongrues/musiqueapproximative/commit/6374f050116b29719e87c3ad26b4a5779d4b91bb))
+* **openspec:** propose la purge des identifiants de l'historique ([#170](https://github.com/constructions-incongrues/musiqueapproximative/issues/170)) ([3d24625](https://github.com/constructions-incongrues/musiqueapproximative/commit/3d246255bcb21d62a27f421914dfb88e24b22291))
+* **openspec:** réconcilie le plan de release après la session du 18 août ([#173](https://github.com/constructions-incongrues/musiqueapproximative/issues/173)) ([e08ec6b](https://github.com/constructions-incongrues/musiqueapproximative/commit/e08ec6b20b0d601b3c66186fc6b940353f516482))
+* **openspec:** réconcilie le plan, trois stories étaient livrées sans être cochées ([#197](https://github.com/constructions-incongrues/musiqueapproximative/issues/197)) ([27fe0a8](https://github.com/constructions-incongrues/musiqueapproximative/commit/27fe0a8a4a6bdba27329d32fcf6a615343cdd88c))
+* **openspec:** rectifie un diagnostic faux laissé dans un change archivé ([#196](https://github.com/constructions-incongrues/musiqueapproximative/issues/196)) ([0a4fed9](https://github.com/constructions-incongrues/musiqueapproximative/commit/0a4fed962dc04a77363b57d6e25bed12eb10e09c))
+* **openspec:** rend le contexte projet exact, quatre affirmations corrigées ([#182](https://github.com/constructions-incongrues/musiqueapproximative/issues/182)) ([2dfa181](https://github.com/constructions-incongrues/musiqueapproximative/commit/2dfa1813d910262887f4ba8b961eaa58e37626a0))
+* **openspec:** révise le plan de release après la session du 18 août ([#157](https://github.com/constructions-incongrues/musiqueapproximative/issues/157)) ([ac857ed](https://github.com/constructions-incongrues/musiqueapproximative/commit/ac857ed714c76184077d9a4ca95b40c02dbe0a94))
+* relève le système de design existant ([#151](https://github.com/constructions-incongrues/musiqueapproximative/issues/151)) ([f7a7a93](https://github.com/constructions-incongrues/musiqueapproximative/commit/f7a7a93d1b07ce9e8378299b742168f137e2d434))
+* **unicode:** inventorie les morceaux dont le titre a été détruit ([#180](https://github.com/constructions-incongrues/musiqueapproximative/issues/180)) ([b2eb617](https://github.com/constructions-incongrues/musiqueapproximative/commit/b2eb617af67bcd4a42f14ded358c2d0c8b73976e))
+
+
+### Tests
+
+* **desastres:** couvre l'invariance du tirage ([#155](https://github.com/constructions-incongrues/musiqueapproximative/issues/155)) ([9fbf2f0](https://github.com/constructions-incongrues/musiqueapproximative/commit/9fbf2f0ed0e14c314f65782109386ebec21dba1e))
+* **formats:** couvre les representations machine et l'expose ce qu'elles cachaient ([#164](https://github.com/constructions-incongrues/musiqueapproximative/issues/164)) ([b4dcc00](https://github.com/constructions-incongrues/musiqueapproximative/commit/b4dcc0038a7c8743f3ccdec498a1e5bddb30629c))
+* **frontend:** allume le cache dans l'environnement de test ([#154](https://github.com/constructions-incongrues/musiqueapproximative/issues/154)) ([5274fc0](https://github.com/constructions-incongrues/musiqueapproximative/commit/5274fc081fd1ac5b37f161a927029aeab4b2e29c))
+* **json:** retire la dernière requête de chauffe, le défaut qu'elle contournait n'existe plus ([#193](https://github.com/constructions-incongrues/musiqueapproximative/issues/193)) ([fbf8fff](https://github.com/constructions-incongrues/musiqueapproximative/commit/fbf8fff14eb0541d073a61e6c9961709c4bdffc6))
+* **unicode:** rend exécutable l'écart d'encodage, avant de le réparer ([#166](https://github.com/constructions-incongrues/musiqueapproximative/issues/166)) ([1f892b0](https://github.com/constructions-incongrues/musiqueapproximative/commit/1f892b04799e962b38ad320c5a00677149ba1a32))
+
 ## [1.11.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.10.2...v1.11.0) (2026-08-08)
 
 
