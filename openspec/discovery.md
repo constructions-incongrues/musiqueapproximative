@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingtième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-et-unième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1307,7 +1307,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/lib/task/`, `.github/workflows/contrat-production.yml`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 26. `empecher-make-configure-de-casser-le-serveur` — une commande cesse d'être un piège
+- [x] 26. `empecher-make-configure-de-casser-le-serveur` — une commande cesse d'être un piège
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Déployer
   - **MoSCoW** : Must — axe « tenir ce qu'on a livré »
@@ -1330,7 +1330,18 @@ Chaque story est une tranche verticale : elle se démontre seule.
     d'abord cesser de détruire. La rendre utilisable ailleurs vient après.
   - **Code concerné** : `src/Makefile` (cible `configure`), `Makefile`,
     `docs/modules/ROOT/pages/fichiers-de-configuration.adoc`
-  - **Ajoutée** : 2026-08-18
+  - **Ajoutée** : 2026-08-18 · **Livrée le 2026-08-19** sous le nom
+    `refuser-un-rendu-sans-variables`
+  - **Le packet se trompait de cause, et la reproduction l'a corrigé.** Il attribuait
+    l'incident à l'absence de `src/.env` ; c'est l'inverse. Un fichier absent fait échouer
+    `make` dès la ligne 1, où il est inclus, et **rien n'est écrit** : c'est le cas sûr.
+    C'est un `.env` **vide** qui détruit — l'include passe, la liste blanche est vide, et
+    `envsubst` recopie le gabarit verbatim.
+  - **Et le piège n'était pas réservé au serveur** : `src/.env` fait **zéro octet** sur un
+    poste de développement, le vrai fichier étant monté par Docker dans le conteneur. Un
+    `make configure` lancé depuis l'hôte détruisait la configuration locale de la même façon.
+  - **Piège de méthode** : la première reproduction, sur macOS, n'a rien reproduit — `make`
+    y échoue pour une autre raison. Il a fallu la refaire sous Linux.
 
 - [ ] 27. `relier-les-stories-a-leurs-changes` — le plan cesse de perdre ce qu'il a livré
   - **Persona servi** : le mainteneur
@@ -2268,3 +2279,16 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   des colonnes.
   **Reste ouvert, et nommé dans les tâches** : l'envoi aux 37 contributeurs. Ce change publie
   un voyant vert dans le même dépôt où la lettre n'est pas partie.
+
+- 2026-08-19 (vingt-et-unième révision) — **La story 26 est livrée, et son packet se trompait
+  de cause.** Il attribuait l'incident du 18 août à l'absence de `src/.env`. La reproduction
+  dit l'inverse : un fichier absent fait échouer `make` dès la ligne 1 où il est inclus, et
+  rien n'est écrit — c'est le cas sûr. C'est un `.env` **vide** qui détruit.
+  Le garde porte donc sur la **liste de variables** et non sur l'existence du fichier :
+  garder sur l'existence aurait laissé passer exactement le cas qui a cassé le site.
+  **Deux faits que seule la reproduction pouvait donner.** La première tentative, sur macOS,
+  n'a rien reproduit — il a fallu la refaire sous Linux. Et `src/.env` fait **zéro octet sur
+  un poste de développement** : le piège valait aussi en local, ce que personne n'avait vu.
+  C'est la quatrième story de la journée dont la mesure contredit le packet. Le motif est
+  constant : les packets sont écrits à partir de ce qui est lisible, et corrigés par ce qui
+  est exécutable.
