@@ -1,0 +1,238 @@
+= Morceaux au titre ou à l'auteur altérés
+:description: Inventaire des morceaux dont les métadonnées ont été détruites par l'encodage latin1 de la base
+:toclevels: 2
+
+Pendant dix-huit ans, la base de production a stocké les titres et les auteurs en
+`latin1`. Tout caractère hors de ce jeu — cyrillique, japonais, polonais, vietnamien,
+letton, hongrois, turc — y était remplacé par un point d'interrogation *à l'écriture*,
+sans message, sans avertissement et sans trace.
+
+La cause est supprimée depuis le 18 août 2026 : la base est en `utf8mb4` et la
+connexion aussi. Cette page ne traite pas la cause, elle traite ce qu'elle a déjà détruit.
+
+== Ce qui est perdu, et pourquoi une sauvegarde n'aide pas
+
+[IMPORTANT]
+====
+La destruction a lieu *au moment de l'écriture*, pas à la lecture. Une sauvegarde
+antérieure porte donc exactement les mêmes points d'interrogation. *Il n'existe aucune
+copie intacte de ces métadonnées dans le système.*
+
+Les seules personnes qui savent ce qui avait été saisi sont celles qui l'ont saisi.
+====
+
+== Le relevé
+
+Mesuré sur la production le 18 août 2026, depuis le catalogue public.
+
+[cols="3,2",options="header"]
+|===
+|  |
+
+|Morceaux au catalogue
+|8 098
+
+|Morceaux dont le titre ou l'auteur est altéré
+|*85* (1,05 %)
+
+|Contributeurs concernés
+|*37*
+
+|Premier dommage
+|2008-06-19
+
+|Dernier dommage
+|2026-07-27
+|===
+
+Un morceau sur cent. C'est peu en proportion et beaucoup en absolu : ce sont
+85 morceaux dont personne ne peut plus lire le titre.
+
+=== Deux populations, deux espoirs différents
+
+[cols="3,1,4",options="header"]
+|===
+|Période |Morceaux |Ce qu'on peut en attendre
+
+|2022 et après
+|*23*
+|Chez 9 contributeurs, tous actifs. Se souvenir d'un morceau posté il y a
+trois ans est plausible. C'est là que la reconstitution a une chance réelle.
+
+|Avant 2022
+|*62*
+|Jusqu'à 2008. Se souvenir de ce qu'on a saisi en 2009 n'est pas se souvenir de la
+semaine dernière. La plupart ne seront pas retrouvés, et il faut le dire.
+|===
+
+=== Contributeurs les plus touchés
+
+[cols="2,1",options="header"]
+|===
+|Contributeur |Morceaux
+
+|oyibo |9
+|bertier |8
+|sinead |5
+|johan |5
+|mccimperatriz |4
+|glafouk |3
+|fourmi |3
+|djmixme |3
+|===
+
+== Ce que nous demandons aux contributeurs concernés
+
+Pour chaque morceau de la liste qui vous revient :
+
+. Vous souvenez-vous du titre ou de l'auteur exact ?
+. À défaut, avez-vous gardé une trace — un fichier, un message, un signet, une
+  capture ?
+. Sinon, dites-le aussi : *une réponse « je ne sais plus » vaut mieux que pas de
+  réponse.* Elle permet de clore la question au lieu de la laisser ouverte
+  indéfiniment.
+
+Écrire à mailto:bertier@musiqueapproximative.net[bertier@musiqueapproximative.net].
+
+== Si personne ne répond
+
+Alors ces morceaux resteront tels quels, et c'est une décision à assumer plutôt qu'un
+oubli à laisser filer. Le minimum est de les *marquer comme altérés* — non pour rendre
+ce qui est perdu, mais pour cesser de faire passer une mutilation pour un titre. Un
+visiteur qui lit `??????????? ?????` doit pouvoir savoir qu'il s'agit d'un dommage et
+non d'un choix.
+
+Ce marquage n'est pas fait à ce jour.
+
+== Méthode, pour que ce relevé soit refaisable
+
+Les données viennent du catalogue public, non d'un accès à la base :
+
+[source,console]
+----
+curl -s "https://www.musiqueapproximative.net/posts?format=json"
+----
+
+Un morceau est retenu lorsque son titre ou son auteur porte un point d'interrogation
+*collé à une lettre* ou *répété* — `Bj?rk`, `??????`. Un point d'interrogation isolé en
+fin de phrase est une ponctuation légitime et n'est pas compté.
+
+[NOTE]
+====
+Ce critère est une heuristique, pas une preuve. Deux ou trois entrées de la liste
+peuvent être de la ponctuation volontaire — `Alors Infidèle??!` en est un candidat
+sérieux. Seul le contributeur peut trancher, et c'est précisément l'objet de cette page.
+====
+
+Deux vérifications accompagnent le relevé :
+
+* *Aucun morceau du catalogue ne porte de caractère hors cp1252.* Sur 8 098 morceaux
+  et dix-huit ans, il n'en existe pas un seul. Rien n'a jamais survécu.
+* En conséquence, *la production n'a pas encore eu l'occasion de démontrer que la
+  migration fonctionne* : aucun morceau posté depuis ne demandait un tel caractère. La
+  preuve existe, mais elle est dans la suite de tests, pas en ligne.
+
+== La liste
+
+=== 2022 et après — 23 morceaux
+
+[cols="1,2,3,4",options="header"]
+|===
+|Publié |Contributeur |Auteur |Titre
+
+|2022-02-03 |bertier |DR - Dinosauroid |???
+|2022-03-09 |oyibo |Bauhaus |Bela Lugosi's Dead (Rez ??JUNGLIST Remix)
+|2022-06-21 |nils |Cheiko Beauty |??????????????? (A TREE of NIGHT Organ Version)
+|2022-07-14 |oyibo |Azazel Grey |??7-40??
+|2022-07-23 |psychotine |L'Éponge Synthétique |Expe?dition Printanie?re
+|2022-10-10 |bertier |Pawe? Zadro?niak |Beat It
+|2023-04-01 |johan |Geins't Naït |J?ç?vus
+|2023-07-02 |johan |Fuxing Tapes |???
+|2023-07-21 |johan |Saint Abdullah |The Howls of Wadi?-?al?-?Salaam
+|2023-10-04 |oyibo |Mazutti |D?ungla kwita
+|2023-10-07 |bertier |Hijos De... |Nový Sv?t
+|2024-05-12 |nils |Hirono Nishiyama |????
+|2024-06-29 |lovebot |Goregamel |Bol?é?ro [Ravel]
+|2024-07-07 |nota |Özdemir Erdo?an |Gurbet
+|2024-09-29 |bertier |les soeurs complice et zinzin |Rots : les rots reviennent Et c est balaise ????
+|2024-10-07 |bertier |Izumi Hirakawa |??? (Waltz)
+|2024-11-25 |paralliance |Par Alliance, T?I, Neil Cicierega |Step back x Wndrwll (mash up)
+|2025-07-01 |oyibo |Voka Gentle |See Damage (????)
+|2026-01-20 |stevewornv |Ayram & Dj Sebi |L?ut?rie
+|2026-07-06 |stevewornv |Atlantis |Gor?czka cia?
+|2026-07-06 |stevewornv |BG Rap AVI MC |??????? (Remix)
+|2026-07-18 |oyibo |????? |???cailloux???
+|2026-07-27 |oyibo |????? ????????? |??????
+|===
+
+
+=== Avant 2022 — 62 morceaux
+
+[cols="1,2,3,4",options="header"]
+|===
+|Publié |Contributeur |Auteur |Titre
+
+|2008-06-19 |bertier |03. Y.Jo.We!  | Ko?ysanka Kapitana
+|2009-11-29 |chaton-pute |GFMGF  | ??????????? ????? ??????????? ?????? ?????????
+|2011-05-11 |sinead |?????? ????????  |??????????? (Introduction)
+|2011-06-13 |sinead |Andrei Rodionov & Tikhomirov Boris |????????? ????????? (Computer Chess)
+|2011-07-14 |lapingris |??? |???
+|2011-07-15 |lapingris |club foot orchestra |???
+|2011-07-28 |mccimperatriz |??? |Janequin - Le chant des oyseaulx
+|2011-09-09 |flav |??? |A neat kind of guy 
+|2011-09-21 |mccimperatriz |??? |Super Mario Bros 2 OST - Main Theme
+|2011-10-26 |mccimperatriz |????? |Palomitas de maiz con guaracha
+|2011-10-30 |ubik |Jacques luley |????
+|2011-11-16 |alfred |?? |??
+|2012-02-23 |djbongout |Zin-Säy! |????????
+|2012-03-08 |eatrabbit |Alexander Von Borsig |??, ?? (Japan, Japan)
+|2012-04-20 |superpromotion |??? |Long Live Henry IV
+|2012-04-25 |djnobreakfast |los borrachitos junior y su equipo0002 |???
+|2012-08-16 |glafouk |Macintosh Plus |???
+|2012-09-21 |vendredi |?????????? ????? |Rol'
+|2012-09-24 |umfw |??? |On fire
+|2012-10-03 |vendredi |SCOOTER |Posse (??????? of Mater Suspiria Vision ZOMBIE RAVE REMIX)
+|2012-10-08 |ubunoir |Ebola |Marusia si? otru?a
+|2012-10-17 |psychotine |Aleksey Vishnya |Ne khvatayet bol?she strun
+|2012-10-18 |mccimperatriz |???? |J'aime ma boite 
+|2012-11-27 |bertier |Nu Depth |?NU AGE HIGH CLASS? ? ISSUE ? nu depth mix
+|2012-12-02 |sinead |.....??? |83 on est en republique merzbow petitgand
+|2013-02-06 |sinead |Alexander Katenin |06. ? ??????? ??????? ?????? ???? ???????, ??????? ??? ?????
+|2013-04-05 |glafouk |??? |??? Dub that she wants ???
+|2013-12-13 |paultournante |????? ?????????  |??????????? ?????????
+|2014-05-16 |deehowyou |V? ch?ng làm bi?ng Hoai Linh Phi Nhung |V? ch?ng làm bi?ng Hoai Linh Phi Nhung
+|2014-06-30 |paultournante |Extra-Tourist |??? ??????
+|2014-08-07 |klausvomi |Yapoos |??
+|2015-02-25 |klausvomi |Emergency Central Unit (?????? ?????? ???? ) |?????
+|2015-06-13 |sinead |?? |Hommage au fromage (Pour Danser)
+|2015-10-01 |fourmi |Pedro Morquecho |Gershwin song ??
+|2016-01-17 |johan |Goto80 |????????m??????
+|2016-01-18 |glafouk |??? |???
+|2016-04-12 |djmixme | |META TARO ?BABYMETAL COVER?
+|2016-04-14 |fourmi |Benko? La?szlo? |Le?gio?
+|2016-05-14 |fourmi |Progno?zis |Gátlásos vagyok
+|2016-08-13 |nils |Adam Cheng |????
+|2016-10-19 |djmixme |?? [Pops pops LP] |Pops
+|2018-02-19 |christianf |Lil Ugly Mane |???
+|2018-03-10 |christianf |Smoke |???
+|2018-09-02 |sidonie |NSRD |Zieme?briežu paj?g? pa R?gas j?ras l?ci / ?ujorkas taksometr? pa Manhetenu
+|2019-09-03 |johan |Macon |XYEN_?+?K&_1
+|2019-09-04 |lolapoireau |?? |Persian disco song
+|2019-09-24 |djmixme |??? |Le roi Dagobert  (version "Hip-Hop")
+|2020-04-02 |sudori |??????? |???????!
+|2020-04-16 |patrickharlequin |??? |Je suis Charlie (Tribute song)
+|2020-04-16 |patrickharlequin |Madame Massicot |Alors Infidèle??!
+|2020-05-25 |pommedeter |Meitei |?? ?– Kwaidan / ?? (Full Album)
+|2020-07-02 |bertier |Wat Sanita?r |Except Me And My Monkey
+|2020-08-07 |lolapoireau |Cosmic Invaders |???
+|2021-01-01 |marceline |Tzii |????? ?? ???????
+|2021-02-27 |pommedeter |?????????? zerolexe RMX ??? |suppa micro panchop
+|2021-04-30 |oyibo |Burgh |???? (Womb)
+|2021-08-12 |lolapoireau |Fan Lin Lin |????
+|2021-09-10 |marceline |Qebrus |????????
+|2021-10-31 |feefecale |Los Piran?as |Infame Golpazo
+|2021-11-06 |oyibo |Somnoroase P?s?rele |PATRU (#1)
+|2021-12-07 |marceline |Somnoroase P?s?rele |VOMA - Side A
+|2021-12-09 |oyibo |jessop&co. |4 ????? ???? ??? ?????????
+|===
+

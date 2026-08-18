@@ -14,6 +14,7 @@
 * xref:ghcr.adoc[GitHub Container Registry]
 * xref:migration-utf8mb4.adoc[Migration de la base en utf8mb4]
 * xref:api-subsonic.adoc[API Subsonic]
+* xref:morceaux-alteres.adoc[Morceaux au titre altéré]
 * xref:cicd/github-actions.adoc[GitHub Actions]
 * xref:cicd/release-please.adoc[Release Please]
 
