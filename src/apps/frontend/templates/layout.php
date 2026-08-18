@@ -124,7 +124,7 @@
           </h2>
           <p>
             Les morceaux sont aussi servis en JSON, XSPF, RSS et Max/MSP. Le
-            <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/openapi.yaml">contrat OpenAPI</a>
+            <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/api.html">contrat OpenAPI</a>
             décrit chaque route et chaque format.
           </p>
           <h2>

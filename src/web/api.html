@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>API — Musique Approximative</title>
+    <link rel="icon" href="/favicon.ico" />
+    <meta
+      name="description"
+      content="Contrat OpenAPI de Musique Approximative : les routes servies, leurs formats, et ce qui est vérifié."
+    />
+    <!--
+      Page volontairement autonome : aucune requête vers un tiers. Redoc est
+      versionné sous frontend/assets/javascripts/redoc/, là où le site verse
+      déjà jQuery et jPlayer, et le contrat est servi par ce même site. Le
+      visiteur qui lit la description de l'API n'est annoncé à personne.
+
+      Fichier plat plutôt que api/index.html : la règle de réécriture ne
+      détourne que ce qui n'existe pas sur le disque, donc un fichier est servi
+      à coup sûr, là où un répertoire dépend d'un DirectoryIndex qu'on ne peut
+      pas vérifier avant la mise en ligne.
+
+      Les polices sont celles du site (Arvo, Rambla) SANS être chargées ici :
+      si le visiteur arrive depuis le site elles sont en cache, sinon les
+      substituts système prennent le relais. Charger fonts.googleapis.com
+      annulerait l'autonomie de cette page pour une question d'empattements.
+    -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+      .bandeau {
+        font-family: Rambla, system-ui, sans-serif;
+        background: #000;
+        color: #fff;
+        padding: 0.9rem 1.2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1.2rem;
+        align-items: baseline;
+      }
+      .bandeau a {
+        color: #fff;
+      }
+      .bandeau strong {
+        font-family: Arvo, Georgia, serif;
+        font-weight: normal;
+      }
+      .bandeau p {
+        margin: 0;
+        font-size: 0.85rem;
+        opacity: 0.75;
+      }
+      #redoc {
+        min-height: 60vh;
+      }
+      #attente {
+        font-family: Rambla, system-ui, sans-serif;
+        padding: 2rem 1.2rem;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bandeau">
+      <strong><a href="/">Musique Approximative</a></strong>
+      <p>
+        Ce document décrit ce que le site sert aujourd'hui. Il n'est pas
+        normatif : s'il diverge du comportement, c'est lui qui a tort.
+        <a href="/openapi.yaml">Voir le YAML brut</a>.
+      </p>
+    </div>
+
+    <div id="redoc"><p id="attente">Chargement du contrat…</p></div>
+
+    <script src="/frontend/assets/javascripts/redoc/redoc-2.5.3.standalone.js"></script>
+    <script>
+      Redoc.init(
+        "/openapi.yaml",
+        {
+          // Palette monochrome et polices du site — voir DESIGN.md.
+          theme: {
+            colors: { primary: { main: "#000000" } },
+            typography: {
+              fontFamily: "Rambla, system-ui, sans-serif",
+              headings: { fontFamily: "Arvo, Georgia, serif" },
+              code: {
+                fontFamily: '"DejaVu Sans Mono", Monaco, Consolas, monospace',
+              },
+            },
+            sidebar: { backgroundColor: "#fafafa" },
+          },
+          hideDownloadButton: false,
+          expandResponses: "200",
+        },
+        document.getElementById("redoc"),
+        function (erreur) {
+          if (erreur) {
+            document.getElementById("redoc").innerHTML =
+              '<p id="attente">Le contrat n\'a pas pu être chargé. Il reste lisible ' +
+              'directement : <a href="/openapi.yaml">/openapi.yaml</a>.</p>';
+          }
+        },
+      );
+    </script>
+  </body>
+</html>

@@ -62,6 +62,13 @@ lint:
     - linters: [prettier]
       paths:
         - src/web/openapi.yaml
+    # Redoc 2.5.3, dependance tierce versionnee telle qu'elle est distribuee.
+    # On ne reformate pas et on n'analyse pas le code de quelqu'un d'autre : le
+    # modifier romprait la correspondance avec la somme de controle notee dans
+    # vendor/PROVENANCE.md, qui est ce qui rend le versement verifiable.
+    - linters: [ALL]
+      paths:
+        - src/web/frontend/assets/javascripts/redoc/**
     # `version: "1.11.0" # x-release-please-version` : les guillemets sont
     # redondants pour YAML mais la ligne est reecrite par release-please. On ne
     # touche pas a la forme d'une ligne qu'un automate edite.
