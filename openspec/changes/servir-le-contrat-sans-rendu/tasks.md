@@ -27,6 +27,31 @@ La règle du dépôt réserve cet artefact aux changements structurants.
   son domaine » par deux contrôles : `openapi.yaml-dist` n'est pas réapparu, et le document
   ne porte aucune variable.
 
+## 2bis. Ce que le renommage a réveillé, non anticipé
+
+Le fichier s'appelait `openapi.yaml-dist`, extension que Trunk ne reconnaissait pas. Devenu
+`openapi.yaml`, il entre pour la première fois dans le champ des linters. Quatre griefs, et
+aucun ne se corrige en changeant le contrat.
+
+- [x] 2bis.1 **`prettier` casse le document.** Il éclate `required: [a, b, c]` en séquence
+  de flux multiligne, forme que `sfYaml` — le parseur YAML de Symfony 1 — ne sait pas lire :
+  « Unable to parse line 480 ([) ». Or c'est ce parseur qui lit le contrat dans le test qui
+  le confronte au site. **Formater le document le rendrait illisible par ce qui le vérifie.**
+  Constaté en exécutant `trunk fmt` puis la suite : 58 assertions vertes avant, échec de
+  lecture après. Formatage annulé, `prettier` désactivé sur ce seul fichier.
+- [x] 2bis.2 **`checkov` CKV_OPENAPI_4 et _5** exigent une section `security`. L'API est
+  publique et non authentifiée. Les satisfaire demanderait de déclarer une authentification
+  qui n'existe pas.
+- [x] 2bis.3 **`checkov` CKV_OPENAPI_21** exige un `maxItems` sur le tableau de morceaux.
+  Le site ne borne pas `/posts` — décision de l'auteur, la page entière sert au CTRL+F.
+  Déclarer un plafond serait faux.
+- [x] 2bis.4 **`yamllint/quoted-strings`** signale les guillemets de
+  `version: "1.11.0" # x-release-please-version`. La ligne est réécrite par un automate ;
+  on ne touche pas à la forme de ce qu'un automate édite.
+- [x] 2bis.5 Les quatre sont désactivés sur ce seul chemin dans `.trunk/trunk.yaml`, chacun
+  avec son motif écrit. **Aucun n'est masqué sans raison** : trois demandaient de faire
+  mentir un document dont la raison d'être est de ne pas mentir.
+
 ## 3. Les renvois suivent
 
 - [x] 3.1 `release-please-config.json` : `extra-files` pointe sur `src/web/openapi.yaml`.

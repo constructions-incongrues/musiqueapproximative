@@ -43,6 +43,31 @@ lint:
       paths:
         - .claude/**
         - openspec/**
+    # Le contrat OpenAPI decrit une API PUBLIQUE et NON AUTHENTIFIEE. Les regles
+    # checkov ci-dessous exigent une section `security` et un plafond sur les
+    # tableaux ; les satisfaire demanderait de declarer des faits faux :
+    #   CKV_OPENAPI_4/5 — une authentification qui n'existe pas ;
+    #   CKV_OPENAPI_21  — un `maxItems` sur `/posts`, que le site ne borne pas
+    #                     (decision de l'auteur : la page entiere sert au CTRL+F).
+    # Ce document dit ce que le site sert. Le faire mentir pour satisfaire un
+    # linter serait exactement ce qu'il est fait pour empecher.
+    - linters: [checkov]
+      paths:
+        - src/web/openapi.yaml
+    # prettier casse ce fichier, ce n'est pas une preference de style. Il eclate
+    # `required: [a, b, c]` en sequence de flux multiligne, forme que le parseur
+    # YAML de Symfony 1 (`sfYaml`) ne sait pas lire : « Unable to parse line 480 ([) ».
+    # Or c'est ce parseur qui lit le contrat dans le test qui le confronte au
+    # site. Formater ce document le rendrait illisible par ce qui le verifie.
+    - linters: [prettier]
+      paths:
+        - src/web/openapi.yaml
+    # `version: "1.11.0" # x-release-please-version` : les guillemets sont
+    # redondants pour YAML mais la ligne est reecrite par release-please. On ne
+    # touche pas a la forme d'une ligne qu'un automate edite.
+    - linters: [yamllint]
+      paths:
+        - src/web/openapi.yaml
 actions:
   disabled:
     - trunk-announce
