@@ -34,7 +34,7 @@ $t->is((string) $xml['status'], 'ok', '/rest/ping (sans .view) : status ok en XM
 $browser->get('/rest/ping.view?f=json');
 $contentType = $browser->getResponse()->getHttpHeader('Content-Type');
 $t->like($contentType, '#application/json#', 'Content-Type : application/json');
-$t->unlike($contentType, '#vnd\.api\+json#', 'Content-Type : JsonApiFilter ne touche pas au module rest');
+$t->unlike($contentType, '#vnd\.api\+json#', 'Content-Type : le module rest garde le type de son protocole');
 
 // --- methode inconnue : erreur 70, HTTP 200 (Subsonic repond toujours 200) ---
 

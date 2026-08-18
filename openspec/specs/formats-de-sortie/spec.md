@@ -13,6 +13,12 @@ Le système SHALL servir une représentation alternative lorsque le paramètre `
 désigne un format connu, et SHALL déclarer le type de contenu correspondant. Un format
 déclaré SHALL aboutir : il ne peut ni échouer, ni servir un corps vide.
 
+Le type de contenu déclaré SHALL être celui de la représentation servie, sans réécriture
+en aval. Il SHALL être identique qu'une réponse soit calculée ou servie depuis le cache.
+
+Les surfaces qui servent du JSON sous une spécification propre — l'embarquement oEmbed, le
+protocole d'écoute tierce — SHALL conserver le type que cette spécification leur impose.
+
 #### Scénario : Formats reconnus
 
 - **QUAND** un consommateur ajoute `format=json`, `format=xspf` ou `format=max` à une
@@ -47,6 +53,36 @@ déclaré SHALL aboutir : il ne peut ni échouer, ni servir un corps vide.
 - **ALORS** `json` est le seul format annoncé, en `<link rel="alternate">` comme parmi les
   liens visibles
 - **ET** `xspf` et `max` restent accessibles par le paramètre `format`, sans être annoncés
+
+#### Scénario : Le type survit au cache
+
+- **QUAND** une réponse au format `json` est demandée une première fois, puis redemandée
+  et servie depuis le cache
+- **ALORS** les deux réponses portent le même type de contenu
+- **ET** ce type est `application/json`
+
+#### Scénario : Type des routes de navigation du lecteur
+
+- **QUAND** un consommateur demande le morceau suivant, précédent ou un morceau au hasard
+- **ALORS** le type de contenu est `application/json`
+
+#### Scénario : Type d'un morceau désigné par empreinte
+
+- **QUAND** un consommateur demande un morceau par l'empreinte de sa piste
+- **ALORS** le type de contenu est `application/json`
+
+#### Scénario : Surfaces à spécification propre préservées
+
+- **QUAND** un consommateur demande l'embarquement oEmbed d'une page de morceau
+- **ALORS** le type de contenu est celui qu'impose la spécification oEmbed, et non
+  `application/json` nu
+- **ET** le protocole d'écoute tierce conserve de même le type que son propre protocole lui
+  impose
+
+#### Scénario : Représentation HTML non affectée
+
+- **QUAND** une page est servie dans sa représentation HTML
+- **ALORS** son type de contenu reste celui d'un document HTML
 
 ### Requirement: Représentation JSON d'un morceau
 
@@ -166,4 +202,3 @@ comme une liste d'un seul élément.
 - **ALORS** les deux lignes portent les mêmes champs, dans le même ordre et avec le même
   échappement
 - **ET** seuls le rang et le nombre total de morceaux peuvent différer
-

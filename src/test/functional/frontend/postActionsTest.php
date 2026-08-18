@@ -22,7 +22,7 @@ $t->is($browser->getResponse()->getStatusCode(), 200, '/posts repond');
 
 $browser->get('/posts?format=json');
 $t->is($browser->getResponse()->getStatusCode(), 200, '/posts?format=json repond');
-$t->like($browser->getResponse()->getContentType(), '#vnd\.api\+json#', 'la liste JSON garde le type JSON:API');
+$t->like($browser->getResponse()->getContentType(), '#^application/json#', 'la liste JSON est servie en application/json, comme la spec l exige');
 
 $t->diag('Un post publie est servi, un post invisible ne l est pas');
 
