@@ -144,3 +144,57 @@ employées — `SIGNAL SQLSTATE`, curseurs, requêtes préparées,
 `utf8mb4` plutôt qu'à `utf8`, ce qui le rend indifférent au fait que MariaDB nomme `utf8mb3`
 ce que MySQL appelle `utf8`. Mais **la répétition a eu lieu sur un autre moteur que la
 cible**, et il faut le dire plutôt que de laisser croire le contraire.
+
+## 2quater. Portage de l'environnement de dev sur MariaDB — 2026-08-18
+
+À la demande de l'auteur, le conteneur de base est passé de `mysql:5.7.25` à
+`mariadb:10.11`, la version de la production. Le site n'a jamais tourné que sur MariaDB :
+le dump d'amorçage du dépôt est lui-même produit par MariaDB 10.3. Seul le conteneur de
+développement divergeait.
+
+Effet de bord bienvenu : `platform: linux/amd64` disparaît. MySQL 5.7 n'a pas d'image arm64
+et tournait en émulation.
+
+L'ancien répertoire de données est conservé en `var/db.mysql57.bak` — les fichiers MySQL 5.7
+sont illisibles par MariaDB, mais on ne jette pas 236 Mo sans filet. Suite complète après
+portage : **624 tests, tous verts**.
+
+### Ce que le portage a révélé, et c'est la raison de l'avoir fait
+
+**Le contrôle préalable était inutilisable, et MySQL le masquait.**
+
+Sa première version cherchait `LIKE '%Ã©%'`. Une chaîne littérale traverse une conversion de
+jeu de caractères avant d'atteindre une colonne `latin1`, et le résultat dépend du client.
+Sur MariaDB avec son client `utf8mb3` par défaut, ce motif remontait **3 538 corps sur
+8 216** : le script se serait arrêté à tous les coups, sur un corpus dont on savait par
+ailleurs qu'il n'a aucun double encodage.
+
+Un garde-fou qui se déclenche toujours ne protège de rien — il apprend seulement à passer
+outre.
+
+La comparaison porte désormais sur les **octets**, via `HEX()`, qui ne traverse aucune
+conversion. Un `é` doublement encodé occupe deux octets `C3 A9` dans une colonne `latin1` ;
+un `é` authentique en occupe un seul, `E9`.
+
+| | corpus réel | corpus empoisonné |
+| --- | --- | --- |
+| ancien contrôle (`LIKE`) sur MariaDB | 3 538 — arrêt | arrêt |
+| nouveau contrôle (`HEX`) sur MariaDB | **0 — passe** | **arrêt** |
+
+Le nouveau discrimine, l'ancien non.
+
+### Répétition sur le moteur cible
+
+| contrôle | résultat |
+| --- | --- |
+| conversion du corpus réel sur MariaDB 10.11 | 12 tables ; `directus_*` non touchées |
+| `Güyôm` | `47FC79F46D` → `47C3BC79C3B46D` |
+| `variètè_Good` | `E8` → `C3A8`, deux fois |
+| morceaux | 8 216 avant, 8 216 après |
+| morceaux détruits | 82 avant, 82 après |
+| garde-fou sur corpus empoisonné | arrêt |
+
+**Un faux positif écarté** : une sonde signalait un `C3 83` après conversion, dans le corps
+du morceau `3062`. Vérification faite, ce corps porte **83 octets de contrôle avant
+conversion** — les « reliquats d'un import binaire » que le gabarit XSPF documente déjà. La
+conversion les préserve, elle n'en crée pas.

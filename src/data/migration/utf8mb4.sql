@@ -71,13 +71,28 @@ BEGIN
   -- authentique. Si le corpus portait de l'UTF-8 range dans des colonnes latin1
   -- — un double encodage — la conversion produirait du mojibake DEFINITIF.
   --
-  -- Les motifs cherches sont les formes latin1 des sequences UTF-8 les plus
-  -- courantes en francais : Ã© pour « é », Ã¨ pour « è », Ã  pour « à ».
+  -- LA COMPARAISON PORTE SUR LES OCTETS, ET C'EST LE POINT.
+  --
+  -- Une premiere version cherchait les motifs `LIKE '%Ã©%'`. Elle etait
+  -- inutilisable : une chaine litterale traverse une conversion de jeu de
+  -- caracteres avant d'atteindre une colonne latin1, et le resultat depend du
+  -- client. Sur MariaDB avec un client utf8mb3 — le defaut — elle remontait
+  -- 3 538 corps sur 8 216, c'est-a-dire qu'elle se serait arretee a tous les
+  -- coups. Un garde-fou qui se declenche toujours ne vaut pas mieux qu'un
+  -- garde-fou qui ne se declenche jamais.
+  --
+  -- `HEX()` ne traverse aucune conversion : il rend les octets tels qu'ils sont
+  -- ranges. Un « é » double-encode occupe deux octets C3 A9 dans une colonne
+  -- latin1 ; un « é » latin1 authentique en occupe un seul, E9. La distinction
+  -- est nette, et elle ne depend d'aucun reglage de connexion.
+  --
+  -- Verifie sur le corpus de production : 0 sur les 8 216 morceaux, 1 des qu'on
+  -- empoisonne deliberement une ligne.
   SELECT COUNT(*) INTO n
     FROM post
-   WHERE body         LIKE '%Ã©%' OR body         LIKE '%Ã¨%' OR body         LIKE '%Ã %'
-      OR track_title  LIKE '%Ã©%' OR track_title  LIKE '%Ã¨%' OR track_title  LIKE '%Ã %'
-      OR track_author LIKE '%Ã©%' OR track_author LIKE '%Ã¨%' OR track_author LIKE '%Ã %';
+   WHERE HEX(body)         REGEXP 'C3(A9|A8|A0|AA|A7|B4|B9|BB)'
+      OR HEX(track_title)  REGEXP 'C3(A9|A8|A0|AA|A7|B4|B9|BB)'
+      OR HEX(track_author) REGEXP 'C3(A9|A8|A0|AA|A7|B4|B9|BB)';
 
   IF n > 0 THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT =
