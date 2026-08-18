@@ -73,14 +73,31 @@ aucun ne se corrige en changeant le contrat.
 
 ### Vérification manuelle — à faire après la mise en ligne
 
-- [ ] 4.5 **Supprimer d'abord la copie manuelle présente sur le serveur.**
-  `src/web/openapi.yaml` y est actuellement un fichier non suivi ; `git pull` refusera
-  d'écraser un fichier non suivi et **le déploiement échouera** tant qu'il est là.
-  Sur le serveur : `rm httpdocs/src/web/openapi.yaml` avant la mise en ligne.
-- [ ] 4.6 Demander `https://www.musiqueapproximative.net/openapi.yaml`. Attendu : `200`, et
-  le bloc `servers` porte `url: /` — plus aucun `${APP_DOMAIN}`.
-- [ ] 4.7 Vérifier depuis la barre latérale du site : la section « API » mène au document
-  et non à une page d'erreur.
+- [x] 4.5 Copie manuelle supprimée du serveur par l'auteur avant la mise en ligne. Le
+  `git pull` est passé.
+- [x] 4.6 `https://www.musiqueapproximative.net/openapi.yaml` répond **200**, type
+  `application/yaml`, le bloc `servers` porte `url: /`. **0 variable restante, 23 clés
+  `$ref` intactes.** Vérifié sur la production, pas en local.
+- [x] 4.7 La barre latérale de `https://www.musiqueapproximative.net/` sert
+  `href="/openapi.yaml"`, et « Ondes » / « Pantagruweb » y ont **0 occurrence**.
+
+### Incident de mise en ligne, consigné parce qu'il vient d'un conseil fautif
+
+- [x] 4.8 **Le site est tombé en 500 sur toutes ses pages PHP** entre la fusion et la
+  réparation ; seuls les fichiers statiques répondaient. La cause n'est aucun des trois
+  fichiers de ce change — `layout.php` est du HTML, le test n'est pas chargé à l'exécution,
+  le contrat est statique.
+  Elle est dans une commande que j'ai proposée : `make configure` **lancé sur le serveur**.
+  La cible lit `./.env` depuis `src/`, or `src/.env` n'existe pas là-bas — chez le
+  développeur c'est un montage Docker de `etc/<profil>/.env`. Sans lui la liste blanche est
+  vide, `envsubst` ne substitue rien, et tous les `-dist` sont réécrits en gabarits bruts :
+  `databases.yml` porte `${DATABASE_HOST}`, la connexion échoue, chaque page tombe.
+  **La commande était pensée pour tourner en local et a été donnée sans le dire.**
+  Rétabli par l'auteur. Vérifié depuis : les cinq routes principales répondent 200 et la
+  page d'accueil ne contient aucun motif `${...}`.
+  Ce que ça enseigne, et qui dépasse ce change : `make configure` n'est pas exécutable sur
+  le serveur en l'état. Toute consigne d'exploitation qui l'emploie doit dire où elle
+  s'exécute — ou créer `src/.env` d'abord.
 
 ## 5. Ce que ce change ne ferme pas
 
