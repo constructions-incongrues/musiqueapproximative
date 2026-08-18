@@ -120,6 +120,14 @@
             <a href="http://feeds.feedburner.com/musique-approximative">RSS</a>
           </p>
           <h2>
+            API
+          </h2>
+          <p>
+            Les morceaux sont aussi servis en JSON, XSPF, RSS et Max/MSP. Le
+            <a href="<?php echo $sf_request->getRelativeUrlRoot() ?>/openapi.yaml">contrat OpenAPI</a>
+            décrit chaque route et chaque format.
+          </p>
+          <h2>
             Raccourcis
           </h2>
           <ul class="shortcuts" id="shortcuts">
@@ -134,12 +142,6 @@
           </h2>
           <p>
             <a href="http://radio.musiqueapproximative.net">Radio Approximative</a> est un projet musical et informatique où chaque émission est générée aléatoirement à partir du corpus de morceaux disponibles et de génériques et jingles créés par les contributeurs du site.
-          </p>
-          <h2>
-            Ondes
-          </h2>
-          <p>
-            <a href="http://ondes.pantagruweb.club/public/musiqueapproximative">Pantagruweb</a> a bien mangé. Il ne compte pas s'arrêter là.
           </p>
           <h2>
             Crédits
