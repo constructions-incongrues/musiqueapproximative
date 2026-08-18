@@ -134,6 +134,31 @@ WARNING: Si le *texte* a bougé, la conversion a mal tourné. Restaurer le dump.
 . Seulement alors, poser `encoding: utf8mb4` sur le bloc `all` de
   `config/databases.yml-dist` et livrer.
 
+. **Vider le cache après le déploiement.**
++
+[source,console]
+----
+cd src && php symfony cache:clear
+----
++
+WARNING: `databases.yml` est compilé dans `cache/`. Sans cette commande, la connexion
+continue de négocier l'ancien encodage et le changement reste sans effet. Plesk tire le
+code, il ne vide pas le cache.
+
+== Vérification finale, sur le site en ligne
+
+Ces étapes closent la migration. Elles demandent le site déployé et un compte d'admin.
+
+. Poster depuis l'admin **un morceau au titre cyrillique et un portant un emoji**, comme un
+  contributeur le ferait. C'est le seul test qui exerce le chemin réel ; tout le reste n'en
+  est qu'une approximation.
+
+. Vérifier qu'ils sont servis intacts dans la page, le JSON, le XSPF et le `max`.
+
+. Vérifier que la recherche les trouve — la collation de `post_index` a changé.
+
+. Les retirer, ou les garder : mais le décider, pas l'oublier.
+
 == Le contrôle qui décide, et pourquoi
 
 `CONVERT TO CHARACTER SET` réinterprète les octets comme du `latin1` authentique. Si le

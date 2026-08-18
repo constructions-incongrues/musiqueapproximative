@@ -757,7 +757,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     avec des identifiants neufs, fait basculer **42 assertions** dans quatre suites qui
     comptent des morceaux et des artistes.
 
-- [~] 19. `migrer-la-base-en-utf8mb4` — le site cesse de détruire ce qu'on lui confie
+- [x] 19. `migrer-la-base-en-utf8mb4` — le site cesse de détruire ce qu'on lui confie
   - **Persona servi** : le mélomane fêlé (principal), l'auditeur, l'intégrateur
   - **Segment du parcours** : Poster (étape 1), et tout ce qui lit ensuite
   - **MoSCoW** : Must
@@ -782,10 +782,9 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/config/databases.yml-dist`, `src/lib/migration/doctrine/`,
     `src/config/doctrine/schema.yml`
   - **Ajoutée** : 2026-08-18
-  - **Change** : `2026-08-18-migrer-la-base-en-utf8mb4` — **livraison 1 livrée le
-    2026-08-18** : le script, son contrôle préalable, sa documentation, et la répétition sur
-    le moteur et les données de la cible. **La conversion elle-même n'a pas eu lieu** : elle
-    demande l'accès à la production, que le dépôt n'a pas.
+  - **Change** : `2026-08-18-migrer-la-base-en-utf8mb4` — **livré le 2026-08-18**, et la
+    **conversion de production a été menée par l'auteur**, sa vérification passée. La
+    seconde moitié est la story 21, également livrée.
   - **Ce que la répétition a corrigé** : le contrôle préalable cherchait `LIKE '%Ã©%'`. Une
     chaîne littérale traverse une conversion de jeu de caractères avant d'atteindre une
     colonne `latin1`, et le résultat dépend du client. Sur MariaDB — le moteur réel — il
@@ -796,7 +795,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Vérifié sur les données réelles** : 0 double encodage sur 8 216 morceaux, 12 tables
     converties, `directus_*` non touchées, 8 216 morceaux et 82 détruits avant comme après.
 
-- [ ] 21. `poser-l-encodage-de-connexion-en-utf8mb4` — la connexion cesse de convertir
+- [x] 21. `poser-l-encodage-de-connexion-en-utf8mb4` — la connexion cesse de convertir
   - **Persona servi** : le mélomane fêlé
   - **Segment du parcours** : Poster
   - **MoSCoW** : Must
@@ -815,7 +814,15 @@ Chaque story est une tranche verticale : elle se démontre seule.
     des jours.
   - **Code concerné** : `src/config/databases.yml-dist`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-poser-l-encodage-de-connexion-en-utf8mb4` — **livré le
+    2026-08-18**. Vérifié par le chemin applicatif : `Сергей Прокофьев 坂本龍一` et
+    `Пятое время года 🎵🔥` saisis par le modèle et relus identiques.
+  - **Deux choses trouvées en vérifiant** : le cache de configuration masquait le
+    changement — `databases.yml` est compilé dans `cache/`, un `cache:clear` est
+    nécessaire, et le déploiement ne le fait pas. Et le dump d'amorçage du dépôt, daté de
+    2021, précédait les colonnes du schéma : toute installation neuve échouait en 1054.
+    Remplacé par un extrait de la production converti et **anonymisé** — le dépôt étant
+    public, le dump versionné exposait 179 empreintes de mots de passe et 173 courriels.
 
 - [ ] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
   - **Persona servi** : le mélomane fêlé, le mainteneur
