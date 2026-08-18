@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (dix-neuvième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingtième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1280,7 +1280,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : tous les `*-dist` de `src/`, `src/Makefile`, `Makefile`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 25. `rendre-l-encodage-de-connexion-verifiable` — l'encodage cesse d'être invérifiable
+- [x] 25. `rendre-l-encodage-de-connexion-verifiable` — l'encodage cesse d'être invérifiable
   - **Persona servi** : le mainteneur, et derrière lui tout contributeur qui saisit un titre
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Must — axe « tenir ce qu'on a livré »
@@ -2250,3 +2250,21 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **Trois contributeurs n'ont pas de profil** dans les données réelles : le choix `leftJoin`
   plutôt qu'`innerJoin` n'était pas une précaution théorique, il garde leurs morceaux au
   catalogue.
+
+- 2026-08-19 (vingtième révision) — **La story 25 est livrée.** L'encodage de la connexion est
+  constatable en ligne pour la première fois : `/encodage` répond en JSON, en lecture seule,
+  hors cache, avec trois états — conforme, non conforme avec la valeur constatée nommée, et
+  indéterminé quand la base est injoignable, une panne n'étant pas un encodage fautif.
+  **Ce que la critique a changé, et qui vaut plus que la route elle-même** : la voix
+  `guy-debord`, convoquée sur le travail avant qu'il parte, a établi que le voyant était déjà
+  vert et cohabitait avec 61 titres mutilés qu'il ne voyait pas. Il vérifiait une variable
+  quand c'est un titre qui avait été détruit. La réponse porte donc ce qu'elle ne prouve pas,
+  et deux chiffres calculés à côté du verdict. Un « conforme » affiché à côté de 60 titres
+  altérés ne se lit plus de la même façon.
+  **Une requête écrite trois fois** : la première détection des caractères hors cp1252
+  utilisait `CONVERT … IS NULL`, trouvait 54 morceaux et **ne détectait pas le cyrillique** —
+  la contre-épreuve l'a rejetée. La deuxième butait sur un mélange de collations. La
+  troisième distingue cyrillique et emoji du latin accentué, vérifié avec la collation réelle
+  des colonnes.
+  **Reste ouvert, et nommé dans les tâches** : l'envoi aux 37 contributeurs. Ce change publie
+  un voyant vert dans le même dépôt où la lettre n'est pas partie.

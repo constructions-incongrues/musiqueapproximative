@@ -68,9 +68,20 @@
 
 ### Vérification manuelle — après la mise en ligne
 
-- [ ] 4.7 Interroger la route en production. Attendu : **conforme, `utf8mb4`**. C'est la
-  première fois que ce fait sera constatable en ligne.
-- [ ] 4.8 Lancer le rendez-vous nocturne à la main et vérifier qu'il passe au vert.
+- [x] 4.7 **Constaté en production** — et c'est la première fois que ce fait est observable
+  en ligne : `verdict: conforme`, `encodage_constate: utf8mb4`,
+  `caracteres_hors_cp1252_stockes: 0`, `dernier_stocke_hors_cp1252: null`,
+  `titres_alteres_en_base: 60`.
+- [x] 4.8 Rendez-vous nocturne lancé à la main : **succès**, et il imprime le verdict avec
+  ses deux chiffres à côté, comme voulu —
+
+  ```
+  Encodage de connexion : conforme (utf8mb4).
+    caracteres hors cp1252 reellement stockes : 0
+    titres alteres encore en base            : 60
+  ```
+
+  Le « conforme » ne peut plus se lire seul.
 
 ## 5. Ce que ce change ne ferme pas
 
