@@ -78,14 +78,24 @@ Après mise en ligne (PR #187 fusionnée le 18 août 2026) :
 - [x] 4.6 `GET /post/hyacinthe-retour-d-emeute-piege?format=json` en production : douze
   sondes analysables sur douze.
 
-**Défaut d'environnement observé au passage, hors périmètre et non résolu** : une première
-sonde sur la route du morceau a échoué (`Expecting property name enclosed in double quotes:
-line 2 column 3`) avant que douze appels consécutifs passent. C'est la signature déjà
-consignée — PHP-Markdown émet des `E_DEPRECATED` sur le premier rendu Markdown d'un
-processus (`src/lib/vendor/PHP-Markdown/markdown.php:910`, syntaxe `{0}` dépréciée depuis
-PHP 7.4), et ils atterrissent dans le corps de la réponse. C'est ce qui oblige chaque test
-JSON à une requête de chauffe. Indépendant de ce change, mais réel : il rend invalide une
-réponse sur N, selon le recyclage des processus PHP-FPM. Mérite son propre change.
+**Défaut d'environnement observé au passage — le diagnostic écrit ici était faux, il est
+rectifié** : une première sonde sur la route du morceau a échoué (`Expecting property name
+enclosed in double quotes: line 2 column 3`) avant que douze appels consécutifs passent. Ce
+paragraphe en concluait à un défaut vivant, à traiter dans un change à part, situé dans
+`src/lib/vendor/PHP-Markdown/markdown.php:910` (syntaxe `{0}`). **Les deux affirmations
+étaient fausses.**
+
+- Le coupable n'était pas la syntaxe en accolades mais le constructeur PHP 4
+  `Markdown_Parser()`, ligne 199. #184 l'établit par la mesure : les cinq accès en accolades
+  avaient d'abord été convertis seuls, et la suite échouait encore sur 24 assertions.
+- Le défaut n'était plus vivant. #184 avait fusionné cinquante-deux minutes avant que cette
+  sonde échoue. L'échec venait d'un processus PHP-FPM de longue durée servant encore
+  l'ancien fichier — un reliquat qui s'éteint, non un défaut à corriger.
+
+La requête de chauffe que la tâche 3.1 a ajoutée à `jsonEchappementTest.php` était donc un
+contournement sans cause dès sa naissance : elle recopiait un diagnostic hérité au lieu de
+mesurer. #193 l'a retirée, après avoir sondé cinq processus neufs sur leur tout premier
+rendu Markdown — aucun `E_DEPRECATED`, document analysable à chaque fois.
 
 ## 5. Documentation
 
