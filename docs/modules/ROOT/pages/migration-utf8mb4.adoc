@@ -124,7 +124,45 @@ forcer détruit ce qui restait.
 
 == Répétition menée le 2026-08-18
 
-Le script a été éprouvé sur trois copies de la base, jamais sur la production.
+Le script a été éprouvé sur quatre copies, dont **une copie des données réelles de
+production**, jamais sur la production elle-même.
+
+=== Sur les données réelles
+
+[cols="2,3"]
+|===
+| contrôle | résultat
+
+| double encodage sur 8 216 morceaux
+| **0** — la conversion fera exactement ce qu'il faut
+
+| tables converties
+| 12 ; les quinze tables `directus_*` non touchées
+
+| `Güyôm`
+| `47FC79F46D` → `47C3BC79C3B46D`, texte identique
+
+| `variètè_Good`
+| `E8` → `C3A8`, deux fois
+
+| nombre de morceaux
+| 8 216 avant, 8 216 après
+
+| morceaux détruits
+| 82 avant, 82 après — ni réparés, ni aggravés
+
+| mojibake introduit
+| 0
+
+| emoji, cyrillique, idéogrammes après conversion
+| acceptés
+|===
+
+=== Sur des copies de structure
+
+[cols="2,3"]
+|===
+| épreuve | résultat
 
 [cols="2,3"]
 |===
@@ -145,6 +183,16 @@ Le script a été éprouvé sur trois copies de la base, jamais sur la productio
 | corpus portant un double encodage
 | **arrêt** — le garde-fou mord
 |===
+
+=== Ce que la répétition ne couvre pas
+
+Le conteneur de répétition est **MySQL 5.7**, la production **MariaDB 10.11**. Les
+constructions employées existent dans les deux, et le script compare à `utf8mb4` plutôt
+qu'à `utf8` — il est donc indifférent au fait que MariaDB nomme `utf8mb3` ce que MySQL
+appelle `utf8`.
+
+Mais la répétition a eu lieu sur un autre moteur que la cible. Le contrôle préalable reste
+le garde-fou : s'il ne reconnaît pas l'état de la base, il s'arrête.
 
 == Ce que cette migration ne fait pas
 

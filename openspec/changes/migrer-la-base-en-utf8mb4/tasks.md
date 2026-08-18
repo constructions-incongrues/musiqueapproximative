@@ -25,14 +25,14 @@
 
 ## 2. Avant de lancer — sur la production, pas sur le dump local
 
-- [ ] 2.1 **Refaire la mesure du double encodage sur la production.** Le zéro relevé
+- [x] 2.1 **Refaire la mesure du double encodage sur la production.** Le zéro relevé
   jusqu'ici vient d'un dump vieux de cinq ans. C'est la vérification qui décide si la
   conversion répare ou détruit.
-- [ ] 2.2 Relever l'état réel : jeu de caractères de chaque table, encodage de connexion,
+- [x] 2.2 Relever l'état réel : jeu de caractères de chaque table, encodage de connexion,
   nombre de lignes. Le comparer à ce que le script attend.
 - [ ] 2.3 Dump complet, et **vérifier qu'il se relit** — un dump non testé n'est pas une
   sauvegarde.
-- [ ] 2.4 Relever, avant conversion, un échantillon de titres accentués et leur `HEX()` :
+- [x] 2.4 Relever, avant conversion, un échantillon de titres accentués et leur `HEX()` :
   c'est contre lui qu'on vérifiera que rien n'a bougé.
 
 ## 3. La conversion
@@ -96,3 +96,51 @@ La dernière l'est autant : un garde-fou qu'on n'a pas vu mordre ne protège de 
 La première version le lançait dynamiquement et échouait après avoir converti les tables.
 Retiré du script, il est désormais **affiché en fin d'exécution** comme commande à lancer
 séparément. Masquer cet échec aurait laissé la base avec un jeu par défaut incohérent.
+
+## 2ter. Répétition sur les données RÉELLES de production — 2026-08-18
+
+L'auteur a fourni un dump frais. La vérification que ce change disait ne pas pouvoir faire a
+donc été faite, et elle lève la réserve principale.
+
+### L'état réel
+
+| | |
+| --- | --- |
+| serveur | **MariaDB 10.11**, et non MySQL 5.7 |
+| morceaux | **8 216**, dont 8 099 publiés |
+| dernier publié | **2026-08-18** — le jour même |
+| tables du projet en `latin1` | `post`, `post_index`, les six `sf_guard_*` |
+| `user_profile` | `utf8` |
+| les quinze tables `directus_*` | `utf8` / `utf8mb4` — exclues par le script |
+| **double encodage** | **0** |
+
+**Le zéro est le chiffre qui décide.** Il venait jusqu'ici d'un dump vieux de cinq ans ; il
+est désormais mesuré sur la production du jour. `CONVERT TO CHARACTER SET` fera donc
+exactement ce qu'il faut.
+
+### La conversion, sur ces données
+
+| contrôle | résultat |
+| --- | --- |
+| contrôle préalable | passé |
+| tables converties | 12 — les `directus_*` non touchées, comme voulu |
+| `Güyôm` | `47FC79F46D` → `47C3BC79C3B46D`, texte identique |
+| `Ceylán` | `E1` → `C3A1` |
+| `variètè_Good` | `E8` → `C3A8`, deux fois |
+| morceaux après | **8 216**, inchangé |
+| morceaux détruits après | **82**, inchangé — ni réparés ni aggravés |
+| mojibake introduit | **0** |
+| `directus_files` | toujours `utf8`, non touchée |
+| emoji + cyrillique + idéogrammes après conversion | acceptés |
+
+La copie a été supprimée après. Le dump fourni est ajouté à `.gitignore` : il porte des
+données de production et n'a rien à faire au dépôt.
+
+### Ce que la répétition ne couvre toujours pas
+
+Le conteneur local est **MySQL 5.7**, la production **MariaDB 10.11**. Les constructions
+employées — `SIGNAL SQLSTATE`, curseurs, requêtes préparées,
+`COLLATION_CHARACTER_SET_APPLICABILITY` — existent dans les deux, et le script compare à
+`utf8mb4` plutôt qu'à `utf8`, ce qui le rend indifférent au fait que MariaDB nomme `utf8mb3`
+ce que MySQL appelle `utf8`. Mais **la répétition a eu lieu sur un autre moteur que la
+cible**, et il faut le dire plutôt que de laisser croire le contraire.
