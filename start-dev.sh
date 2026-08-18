@@ -15,6 +15,7 @@ if [[ ! -f "etc/musiqueapproximative.localhost/.env" ]]; then
 	cat >etc/musiqueapproximative.localhost/.env <<EOF
 DATABASE_HOST=db
 DATABASE_NAME=musiqueapproximative
+DATABASE_NAME_TEST=musiqueapproximative_test
 DATABASE_USER=root
 DATABASE_PASSWORD=root
 EOF

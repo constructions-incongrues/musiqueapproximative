@@ -74,6 +74,36 @@ Le script `start-dev.sh` effectue :
 3. Installation des dépendances
 4. Initialisation de la base de données
 
+=== 4. Base de test
+
+La suite de tests n'écrit jamais dans la base de développement. Elle utilise
+`musiqueapproximative_test`, déclarée sous `test:` dans `src/config/databases.yml`, et
+`src/test/bootstrap/database.php` **refuse de démarrer** si la connexion pointe ailleurs :
+les fixtures commencent par des `TRUNCATE`.
+
+Cette base n'est pas créée par `start-dev.sh`. Une fois l'environnement démarré :
+
+[source,bash]
+----
+make test-init PROFILE=musiqueapproximative.localhost
+----
+
+La cible crée la base si elle manque, puis y construit le schéma. Elle est rejouable.
+
+[IMPORTANT]
+====
+Le `PROFILE` est obligatoire. Le `Makefile` inclut `etc/$PROFILE/.env` et sa valeur par
+défaut est `www.musiqueapproximative.net`, c'est-à-dire la production. La cible refuse de
+s'exécuter si l'hôte de base de données n'est pas le conteneur local, et le dit.
+====
+
+Sans cette base, trois scripts de test échouent sur le refus du bootstrap. Le message est
+explicite, mais la cause est en amont : ce n'est pas un test cassé, c'est une base absente.
+
+Si le message mentionne un DSN contenant le littéral `${DATABASE_NAME_TEST}`, c'est que le
+`.env` du profil a été écrit avant que cette variable n'existe. L'ajouter, puis relancer
+`make configure` depuis `src/`.
+
 == Structure de l'environnement
 
 === Services Docker
