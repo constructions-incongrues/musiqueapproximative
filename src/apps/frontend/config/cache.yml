@@ -5,9 +5,9 @@
 # elle ne verifie donc rien. Le cache par defaut vaut 86 400 s, et il s'applique
 # a toutes les actions — celle-ci doit en sortir explicitement.
 encodage:
-  enabled:     false
+  enabled: false
 
 default:
-  enabled:     true
+  enabled: true
   with_layout: true
-  lifetime:    86400
+  lifetime: 86400
