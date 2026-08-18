@@ -13,3 +13,9 @@ test:
       dsn:      mysql:host=${DATABASE_HOST};dbname=${DATABASE_NAME_TEST}
       username: ${DATABASE_USER}
       password: ${DATABASE_PASSWORD}
+      # `encoding` et non `charset=` dans le DSN : Doctrine 1 analyse le DSN
+      # lui-même et ignore ce qu'il n'y connaît pas. C'est ce paramètre qui
+      # produit le `SET NAMES`, via sfDoctrineConnectionListener.
+      # utf8mb4 et non utf8 : ce dernier tient sur trois octets et rejette les
+      # emoji avec une erreur 1366.
+      encoding: utf8mb4
