@@ -45,14 +45,28 @@
 
 ### Vérification manuelle — après la mise en ligne
 
-- [ ] 3.6 Remesurer les quatre représentations sur la production, **à cache froid**, et
-  comparer aux chiffres qui ont motivé la story 3 : json 8,4 Mo / 17,5 s, max 2,6 Mo / 15,6 s,
-  html 3,7 Mo / 14,9 s, xspf 3,5 Mo / 2,9 s.
-  Le xspf est le témoin : il ne lit pas le contributeur, **il ne doit pas bouger**. Si tous
-  les quatre s'améliorent d'autant, la cause n'était pas celle qu'on croit.
-- [ ] 3.7 Vérifier qu'une page de morceau affiche toujours le bon nom de contributeur et son
-  lien de site — c'est ce que `UserProfile` porte, et c'est ce qu'une jointure fautive
-  ferait disparaître en silence.
+- [x] 3.6 **Remesuré en production, à cache froid. Le témoin a répondu.**
+
+  | format | avant | après | |
+  | --- | --- | --- | --- |
+  | `json` | 17,5 s | **5,49 s** | 3,2× |
+  | `max` | 15,6 s | **4,36 s** | 3,6× |
+  | `html` | 14,9 s | **3,23 s** | 4,6× |
+  | `xspf` | 2,9 s | **3,47 s** (médiane de 5) | **n'a pas gagné** |
+
+  Les trois formats qui lisent le contributeur accélèrent d'un facteur 3 à 4,6 ; celui qui ne
+  le lit pas, non. **Le diagnostic est confirmé par son témoin.**
+
+- [x] 3.6bis **Coût introduit, mesuré et assumé : le `xspf` a ralenti d'environ 0,5 s.**
+  Cinq mesures — 3,23 / 3,48 / 4,11 / 3,31 / 3,47 s — contre 2,9 s avant. Ce n'est pas du
+  bruit. Il passe par la même requête avec `$fields` au défaut, reçoit donc la jointure et
+  hydrate 8 098 `UserProfile` **qu'il ne lit jamais**.
+  Accepté en l'état : +0,5 s sur le format le plus rapide contre −12 s sur le `json` et
+  −11,7 s sur la page HTML. Le corriger demanderait une projection propre au `xspf`, et il
+  lit malgré tout le contributeur pour composer son titre quand la liste est filtrée par `?c=`.
+- [x] 3.7 Vérifié en production : `name`, `slug` et `href_website` sont tous les trois
+  servis — « Deehowyou », `deehowyou`, `http://myspace.com/deehowyou`. Une jointure fautive
+  les aurait vidés en silence.
 
 ## 4. Ce que ce change ne ferme pas
 
