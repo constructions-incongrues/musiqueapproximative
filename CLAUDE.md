@@ -104,6 +104,7 @@ External service `https://gliche.constructions-incongrues.net/` is hit with `see
 
 - **Conventional Commits required.** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`. Breaking changes use `!` or `BREAKING CHANGE:` footer.
 - Release automation is **release-please** (`.github/workflows/release-please.yml`, `release-please-config.json`). It opens a release PR on every push to `main`; merging it bumps `src/VERSION`, updates `CHANGELOG.adoc`, and creates a tag. Do not hand-edit `CHANGELOG.adoc` or `src/VERSION`.
+- **`last-release-sha` in `release-please-config.json` is permanent — do not remove it.** A history rewrite on 2026-08-18 changed every commit SHA, but the 33 tags could not be force-pushed (a protection rule requires admin access that will not be lifted — the work was closed deliberately). No tag is therefore reachable from `main`, so release-please cannot find its last-release anchor and would walk back to the root commit, proposing the entire repository history as the next changelog. The key pins the anchor to `a250cdf`, the 1.11.0 release commit in the rewritten history. Removing it breaks the changelog.
 - CI on tag push (`ci.yml`) builds and publishes a Docker image to `ghcr.io/constructions-incongrues/musiqueapproximative` and creates major/minor alias tags.
 
 ## Gotchas

@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (neuvième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (dixième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -501,6 +501,12 @@ contenu doit venir du site en ligne, comme celles du tableau ci-dessus.
   parce que cette surface existe et fonctionne que le JSON du module `post` peut rester une
   surface héritée qu'on stabilise au lieu de la faire croître.
 
+- **La purge des identifiants de l'historique** — *close par l'auteur le 2026-08-18, après
+  exécution partielle.* Les branches ont été réécrites ; les 33 étiquettes ont été rejetées
+  par une règle de protection dont la levée demande un accès administrateur. L'exposition
+  reste entière et la story ne sera pas rouverte. Le détail, la sauvegarde et le brouillon de
+  notification sont conservés dans l'archive du change et dans la story 22, qui reste au plan.
+
 ## Stories
 
 Liste ordonnée. Une story = un change OpenSpec (proposal ≈ 200 mots).
@@ -544,7 +550,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-retablir-le-type-de-contenu-json` — **livré le 2026-08-18**
 
-- [~] 2. `borner-les-listes-de-morceaux` — **en attente depuis le 2026-08-18**
+- [~] 2. `borner-les-listes-de-morceaux` — **en attente depuis le 2026-08-18, l'auteur y réfléchit encore**
   - **Motif** : *un consommateur réel de la page non bornée a été identifié — l'auteur
     lui-même.* Il se sert beaucoup de `/posts` en HTML **parce qu'on peut y faire Ctrl+F
     efficacement**. C'est le premier usage réel qu'ait reçu ce plan : sa question ouverte
@@ -828,7 +834,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     Remplacé par un extrait de la production converti et **anonymisé** — le dépôt étant
     public, le dump versionné exposait 179 empreintes de mots de passe et 173 courriels.
 
-- [~] 22. `purger-les-identifiants-de-l-historique` — **archivée le 2026-08-18 sans avoir atteint son objectif**
+- [~] 22. `purger-les-identifiants-de-l-historique` — **close le 2026-08-18. Ne sera pas rouverte.**
   - **Persona servi** : les 171 contributeurs dont l'adresse et l'empreinte de mot de passe
     sont publiées, et qui ne le savent pas
   - **Segment du parcours** : aucun — c'est une dette de sécurité, pas une fonctionnalité
@@ -878,6 +884,17 @@ Chaque story est une tranche verticale : elle se démontre seule.
     prévenir les 173 personnes (brouillon dans `notification.md` de l'archive) ; solliciter
     le support GitHub ; informer les 4 forks. Ces gestes demandent des décisions du
     collectif, pas du code.
+  - **Décision de l'auteur, 2026-08-18 : la story ne sera pas rouverte.** Elle reste au plan
+    parce qu'un plan qui efface ses décisions n'en est plus un. Ce qui demeure vrai, et qui
+    est écrit ici pour être trouvable et non pour être plaidé : les 33 étiquettes portent
+    l'ancien historique, **207 empreintes SHA1 et 171 courriels restent publics**, les
+    empreintes ouvrent toujours les comptes correspondants, et 4 forks en conservent copie.
+    L'inventaire, la sauvegarde vérifiée et le brouillon de notification sont dans l'archive
+    du change, prêts si la décision change un jour.
+  - **Conséquence technique à ne pas oublier** : `last-release-sha` dans
+    `release-please-config.json` était annoncé comme un contournement « à retirer quand les
+    étiquettes passeront ». Les étiquettes ne passeront pas. **La clé est donc permanente**,
+    et la retirer casserait la génération du changelog. C'est écrit dans `CLAUDE.md`.
 
 - [ ] 20. `inventorier-les-morceaux-detruits` — on sait ce qu'on a perdu, et on le dit
   - **Persona servi** : le mélomane fêlé, le mainteneur
@@ -1665,3 +1682,14 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   cause du change, mais d'un `make configure` lancé sur le serveur — la cible y trouve un
   `src/.env` absent, ne substitue rien, et réécrit toute la configuration en gabarits bruts.
   Rétabli. La commande n'est pas exécutable sur le serveur en l'état.
+
+- 2026-08-18 (dixième révision) — **Deux décisions de l'auteur, consignées telles quelles.**
+  La story **22** est close et ne sera pas rouverte. Elle reste au plan, et le relevé de ce
+  qui demeure exposé reste avec elle : un plan qui efface ses décisions n'en est plus un, et
+  celle-ci a un coût qui doit rester trouvable par qui lira ce fichier dans deux ans. Elle
+  entre en « Won't » avec son motif. Conséquence rattrapée dans la même révision :
+  `last-release-sha` était présenté comme temporaire, « à retirer quand les étiquettes
+  passeront » — les étiquettes ne passeront pas, la clé est **permanente**, et `CLAUDE.md` le
+  dit désormais pour que personne ne la retire en croyant nettoyer.
+  Les stories **2** et **3** — borner les listes et le XSPF — restent en attente : l'auteur
+  y réfléchit encore. Rien n'est tranché, donc rien n'est écrit au-delà de ça.
