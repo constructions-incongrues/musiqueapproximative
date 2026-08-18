@@ -80,6 +80,13 @@ function subsonic_load_fixtures()
  *
  * L'index est donc reconstruit apres chaque chargement, de sorte qu'un test de
  * recherche exerce le meme chemin qu'un visiteur.
+ *
+ * Aucun TRUNCATE n'est necessaire ici, et c'est verifie : `subsonic.sql` vide
+ * `post_index` avant de recharger. Ca compte, parce que `batchUpdateIndex()` est
+ * INCREMENTAL — sa requete ne selectionne que les morceaux absents de l'index.
+ * Sur un index deja peuple, elle ne fait rien. En production, apres un changement
+ * de collation, il faut donc vider d'abord : voir
+ * docs/modules/ROOT/pages/migration-utf8mb4.adoc.
  */
 function subsonic_build_search_index()
 {
