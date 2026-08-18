@@ -1,0 +1,87 @@
+name: Contrat en production
+
+# Ce contrôle a son propre rendez-vous, et ce n'est pas une commodité.
+#
+# Il a d'abord été logé dans `nightly.yml`. Or ce workflow échoue en continu
+# depuis le 16 juin 2026 — deux mois — sur un `jq not installed` de
+# `trunk-action`. Une alerte posée dans un rendez-vous rouge en permanence est
+# une alerte déjà éteinte : son signal ne se distingue pas du bruit auquel on
+# s'est habitué. C'est exactement le mode de défaillance que ce contrôle
+# prétendait éviter.
+#
+# Il lui faut donc pouvoir passer au rouge tout seul.
+
+on:
+  schedule:
+    - cron: 0 8 * * 1-5
+  workflow_dispatch: {}
+
+permissions: read-all
+
+jobs:
+  contrat:
+    name: Contrat servi en production
+    runs-on: ubuntu-latest
+
+    # Ce contrôle existe parce que la suite ne peut pas le faire. Elle confronte
+    # le site de TEST au contrat ; elle ne demande jamais rien à la production.
+    # Le 2026-08-18, elle a déclaré le contrat conforme à chaque exécution
+    # pendant que `/openapi.yaml` répondait 404 en ligne, une journée entière.
+    #
+    # Il ne vérifie donc QUE ce que le déploiement peut casser, et rien de ce que
+    # la suite couvre déjà.
+    steps:
+      - name: Interroger le contrat en ligne
+        env:
+          CONTRAT: https://www.musiqueapproximative.net/openapi.yaml
+        run: |
+          # Deux échecs à ne pas confondre : une production INJOIGNABLE n'est pas
+          # un contrat FAUX. Une alerte qui crie au loup se désactive en trois
+          # semaines — ce contrôle ne signale donc que ce qu'il peut affirmer.
+          statut=""
+          for essai in 1 2 3; do
+            statut=$(curl -sS -o /tmp/contrat.yaml -w '%{http_code}' \
+              --max-time 30 --retry 0 "$CONTRAT" || echo "000")
+            case "$statut" in
+              000|5??) echo "essai $essai : statut $statut, nouvel essai"; sleep 20 ;;
+              *) break ;;
+            esac
+          done
+
+          case "$statut" in
+            000|5??)
+              echo "::notice::Production injoignable (statut $statut) après trois essais."
+              echo "Ce n'est pas la question posée : le contrat n'est ni confirmé ni infirmé."
+              exit 0
+              ;;
+          esac
+
+          echec=0
+
+          test "$statut" = "200" || {
+            echo "::error::Le contrat répond $statut à $CONTRAT. Il n'est pas servi."
+            echec=1
+          }
+
+          type=$(curl -sS -o /dev/null -w '%{content_type}' --max-time 30 "$CONTRAT")
+          case "$type" in
+            *yaml*|*text/plain*) ;;
+            *) echo "::error::Type de média « $type », attendu du YAML."; echec=1 ;;
+          esac
+
+          if [ "$statut" = "200" ]; then
+            grep -qE '\$\{[A-Z_]+\}' /tmp/contrat.yaml && {
+              echo "::error::Le contrat servi porte une variable non substituée :"
+              grep -oE '\$\{[A-Z_]+\}' /tmp/contrat.yaml | sort -u | sed 's/^/  /'
+              echec=1
+            }
+
+            routes=$(grep -cE "^  /" /tmp/contrat.yaml || true)
+            test "$routes" -ge 9 || {
+              echo "::error::Le contrat servi déclare $routes routes, moins que les 9 attendues."
+              echec=1
+            }
+            echo "Contrat servi : statut $statut, type $type, $routes routes, aucune variable restante."
+          fi
+
+          exit "$echec"
