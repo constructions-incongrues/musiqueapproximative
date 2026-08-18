@@ -9,13 +9,17 @@ que la règle du dépôt réserve aux changements structurants.
 
 ## 0. Bloquant — diagnostiquer avant d'implémenter (décision D8)
 
-- [ ] 0.1 **Compter les requêtes** produites par `/posts?format=json` et `?format=max`.
+- [x] 0.1 **Compter les requêtes** produites par `/posts?format=json` et `?format=max`.
   Hypothèse à confirmer ou infirmer : une requête par morceau, ~8 100, faute d'hydratation
   de `UserProfile`.
-- [ ] 0.2 Essayer une jointure élargie sur `buildOnlinePostsQuery`, remesurer les trois
+- [x] 0.2 Essayer une jointure élargie sur `buildOnlinePostsQuery`, remesurer les trois
   formats. **Si le catalogue entier repasse sous quelques secondes, ce change n'a plus
   d'urgence** — la pagination garde sa valeur propre, pas son argument de latence.
-- [ ] 0.3 Trancher : amender ce change, le réduire à la pagination seule, ou l'abandonner.
+  **Résultat : 8 271 requêtes / 7,17 s → 1 requête / 1,08 s.** L'hypothèse est confirmée,
+  la correction tient en un `leftJoin` et un `select` explicite, et elle ne rompt rien.
+- [x] 0.3 Tranché : **la jointure est corrigée dans un change à part, ce change est gelé.**
+  Son argument d'urgence est mesuré faux ; il repartira si un consommateur réclame la
+  pagination, pas sur une latence.
 
 ## 1. Reprendre la convention plutôt qu'en inventer une
 

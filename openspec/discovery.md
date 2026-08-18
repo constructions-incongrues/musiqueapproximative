@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (dix-septième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (dix-huitième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -581,7 +581,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18 · **Mise en attente** : 2026-08-18
   - **Change** : `borner-les-listes-de-morceaux`, proposé puis retiré le 2026-08-18
 
-- [ ] 3. `borner-les-representations-machine` — les formats machine cessent de servir tout le catalogue
+- [~] 3. `borner-les-representations-machine` — les formats machine cessent de servir tout le catalogue
   - *Reformulée le 2026-08-18. S'appelait `borner-le-xspf` et ne visait que ce format ; la
     mesure du jour a montré que le XSPF était la moins grave des trois. L'ancien énoncé et
     son motif sont conservés plus bas.*
@@ -633,7 +633,10 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Énoncé d'origine, conservé** : « `borner-le-xspf` — la playlist XSPF cesse de coûter
     3,1 secondes ». Son périmètre excluait `max` « sans douleur mesurée » ; la mesure du
     jour donne 15,6 s pour ce format, ce qui a motivé l'élargissement.
-  - **Change** : _pas encore proposé_
+  - **Change** : `borner-les-representations-machine` — **proposé puis GELÉ le 2026-08-19**,
+    après revue d'ingénierie et diagnostic. Sa prémisse est mesurée fausse : la lenteur ne
+    venait pas du volume mais d'un N+1. Le change reste au dépôt, prêt à repartir si un
+    consommateur réclame la pagination — pas sur un argument de latence.
 
 - [x] 4. `aligner-la-route-md5-sur-la-forme-commune` — un morceau récupéré par empreinte a la forme des autres
   - **Persona servi** : l'intégrateur
@@ -1508,6 +1511,37 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
   - **Ajoutée** : 2026-08-18
 
+- [ ] 34. `hydrater-le-contributeur-en-une-requete` — le catalogue cesse de coûter 8 271 requêtes
+  - **Persona servi** : l'auditeur sur le site, l'intégrateur, le mélomane fêlé — tous ceux
+    qui attendent une liste
+  - **Segment du parcours** : toutes les étapes qui servent une liste
+  - **MoSCoW** : Must — remplace la story 3 comme réponse à la latence
+  - **Née d'un diagnostic, pas d'une intuition** : la story 3 attribuait 17,5 s au volume
+    sérialisé. Mesuré en local sur 8 099 morceaux, identity map vidée entre les essais :
+
+    | | requêtes | durée |
+    | --- | --- | --- |
+    | hydratation seule | **1** | 0,79 s |
+    | + accès au contributeur | **8 099** | 6,63 s |
+    | + `Markdown(body)` | 1 | 0,65 s |
+
+    **L'accès au contributeur est 88 % du coût.** `buildOnlinePostsQuery` joint `sfGuardUser`
+    mais **jamais `UserProfile`**, que `Post::toJson()` lit ligne 119.
+  - **La correction est mesurée** : `leftJoin('u.UserProfile pr')` et un `select` explicite
+    font passer le catalogue de **8 271 requêtes / 7,17 s à 1 requête / 1,08 s** — 6,6× plus
+    rapide, **sans rompre aucun contrat**.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : la jointure et la projection de `buildOnlinePostsQuery` ; vérifier
+    les autres appelants de cette requête, qui en bénéficient ou en pâtissent ; un test qui
+    compte les requêtes, faute de quoi le N+1 reviendra sans bruit. — dehors : borner ou
+    paginer quoi que ce soit ; `PostTable::search()`, qui a son propre N+1 et sa propre story.
+  - **Le piège de méthode à ne pas répéter** : une première mesure concluait « ce n'est pas
+    8 100 requêtes » et se trompait — l'identity map de Doctrine restait chaude d'un essai à
+    l'autre. **Sans `$conn->clear()` entre les mesures, le N+1 est invisible.**
+  - **Code concerné** : `src/lib/model/doctrine/PostTable.class.php`
+    (`buildOnlinePostsQuery`), `src/lib/model/doctrine/Post.class.php` (`toJson`)
+  - **Ajoutée** : 2026-08-19
+
 ## Ordre d'exécution
 
 L'ordre du fichier n'est plus l'ordre des travaux : les stories 10 à 12 sont arrivées après
@@ -2180,3 +2214,20 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **La story 33 est délibérément incomplète.** Les désastres existants sont des gestes, nés
   d'une intention. Rédiger un packet pour un désastre choisi par l'assistant reviendrait à
   inventer cette intention, et ce serait le seul packet de ce plan qui ne vienne de personne.
+
+- 2026-08-19 (dix-huitième révision) — **La story 3 est gelée, une story 34 la remplace.**
+  Une revue d'ingénierie puis un diagnostic ont établi que sa prémisse était fausse. Elle
+  attribuait 17,5 s au volume sérialisé ; la mesure dit que 88 % du coût vient d'un N+1 sur
+  le contributeur — `buildOnlinePostsQuery` joint `sfGuardUser` mais jamais `UserProfile`,
+  que `toJson()` lit. Le catalogue entier passe de **8 271 requêtes / 7,17 s à 1 requête /
+  1,08 s** avec un `leftJoin` et un `select` explicite, **sans rompre aucun contrat**.
+  La story 3 s'apprêtait donc à rompre un contrat public — sans canal de dépréciation, le
+  contrat le reconnaît lui-même — pour traiter un symptôme. Elle reste au dépôt, avec son
+  diagnostic et les huit décisions de la revue, prête à repartir **si un consommateur
+  réclame la pagination**. Pas sur un argument de latence.
+  **Ce que la revue extérieure a apporté, et qu'il faut noter** : c'est elle qui a contesté
+  la prémisse, pas la revue principale, laquelle avait validé le plan sur son postulat. Et
+  une première contre-mesure de l'assistant concluait « ce n'est pas 8 100 requêtes » — elle
+  se trompait, l'identity map de Doctrine restant chaude entre les essais. **Sans
+  `$conn->clear()`, le N+1 est invisible.** Trois vérifications successives ont été
+  nécessaires pour arriver au bon chiffre.
