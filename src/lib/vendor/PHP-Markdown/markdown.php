@@ -1,5 +1,21 @@
 <?php
 #
+# MODIFICATION LOCALE, 2026-08-18 — deux syntaxes supprimees en PHP 8.
+#
+# 1. Le constructeur `Markdown_Parser()`, nomme comme sa classe a la mode PHP 4,
+#    devient `__construct()`. C'est LUI qui emettait le E_DEPRECATED au premier
+#    rendu Markdown de chaque processus — avertissement qui atterrissait dans le
+#    corps des reponses et les rendait inanalysables. Le plan de release avait
+#    diagnostique la ligne 910 ; la mesure a designe celle-ci.
+#
+# 2. Les cinq acces de chaine en accolades (`$chaine{0}`) deviennent des crochets
+#    (`$chaine[0]`). Ceux-la n'emettaient rien ici, mais la syntaxe est supprimee
+#    en PHP 8 tout autant. Les deux formes sont equivalentes.
+#
+# Rendu verifie identique avant/apres, par empreinte md5 sur un echantillon
+# couvrant titres, emphases, entites, listes, code et citation.
+#
+#
 # Markdown  -  A text-to-HTML conversion tool for web writers
 #
 # PHP Markdown
@@ -215,7 +231,7 @@ class Markdown_Parser {
 	var $predef_titles = array();
 
 
-	function Markdown_Parser() {
+	function __construct() {
 	#
 	# Constructor function. Initialize appropriate member variables.
 	#
@@ -907,7 +923,7 @@ class Markdown_Parser {
 		if ($matches[2] == '-' && preg_match('{^-(?: |$)}', $matches[1]))
 			return $matches[0];
 		
-		$level = $matches[2]{0} == '=' ? 1 : 2;
+		$level = $matches[2][0] == '=' ? 1 : 2;
 		$block = "<h$level>".$this->runSpanGamut($matches[1])."</h$level>";
 		return "\n" . $this->hashBlock($block) . "\n\n";
 	}
@@ -1203,7 +1219,7 @@ class Markdown_Parser {
 				} else {
 					# Other closing marker: close one em or strong and
 					# change current token state to match the other
-					$token_stack[0] = str_repeat($token{0}, 3-$token_len);
+					$token_stack[0] = str_repeat($token[0], 3-$token_len);
 					$tag = $token_len == 2 ? "strong" : "em";
 					$span = $text_stack[0];
 					$span = $this->runSpanGamut($span);
@@ -1228,7 +1244,7 @@ class Markdown_Parser {
 				} else {
 					# Reached opening three-char emphasis marker. Push on token 
 					# stack; will be handled by the special condition above.
-					$em = $token{0};
+					$em = $token[0];
 					$strong = "$em$em";
 					array_unshift($token_stack, $token);
 					array_unshift($text_stack, '');
@@ -1557,9 +1573,9 @@ class Markdown_Parser {
 	# Handle $token provided by parseSpan by determining its nature and 
 	# returning the corresponding value that should replace it.
 	#
-		switch ($token{0}) {
+		switch ($token[0]) {
 			case "\\":
-				return $this->hashPart("&#". ord($token{1}). ";");
+				return $this->hashPart("&#". ord($token[1]). ";");
 			case "`":
 				# Search for end marker in remaining text.
 				if (preg_match('/^(.*?[^`])'.preg_quote($token).'(?!`)(.*)$/sm', 
