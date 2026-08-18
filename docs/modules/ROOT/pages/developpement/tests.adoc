@@ -42,6 +42,24 @@ docker-compose exec php php symfony test:functional
 docker-compose exec php php symfony test:unit
 ----
 
+=== L'environnement de test met en cache
+
+`settings.yml` déclare `cache: true` pour l'environnement `test`. Ce n'est pas un détail de
+configuration : c'est ce qui permet à la suite d'observer **ce que voit le deuxième
+visiteur**, là où se sont produits les bugs de cette zone. Un désastre dont les options
+n'étaient injectées qu'à la production de la page, ou un `Content-Type` réécrit après
+l'écriture de l'entrée, ne se voient pas autrement.
+
+Deux conséquences pour qui écrit un test :
+
+* `test/bootstrap/functional.php` vide le répertoire de cache à chaque fichier. L'isolation
+  entre fichiers est donc acquise, sans rien faire.
+* **À l'intérieur d'un même fichier, deux demandes de la même adresse renvoient la même
+  réponse.** La seconde vient du cache. C'est voulu, mais c'est un piège si on attend une
+  réponse fraîche : varier l'adresse, ou vider le cache entre les deux.
+
+`src/test/functional/frontend/desastreCacheTest.php` montre le motif.
+
 === Écrire un test
 
 Créer un fichier de test dans `src/test/functional/` :
