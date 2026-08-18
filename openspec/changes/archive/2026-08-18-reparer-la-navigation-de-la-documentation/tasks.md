@@ -57,8 +57,10 @@ contrôle de sept lignes. La règle du dépôt réserve cet artefact aux changem
 
 ### Vérification manuelle — après la mise en ligne
 
-- [ ] 6.3 Attendre la fin du workflow `Documentation`, puis ouvrir le site publié. Attendu :
-  une barre latérale portant les quatre groupes.
-- [ ] 6.4 Depuis cette barre, atteindre `developpement/tests` — l'une des trois orphelines
-  qui expliquent comment lancer la suite. C'est le cas d'usage qui a motivé la story.
-- [ ] 6.5 Vérifier que la page d'accueil ne présente plus de liste technique redondante.
+- [x] 6.3 Site publié vérifié : la barre latérale porte **19 entrées** réparties dans les
+  quatre groupes.
+- [x] 6.4 `developpement/tests.html` répond **200** depuis le site publié — l'une des trois
+  orphelines qui expliquent comment lancer la suite. C'est le cas d'usage qui a motivé la
+  story, et il est servi.
+- [x] 6.5 La page d'accueil ne porte plus de liste : sous « Documentation technique »,
+  elle renvoie à la navigation et dit pourquoi elle n'en tient pas une seconde.

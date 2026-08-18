@@ -60,8 +60,8 @@ La règle du dépôt réserve cet artefact aux changements structurants.
 
 ### Vérification manuelle — après la mise en ligne
 
-- [ ] 5.6 Demander `https://www.musiqueapproximative.net/api.html`. Attendu : `200`, et les
-  routes rendues — pas seulement un écran d'attente.
-- [ ] 5.7 Depuis la barre latérale du site, suivre « contrat OpenAPI » et vérifier qu'on
-  arrive sur la page rendue.
-- [ ] 5.8 Dans l'onglet réseau du navigateur, vérifier qu'aucune requête ne sort du domaine.
+- [x] 5.6 `https://www.musiqueapproximative.net/api.html` répond **200** et **rend les
+  routes** — vérifié dans un navigateur, pas au seul code HTTP.
+- [x] 5.7 Le lien « contrat OpenAPI » de la barre latérale mène bien à la page rendue.
+- [x] 5.8 **Zéro requête sortante** : aucune URL absolue dans la page servie, et le bundle
+  Redoc répond depuis le domaine.

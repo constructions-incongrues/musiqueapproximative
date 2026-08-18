@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (onzième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (douzième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -957,7 +957,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     le titre, l'absence de titre empêche le slug, l'absence de slug fait servir une page
     morte.
 
-- [ ] 17. `assainir-les-avertissements-de-markdown` — les corps de réponse cessent de porter des avertissements PHP
+- [x] 17. `assainir-les-avertissements-de-markdown` — les corps de réponse cessent de porter des avertissements PHP
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Should
@@ -1173,7 +1173,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-retirer-le-verrouillage-du-zoom` — **livré le 2026-08-18**
 
-- [ ] 23. `verifier-le-contrat-contre-la-production` — un contrat vert cesse de pouvoir être faux
+- [x] 23. `verifier-le-contrat-contre-la-production` — un contrat vert cesse de pouvoir être faux
   - **Persona servi** : l'intégrateur, le mainteneur
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Should
@@ -1200,7 +1200,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `.github/workflows/`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 24. `auditer-les-fichiers-dist` — ce qui est en ligne cesse de diverger du dépôt
+- [x] 24. `auditer-les-fichiers-dist` — ce qui est en ligne cesse de diverger du dépôt
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Should
@@ -1772,3 +1772,24 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   passage de rsync à `git pull`. Toutes deux commencent par mesurer, et la 23 porte une
   question ouverte qu'il faudra trancher : alerte planifiée ou commande manuelle, c'est-à-dire
   quel mode de défaillance on préfère.
+
+- 2026-08-18 (douzième révision) — **Fin de la session : les stories 17, 23 et 24 sont
+  livrées, et neuf changes archivés.** Le plan compte désormais seize stories cochées.
+  Trois d'entre elles n'ont pas donné ce qu'on attendait, et c'est ce qu'il faut retenir.
+  La **17** portait un diagnostic faux — le plan désignait `$matches[2]{0}`, l'avertissement
+  venait d'un constructeur à la mode PHP 4. Les cinq accès en accolades ont été corrigés
+  d'abord, seuls : la suite échouait encore, 24 assertions sur 625, et c'est cet échec qui a
+  imposé de lire le corps réel d'une réponse au lieu de faire confiance au packet.
+  La **24** a rendu un **résultat négatif** : le parc de fichiers `-dist` périmés qu'elle
+  supposait n'existe pas, il n'en reste que deux et rien n'a dérivé. Son produit est le
+  déplacement qu'elle opère — le danger n'est pas leur état, c'est qu'aucun mécanisme ne
+  signalerait leur dérive.
+  La **23** a été corrigée par sa propre vérification. Le contrôle avait été logé dans
+  `nightly.yml` ; sa première exécution a montré que ce workflow **échoue en continu depuis
+  le 16 juin 2026**. Une alerte posée dans un rendez-vous toujours rouge est une alerte
+  déjà éteinte — le mode de défaillance que ce change prétendait éviter, reproduit dans le
+  geste qui le décrivait. Le contrôle a son propre workflow depuis.
+  **Reste ouvert** : les stories 2 et 3, en attente de la décision de l'auteur sur les
+  bornes ; la 22, close ; et trois dettes nommées dans les archives — la montée en PHP 8,
+  bloquée par `getid3` ; `make configure` inexécutable sur le serveur ; et `nightly.yml`
+  rouge depuis deux mois, qui rend invisible tout ce qu'on y loge.
