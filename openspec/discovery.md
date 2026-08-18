@@ -276,6 +276,11 @@ Parcours du **mainteneur** :
 
 ### Must
 
+- **Publier un contrat OpenAPI de l'état actuel** — *ajouté le 2026-08-18.* C'est le
+  nouveau squelette ambulant : il ne change rien à l'API, il la décrit, et chaque story
+  suivante devient un amendement dont le diff est le journal. Il force par ailleurs les
+  décisions que ce plan diffère — on n'écrit pas un `default` de pagination sans le
+  trancher. Étape 1 du parcours de l'intégrateur.
 - **Servir le type de contenu que la spec exige** — `JsonApiFilter` sert
   `application/vnd.api+json` là où le scénario « Formats reconnus » impose
   `application/json`. C'est le seul écart du périmètre qui soit une violation d'une spec
@@ -300,6 +305,10 @@ Parcours du **mainteneur** :
 
 ### Should
 
+- **Réparer la navigation du site de documentation** — *ajouté le 2026-08-18.* Sept pages
+  publiées et inatteignables, faute d'un `nav.adoc` que `antora.yml` déclare pourtant. Ce
+  n'est pas de l'axe « formats machine », mais c'est la condition pour que quoi que ce soit
+  de publié soit lu — y compris le contrat d'API.
 - **Un format d'erreur analysable** — un 404 en HTML sur `format=json` oblige tout client
   à traiter le cas hors de son chemin normal. Étape 4, le second gap du parcours.
 - **Spécifier les routes JSON non couvertes** — sans quoi le mainteneur n'a rien contre
@@ -307,8 +316,10 @@ Parcours du **mainteneur** :
 
 ### Could
 
-- **Publier la documentation d'API dans le site Antora** — règle l'étape 1 du parcours,
-  mais c'est un travail de documentation, pas de format.
+- **Publier la page Subsonic dans le site Antora** — *remplace « publier la documentation
+  d'API », le 2026-08-18.* `API_SUBSONIC.md` est bon et illisible, hors du site. Le reste
+  de l'ancienne entrée est parti ailleurs : le contrat d'API est passé en « Must », et la
+  navigation en « Should ».
 - **Corriger le `context:` de `openspec/config.yaml`** — il affirme qu'aucun test
   automatisé ne couvre le contrat public ; cinq routes le sont depuis. Une ligne.
 
@@ -520,23 +531,22 @@ Chaque story est une tranche verticale : elle se démontre seule.
     où un client réellement utilisé s'en plaindra.
   - **Ajoutée** : 2026-08-18 · **Supersédée** : 2026-08-18
 
-- [ ] 8. `publier-la-documentation-d-api` — l'intégrateur trouve l'API sans lire le code
-  - **Persona servi** : l'intégrateur
-  - **Segment du parcours** : Découvrir (étape 1)
-  - **MoSCoW** : Could
-  - **Pourquoi celle-ci, pourquoi maintenant** : elle ferme le dernier gap du parcours, et
-    elle vient après les autres parce qu'elle documente ce qu'elles auront changé —
-    documenter avant, c'est réécrire deux fois. `docs/antora.yml` déclare
-    `nav: modules/ROOT/nav.adoc`, absent du dépôt ; les trois documents d'API sont du
-    Markdown à la racine de `docs/`, hors du site Antora.
-  - **Dépend de** : stories 1 à 6
-  - **Périmètre** — dedans : créer le `nav.adoc` manquant ; verser la documentation d'API
-    dans `docs/modules/ROOT/pages/` ; y refléter l'état atteint. — dehors :
-    `docs/API_JSON_API_TARGET.md`, qui décrit une option écartée et reste une archive.
-  - **Code concerné** : `docs/antora.yml`, `docs/modules/ROOT/`, `docs/API_CURRENT_STATE.md`,
-    `docs/API_SUBSONIC.md`
-  - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+- [~] 8. ~~`publier-la-documentation-d-api`~~ — **supersédée le 2026-08-18**, éclatée en trois
+  - **Raison** : le packet reposait sur un constat faux et sur une hypothèse plus faible que
+    prévu. Faux : il tenait l'étape « Découvrir » pour un `gap`, alors que le site Antora
+    est **en ligne, bâti à chaque poussée touchant `docs/`**, et publié à
+    `constructions-incongrues.github.io/musiqueapproximative`. Faible : « publier la
+    documentation » recouvrait trois travaux qui n'ont pas les mêmes dépendances ni le même
+    bénéficiaire.
+  - **Ce que l'exploration a trouvé** : le site n'a **aucune entrée de navigation** —
+    `docs/antora.yml` déclare `nav: modules/ROOT/nav.adoc`, absent du dépôt — et son
+    `index.adoc` est une table des matières tenue à la main qui a dérivé : **8 pages liées
+    sur 15**. Sept pages sont publiées mais inatteignables, dont
+    `developpement/environnement` et `developpement/tests`, écrites le jour même.
+  - **Remplacée par** : story 10 pour le contrat d'API, story 11 pour la navigation,
+    story 12 pour la page Subsonic. `docs/API_CURRENT_STATE.md` devient caduc : le document
+    OpenAPI dit la même chose, en vérifié.
+  - **Ajoutée** : 2026-08-18 · **Supersédée** : 2026-08-18
 
 - [ ] 9. `corriger-le-contexte-openspec` — le contexte projet cesse d'affirmer un faux
   - **Persona servi** : le mainteneur
@@ -557,6 +567,101 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `openspec/config.yaml`
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
+
+- [ ] 10. `publier-le-contrat-openapi` — l'API a un contrat lisible par machine, servi et vérifié
+  - **Persona servi** : l'intégrateur
+  - **Segment du parcours** : Découvrir (étape 1)
+  - **MoSCoW** : Must
+  - **Pourquoi celle-ci, pourquoi maintenant** : **c'est le nouveau squelette ambulant du
+    plan.** Elle décrit l'état **actuel** de l'API, sans rien changer, et devient la base
+    que chaque story suivante amende. Le diff du contrat entre deux stories est le journal
+    des modifications de l'API — ce qui retourne l'argument qui reléguait la documentation
+    en dernier : réécrire n'est plus du gaspillage, c'est le livrable.
+    Elle force par ailleurs les décisions que le plan diffère. On n'écrit pas
+    `parameters: [{name: limit, schema: {default: ???}}]` sans trancher la question
+    ouverte n°1.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : `src/web/openapi.yaml-dist` décrivant les routes JSON
+    existantes ; `servers:` alimenté par `${APP_DOMAIN}` via `make configure`, comme
+    `app.yml-dist`, de sorte que les trois profils obtiennent le leur ; un test fonctionnel
+    qui, pour chaque `path` déclaré, demande la route et vérifie le statut et le
+    `Content-Type` annoncés. — dehors : la validation du **corps** contre les schémas, qui
+    demanderait un validateur JSON Schema en dépendance ; toute modification de l'API, qui
+    est le travail des autres stories.
+  - **Ce qui la rend honnête** : `config.yaml` porte l'avertissement écrit avec du sang —
+    la banque de mémoire de `docs/memory-bank/` a été supprimée « après avoir dérivé au
+    point de documenter cinq routes inexistantes ». Un contrat non vérifié ment mieux
+    qu'une prose non vérifiée, parce qu'il a l'autorité d'un format. Le test qui vérifie
+    que chaque route déclarée existe est **la partie non négociable** de cette story.
+  - **Frontière avec `openspec/specs/`** : les specs disent CE QUI doit arriver et
+    pourquoi ; le contrat dit la FORME de l'échange. **La spec est normative, le contrat
+    est descriptif et vérifié.** S'ils divergent, c'est le contrat qui a tort.
+  - **Code concerné** : `src/web/` (fichiers statiques déjà servis — `manifest.json` et
+    `robots.txt` répondent en production), `src/Makefile` (cible `configure`),
+    `etc/*/.env` (`APP_DOMAIN`), `src/test/functional/frontend/`
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
+- [ ] 11. `reparer-la-navigation-du-site` — les pages publiées deviennent atteignables
+  - **Persona servi** : le mainteneur, le contributeur, l'intégrateur — tout le monde
+  - **Segment du parcours** : Découvrir (étape 1)
+  - **MoSCoW** : Should
+  - **Pourquoi celle-ci, pourquoi maintenant** : sept pages sont publiées et inatteignables.
+    `docs/antora.yml` déclare un `nav.adoc` qui n'existe pas, donc le site n'a aucune barre
+    latérale, et `index.adoc` est un sommaire manuel qui a dérivé à 8 pages sur 15. Deux des
+    orphelines expliquent comment faire tourner les tests. Rien dans cette story ne dépend
+    de ce que les autres changeront.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : créer `docs/modules/ROOT/nav.adoc` et y inscrire les quinze
+    pages ; décider si `index.adoc` garde son sommaire manuel ou renvoie à la navigation.
+    — dehors : le contenu des pages, la documentation d'API.
+  - **Question ouverte à trancher dans la proposal** : un sommaire manuel dérive
+    silencieusement — c'est ce qui vient de se produire. Un contrôle en CI qui échoue
+    lorsqu'une page n'est pas dans `nav.adoc` vaut-il son coût, ou accepte-t-on la dérive ?
+  - **Code concerné** : `docs/antora.yml`, `docs/modules/ROOT/nav.adoc`,
+    `docs/modules/ROOT/pages/index.adoc`
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
+- [ ] 12. `publier-la-page-subsonic` — l'auditeur en client Subsonic trouve comment se connecter
+  - **Persona servi** : hors des cinq personas de ce plan — celui qui écoute depuis une
+    application Subsonic, retiré du plan le 2026-08-18
+  - **Segment du parcours** : Découvrir
+  - **MoSCoW** : Could
+  - **Pourquoi celle-ci, pourquoi maintenant** : `docs/API_SUBSONIC.md` est du Markdown à la
+    racine de `docs/`, hors du site Antora. Il est bon — configuration d'un client,
+    structure de la bibliothèque, méthodes supportées, limites connues — et personne ne peut
+    le lire. C'est le seul morceau de l'ancienne story 8 qui reste un déménagement.
+  - **Dépend de** : story 11, sans quoi la page serait publiée et orpheline à son tour
+  - **Périmètre** — dedans : verser `API_SUBSONIC.md` sous `docs/modules/ROOT/pages/`, en
+    AsciiDoc, inscrit dans la navigation. — dehors : le protocole lui-même, et
+    `docs/API_JSON_API_TARGET.md`, qui décrit une option écartée et reste une archive.
+  - **Code concerné** : `docs/API_SUBSONIC.md`, `docs/modules/ROOT/pages/`
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
+## Ordre d'exécution
+
+L'ordre du fichier n'est plus l'ordre des travaux : les stories 10 à 12 sont arrivées après
+coup et gardent leur numéro pour que rien ne se perde. La séquence réelle est celle-ci.
+
+```
+  10  publier-le-contrat-openapi          ◄── squelette ambulant, ne dépend de rien
+   │
+   ├─ 1  retablir-le-type-de-contenu-json     premier amendement au contrat
+   ├─ 2  borner-les-listes-de-morceaux        bloquée par la question ouverte n°1
+   ├─ 3  borner-le-xspf                       ← 2
+   ├─ 4  aligner-la-route-md5                 ← 1
+   ├─ 5  servir-les-erreurs-en-json           ← 4
+   └─ 6  specifier-les-routes-json            ← 1 à 5
+
+  11  reparer-la-navigation-du-site       ◄── ne dépend de rien, à tout moment
+   └─ 12  publier-la-page-subsonic            ← 11
+
+   9  corriger-le-contexte-openspec       ← 6
+```
+
+Les stories 10 et 11 peuvent démarrer le même jour : elles ne se touchent pas.
 
 ## Ce que ce plan promulgue
 
@@ -603,10 +708,23 @@ faire.
 
 ### Ce que ça change dans ce plan
 
-La story 8, *publier la documentation d'API*, est classée « Could » et séquencée en
-dernier, après les stories 1 à 6. C'est l'ordre inverse de ce que cette analyse suggère :
-**c'est la seule story qui crée un canal**. Sans elle, la colonne « norme » reste vide, et
-aucune des stories 1, 2 ou 3 ne peut être annoncée à qui que ce soit.
+*Révisé le 2026-08-18, après exploration.* Cette analyse concluait que la story 8 —
+publier la documentation d'API — était la seule à créer un canal, et qu'elle arrivait trop
+tard. Les deux moitiés de cette conclusion ont bougé.
+
+**Trop généreux sur le canal.** Une documentation en prose crée un *panneau d'affichage* :
+un endroit où une annonce de dépréciation pourrait être posée, que personne n'est tenu de
+venir lire. Ce n'est pas un canal.
+
+**Un contrat OpenAPI, en revanche, remplit la colonne.** Un document versionné, daté,
+diffable et vérifiable en CI est un objet que la colonne « norme » peut contenir — un
+`info.version` et un `deprecated: true` existent, là où un paragraphe n'a pas de prise.
+C'est la story 10, désormais en tête du plan.
+
+**Ce qui reste vrai malgré tout** : rien n'est poussé vers l'intégrateur. Il doit venir
+lire. La conclusion inconfortable tient donc — ne pas borner par défaut tant qu'on ignore
+qui consomme — avec une différence : casser le contrat **se verra dans un diff**. La
+rupture passe de invisible à coûteuse à ignorer. C'est un progrès, pas un recours.
 
 Trois façons de rendre la règle contestable, par coût croissant :
 
@@ -627,6 +745,89 @@ La conclusion inconfortable est la seconde, et elle porte sur la question ouvert
 **ne pas borner par défaut tant qu'on ignore qui consomme.** Un défaut est une loi assortie
 d'une procédure de dérogation qu'on sait inutilisable — presque personne ne change un
 défaut, et ici presque personne ne peut même apprendre qu'il a changé.
+
+## Ce que le contrat coûtera
+
+<!-- incongru-voix: illich — seuil ≈ 9 h englouties pour 6 amendements rendus lisibles ; bascule le jour où les amendements cessent — le mainteneur unique -->
+
+La story 10 vient d'être promue « Must » et faite squelette ambulant du plan. Elle ajoute
+un artefact que chaque changement du JSON devra tenir à jour. Ce relevé chiffre ce que ça
+coûte, et nomme le jour où ça s'inverse.
+
+### Le calcul
+
+| poste englouti | estimation |
+| --- | --- |
+| Écrire le contrat pour 10 routes nommées et leurs formats — json, xspf, max, rss, oembed | ~4 h |
+| Le test qui vérifie que chaque `path` déclaré répond | ~2 h |
+| Le tenir à jour sur les six amendements que ce plan déclare (stories 1 à 6) | ~3 h |
+| **Total sur l'horizon du plan** | **~9 h** |
+
+Ce que ça rend, en trois postes de nature différente :
+
+- **Il force une décision différée.** On n'écrit pas `default:` sans le trancher. La
+  question ouverte n°1 bloque deux stories depuis la rédaction de ce plan ; le contrat la
+  rend indifférable. Ce poste-là est certain et immédiat.
+- **Il rend six ruptures lisibles.** Chaque amendement devient un diff. Valeur réelle
+  pendant le plan.
+- **Il sert des consommateurs.** Valeur proportionnelle à leur nombre — et la question
+  ouverte n°3 dit qu'**aucun n'est identifié**. Ce poste est inconnu, possiblement nul.
+
+Sur l'horizon du plan, le seuil est franchement sous 1 : neuf heures pour une décision
+débloquée et six ruptures documentées, c'est payé. **Le problème n'est pas là.**
+
+### Où ça s'inverse
+
+Le taux d'amendement historique de ce contrat est mesurable : **un changement archivé sur
+vingt-deux** a touché une capacité que le contrat décrirait, et c'était celui qui a créé
+les specs. Une fois les stories 1 à 6 passées, la fréquence retombe à peu près à zéro.
+
+C'est là que le seuil se franchit, et ce n'est pas un ratio — c'est une date :
+
+```
+  pendant le plan          6 amendements en quelques semaines
+                           la discipline s'exerce, le contrat reste vrai
+                                        │
+  après le plan            ~0 amendement par an
+                           plus personne ne l'ouvre
+                                        │
+                                        ▼
+                           il devient la banque de mémoire
+```
+
+`config.yaml` a déjà écrit la fin de cette histoire : la banque de mémoire de
+`docs/memory-bank/` « a été supprimée après avoir dérivé au point de documenter cinq
+routes inexistantes ». Un contrat non exercé ne se maintient pas seul, et il ment avec
+l'autorité d'un format.
+
+**Conséquence directe** : le test de vérification n'est pas un raffinement de la story 10,
+c'est la condition de son existence. Sans lui, le contrat est rentable pendant six semaines
+puis nuisible pour toujours. Le packet de la story 10 le dit déjà — ce relevé chiffre
+pourquoi.
+
+### Verdict de convivialité
+
+| question | réponse | ce qui la fonde |
+| --- | --- | --- |
+| L'usager comprend-il comment ça marche ? | **oui** | ~200 lignes de YAML dans un format que toute l'industrie lit. Ni codegen, ni annotations, ni étape de compilation. |
+| Peut-il le réparer ? | **oui** | Éditer le fichier, relancer le test. Le `servers:` passe par `make configure`, mécanisme déjà en place pour `app.yml`. |
+| Peut-il s'en passer ? | **oui** | `openspec/specs/` décrit déjà le contrat public et il est validé par l'outil. |
+
+Trois oui. L'outil sert son usager, il ne l'emploie pas. C'est un résultat, pas une
+formalité : beaucoup de dispositifs de contrat échouent au deuxième — swagger-php par
+annotations, une génération depuis le code, un pipeline de validation — et celui-ci les a
+tous écartés.
+
+### Le point d'inconfort
+
+Ce relevé conclut « faites-le, mais gardez le test ». C'est confortable : ça valide la
+décision qui vient d'être prise. La lecture inconfortable est ailleurs, et la question
+ouverte n°3 la porte déjà — **on écrit un contrat pour des consommateurs dont on n'a
+jamais établi l'existence.** Neuf heures et un artefact permanent, sur une intuition.
+
+Le poste qui tient debout sans eux est le premier : forcer la décision différée. Si c'est
+la vraie raison, elle mérite d'être dite comme telle plutôt que d'être présentée comme un
+service rendu à des tiers qu'on n'a pas trouvés.
 
 ## Questions ouvertes
 
@@ -703,6 +904,20 @@ défaut, et ici presque personne ne peut même apprendre qu'il a changé.
   là où il fonde le rejet de la conformité JSON:API — c'est un fait sur la surface, pas sur
   le persona. Le plan retient cinq personas et huit stories actives.
 
+- 2026-08-18 (cinquième révision) — Exploration de la story 8, qui l'a démolie et
+  remplacée. Deux constats l'ont défaite : le site de documentation est **en ligne** et
+  reconstruit à chaque poussée, donc l'étape « Découvrir » n'était pas un `gap` ; et
+  « publier la documentation » recouvrait trois travaux aux dépendances différentes. Le
+  site n'a par ailleurs **aucune navigation** — `antora.yml` déclare un `nav.adoc` absent —
+  et son sommaire manuel a dérivé à 8 pages liées sur 15, laissant sept orphelines dont
+  deux écrites le jour même.
+  L'auteur a tranché trois questions : le contrat vit dans `src/web/openapi.yaml`, servi
+  par le site ; `openspec/specs/` reste normatif à côté ; et la chose passe en tête du
+  plan. D'où les stories **10** (contrat OpenAPI, nouveau squelette ambulant), **11**
+  (navigation) et **12** (page Subsonic), la story 8 étant supersédée sans être effacée.
+  Un bloc « Ordre d'exécution » est ajouté, l'ordre du fichier ne valant plus séquence.
+  L'analyse Lessig est révisée : elle surestimait le pouvoir d'une page en prose, et un
+  contrat versionné remplit réellement la colonne « norme » qu'elle laissait vide.
 - 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail. **Aucune
   story n'a avancé** : les cinq changements archivés ce jour-là — couverture de la
   configuration des désastres, dédoublonnage des règles et recettes, cache en environnement
@@ -723,3 +938,14 @@ défaut, et ici presque personne ne peut même apprendre qu'il a changé.
   créer un canal d'annonce, et elle est aujourd'hui classée « Could » en dernière position.
   L'analyse est consignée sous « Ce que ce plan promulgue » ; elle n'a pas modifié le
   MoSCoW ni les stories, la décision revenant à l'auteur.
+
+- 2026-08-18 (relevé illich) — La story 10, promue « Must » et faite squelette ambulant, est
+  passée au calcul de seuil. Résultat : ~9 h englouties sur l'horizon du plan, payées par
+  une décision débloquée et six ruptures rendues lisibles. Trois oui au verdict de
+  convivialité. Le seuil ne se franchit pas sur un ratio mais sur une date : le taux
+  d'amendement historique est d'**un changement archivé sur vingt-deux**, si bien qu'après
+  les stories 1 à 6 le contrat cesse d'être exercé et devient ce que `docs/memory-bank/`
+  est devenu. Conséquence consignée : le test de vérification est la condition d'existence
+  de la story 10, pas un raffinement. Le relevé note aussi que le poste de valeur le plus
+  solide est de forcer la question ouverte n°1, et non de servir des consommateurs dont
+  aucun n'est identifié. Aucune story n'a été modifiée.
