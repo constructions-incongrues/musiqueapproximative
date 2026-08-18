@@ -229,7 +229,8 @@ foreach ($doc['paths'] as $chemin => $operations)
   }
 }
 
-// Deux assertions par demande (statut, type), plus une par schema JSON verifiable.
+// Deux assertions par demande (statut, type), plus une d'analysabilite par
+// reponse JSON, plus une par schema JSON verifiable.
 $attendues = 0;
 
 foreach ($demandes as $demande)
@@ -238,9 +239,14 @@ foreach ($demandes as $demande)
   // redirection n'en declare pas, et son type ne veut rien dire.
   $attendues += '' === $demande['type'] ? 1 : 2;
 
-  if (false !== strpos($demande['type'], 'json') && !empty($demande['schema']['required']))
+  if (false !== strpos($demande['type'], 'json'))
   {
     $attendues++;
+
+    if (!empty($demande['schema']['required']))
+    {
+      $attendues++;
+    }
   }
 }
 
@@ -323,12 +329,28 @@ foreach ($demandes as $demande)
     ));
   }
 
-  if (false === strpos($demande['type'], 'json') || empty($demande['schema']['required']))
+  if (false === strpos($demande['type'], 'json'))
   {
     continue;
   }
 
+  // Une reponse annoncee JSON doit d'abord se laisser lire. Le contrat ne le
+  // disait nulle part, et c'est precisement ce qui a manque : `/posts?format=json`
+  // a servi en production un document invalide — un antislash non echappe, ne
+  // d'un `html_entity_decode()` applique apres `json_encode()` — pendant que
+  // cette suite le declarait conforme, parce qu'elle ne regardait que les cles.
   $decode = json_decode($corps, true);
+
+  $t->ok(null !== $decode, sprintf(
+    'GET %s : le corps est du JSON analysable (%s)',
+    $url, json_last_error_msg()
+  ));
+
+  if (empty($demande['schema']['required']))
+  {
+    continue;
+  }
+
   $manquants = array();
 
   foreach ($demande['schema']['required'] as $champ)
