@@ -230,11 +230,10 @@ class postActions extends sfActions
     // showSuccess.json.php et listSuccess.json.php. Sans elle, cette route
     // servait l'objet nu et imposait un second analyseur au consommateur.
     //
-    // Volontairement SANS html_entity_decode, que ces deux gabarits appliquent :
-    // il desechappe le HTML que Markdown a echappe, et produit un body.html ou
-    // « & » figure nu. Le propager ici repandrait ce comportement au lieu de
-    // l'aligner. La difference porte sur le contenu, non sur la forme, et un
-    // seul analyseur suffit dans les deux cas.
+    // Aucun html_entity_decode : cette route n'en a jamais applique, les deux
+    // gabarits JSON si — et le faire sur un document deja encode rendait
+    // /posts?format=json inanalysable. Ils s'alignent desormais sur elle ; voir
+    // showSuccess.json.php pour le detail du defaut.
     echo sprintf('{ "posts": [%s] }', $post->toJson($request, $this->getContext()));
     sfConfig::set('sf_web_debug', false);
     return sfView::NONE;
