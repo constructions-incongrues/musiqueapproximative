@@ -15,7 +15,8 @@
  * Un partiel symfony 1 est hermétique : son porteur d'attributs ne contient que
  * les variables qu'on lui passe. Ni `$sf_request`, ni `$sf_data`, ni `$sf_context`
  * n'y sont disponibles — voir `get_partial()`, qui n'appelle que `setPartialVars()`.
- * D'où `$baseUrl`, calculé par l'appelant.
+ * D'où `$trackScheme`, calculé par l'appelant : le partiel ne peut pas savoir seul
+ * si la requête est sécurisée.
  *
  * Les variables d'un partiel arrivent en revanche échappées : `$posts` sous forme
  * de `sfOutputEscaperArrayDecorator`, `$title` en chaîne déjà passée par
@@ -25,7 +26,7 @@
  *
  * @var array  $posts   Morceaux, sous décorateur d'échappement
  * @var string $title   Titre de la playlist, échappé pour le HTML
- * @var string $baseUrl Préfixe absolu du site, sans barre oblique finale
+ * @var string $trackScheme Schéma de la requête, « http » ou « https »
  */
 
 $posts = sfOutputEscaper::unescape($posts);
@@ -62,7 +63,10 @@ try {
 
   foreach ($posts as $post) {
     $fields = array(
-      'location'   => sprintf('%s/tracks/%s', $baseUrl, rawurlencode($post->track_filename)),
+      // L'adresse est construite par le modèle, comme dans toutes les autres
+      // représentations : elle designe l'emplacement configure pour les fichiers,
+      // qui peut differer de l'hote du site, et encode le nom de fichier.
+      'location'   => $post->getTrackUrl($trackScheme),
       'creator'    => $post->track_author,
       'title'      => $post->track_title,
       'annotation' => $post->body,
