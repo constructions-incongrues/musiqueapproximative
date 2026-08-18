@@ -11,5 +11,5 @@ $title = sprintf(
 include_partial('post/xspfPlaylist', array(
   'posts' => array($post),
   'title' => $title,
-  'baseUrl' => $sf_request->getUriPrefix() . $sf_request->getRelativeUrlRoot(),
+  'trackScheme' => $sf_request->isSecure() ? 'https' : 'http',
 ));
