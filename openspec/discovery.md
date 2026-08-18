@@ -568,7 +568,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
-- [ ] 10. `publier-le-contrat-openapi` — l'API a un contrat lisible par machine, servi et vérifié
+- [x] 10. `publier-le-contrat-openapi` — l'API a un contrat lisible par machine, servi et vérifié
   - **Persona servi** : l'intégrateur
   - **Segment du parcours** : Découvrir (étape 1)
   - **MoSCoW** : Must
@@ -600,7 +600,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `robots.txt` répondent en production), `src/Makefile` (cible `configure`),
     `etc/*/.env` (`APP_DOMAIN`), `src/test/functional/frontend/`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-publier-le-contrat-openapi` — **livré le 2026-08-18**
 
 - [ ] 11. `reparer-la-navigation-du-site` — les pages publiées deviennent atteignables
   - **Persona servi** : le mainteneur, le contributeur, l'intégrateur — tout le monde
