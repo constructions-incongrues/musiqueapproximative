@@ -33,8 +33,7 @@ développement a été aligné dessus. L'opération y est `ALGORITHM=INPLACE,
 LOCK=NONE` et sub-seconde sur les ~8 200 lignes actuelles : pas de fenêtre de
 maintenance nécessaire.
 
-Détail complet et étapes suivantes : xref:API_SUBSONIC.adoc[] ou
-`docs/API_SUBSONIC.md`.
+Détail complet et étapes suivantes : xref:api-subsonic.adoc[].
 ====
 
 == Déploiement par rsync
