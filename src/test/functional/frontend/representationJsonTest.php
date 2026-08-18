@@ -42,23 +42,6 @@ foreach ($table->createQuery('p')
 
 $t->ok($morceau, 'les fixtures portent un morceau ayant un voisin de chaque cote');
 
-// Requete de chauffe, et il faut dire pourquoi elle existe.
-//
-// L'environnement de test declare `error_reporting: (E_ALL | E_STRICT) ^ E_NOTICE`,
-// qui laisse passer E_DEPRECATED. Or la bibliotheque PHP-Markdown vendorisee
-// emploie `$matches[2]{0}` (markdown.php:910), syntaxe depreciee en PHP 7.4. Le
-// premier rendu Markdown d'un processus emet donc des avertissements, et ceux-ci
-// atterrissent DANS le corps de la reponse — qui cesse d'etre du JSON analysable.
-//
-// Ce n'est pas propre a ce test : c'est ce qui rendait erratiques les sondes
-// ecrites pendant les changes precedents, selon l'ordre des requetes. La production
-// y est immunisee, huit echantillons successifs y renvoyant du JSON valide.
-//
-// Cette requete purge donc les avertissements sur une page HTML, ou ils sont sans
-// consequence, pour que la suivante soit propre. C'est un contournement, il est
-// nomme comme tel, et le defaut est consigne dans tasks.md.
-$browser->get('/post/'.$morceau->slug);
-
 $browser->get('/post/'.$morceau->slug.'?format=json');
 $brut = $browser->getResponse()->getContent();
 $corps = json_decode($brut, true);

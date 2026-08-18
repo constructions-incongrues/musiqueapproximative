@@ -100,15 +100,6 @@ foreach ($familles as $nom => $f) {
   $id++;
 }
 
-// Requete de chauffe, et il faut qu'elle rende du Markdown : c'est le PREMIER
-// rendu Markdown d'un processus qui emet les avertissements E_DEPRECATED, et
-// ceux-ci atterrissent dans le corps de la reponse, laquelle cesse d'etre du
-// JSON analysable. Une page de LISTE ne suffit pas — elle n'affiche que l'artiste
-// et le titre, jamais le corps. Il faut une page de morceau.
-// Defaut d'environnement, consigne en story 17 du plan de release.
-$premier = reset($familles);
-$browser->get('/post/'.$premier['slug']);
-
 foreach ($familles as $nom => $f) {
   $t->diag(sprintf('%s — %s', $nom, $f['note']));
 
