@@ -1,0 +1,420 @@
+# Contrat d'API de Musique Approximative.
+#
+# Ce document DÉCRIT ce que le site sert aujourd'hui. Il n'est pas normatif : la
+# spécification du comportement est tenue sous `openspec/specs/`. S'ils divergent,
+# c'est ce document qui a tort.
+#
+# NE PAS ÉDITER LA VERSION GÉNÉRÉE. Ce fichier est le gabarit ; `make configure`
+# en produit `openapi.yaml` en y substituant les variables du profil.
+#
+# Ce qui est vérifié et ce qui ne l'est pas — 60 faits déclarés sur 88, soit 68 %.
+# Le chiffre est donné ici parce que sans lui, le mot « vérifié » couvre aussi
+# les 28 qui ne le sont pas.
+#
+#   VÉRIFIÉ par `test/functional/frontend/openapiContractTest.php`, à chaque
+#   exécution de la suite : 9 routes déclarées, 17 codes de statut, 16 types de
+#   contenu, 18 champs de premier niveau des réponses JSON.
+#   NON VÉRIFIÉ : 19 champs de schéma au-delà du premier niveau, et 9 paramètres
+#   déclarés que rien n'exerce (`q`, `c`, `play`, `embed`, `random`,
+#   `contributor`, `count`…). Leur présence dans ce document atteste qu'ils ont
+#   été lus dans le code, pas qu'ils se comportent comme il est écrit.
+#
+# Le document que celui-ci remplace, `docs/API_CURRENT_STATE.md`, portait la
+# mention « Auto-generated analysis » et décrivait neuf routes qui n'existaient
+# pas. Le badge y tenait lieu de la vérification. C'est le précédent qui oblige
+# à donner ici une proportion plutôt qu'un mot.
+#
+# Extension `x-parametres` : dit COMMENT obtenir la réponse sous laquelle elle
+# figure — une table `nom du paramètre: valeur`, ou une liste de telles tables
+# lorsque plusieurs demandes différentes aboutissent à la même réponse. Sans elle,
+# la réponse s'obtient par la demande nue. Elle existe parce qu'ici le type de contenu se choisit par
+# un paramètre de requête (`format`) et non par négociation, ce qu'OpenAPI ne sait
+# pas exprimer. Le test s'en sert pour construire ses demandes ; c'est ce qui lui
+# évite de porter sa propre liste de routes, laquelle divergerait de celle-ci.
+# Les valeurs de `slug`, `md5sum`, `current` et `url` viennent des fixtures.
+
+openapi: 3.1.0
+
+info:
+  title: Musique Approximative
+  version: "1.11.0" # x-release-please-version
+  description: |
+    Représentations machine du catalogue de morceaux de Musique Approximative.
+
+    Ce contrat décrit l'état actuel du service, écarts compris. Deux d'entre eux
+    sont connus et documentés ici plutôt que masqués :
+
+    - le type de contenu des réponses JSON est `application/vnd.api+json`, alors
+      que la spécification `formats-de-sortie` exige `application/json` ;
+    - `/post/md5/{md5sum}` sert l'objet nu quand `/post/{slug}?format=json` sert
+      un objet enveloppé dans `posts`.
+
+    Le protocole Subsonic servi sous `/rest` n'est pas décrit ici : il a sa
+    propre documentation.
+  license:
+    name: AGPL-3.0-or-later
+    identifier: AGPL-3.0-or-later
+
+servers:
+  - url: https://${APP_DOMAIN}
+    description: ${APP_TITLE}
+
+tags:
+  - name: morceau
+    description: Un morceau, désigné par son identifiant d'URL ou par l'empreinte de sa piste.
+  - name: liste
+    description: Le catalogue et ses filtres.
+  - name: lecteur
+    description: Routes consommées par le lecteur du site. Leur forme minimale est délibérée.
+  - name: embarquement
+    description: oEmbed.
+
+paths:
+  /:
+    get:
+      tags: [liste]
+      summary: Redirige vers le dernier morceau publié
+      parameters:
+        - $ref: '#/components/parameters/Contributeur'
+      responses:
+        '302':
+          description: Redirection vers la page du dernier morceau publié.
+          headers:
+            Location:
+              description: Adresse de la page du morceau.
+              schema: { type: string, format: uri }
+
+  /post/{slug}:
+    get:
+      tags: [morceau]
+      summary: Un morceau, désigné par son identifiant d'URL
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Identifiant d'URL du morceau.
+          schema: { type: string }
+          example: sigur-ros-rock-roll
+        - $ref: '#/components/parameters/Format'
+        - $ref: '#/components/parameters/Lecture'
+        - name: embed
+          in: query
+          required: false
+          description: Sélectionne un gabarit d'embarquement.
+          schema: { type: string }
+      responses:
+        '200':
+          description: |
+            Le morceau, dans la représentation demandée. Sans `format`, ou avec un
+            `format` non reconnu, la page HTML est servie.
+          content:
+            text/html:
+              schema: { type: string }
+            application/vnd.api+json:
+              x-parametres: { format: json }
+              schema: { $ref: '#/components/schemas/EnveloppeMorceaux' }
+            application/xspf+xml:
+              x-parametres: { format: xspf }
+              schema: { type: string }
+            application/maxmsp+text:
+              x-parametres: { format: max }
+              schema: { type: string }
+        '404':
+          description: |
+            Aucun morceau publié ne porte cet identifiant. Le corps est une page HTML,
+            **y compris lorsque `format=json` est demandé** : un client machine reçoit
+            une page habillée. Écart connu. Les deux demandes sont déclarées ci-dessous
+            pour que le test constate l'écart au lieu de le laisser à la prose.
+          x-parametres:
+            - { slug: aucun-morceau-ne-porte-ce-slug }
+            - { slug: aucun-morceau-ne-porte-ce-slug, format: json }
+          content:
+            text/html:
+              schema: { type: string }
+
+  /post/md5/{md5sum}:
+    get:
+      tags: [morceau]
+      summary: Un morceau, désigné par l'empreinte de sa piste
+      description: |
+        Sert l'objet **nu**, sans l'enveloppe `posts` que rend `/post/{slug}?format=json`.
+        Deux contrats pour le même objet ; c'est un écart connu.
+
+        Une empreinte inconnue ne produit pas de `404` mais une erreur du serveur.
+        Ce comportement n'est pas déclaré ici : le contrat ne décrit que les réponses
+        que le service rend délibérément.
+      parameters:
+        - name: md5sum
+          in: path
+          required: true
+          description: Empreinte MD5 du fichier audio.
+          schema: { type: string, pattern: '^[0-9a-f]{32}$' }
+      responses:
+        '200':
+          description: Le morceau, non enveloppé.
+          content:
+            application/vnd.api+json:
+              schema: { $ref: '#/components/schemas/MorceauNu' }
+
+  /posts:
+    get:
+      tags: [liste]
+      summary: Le catalogue des morceaux publiés
+      description: |
+        **Aucun bornage.** La liste complète est servie, quel que soit le format —
+        environ huit mille morceaux en production. Ni `limit` ni `offset` n'existent
+        à ce jour.
+      parameters:
+        - $ref: '#/components/parameters/Format'
+        - $ref: '#/components/parameters/Lecture'
+        - name: q
+          in: query
+          required: false
+          description: |
+            Recherche. Porte sur l'artiste et le titre uniquement — ni le corps du
+            message, ni le contributeur. L'emporte sur `c` lorsque les deux sont donnés.
+          schema: { type: string }
+        - $ref: '#/components/parameters/Contributeur'
+      responses:
+        '200':
+          description: La liste, dans la représentation demandée.
+          content:
+            text/html:
+              schema: { type: string }
+            application/vnd.api+json:
+              x-parametres: { format: json }
+              schema: { $ref: '#/components/schemas/EnveloppeMorceaux' }
+            application/xspf+xml:
+              x-parametres: { format: xspf }
+              schema: { type: string }
+            application/maxmsp+text:
+              x-parametres: { format: max }
+              schema: { type: string }
+
+  /posts/feed:
+    get:
+      tags: [liste]
+      summary: Flux de syndication des derniers morceaux
+      description: Seule route bornée du service — cinquante morceaux par défaut.
+      parameters:
+        - name: contributor
+          in: query
+          required: false
+          description: Restreint le flux aux morceaux d'un contributeur.
+          schema: { type: string }
+        - name: count
+          in: query
+          required: false
+          description: Nombre de morceaux servis.
+          schema: { type: integer, default: 50 }
+      responses:
+        '200':
+          description: Un flux RSS 2.01.
+          content:
+            application/rss+xml:
+              schema: { type: string }
+
+  /posts/next:
+    get:
+      tags: [lecteur]
+      summary: Le morceau suivant
+      description: |
+        Consommée par le lecteur du site. Sa forme `{url, title}` est le contrat
+        interne de ce lecteur, non une incohérence : elle ne sera pas alignée sur
+        la représentation complète d'un morceau.
+
+        `current` absent ou inconnu ne produit pas de `404` mais une erreur du
+        serveur, non déclarée ici.
+      parameters:
+        - $ref: '#/components/parameters/MorceauCourant'
+      responses:
+        '200':
+          description: Adresse et intitulé du morceau suivant.
+          content:
+            application/vnd.api+json:
+              schema: { $ref: '#/components/schemas/RepereLecteur' }
+
+  /posts/prev:
+    get:
+      tags: [lecteur]
+      summary: Le morceau précédent
+      description: Voir `/posts/next` — même forme, mêmes réserves.
+      parameters:
+        - $ref: '#/components/parameters/MorceauCourant'
+      responses:
+        '200':
+          description: Adresse et intitulé du morceau précédent.
+          content:
+            application/vnd.api+json:
+              schema: { $ref: '#/components/schemas/RepereLecteur' }
+
+  /posts/random:
+    get:
+      tags: [lecteur]
+      summary: Un morceau au hasard
+      parameters:
+        - $ref: '#/components/parameters/Contributeur'
+      responses:
+        '200':
+          description: Adresse et intitulé d'un morceau tiré au hasard.
+          content:
+            application/vnd.api+json:
+              schema: { $ref: '#/components/schemas/RepereLecteur' }
+
+  /oembed:
+    get:
+      tags: [embarquement]
+      summary: Description oEmbed d'une page de morceau
+      parameters:
+        - name: url
+          in: query
+          required: true
+          description: |
+            Adresse de la page du morceau. Seul son dernier segment est lu :
+            l'identifiant d'URL du morceau.
+          schema: { type: string, format: uri }
+        - name: format
+          in: query
+          required: false
+          description: Représentation demandée.
+          schema:
+            type: string
+            enum: [json, xml]
+            default: json
+      responses:
+        '200':
+          description: La description oEmbed.
+          content:
+            application/json+oembed:
+              schema: { $ref: '#/components/schemas/Oembed' }
+            text/xml+oembed:
+              x-parametres: { format: xml }
+              schema: { type: string }
+
+components:
+  parameters:
+    Format:
+      name: format
+      in: query
+      required: false
+      description: |
+        Représentation demandée. Une valeur non reconnue est ignorée et la page
+        HTML est servie — ce n'est pas une erreur.
+      schema:
+        type: string
+        enum: [json, xspf, max]
+    Contributeur:
+      name: c
+      in: query
+      required: false
+      description: Restreint aux morceaux d'un contributeur, désigné par son identifiant.
+      schema: { type: string }
+    Lecture:
+      name: play
+      in: query
+      required: false
+      description: Démarre la lecture automatiquement. N'agit que sur la page HTML.
+      schema: { type: integer, enum: [0, 1] }
+    MorceauCourant:
+      name: current
+      in: query
+      required: true
+      description: Identifiant numérique interne du morceau courant. Ce n'est pas son slug.
+      schema: { type: integer }
+
+  schemas:
+    EnveloppeMorceaux:
+      type: object
+      description: |
+        NON VÉRIFIÉ au-delà du premier niveau. Le test de contrat constate la
+        présence de `posts` ; le détail des morceaux qu'il contient n'est confronté
+        à rien. Le comportement qui fait foi est spécifié sous
+        `openspec/specs/formats-de-sortie/`.
+      required: [posts]
+      properties:
+        posts:
+          type: array
+          items: { $ref: '#/components/schemas/MorceauNu' }
+
+    MorceauNu:
+      type: object
+      description: |
+        NON VÉRIFIÉ au-delà du premier niveau. Le test de contrat constate la
+        présence des champs listés ci-dessous sur `/post/md5/{md5sum}` ; leur
+        contenu et leur structure interne ne sont confrontés à rien.
+
+        Les champs `publish_on`, `created_at`, `updated_at`, `track_duration` et
+        `track_size` sont servis alors que `formats-de-sortie` les dit absents.
+        Écart connu, consigné ici parce qu'il est réel.
+      required: [id, href, body, track, contributor, links]
+      properties:
+        id:
+          type: string
+          description: Identifiant d'URL du morceau.
+        href:
+          type: string
+          format: uri
+          description: Adresse absolue de la représentation JSON du morceau.
+        body:
+          type: object
+          properties:
+            markdown: { type: string }
+            html: { type: string }
+        track:
+          type: object
+          properties:
+            href: { type: string, format: uri }
+            title: { type: string }
+            author: { type: string }
+            md5: { type: string }
+        contributor:
+          type: object
+          properties:
+            name: { type: string }
+            slug: { type: string }
+            href_website: { type: string }
+        links:
+          type: object
+          properties:
+            contributor_playlist: { type: string, format: uri }
+            avatar: { type: string, format: uri }
+            post_previous: { type: string, format: uri }
+            post_next: { type: string, format: uri }
+        publish_on: { type: string }
+        created_at: { type: string }
+        updated_at: { type: string }
+        track_duration: { type: [integer, 'null'] }
+        track_size: { type: [integer, 'null'] }
+        buy_url: { type: [string, 'null'] }
+
+    RepereLecteur:
+      type: object
+      description: |
+        VÉRIFIÉ intégralement — l'objet n'a que deux champs de premier niveau, et
+        le test constate leur présence.
+      required: [url, title]
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Adresse de la page du morceau.
+        title:
+          type: string
+          description: Artiste et titre, séparés par un tiret.
+
+    Oembed:
+      type: object
+      description: |
+        NON VÉRIFIÉ au-delà du premier niveau. Le comportement qui fait foi est
+        spécifié sous `openspec/specs/embarquement-oembed/`.
+      required: [version, type, provider_name, provider_url, height, width, title, description, html]
+      properties:
+        version: { type: string }
+        type: { type: string }
+        provider_name: { type: string }
+        provider_url: { type: string, format: uri }
+        height: { type: integer }
+        width: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        html: { type: string }
