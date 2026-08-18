@@ -1,0 +1,108 @@
+= Fichiers de configuration
+:description: Ce qui est un gabarit, pourquoi, et comment il arrive en production
+
+Certains fichiers de `src/` sont versionnés sous forme de gabarit, suffixés `-dist`.
+`make configure` les rend en y substituant les variables du profil, et le résultat est
+gitignoré.
+
+Cette page dit lesquels, pourquoi, et où est le piège.
+
+== Les deux gabarits, et pourquoi ils le restent
+
+[cols="2,3",options="header"]
+|===
+|Fichier |Pourquoi il ne peut pas être versionné rendu
+
+|`apps/frontend/config/app.yml-dist`
+|Porte le jeton d'API Cloudflare et l'identifiant de zone.
+
+|`config/databases.yml-dist`
+|Porte l'hôte, le nom de base, l'utilisateur et le mot de passe.
+|===
+
+Les verser rendus reviendrait à publier des secrets dans un dépôt public. Ils resteront
+donc des gabarits.
+
+[NOTE]
+====
+Un troisième a quitté la convention le 18 août 2026 : le contrat OpenAPI. Il ne portait
+aucun secret — seulement le domaine — et cette seule variable a suffi à le rendre
+introuvable en production pendant une journée. Il est désormais versionné tel quel, avec
+une adresse de serveur relative. Voir `src/web/openapi.yaml`.
+====
+
+== Le piège : la convention a survécu à son déploiement
+
+La convention `-dist` + `make configure` datait du déploiement *par rsync*, qui rendait les
+fichiers **avant** de les envoyer. Le déploiement se fait maintenant par `git pull`, et les
+rendus sont gitignorés.
+
+[WARNING]
+====
+*Aucun fichier `-dist` ajouté depuis le passage à `git pull` n'arrive en production.*
+
+Il y arrive uniquement s'il a été rendu sur le serveur, ou envoyé à la main. Ajouter un
+nouveau gabarit sans y penser produit un fichier absent en ligne — sans erreur, sans trace,
+et sans que rien ne le signale.
+====
+
+== `make configure` ne s'exécute pas sur le serveur
+
+[CAUTION]
+====
+*Ne pas lancer `make configure` sur le serveur de production.*
+
+La cible lit `./.env` depuis `src/`. Ce fichier n'existe pas sur le serveur : en
+développement, c'est un montage Docker de `etc/<profil>/.env`. Sans lui, la liste blanche
+de variables est vide, `envsubst` ne substitue **rien**, et tous les gabarits sont réécrits
+en l'état — `databases.yml` se retrouve avec `${DATABASE_HOST}`, la connexion échoue, et
+*chaque page du site répond 500*.
+
+C'est arrivé le 18 août 2026.
+====
+
+Pour re-rendre la configuration de production, la rendre **localement** avec le profil
+voulu, puis envoyer le résultat :
+
+[source,console]
+----
+make configure PROFILE=www.musiqueapproximative.net
+----
+
+== État vérifié le 18 août 2026
+
+Les valeurs publiquement observables ont été confrontées à ce que le profil de production
+produirait — en comparant ce qui arrive au visiteur, non des fichiers entre eux.
+
+[cols="2,2,1",options="header"]
+|===
+|Valeur |Attendue |Servie
+
+|Titre de page
+|Musique Approximative
+|✅
+
+|URL des pistes
+|`//www.musiqueapproximative.net/tracks/`
+|✅
+
+|`og:url`
+|`https://www.musiqueapproximative.net/…`
+|✅
+
+|Lecture automatique
+|0
+|✅
+|===
+
+*Rien n'a dérivé.* Le parc de fichiers périmés qu'on redoutait n'existe pas.
+
+=== Ce que cette vérification ne couvre pas
+
+`databases.yml` n'expose **aucune valeur observable depuis l'extérieur**. La ligne
+`encoding: utf8mb4`, posée le 18 août 2026, ne se vérifie pas depuis un navigateur. Si elle
+n'était pas rendue en production, la connexion convertirait toujours les caractères — et
+personne ne le saurait avant le prochain titre détruit.
+
+C'est la limite de cette page : elle constate un état, elle ne le surveille pas. Rien
+aujourd'hui ne signalerait une dérive.
