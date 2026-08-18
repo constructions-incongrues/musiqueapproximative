@@ -41,9 +41,7 @@ info:
   description: |
     Représentations machine du catalogue de morceaux de Musique Approximative.
 
-    Ce contrat décrit l'état actuel du service, écarts compris. Un écart reste
-    connu et documenté ici plutôt que masqué : `/post/md5/{md5sum}` sert l'objet
-    nu quand `/post/{slug}?format=json` sert un objet enveloppé dans `posts`.
+    Ce contrat décrit l'état actuel du service, écarts compris.
 
     **Version.** `info.version` est celle du projet, incrémentée à chaque
     publication du site. Elle **ne signale pas** les changements de cette API :
@@ -127,28 +125,24 @@ paths:
               schema: { type: string }
         '404':
           description: |
-            Aucun morceau publié ne porte cet identifiant. Le corps est une page HTML,
-            **y compris lorsque `format=json` est demandé** : un client machine reçoit
-            une page habillée. Écart connu. Les deux demandes sont déclarées ci-dessous
-            pour que le test constate l'écart au lieu de le laisser à la prose.
-          x-parametres:
-            - { slug: aucun-morceau-ne-porte-ce-slug }
-            - { slug: aucun-morceau-ne-porte-ce-slug, format: json }
+            Aucun morceau publié ne porte cet identifiant. Servi dans le format demandé :
+            page HTML sans `format`, corps d'erreur analysable avec un format machine.
+          x-parametres: { slug: aucun-morceau-ne-porte-ce-slug }
           content:
             text/html:
               schema: { type: string }
+            application/json:
+              x-parametres: { format: json }
+              schema: { $ref: '#/components/schemas/Erreur' }
 
   /post/md5/{md5sum}:
     get:
       tags: [morceau]
       summary: Un morceau, désigné par l'empreinte de sa piste
       description: |
-        Sert l'objet **nu**, sans l'enveloppe `posts` que rend `/post/{slug}?format=json`.
-        Deux contrats pour le même objet ; c'est un écart connu.
+        Sert le morceau sous la même enveloppe `posts` que `/post/{slug}?format=json` :
+        un seul analyseur suffit à lire les deux.
 
-        Une empreinte inconnue ne produit pas de `404` mais une erreur du serveur.
-        Ce comportement n'est pas déclaré ici : le contrat ne décrit que les réponses
-        que le service rend délibérément.
       parameters:
         - name: md5sum
           in: path
@@ -157,10 +151,16 @@ paths:
           schema: { type: string, pattern: '^[0-9a-f]{32}$' }
       responses:
         '200':
-          description: Le morceau, non enveloppé.
+          description: Le morceau, enveloppé comme sur les autres routes.
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/MorceauNu' }
+              schema: { $ref: '#/components/schemas/EnveloppeMorceaux' }
+        '404':
+          description: Aucun morceau publiable ne porte cette empreinte.
+          x-parametres: { md5sum: '00000000000000000000000000000000' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erreur' }
 
   /posts:
     get:
@@ -227,10 +227,9 @@ paths:
       description: |
         Consommée par le lecteur du site. Sa forme `{url, title}` est le contrat
         interne de ce lecteur, non une incohérence : elle ne sera pas alignée sur
-        la représentation complète d'un morceau.
-
-        `current` absent ou inconnu ne produit pas de `404` mais une erreur du
-        serveur, non déclarée ici.
+        la représentation complète d'un morceau. C'est, depuis l'alignement de
+        `/post/md5/{md5sum}`, la **seule** divergence de forme du service, et elle
+        est délibérée.
       parameters:
         - $ref: '#/components/parameters/MorceauCourant'
       responses:
@@ -239,6 +238,22 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/RepereLecteur' }
+        '400':
+          description: |
+            Le paramètre `current` est absent. La demande est mal formée, ce qui se
+            distingue d'une ressource correctement demandée mais absente.
+          x-parametres: { current: '' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erreur' }
+        '404':
+          description: |
+            Le morceau courant n'existe pas, ou il n'a pas de voisin suivant dans la
+            sélection demandée.
+          x-parametres: { current: 999999 }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erreur' }
 
   /posts/prev:
     get:
@@ -253,6 +268,22 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/RepereLecteur' }
+        '400':
+          description: |
+            Le paramètre `current` est absent. La demande est mal formée, ce qui se
+            distingue d'une ressource correctement demandée mais absente.
+          x-parametres: { current: '' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erreur' }
+        '404':
+          description: |
+            Le morceau courant n'existe pas, ou il n'a pas de voisin précédent dans la
+            sélection demandée.
+          x-parametres: { current: 999999 }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erreur' }
 
   /posts/random:
     get:
@@ -392,6 +423,32 @@ components:
         track_duration: { type: [integer, 'null'] }
         track_size: { type: [integer, 'null'] }
         buy_url: { type: [string, 'null'] }
+
+    Erreur:
+      type: object
+      description: |
+        VÉRIFIÉ au premier niveau — le test constate la présence de `errors`.
+
+        La forme `{errors: [...]}` vient de la convention JSON:API, que ce projet a
+        écartée par ailleurs. Elle est reprise pour ses propres mérites : simple,
+        déjà écrite, déjà testée. Ce n'est pas une déclaration de conformité.
+      required: [errors]
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            required: [status, title]
+            properties:
+              status:
+                type: string
+                description: Le code de statut HTTP, en chaîne.
+              title:
+                type: string
+                description: Intitulé court de l'erreur.
+              detail:
+                type: string
+                description: Description longue, destinée à un humain.
 
     RepereLecteur:
       type: object

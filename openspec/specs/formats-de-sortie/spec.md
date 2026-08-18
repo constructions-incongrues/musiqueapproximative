@@ -89,6 +89,14 @@ protocole d'écoute tierce — SHALL conserver le type que cette spécification 
 La représentation JSON d'un morceau SHALL suivre la convention jsonapi.org fondée sur les
 URL, et SHALL exposer le morceau, sa piste, son contributeur et ses liens de navigation.
 
+Elle SHALL être servie enveloppée dans une collection, y compris pour un morceau isolé et
+quelle que soit la façon dont ce morceau est désigné. Un consommateur SHALL pouvoir lire
+toute réponse portant un morceau avec un seul analyseur.
+
+Les routes de navigation du lecteur du site font exception : elles servent une forme
+minimale, qui SHALL être documentée comme délibérée. C'est le contrat interne du lecteur,
+et l'aligner casserait la navigation du site.
+
 #### Scénario : Identité et adresse
 
 - **QUAND** un consommateur demande la représentation JSON d'un morceau
@@ -127,6 +135,20 @@ URL, et SHALL exposer le morceau, sa piste, son contributeur et ses liens de nav
 - **QUAND** un consommateur demande la représentation JSON d'un morceau
 - **ALORS** les champs internes de mise en ligne, de révision et l'objet utilisateur
   complet sont absents de la réponse
+
+#### Scénario : Enveloppe d'un morceau isolé
+
+- **QUAND** un consommateur demande la représentation JSON d'un seul morceau, par son
+  identifiant d'URL ou par l'empreinte de sa piste
+- **ALORS** le morceau est servi dans une collection, comme le serait une liste d'un seul
+  élément
+
+#### Scénario : Forme minimale des routes de navigation du lecteur
+
+- **QUAND** un consommateur demande le morceau suivant, précédent ou un morceau au hasard
+- **ALORS** la réponse porte l'adresse de la page du morceau et son intitulé, et rien de plus
+- **ET** cette forme n'est pas une incohérence mais le contrat interne du lecteur du site
+- **ET** elle est documentée comme délibérée là où les représentations sont décrites
 
 ### Requirement: Représentation XSPF d'une liste
 
@@ -202,3 +224,44 @@ comme une liste d'un seul élément.
 - **ALORS** les deux lignes portent les mêmes champs, dans le même ordre et avec le même
   échappement
 - **ET** seuls le rang et le nombre total de morceaux peuvent différer
+
+### Requirement: Représentation d'une erreur
+
+Lorsqu'une demande faite dans un format machine n'aboutit pas, le système SHALL servir
+l'échec **dans ce format**, et non dans la représentation HTML habituelle. Le corps SHALL
+décrire l'erreur de façon analysable, et le type de contenu SHALL être celui du format
+demandé.
+
+Aucune demande d'une ressource absente ou mal désignée SHALL produire une erreur
+d'exécution : une ressource qui n'existe pas est une réponse, pas une panne.
+
+Les surfaces régies par une spécification propre — l'embarquement oEmbed, le protocole
+d'écoute tierce — SHALL conserver le comportement d'erreur que cette spécification leur
+impose.
+
+#### Scénario : Erreur servie dans le format demandé
+
+- **QUAND** un consommateur demande dans un format machine une ressource qui n'existe pas
+- **ALORS** le type de contenu de la réponse est celui de ce format
+- **ET** le corps est analysable dans ce format
+- **ET** il porte le code de statut et un intitulé décrivant l'erreur
+
+#### Scénario : Absence de ressource n'est pas une panne
+
+- **QUAND** une ressource demandée n'existe pas, quelle que soit la façon dont elle est
+  désignée
+- **ALORS** la réponse porte un code de statut d'erreur du client
+- **ET** aucune trace d'exécution n'est exposée
+
+#### Scénario : Demande mal formée et ressource absente sont distinguées
+
+- **QUAND** une demande omet un paramètre que le système exige
+- **ALORS** la réponse la signale comme une demande mal formée
+- **ET** ce cas se distingue de celui d'une ressource correctement demandée mais absente
+
+#### Scénario : Surfaces à spécification propre préservées
+
+- **QUAND** une erreur survient sur l'embarquement oEmbed ou sur le protocole d'écoute
+  tierce
+- **ALORS** le comportement reste celui que leur propre spécification impose
+- **ET** il n'est pas aligné sur celui décrit ici
