@@ -97,6 +97,56 @@ produirait — en comparant ce qui arrive au visiteur, non des fichiers entre eu
 
 *Rien n'a dérivé.* Le parc de fichiers périmés qu'on redoutait n'existe pas.
 
+== Constater l'encodage de la connexion
+
+`https://www.musiqueapproximative.net/encodage` répond en JSON, sans authentification, en
+lecture seule.
+
+[source,console]
+----
+curl -s https://www.musiqueapproximative.net/encodage
+----
+
+[cols="2,3",options="header"]
+|===
+|Verdict |Ce que ça veut dire
+
+|`conforme`
+|La connexion est en `utf8mb4`. Rien de plus.
+
+|`non-conforme`
+|La connexion n'est pas en `utf8mb4`, et la réponse dit ce qu'elle est.
+*Tout caractère hors cp1252 saisi est détruit à l'écriture, silencieusement.*
+Re-rendre `databases.yml` — voir l'encadré ci-dessus, la commande ne se lance pas sur le
+serveur.
+
+|`indetermine`
+|La base est injoignable. Ce n'est pas un encodage fautif ; c'est une panne.
+|===
+
+Le rendez-vous nocturne `contrat-production.yml` interroge cette route les jours ouvrés à
+8 h et n'échoue que sur `non-conforme`.
+
+[WARNING]
+====
+*Le verdict porte sur la connexion, pas sur les titres.*
+
+Un `conforme` ne prouve pas qu'un titre cyrillique survivra. Les tables sont converties
+depuis le 18 août 2026, la connexion aussi, mais *la production n'a jamais eu l'occasion de
+le démontrer* : aucun morceau du catalogue ne porte de caractère hors cp1252, sur dix-huit
+ans.
+
+C'est pourquoi la réponse porte deux chiffres à côté du verdict, tous deux calculés :
+
+* `caracteres_hors_cp1252_stockes` — zéro à ce jour. *Tant que ce champ vaut zéro, le vert
+  signifie « configuration correcte, preuve jamais faite ».* Le jour où un titre cyrillique
+  survivra, il se remplira seul.
+* `titres_alteres_en_base` — soixante, et ils sont toujours là. Un `conforme` affiché à côté
+  de ce nombre ne se lit plus de la même façon.
+
+Voir xref:morceaux-alteres.adoc[Morceaux au titre altéré].
+====
+
 === Ce que cette vérification ne couvre pas
 
 `databases.yml` n'expose **aucune valeur observable depuis l'extérieur**. La ligne
@@ -104,5 +154,7 @@ produirait — en comparant ce qui arrive au visiteur, non des fichiers entre eu
 n'était pas rendue en production, la connexion convertirait toujours les caractères — et
 personne ne le saurait avant le prochain titre détruit.
 
-C'est la limite de cette page : elle constate un état, elle ne le surveille pas. Rien
-aujourd'hui ne signalerait une dérive.
+Cette limite est **levée pour l'encodage** depuis le 2026-08-19, par la route décrite
+ci-dessus. Elle demeure pour les autres valeurs — hôte, utilisateur, mot de passe — qui se
+signalent d'elles-mêmes : sans elles, le site ne répond pas. L'encodage était le seul à
+pouvoir être faux sans que rien ne tombe.

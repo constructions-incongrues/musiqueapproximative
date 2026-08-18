@@ -84,3 +84,51 @@ jobs:
           fi
 
           exit "$echec"
+
+      - name: Interroger l'encodage de la connexion
+        env:
+          ENCODAGE: https://www.musiqueapproximative.net/encodage
+        run: |
+          # Meme distinction que pour le contrat : une production INJOIGNABLE
+          # n'est pas un encodage FAUX. On lit le verdict plutot que le seul
+          # statut HTTP — la route repond 503 quand la base est injoignable, et
+          # ce cas doit etre reessaye, pas signale comme une non-conformite.
+          statut=""
+          for essai in 1 2 3; do
+            statut=$(curl -sS -o /tmp/encodage.json -w '%{http_code}' \
+              --max-time 30 "$ENCODAGE" || echo "000")
+            case "$statut" in
+              000|5??) echo "essai $essai : statut $statut, nouvel essai"; sleep 20 ;;
+              *) break ;;
+            esac
+          done
+
+          case "$statut" in
+            000|5??)
+              echo "::notice::Encodage indeterminable (statut $statut) apres trois essais."
+              echo "La base est injoignable ou le site est en panne : ce n'est pas la question posee."
+              exit 0
+              ;;
+          esac
+
+          verdict=$(sed -n 's/.*"verdict"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' /tmp/encodage.json | head -1)
+          constate=$(sed -n 's/.*"encodage_constate"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' /tmp/encodage.json | head -1)
+
+          case "$verdict" in
+            conforme)
+              echo "Encodage de connexion : conforme ($constate)."
+              # Ce que le vert ne dit pas, imprime a cote pour qu'il ne soit pas
+              # lu comme une preuve que les titres survivent.
+              sed -n 's/.*"caracteres_hors_cp1252_stockes"[[:space:]]*:[[:space:]]*\([0-9]*\).*/  caracteres hors cp1252 reellement stockes : \1/p' /tmp/encodage.json
+              sed -n 's/.*"titres_alteres_en_base"[[:space:]]*:[[:space:]]*\([0-9]*\).*/  titres alteres encore en base            : \1/p' /tmp/encodage.json
+              ;;
+            indetermine)
+              echo "::notice::Encodage indetermine — la verification a repondu sans pouvoir conclure."
+              ;;
+            *)
+              echo "::error::Encodage de connexion NON CONFORME : « $constate » au lieu de « utf8mb4 »."
+              echo "::error::Tout caractere hors cp1252 saisi est detruit a l'ecriture, silencieusement."
+              echo "::error::Voir docs/modules/ROOT/pages/fichiers-de-configuration.adoc"
+              exit 1
+              ;;
+          esac

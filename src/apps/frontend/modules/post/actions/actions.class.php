@@ -211,6 +211,102 @@ class postActions extends sfActions
     return $templateName;
   }
 
+  /**
+   * Verification d'exploitation : l'encodage de la connexion a la base.
+   *
+   * Ce que cette route repond, et ce qu'elle ne repond pas.
+   *
+   * La base a ete migree en utf8mb4 le 2026-08-18, et la connexion aussi. Mais
+   * `databases.yml` n'expose aucune valeur observable de l'exterieur : si la
+   * ligne `encoding` disparaissait — un `make configure` malheureux sur le
+   * serveur suffit, c'est arrive le meme jour — la connexion se remettrait a
+   * convertir les caracteres, et personne ne le saurait avant le prochain titre
+   * detruit.
+   *
+   * Le verdict porte donc sur la CONNEXION, et sur rien d'autre. Il ne dit pas
+   * qu'un titre cyrillique survivra : les tables ayant deja ete converties, le
+   * jeu de caracteres de la connexion est la derniere variable connue entre un
+   * titre saisi et un titre stocke, mais « derniere variable connue » n'est pas
+   * « preuve ».
+   *
+   * D'ou les deux chiffres qui accompagnent le verdict, et sans lesquels un
+   * « conforme » vaudrait pour ce qu'il ne vaut pas :
+   *
+   *   - le nombre de caracteres hors cp1252 REELLEMENT STOCKES, et la date du
+   *     dernier. Zero, sur dix-huit ans, au 2026-08-19. Tant que ce champ est
+   *     vide, le vert signifie « configuration correcte, preuve jamais faite ».
+   *   - le nombre de titres deja alteres encore en base. Soixante et un au
+   *     2026-08-19. Un « conforme » affiche a cote de ce nombre ne se lit plus
+   *     de la meme facon.
+   *
+   * Les deux sont CALCULES et non ecrits en dur : le jour ou un titre cyrillique
+   * survivra, ce champ se remplira tout seul, et le voyant cessera enfin de
+   * n'etre qu'un voyant.
+   *
+   * En lecture seule. C'est ce qui permet a cette route d'etre publique.
+   */
+  public function executeEncodage(sfWebRequest $request)
+  {
+    $this->getResponse()->setContentType('application/json');
+    // Une verification en cache rapporte l'etat de la veille. `cache.yml` la
+    // sort du cache de page ; ces en-tetes en sortent les intermediaires.
+    $this->getResponse()->setHttpHeader('Cache-Control', 'no-store, max-age=0');
+
+    $attendu = 'utf8mb4';
+    $reponse = array(
+      'verdict'          => 'indetermine',
+      'portee'           => 'connexion',
+      'ne_prouve_pas'    => 'qu un titre hors cp1252 survit a une ecriture ; les tables sont converties, mais la production ne l a jamais demontre',
+      'encodage_attendu' => $attendu,
+    );
+
+    try
+    {
+      $connexion = Doctrine_Manager::getInstance()->getCurrentConnection();
+
+      $variables = $connexion->fetchAssoc('SHOW VARIABLES LIKE ?', array('character_set_connection'));
+      $constate = isset($variables[0]['Value']) ? $variables[0]['Value'] : null;
+
+      $reponse['encodage_constate'] = $constate;
+      $reponse['verdict'] = ($constate === $attendu) ? 'conforme' : 'non-conforme';
+
+      // Un caractere hors cp1252 ne survit pas a un aller-retour latin1. La
+      // comparaison est binaire : une collation qui traite deux chaines comme
+      // equivalentes masquerait justement la difference qu'on cherche.
+      $horsJeu = 'CONVERT(CONVERT(%1$s USING latin1) USING utf8mb4) COLLATE utf8mb4_bin <> %1$s COLLATE utf8mb4_bin';
+      $altere = "%s LIKE '%%??%%'";
+
+      $mesure = $connexion->fetchAssoc(sprintf(
+        'SELECT
+           SUM(CASE WHEN (%s OR %s) THEN 1 ELSE 0 END) AS hors_cp1252,
+           MAX(CASE WHEN (%s OR %s) THEN publish_on END) AS dernier_hors_cp1252,
+           SUM(CASE WHEN (%s OR %s) THEN 1 ELSE 0 END) AS alteres
+         FROM post WHERE %s',
+        sprintf($horsJeu, 'track_title'), sprintf($horsJeu, 'track_author'),
+        sprintf($horsJeu, 'track_title'), sprintf($horsJeu, 'track_author'),
+        sprintf($altere, 'track_title'), sprintf($altere, 'track_author'),
+        str_replace('p.', '', PostTable::WHERE_ONLINE)
+      ));
+
+      $reponse['caracteres_hors_cp1252_stockes'] = (int) $mesure[0]['hors_cp1252'];
+      $reponse['dernier_stocke_hors_cp1252']     = $mesure[0]['dernier_hors_cp1252'];
+      $reponse['titres_alteres_en_base']         = (int) $mesure[0]['alteres'];
+    }
+    catch (Exception $exception)
+    {
+      // Une base injoignable n'est pas un encodage fautif. Les confondre
+      // produirait le bruit qui fait desactiver une alerte.
+      $reponse['verdict'] = 'indetermine';
+      $reponse['motif']   = 'base injoignable';
+      $this->getResponse()->setStatusCode(503);
+    }
+
+    echo json_encode($reponse, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    sfConfig::set('sf_web_debug', false);
+
+    return sfView::NONE;
+  }
+
   public function executeMd5(sfWebRequest $request)
   {
     $post = Doctrine_Core::getTable('Post')->getByMd5Sum($request->getParameter('md5sum'));

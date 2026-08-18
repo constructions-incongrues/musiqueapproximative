@@ -1,7 +1,13 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/09-Cache
 
+# Une verification d'exploitation mise en cache rapporte l'etat de la veille :
+# elle ne verifie donc rien. Le cache par defaut vaut 86 400 s, et il s'applique
+# a toutes les actions — celle-ci doit en sortir explicitement.
+encodage:
+  enabled: false
+
 default:
-  enabled:     true
+  enabled: true
   with_layout: true
-  lifetime:    86400
+  lifetime: 86400
