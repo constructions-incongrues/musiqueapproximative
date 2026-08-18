@@ -127,7 +127,59 @@ class sfDesastreManager
       }
     }
 
+    $config['regles'] = $this->dedupliquerRegles($config['regles']);
+
     return $config;
+  }
+
+  /**
+   * Ne conserve qu'une occurrence d'une regle declaree plusieurs fois.
+   *
+   * Deux regles sont la meme lorsque leur condition, leur probabilite, leur
+   * liste de recettes et leur declencheur sont identiques.
+   *
+   * `trigger` fait partie de la comparaison. L'exclure reviendrait a fusionner
+   * une regle forcable avec une regle qui ne l'est pas, et a conserver la
+   * premiere declaree — donc a supprimer un declencheur. L'exigence
+   * « Couverture des declencheurs » veut precisement qu'aucun desastre ne soit
+   * observable seulement par tirage : un dedoublonnage qui retire un
+   * declencheur rend la configuration moins conforme qu'avant.
+   *
+   * La premiere occurrence est conservee a son rang, la seconde disparait sans
+   * decaler ce qui la precede : l'ordre de declaration determine l'ordre
+   * d'evaluation.
+   *
+   * @param  array $regles
+   * @return array
+   */
+  protected function dedupliquerRegles(array $regles)
+  {
+    $vues = array();
+    $uniques = array();
+
+    foreach ($regles as $regle) {
+      if (!is_array($regle)) {
+        continue;
+      }
+
+      // Champs nommes un a un, dans un ordre fixe : serialiser la regle entiere
+      // ferait dependre l'unicite de l'ordre des cles dans le fichier YAML.
+      $signature = serialize(array(
+        isset($regle['query']) ? $regle['query'] : null,
+        isset($regle['probability']) ? (float) $regle['probability'] : 1.0,
+        isset($regle['recettes']) ? (array) $regle['recettes'] : array(),
+        isset($regle['trigger']) ? $regle['trigger'] : null,
+      ));
+
+      if (isset($vues[$signature])) {
+        continue;
+      }
+
+      $vues[$signature] = true;
+      $uniques[] = $regle;
+    }
+
+    return $uniques;
   }
 
   /**
@@ -164,6 +216,10 @@ class sfDesastreManager
     $this->ruleEngine->setContext($context);
 
     $selectedRecettes = array();
+    // Une recette peut etre designee par plusieurs regles satisfaites — c'est le
+    // cas nominal quand deux conditions se recouvrent. Elle ne doit enrichir la
+    // reponse qu'une fois, au rang de la premiere regle qui la designe.
+    $dejaRetenues = array();
 
     foreach ($this->config['regles'] as $regle) {
       if (!isset($regle['query'])) {
@@ -205,12 +261,19 @@ class sfDesastreManager
           // Appliquer toutes les recettes listees
           foreach ($regle['recettes'] as $recetteName) {
             if (isset($this->config['recettes'][$recetteName])) {
+              // Deja retenue par une regle precedente : on garde son rang
+              // d'origine plutot que de l'ajouter une seconde fois.
+              if (isset($dejaRetenues[$recetteName])) {
+                continue;
+              }
+
               $recette = $this->config['recettes'][$recetteName];
 
               // Verifier si la recette est activee
               if (!isset($recette['enabled']) || $recette['enabled'] === true) {
                 $recette['name'] = $recetteName;
                 $selectedRecettes[] = $recette;
+                $dejaRetenues[$recetteName] = true;
               }
             }
           }

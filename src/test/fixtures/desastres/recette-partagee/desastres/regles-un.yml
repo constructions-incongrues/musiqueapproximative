@@ -1,0 +1,13 @@
+regles:
+  - probability: 1
+    query: query.marqueur ~ /.*oui.*/i
+    recettes: [premiere]
+    trigger: alpha
+  - probability: 1
+    query: query.marqueur ~ /.*oui.*/i
+    recettes: [seconde]
+    trigger: beta
+  - probability: 1
+    query: query.autre ~ /.*oui.*/i
+    recettes: [premiere]
+    trigger: gamma

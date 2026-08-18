@@ -1,0 +1,7 @@
+recettes:
+  premiere:
+    desastre: premiere
+    enabled: true
+  seconde:
+    desastre: seconde
+    enabled: true
