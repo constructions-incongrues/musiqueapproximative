@@ -48,19 +48,26 @@ de nouveau la production. Au passage, `track_duration` et `track_size` manquaien
 réamorçage sur MariaDB a rechargé le dump du dépôt, **daté de 2021, antérieur à ces
 colonnes**. Toute installation neuve rencontre ce défaut — voir plus bas.
 
-## 3. Vérification en ligne, après déploiement
+## 3. Ce qui appartient à l'opérateur
 
-- [ ] 3.1 Poster depuis l'admin un morceau au titre cyrillique et un portant un emoji, comme
-  un contributeur le ferait. **C'est le seul test qui exerce le chemin réel** — tout le
-  reste n'en est qu'une approximation.
-- [ ] 3.2 Vérifier qu'ils sont servis intacts dans la page, le JSON, le XSPF et le `max`.
-- [ ] 3.3 Vérifier que la recherche les trouve.
-- [ ] 3.4 Les retirer, ou les garder — mais le décider, pas l'oublier.
+**Non cochées, et elles ne le seront pas ici.** Elles demandent le site déployé et un compte
+d'admin, que le dépôt n'a pas :
+
+- vider le cache après déploiement — sans quoi le changement reste sans effet ;
+- poster un morceau cyrillique et un morceau avec emoji depuis l'admin ;
+- vérifier qu'ils sont servis intacts dans les quatre représentations ;
+- vérifier que la recherche les trouve.
+
+Elles vivent dans `docs/modules/ROOT/pages/migration-utf8mb4.adoc`, section « Vérification
+finale, sur le site en ligne ».
+
+**Ce que ce change livre, et qui est fait** : l'encodage posé, vérifié localement par le
+chemin applicatif, et le dump d'amorçage remplacé.
 
 ### Ce que ce change ne fait pas
 
-- [ ] 3.5 Consigner : les **82 morceaux détruits le restent**. Le site cesse de détruire ;
-  il ne répare rien de ce qui l'a été. C'est la story 20.
+Les **82 morceaux détruits le restent**. Le site cesse de détruire ; il ne répare rien de ce
+qui l'a été. C'est la story 20.
 
 ### Le défaut d'amorçage, corrigé dans le même geste
 
