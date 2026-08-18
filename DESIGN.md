@@ -35,11 +35,11 @@ le mécanisme décrit plus bas.
 L'inversion noir/blanc est la seule figure de style du système, et elle opère à
 trois échelles :
 
-| échelle | ce qui s'inverse |
-| --- | --- |
-| Structure | Bandeau noir → dalle blanche de contenu → pied noir. La page morceau est une carte blanche posée sur du noir ; la page liste, elle, reste blanche sur noir, donc en négatif de la première. |
-| Interaction | Tout survol de lien inverse le fond et le texte (`#fff`/`#000`). C'est le seul retour visuel du système. |
-| Sélection | `::selection` s'inverse par zone : blanc sur noir dans l'en-tête et les listes, noir sur blanc dans le corps de texte. |
+| échelle     | ce qui s'inverse                                                                                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Structure   | Bandeau noir → dalle blanche de contenu → pied noir. La page morceau est une carte blanche posée sur du noir ; la page liste, elle, reste blanche sur noir, donc en négatif de la première. |
+| Interaction | Tout survol de lien inverse le fond et le texte (`#fff`/`#000`). C'est le seul retour visuel du système.                                                                                    |
+| Sélection   | `::selection` s'inverse par zone : blanc sur noir dans l'en-tête et les listes, noir sur blanc dans le corps de texte.                                                                      |
 
 ## Typographie
 
@@ -59,15 +59,15 @@ L'échelle du titre principal est déclarée en huit points d'arrêt manuels, sa
 `clamp()` :
 
 | viewport | déclaré | **rendu réel** |
-| --- | --- | --- |
-| ≥ 1200px | 4.9rem | 78,4px |
-| ≤ 1050px | 3.5rem | 56px |
-| ≤ 800px | 3.5rem | 56px |
-| ≤ 720px | 3rem | 48px |
-| ≤ 630px | 2.5rem | 40px |
-| ≤ 530px | 2rem | 32px |
-| ≤ 430px | 1.5rem | 24px |
-| ≤ 370px | 1.2rem | 19,2px |
+| -------- | ------- | -------------- |
+| ≥ 1200px | 4.9rem  | 78,4px         |
+| ≤ 1050px | 3.5rem  | 56px           |
+| ≤ 800px  | 3.5rem  | 56px           |
+| ≤ 720px  | 3rem    | 48px           |
+| ≤ 630px  | 2.5rem  | 40px           |
+| ≤ 530px  | 2rem    | 32px           |
+| ≤ 430px  | 1.5rem  | 24px           |
+| ≤ 370px  | 1.2rem  | 19,2px         |
 
 La colonne « rendu réel » diverge de l'intention : voir « Écarts relevés », point 1.
 C'est probablement ce qui explique qu'il ait fallu huit paliers pour un seul élément.
@@ -81,20 +81,20 @@ et aucune des deux n'est celle qui s'affiche.
 - **Approche** : monochrome. Il n'y a **pas de couleur d'accent**, et c'est un choix
   structurant, pas un oubli.
 
-| rôle | valeur |
-| --- | --- |
-| Fond de page | `#000` |
-| Texte sur fond de page | `#fff` |
-| Dalle de contenu | `#fff` |
-| Texte de la dalle | `#000` |
-| Sous-titre de morceau (`h2`) | `#555` |
-| Lien dans un texte | `#555050`, `#000` au survol |
-| Lien de liste, contributeur | `#bbb` |
-| Barre de progression du lecteur | gris moyen |
+| rôle                            | valeur                      |
+| ------------------------------- | --------------------------- |
+| Fond de page                    | `#000`                      |
+| Texte sur fond de page          | `#fff`                      |
+| Dalle de contenu                | `#fff`                      |
+| Texte de la dalle               | `#000`                      |
+| Sous-titre de morceau (`h2`)    | `#555`                      |
+| Lien dans un texte              | `#555050`, `#000` au survol |
+| Lien de liste, contributeur     | `#bbb`                      |
+| Barre de progression du lecteur | gris moyen                  |
 
 - **Sémantique** : aucune. Pas de vert de succès, pas de rouge d'erreur. Le site
   n'a pas de formulaire à valider hors la recherche.
-- **Mode sombre** : sans objet. Le mode sombre *est* le mode par défaut. Le blanc
+- **Mode sombre** : sans objet. Le mode sombre _est_ le mode par défaut. Le blanc
   n'apparaît qu'en dalle de contenu.
 
 ### Pourquoi le monochrome est le socle du reste
@@ -158,7 +158,7 @@ base. Deux exemples relevés :
   `translate`/`skew` et bascules de teinte vers le cyan et le violet.
 
 **Conséquence pour quiconque travaille sur ce design** : le système de base n'est
-pas un contrat d'apparence, c'est un *état de repos*. Un désastre peut légitimement
+pas un contrat d'apparence, c'est un _état de repos_. Un désastre peut légitimement
 le contredire. Une revue visuelle qui signalerait un désastre comme une incohérence
 se tromperait de cible.
 
@@ -208,22 +208,22 @@ thème par défaut ne s'en sert pas.
 
 Présents dans l'arbre, jamais chargés par `layout.php` :
 
-| fichier | lignes |
-| --- | --- |
-| `ie-rtl.css` | 2 965 |
-| `player.css` | 640 |
-| `demo.css` | 308 |
-| `backup_1.css` | 187 |
-| habillage `player/skin/ma` | — |
-| habillage `player/skin/blue.monday` | — |
+| fichier                             | lignes |
+| ----------------------------------- | ------ |
+| `ie-rtl.css`                        | 2 965  |
+| `player.css`                        | 640    |
+| `demo.css`                          | 308    |
+| `backup_1.css`                      | 187    |
+| habillage `player/skin/ma`          | —      |
+| habillage `player/skin/blue.monday` | —      |
 
 À quoi s'ajoute `ie.css`, chargé lui, mais sous condition `[if lt IE 9]` : 2 965
 lignes servies à un navigateur que plus personne n'utilise.
 
 ## Journal des décisions
 
-| Date | Décision | Motif |
-| --- | --- | --- |
-| 2026-08-18 | Document créé par déduction de l'existant, non par proposition | Le site a un design depuis quinze ans mais aucune source de vérité : le CSS vit dans `main.css`, dans 206 lignes en ligne de `showSuccess.php`, et dans un fichier de thème vide. On ne redessine pas ce qu'on n'a pas décrit. |
-| 2026-08-18 | La couche désastre est traitée comme une partie du système, pas comme une anomalie | Une revue visuelle qui la signalerait comme incohérence se tromperait : l'arbitraire est le propos déclaré du site. |
-| 2026-08-18 | Les écarts sont constatés, pas corrigés | Le premier d'entre eux change la taille de tous les textes du site. C'est une décision de produit, pas une tâche de ménage. |
+| Date       | Décision                                                                           | Motif                                                                                                                                                                                                                          |
+| ---------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-08-18 | Document créé par déduction de l'existant, non par proposition                     | Le site a un design depuis quinze ans mais aucune source de vérité : le CSS vit dans `main.css`, dans 206 lignes en ligne de `showSuccess.php`, et dans un fichier de thème vide. On ne redessine pas ce qu'on n'a pas décrit. |
+| 2026-08-18 | La couche désastre est traitée comme une partie du système, pas comme une anomalie | Une revue visuelle qui la signalerait comme incohérence se tromperait : l'arbitraire est le propos déclaré du site.                                                                                                            |
+| 2026-08-18 | Les écarts sont constatés, pas corrigés                                            | Le premier d'entre eux change la taille de tous les textes du site. C'est une décision de produit, pas une tâche de ménage.                                                                                                    |
