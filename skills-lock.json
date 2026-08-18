@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skills": {
+    "acceptance-test-authoring": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/acceptance-test-authoring/SKILL.md",
+      "computedHash": "19aacf63a2dd99360b2d566cb409b1c28bf34a6574e7d5a6f8d936a02613b2f8"
+    },
+    "architectural-decision-records": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/architectural-decision-records/SKILL.md",
+      "computedHash": "a1bbf5fa344369d07234164df3bf15582aaffd1f58b9321e5b5ecc1fea8e2252"
+    },
+    "c4-diagrams": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/c4-diagrams/SKILL.md",
+      "computedHash": "6c432ca7c9f5dec38ec9309b0f874025b668c53fad8f13125ef049db7a571b12"
+    },
+    "discovery": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/discovery/SKILL.md",
+      "computedHash": "8db9f1cd9535c3714c86d84e4ac44a5e4e9101a1f8e4c6c4b8b85e54afec202b"
+    },
+    "gherkin-authoring": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/gherkin-authoring/SKILL.md",
+      "computedHash": "c9e0f9b6eddc4dffb9da6e359353e4cf01a6bad73bcc4613f0528695ceff5d1d"
+    },
+    "glossary": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/glossary/SKILL.md",
+      "computedHash": "8b4ea6a5f8d03d009905d66841bf1ca52740a7574b06b42e0241293dd688771d"
+    },
+    "grill-me": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/grill-me/SKILL.md",
+      "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
+    },
+    "openspec-git-discipline": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/openspec-git-discipline/SKILL.md",
+      "computedHash": "9824d7a5897b41bd4610b96e28ba39dd3f3e8b38d773ceed4ed26f97e3a58997"
+    },
+    "spec-as-source": {
+      "source": "intent-driven-dev/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/spec-as-source/SKILL.md",
+      "computedHash": "a1d1d7765bf71d9f9c33434e04e9dbd750855b1fcc1c13c2d1de2bd8e0738264"
+    }
+  }
+}
