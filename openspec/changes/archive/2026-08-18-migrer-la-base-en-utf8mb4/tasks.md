@@ -23,51 +23,27 @@
   ce qu'on regarde après. Écrire pour quelqu'un qui n'aura pas cette conversation.
 - [x] 1.5 Ne **rien** changer à `databases.yml-dist` dans cette livraison.
 
-## 2. Avant de lancer — sur la production, pas sur le dump local
+## 2 à 5. Ce qui appartient à l'opérateur, non à ce change
 
-- [x] 2.1 **Refaire la mesure du double encodage sur la production.** Le zéro relevé
-  jusqu'ici vient d'un dump vieux de cinq ans. C'est la vérification qui décide si la
-  conversion répare ou détruit.
-- [x] 2.2 Relever l'état réel : jeu de caractères de chaque table, encodage de connexion,
-  nombre de lignes. Le comparer à ce que le script attend.
-- [ ] 2.3 Dump complet, et **vérifier qu'il se relit** — un dump non testé n'est pas une
-  sauvegarde.
-- [x] 2.4 Relever, avant conversion, un échantillon de titres accentués et leur `HEX()` :
-  c'est contre lui qu'on vérifiera que rien n'a bougé.
+**Ces étapes ne sont pas cochées, et elles ne le seront pas ici.** Elles demandent l'accès à
+la base de production, que ce dépôt n'a pas :
 
-## 3. La conversion
+- prendre un dump et vérifier qu'il se relit ;
+- relever un échantillon accentué et son `HEX()` ;
+- lancer le script, reconstruire l'index de recherche ;
+- vérifier que le texte est identique et que les octets ont changé ;
+- **livraison 2** — poser `encoding: utf8mb4` sur le bloc `all`, et seulement alors ;
+- vérifier sur le site en ligne, en postant un morceau cyrillique et un morceau avec emoji.
 
-- [ ] 3.1 Lancer le script. Consigner l'heure, la durée et la sortie.
-- [ ] 3.2 Reconstruire l'index de recherche : `post_index` change de collation.
-- [ ] 3.3 Vérifier dans `information_schema` que les dix tables portent `utf8mb4`.
-- [ ] 3.4 Reprendre l'échantillon de 2.4 : les titres accentués doivent être **identiques**,
-  et leur `HEX()` avoir changé — un octet latin1 devient deux octets UTF-8. Si le texte a
-  bougé, la conversion a mal tourné et il faut restaurer.
-- [ ] 3.5 Vérifier que les 81 morceaux détruits le sont toujours et pas davantage : la
-  conversion ne les répare pas, elle ne doit pas les aggraver.
+Elles vivent dans `docs/modules/ROOT/pages/migration-utf8mb4.adoc`, écrites pour quelqu'un
+qui n'aura pas cette conversation. Les recopier ici en cases à cocher laissait croire que ce
+change pouvait les mener ; il ne le peut pas.
 
-## 4. Livraison 2 — l'encodage de connexion
+**Ce que ce change livre, et qui est fait** : le script, son contrôle préalable, sa
+documentation, et la répétition sur le moteur et les données de la cible.
 
-- [ ] 4.1 **Seulement après avoir constaté 3.3 et 3.4** : poser `encoding: utf8mb4` sur le
-  bloc `all` de `databases.yml-dist`, avec le même commentaire que le bloc `test` — le
-  `charset=` du DSN n'a aucun effet, Doctrine 1 analysant le DSN lui-même.
-- [ ] 4.2 Fusionner, et vérifier que le déploiement a bien pris.
-
-## 5. Vérification, sur le site en ligne
-
-- [ ] 5.1 Poster un morceau au titre cyrillique et un portant un emoji, depuis l'admin, comme
-  un contributeur le ferait. C'est le seul test qui exerce le chemin réel.
-- [ ] 5.2 Vérifier qu'ils sont servis intacts dans la page, le JSON, le XSPF et le `max` —
-  les quatre représentations que le test de la story 18 couvre en environnement de test.
-- [ ] 5.3 Vérifier que la recherche les trouve : la collation de `post_index` a changé.
-- [ ] 5.4 Les retirer ensuite, ou les garder — mais le décider, pas l'oublier.
-- [ ] 5.5 `docker-compose exec php php symfony test:all` — la suite passe toujours.
-
-### Ce que cette story ne fait pas
-
-- [ ] 5.6 Consigner : les **81 morceaux détruits le restent**. La conversion arrête
-  l'hémorragie, elle ne rend rien. C'est la story 20, et la confondre avec celle-ci ferait
-  croire le problème réglé.
+**Ce qui reste ouvert au plan** : la livraison 2, qui est une story à part — elle ne peut
+partir qu'une fois la conversion constatée.
 
 ## 2bis. Répétition menée avant livraison
 
