@@ -148,16 +148,38 @@ function contrat_parametres_obligatoires(array $operation, array $doc)
 }
 
 // Valeurs tirees des fixtures pour les parametres obligatoires du contrat.
-$morceau = Doctrine_Core::getTable('Post')->createQuery('p')
+//
+// Le morceau retenu doit avoir un voisin de CHAQUE cote : le contrat declare un
+// 200 sur /posts/next comme sur /posts/prev, et un morceau sans suivant ou sans
+// precedent y servirait le 404, rendant la reponse declaree inatteignable.
+// La relation de voisinage n'est pas une simple chaine chronologique — on
+// interroge donc le modele plutot que de la deduire.
+$table = Doctrine_Core::getTable('Post');
+$morceau = null;
+
+foreach ($table->createQuery('p')
   ->where('p.is_online = 1 AND p.publish_on <= NOW()')
   ->andWhere("p.slug IS NOT NULL AND p.slug != '' AND p.track_md5 IS NOT NULL")
   ->orderBy('p.publish_on DESC')
-  ->fetchOne();
+  ->execute() as $candidat)
+{
+  $suivant = $table->getNextPost($candidat, array());
+  $precedent = $table->getPreviousPost($candidat, array());
+
+  if ($suivant && $suivant->slug && $precedent && $precedent->slug)
+  {
+    $morceau = $candidat;
+    break;
+  }
+}
 
 if (!$morceau)
 {
   $t = new lime_test(1);
-  $t->fail('Aucun morceau publie dans les fixtures : le contrat ne peut pas etre exerce.');
+  $t->fail(
+    "Aucun morceau publie des fixtures n'a un voisin de chaque cote : les reponses\n".
+    'que le contrat declare sur /posts/next et /posts/prev ne peuvent pas etre exercees.'
+  );
 
   return;
 }

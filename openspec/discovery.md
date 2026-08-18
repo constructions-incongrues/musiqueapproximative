@@ -530,7 +530,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 · **Resserrée** : 2026-08-18
   - **Change** : `2026-08-18-aligner-la-route-md5-sur-la-forme-commune` — **livré le 2026-08-18**
 
-- [ ] 5. `servir-les-erreurs-en-json` — une erreur sur une route JSON revient en JSON
+- [x] 5. `servir-les-erreurs-en-json` — une erreur sur une route JSON revient en JSON
   - **Persona servi** : l'intégrateur
   - **Segment du parcours** : Encaisser l'erreur (étape 4)
   - **MoSCoW** : Should
@@ -554,7 +554,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/apps/frontend/modules/post/actions/actions.class.php`,
     `src/apps/frontend/config/settings.yml`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-servir-les-erreurs-en-json` — **livré le 2026-08-18**
 
 - [ ] 6. `specifier-les-routes-json-non-couvertes` — chaque route JSON servie est décrite par un scénario
   - **Persona servi** : le mainteneur

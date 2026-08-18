@@ -58,13 +58,72 @@ class postActions extends sfActions
    *
    * @param sfRequest $request A request object
    */
+  /**
+   * Formats machine servis par ce module, et leur type de contenu.
+   *
+   * Sert a decider si une erreur doit revenir dans un format machine plutot que
+   * dans la page HTML habituelle.
+   */
+  protected function getMachineFormat(sfWebRequest $request)
+  {
+    $formats = array(
+      'json' => 'application/json',
+      'xspf' => 'application/xspf+xml',
+      'max'  => 'application/maxmsp+text',
+    );
+
+    $format = $request->getParameter('format');
+
+    return isset($formats[$format]) ? array($format, $formats[$format]) : null;
+  }
+
+  /**
+   * Sert une erreur dans le format machine demande.
+   *
+   * Renvoie false lorsque la demande n'est pas faite dans un format machine :
+   * l'appelant laisse alors le socle rendre sa page d'erreur habituelle.
+   *
+   * Le corps est construit par ApiErrorResponse, ecrite et testee de longue date
+   * et dont c'est le premier appelant.
+   */
+  protected function renderApiError(sfWebRequest $request, $status, $title, $detail = '', $forceJson = false)
+  {
+    $machine = $this->getMachineFormat($request);
+
+    if (null === $machine && !$forceJson) {
+      return false;
+    }
+
+    // Les routes qui ne servent que du JSON n'ont pas de parametre `format` :
+    // elles forcent le rendu.
+    $contentType = null === $machine ? 'application/json' : $machine[1];
+
+    $this->getResponse()->setStatusCode($status);
+    $this->getResponse()->setContentType($contentType);
+
+    $corps = ApiErrorResponse::format($status, $title, $detail);
+
+    sfConfig::set('sf_web_debug', false);
+    $this->renderText(json_encode($corps));
+
+    return true;
+  }
+
   public function executeShow(sfWebRequest $request)
   {
     // Retrieve appropriate post from database
     $post = Doctrine_Core::getTable('Post')->getOnlinePostBySlug($request->getParameter('slug'));
 
-    // Throw a 404 error if no post is found
-    $this->forward404Unless($post);
+    if (!$post) {
+      // Dans un format machine, l'erreur revient dans ce format ; sinon on laisse
+      // le socle rendre la page d'erreur habituelle, qui ne change pas.
+      if ($this->renderApiError($request, 404, 'Morceau introuvable',
+        sprintf('Aucun morceau publiable ne porte l\'identifiant « %s ».', $request->getParameter('slug')))) {
+        return sfView::NONE;
+      }
+
+      $this->forward404();
+    }
 
     $this->getDisaster($request, $this->getResponse(), [
       "artist" => $post->track_author, 
@@ -155,6 +214,15 @@ class postActions extends sfActions
   public function executeMd5(sfWebRequest $request)
   {
     $post = Doctrine_Core::getTable('Post')->getByMd5Sum($request->getParameter('md5sum'));
+
+    if (!$post) {
+      $this->renderApiError($request, 404, 'Morceau introuvable',
+        sprintf('Aucun morceau publiable ne porte l\'empreinte « %s ».', $request->getParameter('md5sum')),
+        true);
+
+      return sfView::NONE;
+    }
+
     $this->getResponse()->setContentType('application/json');
 
     // Meme enveloppe que les autres routes qui rendent un morceau en JSON :
@@ -307,13 +375,73 @@ class postActions extends sfActions
    */
   public function executeNext(sfWebRequest $request)
   {
-    $post = Doctrine_Core::getTable('Post')->getNextPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+    $courant = $request->getParameter('current');
+
+    if (null === $courant || '' === $courant) {
+      // Parametre declare obligatoire au contrat : son absence est une demande
+      // mal formee, non une ressource absente.
+      $this->renderApiError($request, 400, 'Morceau courant non precise',
+        'Le parametre « current » est obligatoire : il designe le morceau depuis lequel naviguer.', true);
+
+      return sfView::NONE;
+    }
+
+    $depuis = Doctrine_Core::getTable('Post')->find($courant);
+
+    if (!$depuis) {
+      // Sans cette verification, `false` etait passe a getNextPost(Post $post, ...)
+      // et l'action levait une TypeError, donc un 500.
+      $this->renderApiError($request, 404, 'Morceau courant introuvable',
+        sprintf('Aucun morceau ne porte l\'identifiant « %s ».', $courant), true);
+
+      return sfView::NONE;
+    }
+
+    $post = Doctrine_Core::getTable('Post')->getNextPost($depuis, $request->getParameterHolder()->getAll());
+
+    if (!$post || !$post->slug) {
+      $this->renderApiError($request, 404, 'Aucun morceau suivant',
+        'Ce morceau n\'a pas de suivant dans la selection demandee.', true);
+
+      return sfView::NONE;
+    }
+
     return $this->renderJsonPost($post);
   }
 
   public function executePrev(sfWebRequest $request)
   {
-    $post = Doctrine_Core::getTable('Post')->getPreviousPost(Doctrine_Core::getTable('Post')->find($request->getParameter('current')), $request->getParameterHolder()->getAll());
+    $courant = $request->getParameter('current');
+
+    if (null === $courant || '' === $courant) {
+      // Parametre declare obligatoire au contrat : son absence est une demande
+      // mal formee, non une ressource absente.
+      $this->renderApiError($request, 400, 'Morceau courant non precise',
+        'Le parametre « current » est obligatoire : il designe le morceau depuis lequel naviguer.', true);
+
+      return sfView::NONE;
+    }
+
+    $depuis = Doctrine_Core::getTable('Post')->find($courant);
+
+    if (!$depuis) {
+      // Sans cette verification, `false` etait passe a getPreviousPost(Post $post, ...)
+      // et l'action levait une TypeError, donc un 500.
+      $this->renderApiError($request, 404, 'Morceau courant introuvable',
+        sprintf('Aucun morceau ne porte l\'identifiant « %s ».', $courant), true);
+
+      return sfView::NONE;
+    }
+
+    $post = Doctrine_Core::getTable('Post')->getPreviousPost($depuis, $request->getParameterHolder()->getAll());
+
+    if (!$post || !$post->slug) {
+      $this->renderApiError($request, 404, 'Aucun morceau precedent',
+        'Ce morceau n\'a pas de precedent dans la selection demandee.', true);
+
+      return sfView::NONE;
+    }
+
     return $this->renderJsonPost($post);
   }
 
@@ -333,8 +461,16 @@ class postActions extends sfActions
     // Retrieve appropriate post from database
     $post = Doctrine_Core::getTable('Post')->getOnlinePostBySlug(basename($request->getParameter('url')));
 
-    // Throw a 404 error if no post is found
-    $this->forward404Unless($post);
+    if (!$post) {
+      // Dans un format machine, l'erreur revient dans ce format ; sinon on laisse
+      // le socle rendre la page d'erreur habituelle, qui ne change pas.
+      if ($this->renderApiError($request, 404, 'Morceau introuvable',
+        sprintf('Aucun morceau publiable ne porte l\'identifiant « %s ».', $request->getParameter('slug')))) {
+        return sfView::NONE;
+      }
+
+      $this->forward404();
+    }
 
     // Build data array
     $this->getContext()->getConfiguration()->loadHelpers('Markdown');
