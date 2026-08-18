@@ -19,6 +19,9 @@
   et **le mélomane fêlé**, le contributeur. Leur ajout a tranché la question ouverte n°2 et
   déplacé une priorité. Le second nom vient du site lui-même : « C'est l'exutoire anarchique
   d'une bande de mélomanes fêlé⋅e⋅s » (`layout.php`, section « À propos »).
+- 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail qui n'a
+  touché aucune story de ce plan, mais en a déplacé le terrain : cinq changements archivés
+  sur `desastres` et l'outillage de test. Voir « Ce que la session a changé pour ce plan ».
 - 2026-08-18 (seconde révision) — Correction de l'auteur sur le mélomane fêlé : il ne se
   sert pas de Radio Approximative ; ce qu'il veut est **poster facilement et retrouver
   facilement**. Et un sixième persona apporté : **le DJ de soirée**, qui se sert du site sur
@@ -60,6 +63,50 @@ La playlist d'un seul contributeur pèse déjà 1 Mo en JSON, et rien ne la born
    sont toujours présents.
 3. **Elle casserait un contrat spécifié** — cinq scénarios de `formats-de-sortie` — au
    bénéfice de consommateurs qu'on n'a pas identifiés.
+
+## Ce que la session du 2026-08-18 a changé pour ce plan
+
+Cinq changements ont été archivés ce jour-là. **Aucun ne correspond à une story de ce
+plan** : ils portaient sur la spec `desastres` et sur l'outillage de test. Ils modifient
+néanmoins le terrain sur lequel les stories seront construites.
+
+### Le schéma OpenSpec a changé
+
+`openspec/config.yaml` déclare désormais `schema: behaviour-driven` en lieu et place du
+schéma sur mesure `musique-approximative`. Conséquence directe pour ce plan : le nouveau
+schéma ajoute un artefact **`design`**, et `tasks` en dépend. Chaque story coûte donc un
+document de plus qu'au moment où ce plan a été écrit.
+
+La règle de dimensionnement — « proposal ≈ 200 mots » — reste juste, mais elle ne décrit
+plus le coût total d'une story. Pour les stories manifestement non structurantes, le
+`design.md` peut se réduire à une décision unique ; c'est ce qu'ont fait les changements de
+cette session.
+
+### L'environnement de test voit maintenant le cache
+
+`settings.yml` déclare `cache: true` pour l'environnement `test`. La suite fonctionnelle
+peut donc observer une réponse servie depuis le cache, et non plus seulement le premier
+visiteur.
+
+C'est directement utile à la **story 1**. `filters.yml` place `json_api` sous `cache`
+délibérément :
+
+> « Le Content-Type doit etre reecrit avant que `sfCacheFilter` n'ecrive l'entree, sinon la
+> reponse mise en cache porte le type d'origine. »
+
+Retirer `JsonApiFilter` supprime ce besoin, mais la story doit démontrer qu'elle ne
+ressuscite pas cette classe de bug. C'était impossible à vérifier quand ce plan a été
+écrit ; ça ne l'est plus.
+
+### La suite de tests est verte, et exécutable en local
+
+**16 fichiers, 461 tests, aucun échec.** Une cible `make test-init` prépare la base de
+test. Les trois scripts qui échouaient ne révélaient aucun défaut de code : une base
+absente et un cache d'autochargement périmé.
+
+Ce qui rend la **story 6** — spécifier et couvrir les routes JSON non couvertes —
+nettement moins chère qu'annoncé : il n'y a plus d'environnement à débloquer avant de
+pouvoir écrire un test.
 
 ## Personas
 
@@ -312,10 +359,23 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `application/json`. Elle retire du code au lieu d'en ajouter.
   - **Dépend de** : rien
   - **Périmètre** — dedans : retirer `JsonApiFilter` et son entrée `json_api` de
-    `filters.yml` ; retirer `JsonApiFilterTest` ; vérifier que `/rest` (Subsonic) et
-    `/oembed`, que le filtre exemptait explicitement, conservent leur type de contenu ;
-    vérifier que le type revient bien à `application/json` sur `/posts` et `/post/:slug`.
+    `filters.yml` ; retirer `JsonApiFilterTest` ; corriger l'assertion fonctionnelle qui
+    verrouille le type actuel ; vérifier que `/rest` (Subsonic) et `/oembed`, que le filtre
+    exemptait explicitement, conservent leur type de contenu ; vérifier que le type revient
+    bien à `application/json` sur `/posts` et `/post/:slug`.
     — dehors : la forme du corps JSON, inchangée ; `ApiResponse`, qui reste sans appelant.
+  - **Relevé du 2026-08-18** : **six assertions** verrouillent `application/vnd.api+json`,
+    réparties sur deux fichiers et non un seul —
+    `functional/frontend/postActionsTest.php:25` en porte une,
+    `unit/filter/JsonApiFilterTest.php` en porte cinq, dont deux `unlike` qui gardent les
+    exemptions d'`oembed` et du format HTML. Retirer le fichier de test unitaire ne suffit
+    donc pas : le comportement que ses deux `unlike` protègent — `oembed` sert
+    `application/json` — doit rester vrai après le retrait du filtre.
+  - **Piège à ne pas ressusciter** : `filters.yml` place `json_api` **sous** `cache`
+    délibérément, « sinon la reponse mise en cache porte le type d'origine ». C'est un bug
+    déjà corrigé une fois. Depuis `2026-08-18-activer-le-cache-en-test`, l'environnement de
+    test met en cache : la story peut et doit démontrer qu'une réponse servie depuis le
+    cache porte le bon type.
   - **Code concerné** : `src/lib/filter/JsonApiFilter.class.php`,
     `src/apps/frontend/config/filters.yml`, `src/test/unit/filter/JsonApiFilterTest.php`,
     `src/test/functional/frontend/postActionsTest.php`
@@ -438,6 +498,10 @@ Chaque story est une tranche verticale : elle se démontre seule.
     ci-dessus ; couverture fonctionnelle des routes JSON que
     `test/functional/frontend/postActionsTest.php` ignore encore. — dehors : les specs
     `embarquement-oembed` et Subsonic, déjà tenues ailleurs.
+  - **Devenue moins chère le 2026-08-18** : écrire un test fonctionnel ne demande plus de
+    débloquer l'environnement au préalable. `make test-init` prépare la base, la suite est
+    verte — 16 fichiers, 461 tests — et l'environnement de test met en cache. Le coût
+    annoncé de cette story supposait un environnement qu'il fallait d'abord réparer.
   - **Code concerné** : `openspec/specs/formats-de-sortie/spec.md`,
     `src/test/functional/frontend/postActionsTest.php`
   - **Ajoutée** : 2026-08-18
@@ -479,16 +543,90 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Could
   - **Pourquoi celle-ci, pourquoi maintenant** : le `context:` de `openspec/config.yaml`
-    affirme « aucun test automatisé ne le couvre aujourd'hui » à propos du contrat public,
-    alors que `test/functional/frontend/postActionsTest.php` couvre cinq routes. Ce
-    contexte est injecté dans les instructions de chaque artefact : l'erreur se propage à
-    tout ce qu'OpenSpec produit. À faire quand la story 6 aura fixé la couverture réelle.
+    affirme « aucun test automatisé ne le couvre aujourd'hui » à propos du contrat public.
+    Ce contexte est injecté dans les instructions de chaque artefact : l'erreur se propage
+    à tout ce qu'OpenSpec produit.
+  - **L'écart s'est creusé le 2026-08-18** : la phrase était déjà fausse — cinq routes
+    couvertes — elle l'est devenue davantage. La suite compte désormais **16 fichiers et
+    461 assertions**, dont quatre fichiers fonctionnels qui exercent le contrat public, le
+    protocole Subsonic et le comportement du cache. La ligne à corriger n'a pas bougé ;
+    ce qu'elle contredit, si.
   - **Dépend de** : story 6
   - **Périmètre** — dedans : la phrase fautive, mise à jour d'après la couverture réelle.
     — dehors : le reste du `context:`, vérifié exact.
   - **Code concerné** : `openspec/config.yaml`
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
+
+## Ce que ce plan promulgue
+
+<!-- incongru-voix: lessig — la valeur par défaut de la pagination et le type de contenu servi, régulés par l'architecture seule — recours: aucun -->
+
+*Analyse tenue depuis une position réformiste déclarée : elle ne conteste pas qu'on puisse
+changer le JSON, elle demande par quelle voie un tiers pourrait s'y opposer. Si cette
+réponse arrange, c'est peut-être qu'elle évite une question plus dure — celle de savoir si
+cette API devait exister sans contrat.*
+
+Les stories 1, 2 et 3 changent ce que reçoit un appelant du JSON qui n'a rien signé. Ce
+n'est pas un détail d'implémentation : c'est une règle promulguée. Le tableau ci-dessous
+la remplit.
+
+### Contrainte : ce que reçoit un appelant qui ne demande rien
+
+| modalité | ce qui régule ici |
+| --- | --- |
+| **loi** | rien. Aucune condition d'utilisation, aucune mention légale, aucun contrat d'API. L'AGPLv3 régit le code du site, pas le service qu'il rend. |
+| **norme** | rien. Aucun canal d'annonce vers les intégrateurs. `CHANGELOG.adoc` s'adresse aux contributeurs du dépôt, et la seule adresse publiée est éditoriale. |
+| **prix** | le coût de la rétro-ingénierie — mais seulement pour qui s'aperçoit qu'il y a quelque chose à contourner. Il n'existe aucune documentation d'API publiée : c'est la story 8, non faite. |
+| **architecture** | totale. `executeList` décide, l'appelant ne négocie rien. |
+
+**Recours : aucun.** Pas de version d'API, pas d'en-tête de dépréciation, pas de délai. Et
+sur ce dépôt le déploiement est automatique : `main` part en production à la poussée. La
+règle entre donc en vigueur sans notification **et sans le délai que d'autres projets
+obtiennent par accident**, entre la fusion et la mise en ligne.
+
+### La question qui suit toujours
+
+Formulée comme une règle plutôt que comme une story :
+
+> « À compter de la prochaine poussée, tout appelant de `/posts?format=json` qui ne
+> demande rien recevra vingt morceaux au lieu de huit mille, sans préavis, sans version,
+> et sans moyen de s'en plaindre. »
+
+L'aurait-on votée ainsi ? La réponse honnête est qu'on ne sait pas, parce que personne n'a
+été mis en position de la voter.
+
+Ce qui ne rend pas le statu quo innocent : servir 8,4 Mo et 16,5 secondes de génération à
+tout le monde est aussi une contrainte imposée sans consentement. **Il n'existe pas d'état
+non régulé** — la seule question est qui écrit la règle, et s'il avait mandat pour le
+faire.
+
+### Ce que ça change dans ce plan
+
+La story 8, *publier la documentation d'API*, est classée « Could » et séquencée en
+dernier, après les stories 1 à 6. C'est l'ordre inverse de ce que cette analyse suggère :
+**c'est la seule story qui crée un canal**. Sans elle, la colonne « norme » reste vide, et
+aucune des stories 1, 2 ou 3 ne peut être annoncée à qui que ce soit.
+
+Trois façons de rendre la règle contestable, par coût croissant :
+
+1. **Publier la documentation d'abord.** Déplacer la story 8 avant les stories 2 et 3. Ne
+   crée pas un recours, mais crée l'endroit où une annonce devient possible.
+2. **Borner sur demande explicite d'abord, par défaut ensuite.** Le paramètre existe, le
+   défaut ne bouge pas ; on observe qui l'utilise avant de trancher. Répond directement à
+   la question ouverte n°1 sans la trancher à l'aveugle.
+3. **Versionner la sortie.** Le coût réel, et sans doute disproportionné pour ce projet.
+
+### Le point d'inconfort
+
+La première option est la moins chère et laisse le mainteneur avancer. C'est-à-dire
+qu'elle est confortable pour celui qui détient déjà le pouvoir de décider, ce qui doit
+être dit plutôt que masqué par la finesse du tableau.
+
+La conclusion inconfortable est la seconde, et elle porte sur la question ouverte n°1 :
+**ne pas borner par défaut tant qu'on ignore qui consomme.** Un défaut est une loi assortie
+d'une procédure de dérogation qu'on sait inutilisable — presque personne ne change un
+défaut, et ici presque personne ne peut même apprendre qu'il a changé.
 
 ## Questions ouvertes
 
@@ -510,7 +648,11 @@ Chaque story est une tranche verticale : elle se démontre seule.
    les raccourcis `j` / `k` / `r`, le bouton aléatoire et l'enchaînement du lecteur. Ces
    routes ne seront pas alignées ; leur divergence sera documentée. Voir story 4.
 
-3. **Qui consomme le JSON ?** — toujours ouverte, et sans candidat solide. La révision
+3. **Qui consomme le JSON ?** — toujours ouverte, et sans candidat solide. La session du
+   2026-08-18 n'a rien apporté sur ce point, et c'est en soi un signal : quatre heures
+   passées dans ce dépôt, à lire les filtres, les gabarits, les tests et la configuration,
+   sans jamais croiser un appelant du JSON. Ce n'est pas une preuve d'absence, mais c'est
+   un indice de plus. La révision
    avait avancé Radio Approximative ; l'auteur a corrigé : ce n'est pas ce que fait le
    mélomane fêlé, et rien dans le dépôt n'établit que ce projet lise le JSON. L'hypothèse
    est retirée. Aucun consommateur du JSON n'est identifié à ce jour — ce qui est en soi un
@@ -560,3 +702,24 @@ Chaque story est une tranche verticale : elle se démontre seule.
   se contentent de vérifier qu'elles ne le cassent pas. L'argument Subsonic reste en place
   là où il fonde le rejet de la conformité JSON:API — c'est un fait sur la surface, pas sur
   le persona. Le plan retient cinq personas et huit stories actives.
+
+- 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail. **Aucune
+  story n'a avancé** : les cinq changements archivés ce jour-là — couverture de la
+  configuration des désastres, dédoublonnage des règles et recettes, cache en environnement
+  de test, couverture de l'invariance, préparation de la base de test locale — portent sur
+  la spec `desastres` et sur l'outillage, pas sur les formats machine. Le terrain a
+  néanmoins bougé sur trois points, consignés dans « Ce que la session a changé pour ce
+  plan » : le schéma OpenSpec est passé à `behaviour-driven`, qui ajoute un artefact
+  `design` à chaque story ; l'environnement de test met en cache, ce dont la story 1 a
+  directement besoin ; et la suite est verte et exécutable en local, ce qui abaisse le coût
+  de la story 6. Les packets des stories 1, 6 et 9 sont mis à jour en conséquence. Le
+  relevé le plus concret concerne la story 1 : six assertions, sur deux fichiers, verrouillent
+  le type de contenu qu'elle veut changer.
+
+- 2026-08-18 (analyse lessig) — Le plan est passé au tableau des quatre modalités, sur la
+  contrainte qu'il impose aux appelants du JSON. Résultat : régulation par l'architecture
+  seule, recours aucun, aggravé par le déploiement automatique qui supprime le délai entre
+  fusion et mise en ligne. Conséquence sur l'ordonnancement : la story 8 est la seule à
+  créer un canal d'annonce, et elle est aujourd'hui classée « Could » en dernière position.
+  L'analyse est consignée sous « Ce que ce plan promulgue » ; elle n'a pas modifié le
+  MoSCoW ni les stories, la décision revenant à l'auteur.
