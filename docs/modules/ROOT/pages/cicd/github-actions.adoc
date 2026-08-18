@@ -69,18 +69,6 @@ jobs:
 
 Voir xref:cicd/release-please.adoc[Release Please] pour plus de détails.
 
-=== Repomix Packing
-
-**Fichier** : `.github/workflows/repomix.yml`
-
-**Déclencheurs** :
-
-* Quotidien à 2h du matin
-* Push sur `main`
-* Déclenchement manuel
-
-**Fonction** : Génère un pack du repository pour l'analyse IA.
-
 === Documentation
 
 **Fichier** : `.github/workflows/documentation.yml`
@@ -127,7 +115,6 @@ Les workflows utilisent les permissions suivantes :
 
 Les workflows génèrent des artifacts :
 
-* **Repomix** : `repomix-output-{sha}` (30 jours)
 * **Documentation** : Déployé sur GitHub Pages
 
 == Cache
