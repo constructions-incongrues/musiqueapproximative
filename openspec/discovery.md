@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (quinzième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (seizième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1277,6 +1277,109 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : tous les `*-dist` de `src/`, `src/Makefile`, `Makefile`
   - **Ajoutée** : 2026-08-18
 
+- [ ] 25. `rendre-l-encodage-de-connexion-verifiable` — l'encodage cesse d'être invérifiable
+  - **Persona servi** : le mainteneur, et derrière lui tout contributeur qui saisit un titre
+  - **Segment du parcours** : Vérifier
+  - **MoSCoW** : Must — axe « tenir ce qu'on a livré »
+  - **Le trou, mesuré** : la story 24 a établi que `databases.yml` **n'expose aucune valeur
+    observable depuis l'extérieur**. Sa ligne `encoding: utf8mb4`, posée le 2026-08-18, ne
+    se vérifie ni depuis un navigateur, ni par le contrôle nocturne du contrat. Si elle
+    n'était pas rendue en production, la connexion convertirait toujours les caractères —
+    **et personne ne le saurait avant le prochain titre détruit.**
+  - **Ce qui aggrave** : la story 20 a montré qu'aucun morceau du catalogue ne porte de
+    caractère hors cp1252, sur dix-huit ans. La production **n'a donc jamais eu l'occasion
+    de démontrer que la migration fonctionne** : la preuve existe dans la suite de tests,
+    pas en ligne. Le premier titre cyrillique posté sera le test — et s'il échoue, il sera
+    détruit avant qu'on le sache.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : un moyen de constater, sur une installation donnée, que la
+    connexion est bien en `utf8mb4` ; décider où il vit — tâche symfony lançable sur le
+    serveur, ou point de contrôle que le rendez-vous nocturne peut interroger. — dehors :
+    surveiller la base elle-même ; instrumenter les autres valeurs de `databases.yml`.
+  - **Question ouverte à trancher dans la proposal** : un point de contrôle exposé en HTTP
+    rend la vérification automatique mais publie un détail d'infrastructure. Une tâche à
+    lancer à la main ne publie rien mais ne s'exécute pas — c'est le même arbitrage que la
+    story 23, et il ne se tranche pas forcément pareil ici.
+  - **Code concerné** : `src/config/databases.yml-dist`,
+    `src/lib/task/`, `.github/workflows/contrat-production.yml`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 26. `empecher-make-configure-de-casser-le-serveur` — une commande cesse d'être un piège
+  - **Persona servi** : le mainteneur
+  - **Segment du parcours** : Déployer
+  - **MoSCoW** : Must — axe « tenir ce qu'on a livré »
+  - **Née d'un incident du 2026-08-18** : `make configure`, lancé sur le serveur, **a mis
+    toutes les pages du site en 500**. La cible lit `./.env` depuis `src/` ; ce fichier
+    n'existe pas là-bas — en développement c'est un montage Docker de `etc/<profil>/.env`.
+    Sans lui la liste blanche est vide, `envsubst` ne substitue rien, et tous les gabarits
+    sont réécrits en l'état : `databases.yml` se retrouve avec `${DATABASE_HOST}`.
+  - **Pourquoi documenter n'a pas suffi** : le piège est déjà écrit en encadré dans
+    `fichiers-de-configuration.adoc`. **Documenter ne prévient que qui lit la
+    documentation** ; celui qui suit un conseil pressé ne la lit pas — c'est exactement ce
+    qui est arrivé.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : la cible refuse de s'exécuter, avec un message qui dit
+    pourquoi, quand `.env` est absent ou ne produit aucune variable ; vérifier que le cas
+    nominal en développement n'est pas gêné. — dehors : décider où vit le `.env` de
+    production, et rendre la commande utilisable là-bas — c'est une question de déploiement,
+    plus vaste.
+  - **Le geste minimal est le bon ici** : une commande qui détruit silencieusement doit
+    d'abord cesser de détruire. La rendre utilisable ailleurs vient après.
+  - **Code concerné** : `src/Makefile` (cible `configure`), `Makefile`,
+    `docs/modules/ROOT/pages/fichiers-de-configuration.adoc`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 27. `relier-les-stories-a-leurs-changes` — le plan cesse de perdre ce qu'il a livré
+  - **Persona servi** : le mainteneur
+  - **Segment du parcours** : Vérifier
+  - **MoSCoW** : Should — axe « tenir ce qu'on a livré »
+  - **Née d'un défaut constaté deux fois dans la même journée** : les stories 9, 11 et 20
+    étaient livrées et sont restées décochées, parce que leur change avait été nommé
+    autrement que leur packet — `corriger-le-contexte-projet` pour
+    `corriger-le-contexte-openspec`, et ainsi de suite. **Le plan comptait dix-neuf stories
+    livrées en croyant en compter seize.** Le nom du change est le seul lien entre une story
+    et son archive, et il dérive dès qu'on reformule.
+  - **Ce n'est pas une coquetterie de rangement** : un plan qui affiche une story ouverte
+    alors qu'elle est faite envoie quelqu'un refaire le travail, et un plan qu'il faut
+    auditer à la main pour être cru ne sert plus à décider. C'est le même défaut que le
+    sommaire manuel de la documentation, corrigé par la story 11 — et le plan n'a pas
+    l'équivalent du contrôle qu'elle a posé.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : un contrôle qui rapproche chaque story cochée d'un change
+    existant, et signale les cases cochées sans archive comme les archives sans story ;
+    décider où il tourne. — dehors : deviner la correspondance quand les noms diffèrent —
+    mieux vaut la déclarer dans le packet que la faire inférer.
+  - **Ce que le contrôle ne peut pas faire, et qu'il faut dire** : il ne détectera pas un
+    packet dont les **chiffres** ont vieilli. C'est l'autre défaut du jour — un « 3,1 s »
+    de sept mois a promu une story en Must alors que la mesure disait l'inverse. Aucun outil
+    ne rattrape ça ; seule une convention le peut, et elle est proposée en Could.
+  - **Code concerné** : `openspec/discovery.md`, `openspec/changes/archive/`,
+    `.github/workflows/ci.yml`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 28. `auditer-la-compatibilite-php-8` — on sait enfin si la montée est atteignable
+  - **Persona servi** : le mainteneur
+  - **Segment du parcours** : hors parcours — c'est l'horizon du projet
+  - **MoSCoW** : Should — troisième axe, après les deux premiers
+  - **Où on en est** : deux syntaxes supprimées ont été traitées le 2026-08-18 — le
+    constructeur PHP 4 de PHP-Markdown, et une bibliothèque `File_XSPF` morte qui ne
+    compilait déjà plus. **Ça ne dit rien du reste.** Un verrou annoncé s'est même révélé
+    imaginaire : l'occurrence de `getid3` était dans un commentaire.
+  - **Pourquoi maintenant** : PHP 7.4 est hors support depuis novembre 2022. Le projet
+    n'ignore pas la question, il ne l'a jamais posée — et chaque story qui touche du code
+    legacy la repose sans y répondre.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : inventorier les incompatibilités réelles sur tout le code
+    exécuté, par analyse et non au `grep` ; établir lesquelles viennent de dépendances
+    Composer, corrigibles par montée de version, et lesquelles sont dans le code du projet ;
+    conclure par un verdict — atteignable, ou à quel prix. — dehors : **faire la migration**.
+    Cette story produit une décision documentée, pas un changement de version.
+  - **Le piège de méthode à ne pas répéter** : `php -l` sur un poste de développement en
+    PHP 8 déclare sain un fichier que le PHP 7.4 du conteneur refuse. **Vérifier une
+    compatibilité sur la mauvaise version d'interpréteur ne prouve rien.**
+  - **Code concerné** : tout `src/`, `src/composer.json`, `src/composer.lock`
+  - **Ajoutée** : 2026-08-18
+
 ## Ordre d'exécution
 
 L'ordre du fichier n'est plus l'ordre des travaux : les stories 10 à 12 sont arrivées après
@@ -1898,3 +2001,31 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   grossi, les formats ont changé, et la hiérarchie s'est inversée sans que personne le voie.
   Un packet de story vieillit comme un sommaire manuel — c'est le même défaut que celui
   corrigé par la story 11, et le plan n'a pas d'équivalent du contrôle qu'elle a posé.
+
+- 2026-08-18 (seizième révision) — **Cadrage de la 1.13.0, apporté par l'auteur.** Trois axes
+  ordonnés : *tenir ce qu'on a livré*, puis les dettes restantes, puis *ouvrir la voie
+  PHP 8*. Un quatrième axe a été proposé et **écarté** : réparer envers les 37 contributeurs
+  dont les titres ont été détruits. Il n'est pas abandonné — il dépend d'un envoi qui
+  appartient au collectif et de réponses qui peuvent ne pas venir, ce qui n'en fait pas la
+  matière d'une release. La page est publiée, la demande y est rédigée.
+  **Quatre stories ouvertes**, en plus de la 3 déjà au plan.
+  La **25** vient d'un trou que la story 24 a mis au jour : `databases.yml` n'expose aucune
+  valeur observable, et son `encoding: utf8mb4` ne se vérifie de nulle part. Combiné au fait
+  que zéro caractère hors cp1252 n'a jamais survécu, cela signifie que **la production n'a
+  jamais démontré que la migration fonctionne**. Le premier titre cyrillique posté sera le
+  test, et s'il échoue il sera détruit avant qu'on le sache.
+  La **26** vient d'un incident : `make configure` lancé sur le serveur a mis toutes les
+  pages en 500. Le piège est déjà documenté en encadré — et documenter n'a pas suffi, parce
+  que celui qui suit un conseil pressé ne lit pas la documentation. C'est arrivé.
+  La **27** vient du défaut que cette révision-ci a constaté pour la deuxième fois de la
+  journée : trois stories livrées et restées décochées, leur change ayant été nommé
+  autrement que leur packet. Le nom est le seul lien, et il dérive dès qu'on reformule.
+  La **28** pose enfin la question PHP 8, jamais posée. Elle produit un verdict, pas une
+  migration.
+  **Deux dettes se sont fermées d'elles-mêmes** et sont retirées du décompte :
+  `jsonEchappementTest.php` porte les fixtures à antislash qui manquaient, et le
+  verrouillage du zoom a bien disparu du gabarit.
+  **Ce que ce cadrage ne couvre pas, et qui reste vrai** : les 207 empreintes toujours
+  publiques, par décision consignée ; et le fait qu'aucun contrôle ne rattrape un packet
+  dont les chiffres ont vieilli — la 27 le dit elle-même, c'est une affaire de convention,
+  pas d'outil.
