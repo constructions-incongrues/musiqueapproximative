@@ -1,7 +1,13 @@
-# Discovery : tenir les formats machine
+# Discovery : Musique Approximative
 
 > Status: complete
 > Created: 2026-08-18 · Last revised: 2026-08-18
+
+> **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
+> formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
+> le plan de release du projet. Les formats machine en restent la matière principale
+> — c'est là qu'on a mesuré — mais rien n'y est exclu au motif de « relever d'un autre
+> axe ». Voir le Change Log.
 
 > Plan de release produit par la compétence discovery. Le reprendre ou le réviser en la relançant.
 > Pour construire : lancer `/opsx:propose` en lui demandant d'utiliser la prochaine story non cochée.
@@ -22,6 +28,12 @@
 - 2026-08-18 (quatrième révision) — Mise à jour depuis une session de travail qui n'a
   touché aucune story de ce plan, mais en a déplacé le terrain : cinq changements archivés
   sur `desastres` et l'outillage de test. Voir « Ce que la session a changé pour ce plan ».
+- 2026-08-18 (cinquième révision) — Deux apports de l'auteur. D'abord une correction de
+  portée : **ce plan est généraliste**, il ne se limite pas aux formats machine. Ensuite
+  la promotion en Must du travail d'accès mobile. Entrée du jour également : la livraison
+  de la story 10, qui a produit quatre relevés machine versés aux stories concernées, et
+  l'archivage de `fix-recherche-mobile`, livré en production sans avoir jamais figuré à ce
+  plan.
 - 2026-08-18 (seconde révision) — Correction de l'auteur sur le mélomane fêlé : il ne se
   sert pas de Radio Approximative ; ce qu'il veut est **poster facilement et retrouver
   facilement**. Et un sixième persona apporté : **le DJ de soirée**, qui se sert du site sur
@@ -291,12 +303,21 @@ Parcours du **mainteneur** :
   soirée » a rendu intenable de borner le JSON en laissant la page HTML à 3,7 Mo : c'est la
   même action, le même paramètre, et c'est son étape 3 qui est un gap. Étape 3 de
   l'intégrateur, étape 3 du DJ. Le mélomane fêlé en profite sur sa playlist publique
-  (1,0 Mo en JSON) — mais pas sur son propre gap, qui est l'admin sans recherche et qui
-  relève d'un autre axe.
+  (1,0 Mo en JSON) — mais pas sur son propre gap, qui est l'admin sans recherche. Celui-ci
+  est désormais en « Could » (remonté le 2026-08-18), et non plus écarté.
 - **Une seule forme de morceau en JSON** — *reformulé en révision du 2026-08-18.*
   `/post/:slug` sert `{"posts":[…]}` et `/post/md5/:md5sum` sert l'objet nu : deux contrats
   pour le même objet, selon la façon dont on le désigne. `/posts/next|prev|random` sortent
   de ce compte : leur forme minimale est le contrat interne du lecteur du site. Étape 3.
+- **Le champ de recherche existe sur téléphone** — *inscrit rétroactivement le
+  2026-08-18.* `main.css` le masquait sous 768 px. Le DJ de soirée n'avait pas de chemin
+  vers `/posts?q=…` depuis son téléphone : son étape 2 était un gap complet, pas un
+  « partiel ». **Livré** (story 13).
+- **Le visiteur peut agrandir la page** — *ajouté le 2026-08-18.* `layout.php:7` le lui
+  interdit. Une ligne à retirer, sans contrepartie depuis que le champ de recherche est à
+  16 px. Aucun recours n'existe côté site ; les seuls qui existent ont été créés par les
+  navigateurs contre l'auteur du site. Étape de tous les parcours servis en HTML
+  (story 14).
 - **Borner le XSPF** — *promu depuis Should en révision du 2026-08-18.* Le lien XSPF est
   offert au visiteur parmi les liens visibles d'une page de liste, la spec l'impose, et il
   coûte 2,7 à 3,1 s : l'étape 4 du parcours de l'auditeur sur le site. Ce n'était un
@@ -316,10 +337,34 @@ Parcours du **mainteneur** :
 
 ### Could
 
+> Les trois premières entrées viennent de « Won't », d'où la correction de portée du
+> 2026-08-18 les a sorties. Elles n'y étaient pas pour leur mérite propre mais parce que
+> le plan se croyait cantonné aux formats machine — motif qui n'existe plus. Un cran, pas
+> deux : elles n'ont pas encore de story, et n'en auront qu'une fois promues en « Should »
+> ou au-dessus. Les stories se taillent dans les « Must », puis dans les « Should ».
+
 - **Publier la page Subsonic dans le site Antora** — *remplace « publier la documentation
   d'API », le 2026-08-18.* `API_SUBSONIC.md` est bon et illisible, hors du site. Le reste
   de l'ancienne entrée est parti ailleurs : le contrat d'API est passé en « Must », et la
   navigation en « Should ».
+- **Un filtre ou une recherche dans l'admin** — *remonté de « Won't » le 2026-08-18.*
+  Le mélomane fêlé, et c'est **son seul gap** : `generator.yml` porte
+  `filter: class: false`, il parcourt ses 993 morceaux vingt par vingt. Ce plan dit de lui
+  que son besoin est « poster facilement et retrouver facilement » ; retrouver est la
+  moitié qu'il n'a pas. Il était écarté au seul motif de relever d'un autre axe — motif
+  tombé avec la correction de portée. Application `admin`, que rien d'autre à ce plan ne
+  touche. `postActions::buildQuery()` restreint déjà correctement la liste à ses propres
+  morceaux : c'est la ligne `filter` qui manque, pas la requête.
+- **Une recherche qui couvre le corps et le contributeur** — *remonté de « Won't » le
+  2026-08-18.* Le DJ de soirée et le mélomane fêlé. `Searchable` n'indexe que
+  `track_author` et `track_title` (`schema.yml`) : une bribe du texte accompagnant le
+  morceau, un nom de contributeur, ne trouvent rien. C'est un changement de modèle et non
+  de format — le plus coûteux des trois, et le seul qui touche `schema.yml`.
+- **Une interface de pagination sur `/posts`** — *remonté de « Won't » le 2026-08-18.*
+  Le DJ de soirée. La story 2 lui donne le *paramètre* pour demander moins ; elle ne lui
+  donne pas les boutons « page suivante ». Un paramètre sans interface est un demi-service,
+  et le DJ ne connaîtra jamais le paramètre. **Dépend de la story 2**, qui doit avoir
+  tranché sa convention avant qu'on dessine des boutons dessus.
 - **Corriger le `context:` de `openspec/config.yaml`** — il affirme qu'aucun test
   automatisé ne couvre le contrat public ; cinq routes le sont depuis. Une ligne.
 
@@ -329,20 +374,6 @@ Parcours du **mainteneur** :
   Sources. `docs/API_JSON_API_TARGET.md` reste au dépôt comme trace de l'option étudiée.
   À rouvrir si un consommateur réel réclame l'interopérabilité avec de l'outillage
   JSON:API générique.
-- **Rendre le catalogue parcourable par un humain** — index par artiste, par mois, par
-  contributeur. `PostTable` sait déjà le faire et seul Subsonic l'expose. C'est un autre
-  axe : il mérite sa propre discovery. *La révision du 2026-08-18 lui verse trois besoins
-  précis, pour qu'ils ne se perdent pas :*
-  - **Une interface de pagination sur `/posts`** — le DJ de soirée. Cette release lui donne
-    le *paramètre* pour demander moins ; elle ne lui donne pas les boutons « page
-    suivante ». Le paramètre sans l'interface est un demi-service, et l'autre moitié est du
-    travail de navigation.
-  - **Une recherche qui couvre le corps et le contributeur** — le DJ et le mélomane fêlé.
-    `Searchable` n'indexe que `track_author` et `track_title` (`schema.yml`). Élargir
-    l'index est un changement de modèle, pas de format.
-  - **Un filtre ou une recherche dans l'admin** — le mélomane fêlé. `generator.yml` porte
-    `filter: class: false` ; il parcourt ses 993 morceaux vingt par vingt. C'est
-    l'application `admin`, que cet axe ne touche pas du tout.
 - **Toute la surface Subsonic** — *sortie du périmètre le 2026-08-18, avec son persona.*
   Le module `rest` a sa propre spécification, ses propres tests et sa propre documentation ;
   il est déjà exempté du filtre que la story 1 retire. Ce qui en sort avec lui : la
@@ -407,8 +438,9 @@ Chaque story est une tranche verticale : elle se démontre seule.
     pour **tous** les formats qu'elle sert, HTML compris ; exposition du total ; comportement
     quand ils sont absents, négatifs ou non numériques ; interaction avec `q` et `c`, qui
     filtrent déjà. — dehors : l'**interface** de pagination du site — boutons « page
-    suivante », numéros de page — qui relève de l'axe navigation ; les formats `xspf` et
-    `max` (story 3).
+    suivante », numéros de page — qui est une entrée « Could » distincte, dépendante de
+    cette story : on ne dessine pas de boutons avant que la convention de paramètre soit
+    tranchée ; les formats `xspf` et `max` (story 3).
   - **Ce qui a élargi cette story** : *révision du 2026-08-18.* Elle excluait explicitement
     la page HTML, au motif qu'elle relevait d'un autre axe. Le persona « DJ de soirée » a
     rendu la ligne intenable : la page HTML est sa douleur principale (3,7 Mo sur le réseau
@@ -470,6 +502,11 @@ Chaque story est une tranche verticale : elle se démontre seule.
     n'est pas une incohérence à corriger mais le contrat interne du lecteur : l'aligner
     casserait la navigation du site. La story se réduit donc à `/md5`, et l'avertissement de
     taille tombe.
+  - **Ce que la story 10 a ajouté à son périmètre** : *2026-08-18.* Le relevé machine
+    montre que `/post/md5/` ne sert pas seulement l'objet nu : il expose `publish_on`,
+    `created_at`, `updated_at`, `track_duration` et `track_size`. Le scénario « Champs
+    jamais exposés » de `formats-de-sortie` dit ces champs absents. La story a donc deux
+    écarts à corriger, pas un — l'enveloppe et la fuite.
   - **Code concerné** : `src/apps/frontend/modules/post/actions/actions.class.php`
     (`executeMd5`, `renderJsonPost`),
     `src/apps/frontend/modules/post/templates/md5Success.php`,
@@ -490,6 +527,13 @@ Chaque story est une tranche verticale : elle se démontre seule.
     next/prev n'a pas de suivant ; le corps porte le type de contenu du format demandé ; le
     code HTTP reste celui d'aujourd'hui. — dehors : `/rest`, qui suit le protocole Subsonic
     et répond 200 même en erreur ; `/oembed`, qui a sa propre spécification.
+  - **Ce que la story 10 a changé pour elle** : *2026-08-18.* Elle croyait n'avoir qu'à
+    formater des 404. Le relevé machine dit autre chose : `/post/md5/<inconnu>` et
+    `/posts/next|prev` sans `current` ne renvoient pas 404 mais une **erreur fatale PHP**.
+    `executeMd5()` appelle `toJson()` sur `false` sans `forward404Unless` préalable
+    (`actions.class.php:157`) ; `getNextPost()` reçoit `false` là où sa signature exige un
+    `Post` (`:299` et `:305`). La story a donc d'abord des 500 à supprimer, ensuite des
+    404 à habiller. C'est plus de travail qu'annoncé, et c'est un défaut plus grave.
   - **Code concerné** : `src/lib/helper/ApiErrorResponse.php`,
     `src/apps/frontend/modules/post/actions/actions.class.php`,
     `src/apps/frontend/config/settings.yml`
@@ -601,6 +645,16 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `etc/*/.env` (`APP_DOMAIN`), `src/test/functional/frontend/`
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-publier-le-contrat-openapi` — **livré le 2026-08-18**
+  - **Ce que sa livraison a rapporté** : quatre relevés machine, versés aux stories
+    concernées. (1) `/post/md5/<inconnu>` et `/posts/next|prev` sans `current` produisent
+    une **erreur fatale PHP**, pas un 404 — voir story 5. (2) `/post/md5/` expose
+    `publish_on`, `created_at`, `updated_at`, `track_duration`, `track_size`, que
+    `formats-de-sortie` dit absents — voir story 4. (3) `docs/API_CURRENT_STATE.md`
+    annonçait **neuf routes inexistantes** sous une mention « Auto-generated » : retiré.
+    (4) La CI rendait les `-dist` par un `envsubst` nu, qui mangeait les clés `$ref` du
+    contrat — deux moteurs de rendu, deux fichiers. Corrigé par une liste blanche
+    explicite, plus un garde-fou dans le test. **Contrainte à connaître pour tout futur
+    `-dist` : un `$` non destiné à la substitution y est fragile.**
 
 - [ ] 11. `reparer-la-navigation-du-site` — les pages publiées deviennent atteignables
   - **Persona servi** : le mainteneur, le contributeur, l'intégrateur — tout le monde
@@ -640,6 +694,58 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
+- [x] 13. `fix-recherche-mobile` — le champ de recherche existe sur téléphone
+  - **Persona servi** : le DJ de soirée (principal), le mélomane fêlé
+  - **Segment du parcours** : Chercher (DJ, étape 2)
+  - **MoSCoW** : Must
+  - **Inscrite après coup** : *2026-08-18.* Ce travail a été fait et mis en production
+    sans figurer à ce plan — parce que le plan se croyait cantonné aux formats machine et
+    tenait l'interface pour un autre axe. La correction de portée du jour la fait entrer
+    rétroactivement : elle sert le persona que ce plan a lui-même identifié, sur l'étape
+    de son parcours que ce plan a lui-même marquée « partiel ».
+  - **Ce qu'elle a fait** : `main.css` posait `.search-container { display: none }` sous
+    768 px. Le formulaire de recherche était **purement absent sur téléphone**, alors que
+    `/posts?q=…` fonctionnait. Retrait de la règle, `flex-wrap` sur le bandeau, cibles
+    tactiles de 44 px, police à 16 px contre la mise à l'échelle iOS. Vérifié à 320, 360,
+    480, 768 et 1280 px, sans débordement horizontal à aucune.
+  - **Ce qu'elle a délibérément laissé dehors** : le verrouillage du zoom — story 14.
+  - **Code concerné** : `src/web/frontend/assets/stylesheets/main.css`
+  - **Ajoutée** : 2026-08-18 (rétroactivement)
+  - **Change** : `2026-08-18-fix-recherche-mobile` — **livré** en `f062b4f` (PR #146)
+
+- [ ] 14. `retirer-le-verrouillage-du-zoom` — le visiteur peut agrandir la page
+  - **Persona servi** : le DJ de soirée, l'auditeur sur le site — et au premier chef
+    quiconque a besoin d'agrandir pour lire
+  - **Segment du parcours** : toutes les étapes servies en HTML
+  - **MoSCoW** : Must
+  - **Pourquoi celle-ci, pourquoi maintenant** : `layout.php:7` déclare
+    `minimum-scale=1, maximum-scale=1`. La page ne peut pas être agrandie. La réparation
+    est d'**une ligne** et sans contrepartie : le seul champ de saisie du frontend est
+    celui de la recherche, et il est désormais à 16 px — la balise ne protège donc plus
+    rien. `input.mailing`, l'autre champ qu'elle couvrait, n'existe dans aucun gabarit.
+  - **Dépend de** : story 13, livrée — c'est elle qui a rendu la balise inutile.
+  - **Périmètre** — dedans : retirer `minimum-scale=1, maximum-scale=1` de la balise
+    `viewport` ; vérifier que la mise au point du champ de recherche ne met toujours pas
+    la page à l'échelle, ce que `font-size: 16px` garantit seul. — dehors : le reste de la
+    balise (`width=device-width, initial-scale=1`), et le CSS mort d'`input.mailing`.
+  - **Ce qui la justifie plutôt qu'un simple nettoyage** : `2026-08-18-fix-recherche-mobile`
+    a rempli le tableau des modalités pour cette contrainte. Aucune loi ne l'interdit — un
+    site de collectif n'entre ni dans la loi 2005-102 ni dans l'European Accessibility Act.
+    La norme la condamne : WCAG 2.1 critère 1.4.4, RGAA 10.4. **Le seul recours existant a
+    été créé par Apple et Google contre l'auteur du site** — Safari iOS ignore la
+    déclaration depuis iOS 10, Chrome Android l'ignore si le visiteur a trouvé le réglage.
+    Côté site, recours : aucun. Le visiteur qui pince sans effet conclut que le site est
+    mal fait. Cette règle n'a jamais été votée comme une règle : elle a été écrite dans une
+    balise, en une ligne, sans que personne ait à défendre l'idée que les visiteurs de ce
+    site n'ont pas le droit d'agrandir le texte.
+  - **Artefacts** : `specs` et `tasks` seulement. **Pas de `design.md`** — un changement
+    d'une ligne sans architecture n'en a pas, et la règle du dépôt le dit
+    (`config.yaml`). Le schéma fait dépendre `tasks` de `design` ; c'est un appui, pas
+    une barrière. Voir « Ce que l'appareil de planification coûte ».
+  - **Code concerné** : `src/apps/frontend/templates/layout.php` (ligne 7)
+  - **Ajoutée** : 2026-08-18
+  - **Change** : _pas encore proposé_
+
 ## Ordre d'exécution
 
 L'ordre du fichier n'est plus l'ordre des travaux : les stories 10 à 12 sont arrivées après
@@ -654,6 +760,9 @@ coup et gardent leur numéro pour que rien ne se perde. La séquence réelle est
    ├─ 4  aligner-la-route-md5                 ← 1
    ├─ 5  servir-les-erreurs-en-json           ← 4
    └─ 6  specifier-les-routes-json            ← 1 à 5
+
+  13  fix-recherche-mobile                ✅ livré hors plan, inscrit rétroactivement
+   └─ 14  retirer-le-verrouillage-du-zoom     ← 13 · une ligne, ne dépend de rien d'autre
 
   11  reparer-la-navigation-du-site       ◄── ne dépend de rien, à tout moment
    └─ 12  publier-la-page-subsonic            ← 11
@@ -829,6 +938,79 @@ Le poste qui tient debout sans eux est le premier : forcer la décision différ�
 la vraie raison, elle mérite d'être dite comme telle plutôt que d'être présentée comme un
 service rendu à des tiers qu'on n'a pas trouvés.
 
+## Ce que l'appareil de planification coûte
+
+<!-- incongru-voix: illich — seuil : 1,5 ligne de plan par ligne de code au global, mais ×150 sur un change d'une ligne — le mainteneur unique -->
+
+Ce plan vient d'inscrire une story dont le code tient en **une ligne** — retirer deux
+déclarations de la balise `viewport`. Le schéma en réclame quatre artefacts. Le moment est
+bon pour compter ce que l'appareil prend, plutôt que d'y revenir le jour où il pèsera.
+
+### Le décompte, depuis le premier change archivé (2026-08-01)
+
+| poste | lignes |
+| --- | --- |
+| `openspec/` — plans, specs, artefacts de change | **+9 407** |
+| `src/` hors tests | +3 646 |
+| `src/test` | +2 720 |
+| **Rapport plan / code** | **1,48 ligne de plan par ligne de code** |
+
+24 changes archivés, 6 162 lignes d'artefacts, **moyenne 256 lignes par change**. Ce plan
+lui-même fait 1 072 lignes après cinq révisions en une journée.
+
+### Où le rapport se retourne
+
+Le rapport global ne dit rien : c'est une moyenne entre des cas qui n'ont rien à voir.
+
+| change | planification | code | rapport |
+| --- | --- | --- | --- |
+| `publier-le-contrat-openapi` | 627 l. | ~700 l. (contrat + test) | **0,9** |
+| `fix-recherche-mobile` | 278 l. | 55 l. de CSS | **5,1** |
+| story 14, projetée | ~150 l. | **1 l.** | **~150** |
+
+Le coût de l'appareil est **fixe** — une proposition, un delta de spec, une liste de tâches,
+une validation : de l'ordre d'une heure et de 150 lignes, quelle que soit la taille du
+changement. Ce qu'il rend est **proportionnel** aux décisions que le changement porte. Le
+seuil est donc là où le changement cesse de porter des décisions, pas là où il devient
+petit — et les deux ne coïncident pas.
+
+### Le verdict de convivialité, et il est bon
+
+| question | réponse | ce qui la fonde |
+| --- | --- | --- |
+| Le mainteneur comprend-il comment ça marche ? | **oui** | Des fichiers Markdown dans un dossier. Ni base, ni service, ni format propriétaire. |
+| Peut-il le réparer ? | **oui** | Éditer le fichier. `openspec validate` dit ce qui cloche. |
+| Peut-il s'en passer ? | **oui, et il le fait déjà** | `design.md` n'existe que dans **6 changes sur 24**. La règle du dépôt — « ne produire cet artefact que si le changement est structurant » — est appliquée les trois quarts du temps. |
+
+Trois oui. **L'appareil n'a pas franchi son second seuil**, et la troisième réponse est la
+plus importante : la modulation n'est pas théorique, elle est mesurée. Un outil dont on se
+dispense aux trois quarts sur un artefact ne gouverne pas son usager.
+
+### Ce que ce calcul décide
+
+Une chose, et elle est immédiate. Le schéma `behaviour-driven` fait dépendre `tasks` de
+`design`, ce qui pousse à écrire un `design.md` même quand la règle du dépôt dit de ne pas
+le faire. La commande de proposition tranche déjà ce conflit — les dépendances sont des
+appuis, pas des barrières — mais il faut le savoir pour l'appliquer.
+
+**Pour la story 14 : pas de `design.md`.** Un changement d'une ligne sans architecture n'en
+a pas. Il garde ses `specs` — « le visiteur peut agrandir la page » est un engagement de
+comportement durable, et c'est exactement ce qu'une spec est faite pour tenir — et ses
+`tasks`, dont la vérification manuelle est réelle.
+
+**Règle générale, à appliquer aux stories à venir de ce plan** : sous une dizaine de lignes
+de code, l'artefact qui se justifie encore est celui qui porte un engagement de
+comportement. Les autres restatent le packet de la story. Restater sans vérifier est
+exactement ce qui a fait dériver la banque de mémoire.
+
+### Le point d'inconfort
+
+Ce relevé conclut « l'outil va bien ». C'est confortable, et c'est le résultat qu'on obtient
+en mesurant un appareil le jour où on s'en sert bien. La lecture inconfortable est dans le
+premier tableau : **ce dépôt a produit une fois et demie plus de plan que de code en trois
+semaines.** Le rapport est défendable tant que quelqu'un lit le plan. Personne n'a encore
+mesuré ça, et ce chiffre-là n'a pas de dénominateur.
+
 ## Questions ouvertes
 
 1. **La valeur par défaut de la pagination** (bloque les stories 2 et 3). Borner par défaut
@@ -868,6 +1050,21 @@ service rendu à des tiers qu'on n'a pas trouvés.
 
 ## Change Log
 
+- 2026-08-18 (cinquième révision) — **Correction de portée par l'auteur : ce plan est
+  généraliste.** Il se croyait cantonné à l'axe « tenir les formats machine » et rejetait
+  en « Won't » tout ce qui relevait de l'interface, au motif que cela méritait sa propre
+  discovery. Cette ligne n'était pas tenable : `fix-recherche-mobile` a été livré en
+  production sans jamais figurer au plan, alors qu'il servait un persona que le plan avait
+  identifié, sur une étape que le plan avait marquée. Le titre change en conséquence.
+  Conséquences : deux stories mobiles entrent en **Must** — la 13, livrée et inscrite
+  rétroactivement, et la 14, le verrouillage du zoom, qu'elle avait délibérément laissé
+  dehors. La story 10 est **livrée** ; ses quatre relevés machine sont versés aux stories
+  concernées, dont deux qui s'alourdissent : la story 5 découvre qu'elle a des erreurs
+  fatales à supprimer avant d'avoir des 404 à habiller, et la story 4 découvre une fuite
+  de champs en plus de son problème d'enveloppe. **Reste à trancher : les trois besoins
+  d'interface versés en « Won't » lors de la seconde révision n'ont plus de motif de s'y
+  trouver.**
+
 - 2026-08-18 — Création. Axe « tenir les formats machine » retenu parmi quatre proposés.
   Cadrage **cohérence** retenu contre **conformité JSON:API 1.0**, cette dernière versée
   en « Won't » avec ses motifs. Neuf stories.
@@ -893,7 +1090,8 @@ service rendu à des tiers qu'on n'a pas trouvés.
   pas brancher un paramètre là où il est déjà écrit. L'interface de pagination, elle, reste
   hors périmètre. Trois besoins des nouveaux personas sont versés nommément en « Won't »,
   car ils relèvent de l'axe navigation : la pagination visible, l'élargissement de l'index
-  de recherche, et un filtre dans l'admin. Aucune story ajoutée.
+  de recherche, et un filtre dans l'admin. *(Ce motif a été renversé le 2026-08-18 : les
+  trois sont remontés en « Could ». Entrée conservée telle quelle comme trace.)* Aucune story ajoutée.
 
 - 2026-08-18 (troisième révision) — Le persona « l'auditeur en client Subsonic » est retiré
   du plan à la demande de l'auteur. Son parcours et son entrée « Could » disparaissent avec
