@@ -15,8 +15,16 @@ l'appareil de vérification du projet qui gagne un point de vue. Pas de `design.
 
 ## 2. Le contrôle, et son emplacement
 
-- [x] 2.1 L'ajouter au rendez-vous nocturne existant (`nightly.yml`, jours ouvrés à 8 h)
-  plutôt qu'en créer un. Un second rendez-vous serait un second endroit à surveiller.
+- [x] 2.1 **Décision d'abord prise, puis renversée par une mesure.** Le contrôle avait été
+  logé dans `nightly.yml`, au motif qu'un second rendez-vous serait un second endroit à
+  surveiller. La première exécution a montré que ce workflow **n'est jamais passé au vert** :
+  122 exécutions depuis sa création le 2 janvier 2026, zéro succès.
+  Une alerte posée dans un rendez-vous rouge en permanence est **une alerte déjà éteinte** :
+  son signal ne se distingue pas du bruit auquel on s'est habitué. C'était exactement le
+  mode de défaillance que ce change prétendait éviter, et je l'avais reproduit en le
+  décrivant.
+  Le contrôle a donc son propre workflow, `contrat-production.yml`, pour pouvoir passer au
+  rouge tout seul.
 - [x] 2.2 Ne vérifier **que ce que le déploiement peut casser** : le contrat est-il servi,
   à son adresse, avec un type de média YAML, sans motif `${…}` restant, et déclare-t-il
   encore ses neuf routes.
@@ -56,5 +64,15 @@ l'appareil de vérification du projet qui gagne un point de vue. Pas de `design.
 
 ### Vérification manuelle
 
-- [ ] 5.4 Lancer le workflow à la main (`workflow_dispatch`) après la fusion, et vérifier
-  qu'il passe au vert contre la production réelle.
+- [x] 5.4 Lancé à la main après la fusion. Le job **passe** contre la production réelle et
+  écrit : « Contrat servi : statut 200, type application/yaml, 9 routes, aucune variable
+  restante. » C'est cette exécution qui a révélé l'état de `nightly.yml`.
+- [ ] 5.5 **`nightly.yml` reste rouge**, et ce change ne le répare pas : son job de lint
+  nocturne échoue, sans rapport avec le contrat. Il est traité à part. Un workflow qui n'a
+  jamais été vert est un signal que plus personne ne lit, et c'est un problème en soi.
+
+  *Note ajoutée après enquête :* le `jq not installed` d'abord soupçonné était un faux
+  indice — cette ligne appartient au **listing** que GitHub imprime avant d'exécuter une
+  étape, pour une fonction de `trunk-action` que `check-mode: all` n'appelle jamais.
+  L'échec réel est `trunk check --all`, qui trouve 38 remarques dans du code vendorisé et
+  du legacy Symfony 1.
