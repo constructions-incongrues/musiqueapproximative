@@ -70,4 +70,24 @@ function subsonic_load_fixtures()
   return $dbName;
 }
 
+/**
+ * Reconstruit l'index de recherche plein texte.
+ *
+ * Les fixtures sont chargees en SQL brut, ce qui ne declenche pas l'indexation :
+ * `post_index` reste vide, `PostTable::search()` ne remonte jamais rien, et tous
+ * les scenarios de recherche de `catalogue-morceaux` sont invérifiables — sans
+ * qu'aucun test n'echoue, puisqu'ils n'existaient pas.
+ *
+ * L'index est donc reconstruit apres chaque chargement, de sorte qu'un test de
+ * recherche exerce le meme chemin qu'un visiteur.
+ */
+function subsonic_build_search_index()
+{
+  $table = Doctrine_Core::getTable('Post');
+  $table->batchUpdateIndex();
+
+  return $table->getConnection()->fetchOne('SELECT COUNT(*) FROM post_index');
+}
+
 subsonic_load_fixtures();
+subsonic_build_search_index();
