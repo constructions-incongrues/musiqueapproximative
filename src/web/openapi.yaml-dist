@@ -41,13 +41,19 @@ info:
   description: |
     Représentations machine du catalogue de morceaux de Musique Approximative.
 
-    Ce contrat décrit l'état actuel du service, écarts compris. Deux d'entre eux
-    sont connus et documentés ici plutôt que masqués :
+    Ce contrat décrit l'état actuel du service, écarts compris. Un écart reste
+    connu et documenté ici plutôt que masqué : `/post/md5/{md5sum}` sert l'objet
+    nu quand `/post/{slug}?format=json` sert un objet enveloppé dans `posts`.
 
-    - le type de contenu des réponses JSON est `application/vnd.api+json`, alors
-      que la spécification `formats-de-sortie` exige `application/json` ;
-    - `/post/md5/{md5sum}` sert l'objet nu quand `/post/{slug}?format=json` sert
-      un objet enveloppé dans `posts`.
+    **Version.** `info.version` est celle du projet, incrémentée à chaque
+    publication du site. Elle **ne signale pas** les changements de cette API :
+    une rupture peut survenir sans incrément majeur, et un incrément majeur peut
+    ne rien changer ici. Ne pas s'y fier.
+
+    Ce qui dit ce qui a changé est le **diff de ce document**, versionné avec le
+    site. C'est le seul canal existant, et il demande d'aller regarder : rien
+    n'est poussé vers les consommateurs, il n'existe ni en-tête de dépréciation,
+    ni délai, ni adresse à qui écrire. La mise en ligne est automatique.
 
     Le protocole Subsonic servi sous `/rest` n'est pas décrit ici : il a sa
     propre documentation.
@@ -110,7 +116,7 @@ paths:
           content:
             text/html:
               schema: { type: string }
-            application/vnd.api+json:
+            application/json:
               x-parametres: { format: json }
               schema: { $ref: '#/components/schemas/EnveloppeMorceaux' }
             application/xspf+xml:
@@ -153,7 +159,7 @@ paths:
         '200':
           description: Le morceau, non enveloppé.
           content:
-            application/vnd.api+json:
+            application/json:
               schema: { $ref: '#/components/schemas/MorceauNu' }
 
   /posts:
@@ -181,7 +187,7 @@ paths:
           content:
             text/html:
               schema: { type: string }
-            application/vnd.api+json:
+            application/json:
               x-parametres: { format: json }
               schema: { $ref: '#/components/schemas/EnveloppeMorceaux' }
             application/xspf+xml:
@@ -231,7 +237,7 @@ paths:
         '200':
           description: Adresse et intitulé du morceau suivant.
           content:
-            application/vnd.api+json:
+            application/json:
               schema: { $ref: '#/components/schemas/RepereLecteur' }
 
   /posts/prev:
@@ -245,7 +251,7 @@ paths:
         '200':
           description: Adresse et intitulé du morceau précédent.
           content:
-            application/vnd.api+json:
+            application/json:
               schema: { $ref: '#/components/schemas/RepereLecteur' }
 
   /posts/random:
@@ -258,7 +264,7 @@ paths:
         '200':
           description: Adresse et intitulé d'un morceau tiré au hasard.
           content:
-            application/vnd.api+json:
+            application/json:
               schema: { $ref: '#/components/schemas/RepereLecteur' }
 
   /oembed:
