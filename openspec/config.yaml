@@ -1,4 +1,4 @@
-schema: musique-approximative
+schema: behaviour-driven
 
 context: |
   Musique Approximative — playlist quotidienne collaborative du collectif
@@ -42,17 +42,55 @@ context: |
   prendre la prochaine story non cochée de ce fichier et utiliser son packet
   comme entrée. Une story par change, une seule à la fois.
 
-# Les règles de rédaction — français, section « Hors périmètre », comportement
-# observable plutôt qu'implémentation, tâche de vérification manuelle, cache et
-# plugins tiers — sont désormais portées par le schéma `musique-approximative`,
-# dans `openspec/schemas/`. Les répéter ici créerait deux sources de vérité qui
-# divergeraient. Ne subsistent ci-dessous que les consignes que le schéma ne
-# couvre pas.
+# Les règles de rédaction du projet — français, section « Hors périmètre »,
+# comportement observable plutôt qu'implémentation, vérification manuelle —
+# étaient portées par le schéma `musique-approximative`. Depuis le passage à
+# `behaviour-driven`, elles sont déclarées ici : le schéma actif est rédigé en
+# anglais et ne les couvre pas. Ne subsistent ci-dessous que les consignes que
+# le schéma ne porte pas lui-même.
+#
+# `musique-approximative` reste sous `openspec/schemas/` : le retour en arrière
+# tient à la valeur de `schema:` en tête de ce fichier.
 
 rules:
   proposal:
-    - Lorsqu'une contrainte du socle legacy oriente la solution retenue, la
-      documenter dans la section « Approche » plutôt que de la laisser implicite.
+    - "Rédiger en français. Seuls restent en anglais les titres que l'outil
+      analyse par leur nom : `## Why`, `## What Changes`."
+    - "Ajouter une section « Hors périmètre », qui dit ce que le changement ne
+      fait délibérément pas. Elle est obligatoire : sur du code legacy, la
+      tentation de corriger « tant qu'on y est » est le premier facteur de dérive."
+    - Nommer les capacités en kebab-case et en français, par exemple
+      `flux-syndication` ou `catalogue-morceaux`.
+    - Dire explicitement si le contrat public est concerné.
+    - "Lorsqu'une contrainte du socle legacy oriente la solution retenue, la
+      documenter plutôt que de la laisser implicite : dans l'artefact `design`
+      s'il est produit, sinon dans la proposition."
+  specs:
+    - "Rédiger en français. Restent en anglais les seuls repères que l'outil
+      analyse : `## ADDED|MODIFIED|REMOVED|RENAMED Requirements`,
+      `### Requirement:`, `## Purpose`, et les mots normatifs `SHALL` et `MUST`."
+    - "Écrire chaque scénario `#### Scénario : <nom>`, avec exactement quatre
+      dièses, et son corps en `- **QUAND**`, `- **ALORS**`, `- **ET**`. C'est la
+      forme des 104 scénarios déjà versés sous `openspec/specs/`."
+    - Ne jamais mentionner Symfony ni Doctrine dans une spec. Ils ont vocation à
+      disparaître, pas le comportement.
+    - "Test rapide : si l'implémentation peut changer sans que le comportement
+      observable bouge, cela n'a pas sa place dans une spec."
+  design:
+    - Rédiger en français.
+    - "Ne produire cet artefact que si le changement est structurant : plusieurs
+      modules, schéma de données, dépendance nouvelle, migration. La plupart des
+      changes de ce dépôt n'en ont pas besoin."
+  tasks:
+    - Rédiger en français.
+    - "Terminer par une section de vérification manuelle. La suite Lime sous
+      `src/test/` couvre une partie du contrat public, pas sa totalité : les
+      tâches de vérification doivent être assez précises pour être exécutées par
+      quelqu'un d'autre — quelle URL demander, quoi regarder dans la réponse,
+      quel résultat attendre."
+    - Une case cochée signifie vérifiée, jamais « probablement bon ». Si une
+      vérification n'a pas pu être menée, laisser sa case décochée et le dire en
+      clair dans le fichier.
 
 operations:
   archive:
