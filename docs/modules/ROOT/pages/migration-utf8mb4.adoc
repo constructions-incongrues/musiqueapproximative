@@ -1,0 +1,155 @@
+= Migration de la base en utf8mb4
+:toc:
+
+Marche à suivre pour convertir la base de production de `latin1` vers `utf8mb4`.
+
+IMPORTANT: Cette migration ne s'exécute pas au déploiement. Plesk tire `main` et
+ne lance aucune migration. Elle doit être lancée à la main, par le détenteur des
+accès à la base.
+
+== Pourquoi
+
+La base est en `latin1`. Tout caractère hors cp1252 saisi par un contributeur y est
+remplacé par `?` à l'écriture, définitivement.
+
+[cols="1,1,1"]
+|===
+| saisi | ce que la base en fait | après migration
+
+| `Sigur Rós`, `für Elise` | intact | intact
+| `Paweł Zadrożniak` | `Pawe? Zadro?niak` | intact
+| `Сергей Прокофьев` | `?????? ?????????` | intact
+| `🎵` | `?` | intact
+|===
+
+Au dernier relevé : **81 morceaux** ont un titre ou un auteur détruit, **37
+contributeurs** sont concernés, et **cinq dégâts datent de 2026**. Sur 8 097 morceaux
+et dix-huit ans, **pas un seul caractère hors cp1252 n'a survécu**.
+
+== L'ordre des gestes, qui est une contrainte
+
+Convertir les tables *d'abord*, changer l'encodage de connexion *ensuite*.
+
+Déclarer `encoding: utf8mb4` avant la conversion ferait envoyer de l'utf8mb4 vers des
+colonnes `latin1` — le mécanisme qui détruit aujourd'hui, en pire.
+
+[source]
+----
+livraison 1   le script et cette page          aucun effet en production
+    ↓
+  À LA MAIN   lancer le script                 les tables passent en utf8mb4
+    ↓
+livraison 2   encoding: utf8mb4 sur `all`      la connexion cesse de convertir
+----
+
+Entre les deux, l'application lit des tables `utf8mb4` sur une connexion `utf8`.
+MySQL reconvertit, et `utf8` couvre tout le plan multilingue de base : rien de
+l'existant ne se perd. Seuls les emoji restent refusés, et bruyamment. **C'est un
+état sûr, dans lequel on peut rester des jours.**
+
+== Avant de lancer
+
+. **Dump complet, et vérifier qu'il se relit.** Un dump non testé n'est pas une
+  sauvegarde. C'est le seul retour arrière : `CONVERT TO CHARACTER SET latin1` ne
+  rend rien, il re-détruirait ce que la conversion vient de sauver.
++
+[source,console]
+----
+mysqldump -u<user> -p --default-character-set=latin1 <base> > avant-utf8mb4.sql
+mysql -u<user> -p -e "CREATE DATABASE verif_dump"
+mysql -u<user> -p --default-character-set=latin1 verif_dump < avant-utf8mb4.sql
+----
+
+. **Relever un échantillon accentué et ses octets.** C'est contre lui qu'on vérifiera
+  que rien n'a bougé.
++
+[source,sql]
+----
+SELECT id, track_author, HEX(track_author)
+  FROM post WHERE track_author REGEXP '[^ -~]' ORDER BY id LIMIT 5;
+----
+
+== Lancer
+
+[source,console]
+----
+mysql -u<user> -p <base> < src/data/migration/utf8mb4.sql
+----
+
+Le script commence par un contrôle préalable qui **s'arrête** si l'un des trois états
+attendus est faux : rien à convertir, pas de table `post`, ou du double encodage
+détecté. Le troisième est le décisif — voir plus bas.
+
+Il saute les tables déjà converties : une exécution interrompue se relance sans dommage.
+
+== Après
+
+. Vérifier que toutes les tables portent `utf8mb4` — le script l'affiche en fin
+  d'exécution.
+
+. Lancer la commande que le script affiche pour la base elle-même. Elle ne touche
+  aucune donnée ; elle fixe le jeu par défaut des tables créées ensuite.
++
+NOTE: `ALTER DATABASE` n'est pas supporté par le protocole des requêtes préparées
+(erreur 1295), et le script ne connaît pas le nom de la base. D'où cette commande à
+part.
+
+. **Reconstruire l'index de recherche** : la collation de `post_index` a changé.
+
+. Reprendre l'échantillon relevé avant. Le texte doit être **identique**, et le `HEX()`
+  avoir changé — un octet `latin1` devient deux octets UTF-8 :
++
+[source]
+----
+avant   Güyôm    HEX=47FC79F46D
+après   Güyôm    HEX=47C3BC79C3B46D
+----
++
+WARNING: Si le *texte* a bougé, la conversion a mal tourné. Restaurer le dump.
+
+. Seulement alors, poser `encoding: utf8mb4` sur le bloc `all` de
+  `config/databases.yml-dist` et livrer.
+
+== Le contrôle qui décide, et pourquoi
+
+`CONVERT TO CHARACTER SET` réinterprète les octets comme du `latin1` authentique. Si le
+corpus portait de l'UTF-8 rangé dans des colonnes `latin1` — un double encodage — la
+conversion produirait du **mojibake définitif**.
+
+Le contrôle cherche les formes `latin1` des séquences UTF-8 les plus courantes en
+français : `Ã©` pour `é`, `Ã¨` pour `è`, `Ã ` pour `à`. S'il en trouve une, il s'arrête.
+
+Ne pas forcer. Un corpus doublement encodé demande un traitement différent, et le
+forcer détruit ce qui restait.
+
+== Répétition menée le 2026-08-18
+
+Le script a été éprouvé sur trois copies de la base, jamais sur la production.
+
+[cols="2,3"]
+|===
+| épreuve | résultat
+
+| conversion d'une copie `latin1` complète
+| 4 tables converties ; `Güyôm` conservé, `HEX` passé de `47FC79F46D` à `47C3BC79C3B46D`
+
+| insertion d'un emoji après conversion
+| acceptée
+
+| relance sur une base déjà convertie
+| arrêt avec un message explicite
+
+| reprise après interruption à mi-parcours
+| 2 tables restantes converties, les 2 déjà faites intouchées
+
+| corpus portant un double encodage
+| **arrêt** — le garde-fou mord
+|===
+
+== Ce que cette migration ne fait pas
+
+Les **81 morceaux déjà détruits le restent**. Le `?` a remplacé l'octet à l'écriture ;
+aucune conversion ne le rend, et une sauvegarde antérieure porte les mêmes `?`.
+
+La confondre avec une réparation ferait croire le problème réglé. L'inventaire de ce
+qui est perdu est un travail à part.
