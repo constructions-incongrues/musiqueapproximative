@@ -854,7 +854,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
-- [ ] 16. `restreindre-les-tirages-aux-morceaux-publiables` — le hasard ne mène plus à une page morte
+- [x] 16. `restreindre-les-tirages-aux-morceaux-publiables` — le hasard ne mène plus à une page morte
   - **Persona servi** : l'auditeur sur le site, le DJ de soirée — quiconque clique le bouton
     aléatoire ou frappe `r`
   - **Segment du parcours** : Enchaîner (auditeur, étape 3)
@@ -876,7 +876,14 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/lib/model/doctrine/PostTable.class.php`,
     `src/test/functional/frontend/catalogueEtNavigationTest.php`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-restreindre-les-tirages-aux-morceaux-publiables` — **livré le
+    2026-08-18**. Six conditions alignées sur `WHERE_ONLINE`, 8 098 publiables avant comme
+    après, le scénario passe de non vérifié à vérifié.
+  - **Ce que la livraison a montré** : le seul morceau atteignable à tort était
+    `????? — ??????`, publié en 2009 — un titre cyrillique détruit par l'encodage `latin1`,
+    dont `Sluggable` n'a rien pu tirer. Les deux défauts s'enchaînent : l'encodage détruit
+    le titre, l'absence de titre empêche le slug, l'absence de slug fait servir une page
+    morte.
 
 - [ ] 17. `assainir-les-avertissements-de-markdown` — les corps de réponse cessent de porter des avertissements PHP
   - **Persona servi** : le mainteneur
