@@ -46,7 +46,7 @@ class PostTable extends Doctrine_Table
       ->select(self::FIELDS_BASIC)
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
-      ->where('p.is_online = 1 and p.publish_on <= date_add(now(), interval 2 hour)')
+      ->where(self::WHERE_ONLINE)
       ->orderBy('p.publish_on DESC')
       ->limit(1);
 
@@ -83,7 +83,7 @@ class PostTable extends Doctrine_Table
       ->select(self::FIELDS_BASIC)
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
-      ->where('p.is_online = 1 and p.publish_on <= date_add(now(), interval 2 hour) and p.id = ?');
+      ->where(self::WHERE_ONLINE.' AND p.id = ?');
     $post = $q->fetchOne(array($post_id));
     $q->free();
 
@@ -103,7 +103,7 @@ class PostTable extends Doctrine_Table
       ->select(self::FIELDS_BASIC)
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
-      ->where('p.is_online = 1 and p.publish_on > ? and p.publish_on <= date_add(now(), interval 2 hour)')
+      ->where(self::WHERE_ONLINE.' AND p.publish_on > ?')
       ->orderBy('p.publish_on ASC')
       ->limit(1);
 
@@ -133,7 +133,7 @@ class PostTable extends Doctrine_Table
       ->select(self::FIELDS_BASIC)
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
-      ->where('p.is_online = 1 and p.publish_on < ?')
+      ->where(self::WHERE_ONLINE.' AND p.publish_on < ?')
       ->orderBy('p.publish_on DESC')
       ->limit(1);
 
@@ -225,7 +225,7 @@ class PostTable extends Doctrine_Table
       ->select(self::FIELDS_BASIC)
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
-      ->where('p.is_online = 1 and p.publish_on <= date_add(now(), interval 2 hour)')
+      ->where(self::WHERE_ONLINE)
       ->orderBy('rand()')
       ->limit(1);
 
@@ -248,7 +248,7 @@ class PostTable extends Doctrine_Table
       ->select(self::FIELDS_BASIC)
       ->from('Post p')
       ->leftJoin('p.sfGuardUser u on p.contributor_id = u.id')
-      ->where('p.is_online = 1 and p.track_md5 = ?');
+      ->where(self::WHERE_ONLINE.' AND p.track_md5 = ?');
     $post = $q->fetchOne(array($md5sum));
 
     return $post;

@@ -15,7 +15,7 @@
 include dirname(__FILE__).'/../../bootstrap/functional.php';
 require_once dirname(__FILE__).'/../../bootstrap/database.php';
 
-$browser = new sfTestFunctional(new sfBrowser(), new lime_test(19));
+$browser = new sfTestFunctional(new sfBrowser(), new lime_test(20));
 $t = $browser->test();
 
 $table = Doctrine_Core::getTable('Post');
@@ -176,27 +176,38 @@ foreach ($publiables as $p) { $slugsPubliables[] = $p->slug; }
 
 $tire = basename(parse_url($ra['url'], PHP_URL_PATH));
 
-// NON VERIFIE, et c'est un defaut du site, non du test.
+// Le tirage est aleatoire ET mis en cache : constater une fois ne demontre rien.
+// On interroge donc le modele, qui est ce que la route appelle, sur assez de
+// tirages pour que le hasard ne masque plus rien.
 //
-// `PostTable::WHERE_ONLINE` definit un morceau publiable par
-// `is_online = 1 AND publish_on <= … AND slug IS NOT NULL AND slug != ''`.
-// Mais `getRandomPost()` reecrit sa condition A LA MAIN, sans la clause de slug
-// (`PostTable.class.php:228`). Elle peut donc tirer un morceau sans identifiant
-// d'URL, et servir `/post/` — une page morte.
-//
-// Deux des sept candidats des fixtures sont dans ce cas ; en production, un sur
-// 6 103. L'assertion est donc intrinsequement instable, et la faire passer
-// demanderait soit de la relancer jusqu'a ce qu'elle tombe bien, soit de
-// restreindre le tirage — deux facons de cacher le defaut.
-//
-// Le meme oubli touche `getNextPost` (:106), `getPreviousPost` (:136) et
-// `getByMd5Sum` (:251). Consigne dans tasks.md, non corrige ici : ce change
-// declare `skip_specs` et ne touche pas au code.
-$t->skip(
-  'Scenario Morceau aleatoire : le morceau tire est publiable — NON VERIFIE, '
-  .'getRandomPost() omet la clause de slug de WHERE_ONLINE et peut tirer un morceau sans URL',
-  1
+// Ce scenario a longtemps ete marque NON VERIFIE : `getRandomPost()` reecrivait
+// la condition de publiabilite a la main, sans la clause de slug de
+// `WHERE_ONLINE`, et pouvait donc servir `/post/` — une page morte. Un seul
+// morceau de la production etait dans ce cas, et c'est le meme defaut vu deux
+// fois : son titre cyrillique detruit par l'encodage latin1 n'a laisse aucun
+// slug a construire.
+$sansSlug = array();
+
+foreach ($table->createQuery('p')
+  ->where("p.is_online = 1 AND p.publish_on <= NOW() AND (p.slug IS NULL OR p.slug = '')")
+  ->execute() as $muet) {
+  $sansSlug[] = $muet->id;
+}
+
+$tires = array();
+
+for ($i = 0; $i < 60; $i++) {
+  $tire = $table->getRandomPost(array());
+  $tires[] = $tire ? $tire->id : null;
+}
+
+$t->is(
+  array_values(array_intersect($tires, $sansSlug)),
+  array(),
+  'Scenario Morceau aleatoire : sur 60 tirages, aucun morceau sans identifiant d URL'
 );
+
+$t->ok(count(array_unique($tires)) > 1, '60 tirages donnent plusieurs morceaux : le hasard joue bien');
 
 $browser->get('/posts/random?c='.$contributeur);
 $rac = json_decode($browser->getResponse()->getContent(), true);
