@@ -11,6 +11,7 @@
 
 .Déployer et exploiter
 * xref:deploiement.adoc[Déploiement]
+* xref:fichiers-de-configuration.adoc[Fichiers de configuration]
 * xref:ghcr.adoc[GitHub Container Registry]
 * xref:migration-utf8mb4.adoc[Migration de la base en utf8mb4]
 * xref:api-subsonic.adoc[API Subsonic]
