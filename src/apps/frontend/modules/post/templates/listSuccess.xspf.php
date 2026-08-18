@@ -20,5 +20,5 @@ if ($sf_request->getParameter('c')) {
 include_partial('post/xspfPlaylist', array(
   'posts' => $posts,
   'title' => $title,
-  'baseUrl' => $sf_request->getUriPrefix() . $sf_request->getRelativeUrlRoot(),
+  'trackScheme' => $sf_request->isSecure() ? 'https' : 'http',
 ));

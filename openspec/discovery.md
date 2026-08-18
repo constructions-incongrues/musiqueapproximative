@@ -556,7 +556,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-servir-les-erreurs-en-json` — **livré le 2026-08-18**
 
-- [ ] 6. `specifier-les-routes-json-non-couvertes` — chaque route JSON servie est décrite par un scénario
+- [~] 6. `specifier-les-routes-json-non-couvertes` — chaque route JSON servie est décrite par un scénario
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : Changer un format, Vérifier
   - **MoSCoW** : Should
@@ -575,8 +575,40 @@ Chaque story est une tranche verticale : elle se démontre seule.
     annoncé de cette story supposait un environnement qu'il fallait d'abord réparer.
   - **Code concerné** : `openspec/specs/formats-de-sortie/spec.md`,
     `src/test/functional/frontend/postActionsTest.php`
-  - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Reformulée le 2026-08-18, et c'est l'audit qui l'a imposé** : la moitié « spécifier »
+    était **déjà faite**. Les stories 1, 4 et 5 ont écrit en passant les scénarios de
+    `/post/md5/`, des routes de navigation et du comportement en erreur ; la pagination n'en
+    a pas, mais sa story est en attente. L'audit a compté **59 scénarios** sur les deux
+    capacités de cet axe, et une preuve mince : quinze assertions dans `postActionsTest`,
+    dix sur le type et le cache, et le test de contrat qui ne regarde que statut, type et
+    champs de premier niveau. Le mainteneur n'a donc pas un problème de description, **il a
+    un problème de preuve**. La story continue sous le nom
+    `verifier-les-representations-machine`.
+  - **Ajoutée** : 2026-08-18 · **Reformulée** : 2026-08-18
+  - **Change** : `verifier-les-representations-machine` — proposé le 2026-08-18, groupe XSPF
+    et Max/MSP fait, le reste ouvert
+
+- [x] 15. `unifier-l-adresse-du-fichier-audio` — un fichier audio a une seule adresse
+  - **Persona servi** : l'intégrateur, et quiconque suit une adresse de fichier
+  - **Segment du parcours** : Récupérer (étape 3)
+  - **MoSCoW** : Must
+  - **Née d'une vérification, non d'un plan** : trouvée en écrivant la couverture de la
+    story 6. Le même morceau était servi sous deux adresses selon la représentation —
+    et `/post/{slug}?format=max` rendait `http://localhost/tracks/un titre.mp3`, **espace
+    brut, URL cassée**. Le scénario « Structure identique à celle d'une liste » l'interdisait
+    déjà ; rien ne l'exerçait.
+  - **Ce que l'exploration a élargi** : le défaut ne touchait pas un gabarit mais **trois**.
+    Le `max` isolé et les deux gabarits XSPF construisaient l'adresse depuis l'hôte de la
+    requête, ignorant `app_urls_tracks`. En production les deux coïncident, ce qui explique
+    que personne ne l'ait vu — ils divergent dès que les fichiers sont servis ailleurs, ce
+    qui est la raison d'être de ce réglage.
+  - **Périmètre** — dedans : les trois gabarits alignés sur `Post::getTrackUrl()` ; une
+    exigence de spec disant que l'adresse se construit d'une seule façon. — dehors : le flux
+    et oEmbed, qui passaient déjà par le modèle ; la valeur du réglage.
+  - **Code concerné** : `showSuccess.max.php`, `listSuccess.xspf.php`,
+    `showSuccess.xspf.php`, `_xspfPlaylist.xspf.php`
+  - **Ajoutée** : 2026-08-18 · **Livrée** : 2026-08-18
+  - **Change** : `2026-08-18-unifier-l-adresse-du-fichier-audio` — **livré le 2026-08-18**
 
 - [~] 7. ~~`paginer-getartists-subsonic`~~ — **supersédée le 2026-08-18**
   - **Raison** : son unique persona, « l'auditeur en client Subsonic », a été retiré du plan

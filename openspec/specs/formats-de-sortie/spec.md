@@ -16,6 +16,11 @@ déclaré SHALL aboutir : il ne peut ni échouer, ni servir un corps vide.
 Le type de contenu déclaré SHALL être celui de la représentation servie, sans réécriture
 en aval. Il SHALL être identique qu'une réponse soit calculée ou servie depuis le cache.
 
+L'adresse du fichier audio d'un morceau SHALL être construite d'une seule façon, quelle que
+soit la représentation qui la porte et quelle que soit la route qui la sert. Elle SHALL
+désigner l'emplacement configuré pour les fichiers — lequel peut différer de l'hôte du site —
+et le nom de fichier y SHALL être encodé pour une URL.
+
 Les surfaces qui servent du JSON sous une spécification propre — l'embarquement oEmbed, le
 protocole d'écoute tierce — SHALL conserver le type que cette spécification leur impose.
 
@@ -83,6 +88,30 @@ protocole d'écoute tierce — SHALL conserver le type que cette spécification 
 
 - **QUAND** une page est servie dans sa représentation HTML
 - **ALORS** son type de contenu reste celui d'un document HTML
+
+#### Scénario : Adresse du fichier identique d'une représentation à l'autre
+
+- **QUAND** un consommateur récupère un même morceau dans deux représentations différentes
+- **ALORS** l'adresse de son fichier audio est la même dans les deux
+
+#### Scénario : Adresse du fichier identique d'une route à l'autre
+
+- **QUAND** un consommateur récupère un même morceau seul, puis dans une liste, dans la même
+  représentation
+- **ALORS** l'adresse de son fichier audio est la même dans les deux
+
+#### Scénario : Nom de fichier encodé
+
+- **QUAND** le nom du fichier audio contient un espace ou un caractère qu'une URL ne peut pas
+  porter tel quel
+- **ALORS** l'adresse servie l'encode
+- **ET** elle reste une URL valide
+
+#### Scénario : Emplacement configuré honoré
+
+- **QUAND** les fichiers audio sont servis depuis un emplacement distinct de l'hôte du site
+- **ALORS** les adresses servies désignent cet emplacement
+- **ET** aucune représentation ne retombe sur l'hôte de la requête
 
 ### Requirement: Représentation JSON d'un morceau
 
