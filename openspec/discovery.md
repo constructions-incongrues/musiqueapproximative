@@ -390,7 +390,7 @@ Parcours du **mainteneur** :
 Liste ordonnée. Une story = un change OpenSpec (proposal ≈ 200 mots).
 Chaque story est une tranche verticale : elle se démontre seule.
 
-- [ ] 1. `retablir-le-type-de-contenu-json` — le JSON est servi avec le type que la spec exige
+- [x] 1. `retablir-le-type-de-contenu-json` — le JSON est servi avec le type que la spec exige
   - **Persona servi** : l'intégrateur
   - **Segment du parcours** : Récupérer (étape 3)
   - **MoSCoW** : Must
@@ -406,11 +406,15 @@ Chaque story est une tranche verticale : elle se démontre seule.
     exemptait explicitement, conservent leur type de contenu ; vérifier que le type revient
     bien à `application/json` sur `/posts` et `/post/:slug`.
     — dehors : la forme du corps JSON, inchangée ; `ApiResponse`, qui reste sans appelant.
-  - **Relevé du 2026-08-18** : **six assertions** verrouillent `application/vnd.api+json`,
-    réparties sur deux fichiers et non un seul —
-    `functional/frontend/postActionsTest.php:25` en porte une,
-    `unit/filter/JsonApiFilterTest.php` en porte cinq, dont deux `unlike` qui gardent les
-    exemptions d'`oembed` et du format HTML. Retirer le fichier de test unitaire ne suffit
+  - **Relevé du 2026-08-18, corrigé à la proposition** : le packet annonçait **six**
+    assertions sur deux fichiers. Le compte réel est de **dix sur trois** —
+    `unit/filter/JsonApiFilterTest.php` en porte **huit** (et non cinq), dont **trois**
+    `unlike` et non deux ; `functional/frontend/postActionsTest.php:25` en porte une ;
+    `functional/frontend/restActionsTest.php:37` en porte une, qui reste vraie après le
+    retrait mais dont le libellé nomme le filtre. S'ajoutent **six déclarations au contrat
+    OpenAPI**, qui n'existait pas quand ce packet a été écrit : le test de contrat échoue
+    à la seconde où le filtre disparaît si le document n'est pas amendé dans le même
+    geste. C'est le premier amendement, et le dispositif fonctionne comme prévu. Retirer le fichier de test unitaire ne suffit
     donc pas : le comportement que ses deux `unlike` protègent — `oembed` sert
     `application/json` — doit rester vrai après le retrait du filtre.
   - **Piège à ne pas ressusciter** : `filters.yml` place `json_api` **sous** `cache`
@@ -422,7 +426,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/apps/frontend/config/filters.yml`, `src/test/unit/filter/JsonApiFilterTest.php`,
     `src/test/functional/frontend/postActionsTest.php`
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-retablir-le-type-de-contenu-json` — **livré le 2026-08-18**
 
 - [ ] 2. `borner-les-listes-de-morceaux` — on demande une tranche du catalogue, pas les 8 097 morceaux
   - **Persona servi** : l'intégrateur, le DJ de soirée, le mélomane fêlé
