@@ -229,6 +229,22 @@ regles:
 * `probability` : Probabilité de déclenchement (0.0 à 1.0, défaut: 1.0)
 * `trigger` : Paramètre URL pour forcer le déclenchement (ex: `?debug_bleu`)
 
+**Unicité** :
+
+Une règle n'est évaluée qu'une fois, même si elle est déclarée dans plusieurs des fichiers
+importés par `desastres.yml`. Deux déclarations sont la même règle lorsque leur `query`,
+leur `probability`, leurs `recettes` et leur `trigger` sont identiques — c'est la copie
+d'un bloc d'un fichier à l'autre. Sans ce dédoublonnage, une règle à `probability: 0.7`
+déclarée deux fois se déclencherait dans 91 % des cas au lieu de 70 %.
+
+Deux règles qui ne diffèrent que par leur `trigger` restent en revanche deux règles :
+les fusionner reviendrait à supprimer un déclencheur, et un désastre ne doit jamais être
+observable seulement par tirage.
+
+Une recette désignée par plusieurs règles satisfaites n'est appliquée qu'une fois, au rang
+de la première règle qui la désigne. C'est le cas courant lorsque deux conditions se
+recouvrent.
+
 **Exemples de conditions** :
 
 [source,yaml]

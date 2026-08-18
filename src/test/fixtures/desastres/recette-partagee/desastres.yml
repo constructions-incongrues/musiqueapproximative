@@ -1,0 +1,10 @@
+# Trois regles DIFFERENTES, dont la premiere et la troisieme designent la meme
+# recette. C'est le cas nominal : deux conditions qui se recouvrent, pas une
+# regle recopiee.
+imports:
+  recettes:
+    - desastres/recettes-un.yml
+  regles:
+    - desastres/regles-un.yml
+regles: []
+recettes: {}

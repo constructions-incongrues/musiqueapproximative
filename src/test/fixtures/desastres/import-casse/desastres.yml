@@ -1,0 +1,9 @@
+# L'import de regles « desastres/regles-absentes.yml » ne designe aucun fichier.
+imports:
+  recettes:
+    - desastres/recettes-un.yml
+  regles:
+    - desastres/regles-un.yml
+    - desastres/regles-absentes.yml
+regles: []
+recettes: {}

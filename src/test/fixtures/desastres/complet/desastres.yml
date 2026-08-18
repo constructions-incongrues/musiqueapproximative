@@ -1,0 +1,10 @@
+# Tous les imports se resolvent. L'ordre de declaration fixe l'ordre d'evaluation.
+imports:
+  recettes:
+    - desastres/recettes-un.yml
+    - desastres/recettes-deux.yml
+  regles:
+    - desastres/regles-un.yml
+    - desastres/regles-deux.yml
+regles: []
+recettes: {}

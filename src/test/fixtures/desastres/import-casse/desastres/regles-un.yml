@@ -1,0 +1,5 @@
+regles:
+  - probability: 1
+    query: query.marqueur ~ /.*oui.*/i
+    recettes: [premiere]
+    trigger: premiere

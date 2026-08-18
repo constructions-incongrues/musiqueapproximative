@@ -1,0 +1,12 @@
+regles:
+  - probability: 1
+    query: query.marqueur ~ /.*jamais.*/i
+    recettes: [premiere]
+  - probability: 1
+    query: query.marqueur ~ /.*jamais.*/i
+    recettes: [premiere]
+    trigger: partage
+  - probability: 1
+    query: query.marqueur ~ /.*jamais.*/i
+    recettes: [seconde]
+    trigger: partage

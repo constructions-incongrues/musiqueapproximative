@@ -1,0 +1,10 @@
+# La meme regle — condition, probabilite et recettes identiques — est declaree
+# dans les deux fichiers importes.
+imports:
+  recettes:
+    - desastres/recettes-un.yml
+  regles:
+    - desastres/regles-un.yml
+    - desastres/regles-bis.yml
+regles: []
+recettes: {}
