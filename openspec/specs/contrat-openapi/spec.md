@@ -15,8 +15,12 @@ d'elles, c'est lui qui a tort.
 ### Requirement: Description d'API publiée
 
 Le site SHALL publier, à une adresse fixe et sans authentification, un document OpenAPI
-décrivant les routes qu'il sert. Ce document SHALL désigner comme serveur le domaine sur
-lequel l'installation tourne, de sorte que chaque déploiement publie le sien.
+décrivant les routes qu'il sert. Ce document SHALL désigner son serveur par une adresse
+**relative**, de sorte qu'il se résolve contre l'installation qui le sert, quelle qu'elle
+soit, sans qu'aucune étape de transformation ne soit nécessaire avant publication.
+
+Le document SHALL être publiable tel qu'il est versionné. Aucun motif restant à substituer
+SHALL y figurer.
 
 Le document SHALL couvrir les routes du catalogue de morceaux et leurs représentations
 alternatives. Il SHALL laisser de côté les surfaces décrites ailleurs.
@@ -31,8 +35,15 @@ alternatives. Il SHALL laisser de côté les surfaces décrites ailleurs.
 #### Scénario : Serveur adapté au déploiement
 
 - **QUAND** le document est servi par une installation donnée
-- **ALORS** l'adresse de serveur qu'il déclare est celle de cette installation
-- **ET** deux installations de domaines différents servent chacune la sienne
+- **ALORS** l'adresse de serveur qu'il déclare se résout sur cette installation
+- **ET** deux installations de domaines différents servent le même document sans qu'il ait
+  été transformé pour l'une ou pour l'autre
+
+#### Scénario : Document publiable tel quel
+
+- **QUAND** le document versionné est déposé sur une installation sans transformation
+- **ALORS** il ne porte aucun motif de substitution restant
+- **ET** ce qu'un consommateur lit est ce que le dépôt contient
 
 #### Scénario : Portée décrite
 

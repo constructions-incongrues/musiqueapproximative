@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (huitième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (neuvième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1644,3 +1644,24 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   désastres, hors des axes de ce plan : ils sont nommés ici pour que le décompte
   « 24 changes archivés » reste vérifiable, non pour être rétro-inscrits en stories.
   Aucune story n'a été ajoutée ni supprimée.
+
+- 2026-08-18 (neuvième révision) — **La story 10 n'était pas livrée, et le plan le disait.**
+  Le contrat OpenAPI existait, était vérifié à chaque exécution de la suite, et **répondait
+  404 en production** : seul `openapi.yaml-dist` était versionné, le rendu venait de
+  `make configure`, et le déploiement se fait par `git pull`. Un document que rien ne sert
+  n'est pas publié. Corrigé hors plan par le change `servir-le-contrat-sans-rendu`, archivé
+  le jour même : le contrat devient un fichier versionné servi tel quel, avec une adresse de
+  serveur relative. La capacité `contrat-openapi` est amendée en conséquence — c'est un
+  changement de comportement observable, pas un détail d'implémentation.
+  **Ce que ça révèle et qui dépasse le contrat** : la convention `-dist` + `make configure`
+  datait du déploiement par rsync, qui rendait les fichiers avant de les envoyer. Depuis le
+  passage à `git pull`, **aucun fichier `-dist` ajouté n'arrive en production**. Les autres
+  `-dist` du dépôt sont antérieurs et présents sur le serveur depuis l'ère rsync ; rien ne
+  prouve qu'ils soient à jour. C'est une story à écrire, et elle commence par mesurer.
+  **Le trou de vérification reste ouvert** : le contrat n'est confronté qu'à l'instance de
+  test. C'est ce qui a laissé un document 404 passer pour publié pendant une journée. Une
+  vérification contre la production est une story à part, non écrite à ce jour.
+  Consigné aussi : la mise en ligne a mis le site en 500 sur toutes ses pages PHP, non à
+  cause du change, mais d'un `make configure` lancé sur le serveur — la cible y trouve un
+  `src/.env` absent, ne substitue rien, et réécrit toute la configuration en gabarits bruts.
+  Rétabli. La commande n'est pas exécutable sur le serveur en l'état.
