@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (quatorzième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (quinzième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -581,33 +581,58 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18 · **Mise en attente** : 2026-08-18
   - **Change** : `borner-les-listes-de-morceaux`, proposé puis retiré le 2026-08-18
 
-- [ ] 3. `borner-le-xspf` — la playlist XSPF cesse de coûter 3,1 secondes
+- [ ] 3. `borner-les-representations-machine` — les formats machine cessent de servir tout le catalogue
+  - *Reformulée le 2026-08-18. S'appelait `borner-le-xspf` et ne visait que ce format ; la
+    mesure du jour a montré que le XSPF était la moins grave des trois. L'ancien énoncé et
+    son motif sont conservés plus bas.*
   - **Persona servi** : l'auditeur sur le site (principal), l'intégrateur, le mélomane fêlé
   - **Segment du parcours** : Emporter la playlist (auditeur, étape 4) · Récupérer
     (intégrateur, étape 3) · Montrer sa playlist (mélomane, étape 3)
   - **MoSCoW** : Must — *promue depuis Should le 2026-08-18*
-  - **Pourquoi celle-ci, pourquoi maintenant** : le XSPF n'est pas un format d'intégrateur.
-    La spec `formats-de-sortie` impose qu'il figure parmi les **liens visibles proposés au
-    visiteur** sur une page de liste. Un humain clique dessus et attend 2,7 à 3,1 s pour
-    3,5 Mo. C'est la seule latence de cet axe sur un chemin humain.
-  - **Dépend de** : ~~story 2~~ — **plus rien, depuis le 2026-08-18.** La story 2 est en
-    attente, sa convention de paramètre n'existera donc pas. Le motif qui l'a suspendue —
-    Ctrl+F sur la page complète — **ne s'applique pas au XSPF** : c'est un fichier de
-    playlist, on n'y cherche pas au clavier, et sa douleur est une latence de 2,7 à 3,1 s
-    sur un lien qu'un humain clique. Cette story peut donc partir seule, en tranchant sa
-    propre convention.
-  - **Périmètre** — dedans : `limit`/`offset` sur `format=xspf` ; le titre de playlist, que
-    `formats-de-sortie` spécifie, doit rester juste quand la liste est tronquée ; le cas
-    `?c=<contributeur>`, qui sert la playlist personnelle d'un mélomane (440 ko pour 993
-    morceaux chez le plus prolifique). — dehors : le format `max`, sans douleur mesurée.
+  - **Ce que coûte `/posts` aujourd'hui**, mesuré sur la production le 2026-08-18 :
+
+    | format | poids | durée |
+    | --- | --- | --- |
+    | `max` | 2,6 Mo | 15,6 s |
+    | `xspf` | 3,5 Mo | **2,9 s** |
+    | `html` | 3,7 Mo | 14,9 s |
+    | `json` | **8,4 Mo** | **17,5 s** |
+
+  - **Pourquoi celle-ci, pourquoi maintenant** : les trois formats machine servent
+    l'intégralité du catalogue, 8 098 morceaux, à chaque demande. Le `json` met **17,5 s
+    pour 8,4 Mo**. Le `xspf` figure en outre, par la spec `formats-de-sortie`, parmi les
+    **liens visibles proposés au visiteur** : un humain clique et attend.
+  - **Ce que la mesure a corrigé** : l'énoncé précédent affirmait que le XSPF était « la
+    seule latence de cet axe sur un chemin humain ». C'est faux — il est **le plus rapide
+    des quatre**. Borner le XSPF seul aurait corrigé la plus petite des latences. Les trois
+    partagent la même cause, une liste non bornée, et une seule décision les couvre.
+  - **Le HTML reste dehors, et ce n'est pas un oubli** : la page complète est une décision
+    de l'auteur — on y fait Ctrl+F, et la recherche du site n'indexe pas le contributeur
+    (`Searchable` ne porte que `track_author` et `track_title`). Ce motif ne vaut pour aucun
+    format machine : on ne cherche pas au clavier dans un fichier XSPF.
+  - **Dépend de** : rien. La story 2 est en attente et sa convention de paramètre n'existera
+    donc pas ; celle-ci tranche la sienne.
+  - **Périmètre** — dedans : borner `json`, `xspf` et `max` sur les routes de liste ; le
+    titre de playlist XSPF, que `formats-de-sortie` spécifie, doit rester juste quand la
+    liste est tronquée ; le cas `?c=<contributeur>`, qui sert la playlist personnelle d'un
+    mélomane (440 ko pour 993 morceaux chez le plus prolifique) ; amender le contrat
+    OpenAPI, qui décrit ces routes. — dehors : la page HTML, décidée non bornée ; le flux
+    RSS, déjà borné ; l'API Subsonic, hors périmètre de ce plan.
   - **Question ouverte à trancher dans la proposal** : ce que reçoit le visiteur qui clique
-    le lien visible. Une troncature arbitraire le sert mal ; le plus juste est sans doute
-    que le lien porte le contexte de la liste qu'il regarde. La réponse ne peut pas être la
-    même pour lui et pour un intégrateur qui pagine.
+    le lien XSPF visible. Une troncature arbitraire le sert mal ; le plus juste est sans
+    doute que le lien porte le contexte de la liste qu'il regarde. La réponse ne peut pas
+    être la même pour lui et pour un intégrateur qui pagine. **Trancher aussi le défaut** :
+    la story 2 avait retenu 50, mais elle visait une page qu'on lit ; un consommateur
+    machine qui pagine n'a pas les mêmes attentes.
   - **Code concerné** : `src/apps/frontend/modules/post/templates/listSuccess.xspf.php`,
+    `listSuccess.json.php`, `listSuccess.max.php`,
     `src/apps/frontend/modules/post/templates/_xspfPlaylist.xspf.php`,
-    `src/apps/frontend/modules/post/actions/actions.class.php` (`setFormats`)
-  - **Ajoutée** : 2026-08-18
+    `src/apps/frontend/modules/post/actions/actions.class.php` (`setFormats`, `executeList`),
+    `src/web/openapi.yaml`
+  - **Ajoutée** : 2026-08-18 · **Reformulée** : 2026-08-18
+  - **Énoncé d'origine, conservé** : « `borner-le-xspf` — la playlist XSPF cesse de coûter
+    3,1 secondes ». Son périmètre excluait `max` « sans douleur mesurée » ; la mesure du
+    jour donne 15,6 s pour ce format, ce qui a motivé l'élargissement.
   - **Change** : _pas encore proposé_
 
 - [x] 4. `aligner-la-route-md5-sur-la-forme-commune` — un morceau récupéré par empreinte a la forme des autres
@@ -1854,3 +1879,22 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   `afficher-la-version-du-site`, demandés en séance ; `servir-du-json-analysable` et
   `reparer-le-rendez-vous-nocturne`, menés en session de fond ; et
   `reconcilier-les-dettes-php8`.
+
+- 2026-08-18 (quinzième révision) — **La story 3 est reformulée, la mesure ayant défait son
+  motif.** Elle affirmait que le XSPF était « la seule latence de cet axe sur un chemin
+  humain », à 3,1 s. Repris sur la production après la publication de la 1.12.0 : le XSPF
+  est **le plus rapide des quatre formats** — 2,9 s — quand le `json` met **17,5 s pour
+  8,4 Mo** et le `max` 15,6 s. Le périmètre d'origine écartait explicitement `max` « sans
+  douleur mesurée » ; il en a 15,6.
+  Borner le XSPF seul aurait donc corrigé la plus petite des latences. La story devient
+  `borner-les-representations-machine` et couvre les trois formats, qui partagent la même
+  cause — une liste non bornée — et relèvent d'une seule décision. L'énoncé d'origine est
+  conservé dans le packet, non effacé.
+  **Le HTML reste délibérément hors périmètre.** La page complète est une décision de
+  l'auteur : on y fait Ctrl+F, et la recherche du site n'indexe pas le contributeur. Ce
+  motif ne vaut pour aucun format machine.
+  **Ce que ça apprend au-delà de cette story** : le chiffre qui a justifié une priorité
+  avait sept mois et n'a pas été repris avant de la promouvoir en Must. Le catalogue a
+  grossi, les formats ont changé, et la hiérarchie s'est inversée sans que personne le voie.
+  Un packet de story vieillit comme un sommaire manuel — c'est le même défaut que celui
+  corrigé par la story 11, et le plan n'a pas d'équivalent du contrôle qu'elle a posé.
