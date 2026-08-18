@@ -56,7 +56,28 @@
 - [x] 3.4 **Vérifié sur la copie réécrite** : `0` empreinte, `0` courriel réel, **1 081
   commits conservés** — aucun n'est perdu, seuls les blobs sortent. Le pack passe de
   35,9 à 33,3 Mo.
-- [ ] 3.5 Poussée forcée. **Elle déclenche le déploiement** — Plesk tire `main`. Le contenu
+- [~] 3.5 **Menée le 2026-08-18, et INCOMPLÈTE.** Les trois branches sont réécrites sur
+  `origin` — `main` passe de `4df38ae` à `a99802b`. **Les 33 étiquettes ont été rejetées :**
+
+  ```
+  remote: error: GH013: Repository rule violations found for refs/tags/v1.11.0.
+  remote: - Cannot update this protected ref.
+  ```
+
+  **Conséquence mesurée, et elle annule le bénéfice** : un `git clone` récupère les
+  étiquettes par défaut, et 14 d'entre elles portent l'ancien historique. Le dépôt expose
+  donc **toujours 207 empreintes et 171 courriels** — le chiffre exact d'avant l'opération.
+
+  La règle n'a pas été trouvée : ce n'est ni le ruleset du dépôt (il ne cible que la
+  branche par défaut), ni la protection d'étiquettes héritée (absente), ni un ruleset
+  d'organisation (inaccessible). **Il faut un accès administrateur pour la lever.**
+
+  Reste à faire, une fois la règle levée :
+  ```
+  git push github --force 'refs/tags/*:refs/tags/*'
+  ```
+
+- [ ] 3.5b Poussée forcée des étiquettes. **Elle déclenche le déploiement** — Plesk tire `main`. Le contenu
   final étant identique, l'effet devrait être nul ; vérifier le site après plutôt que de le
   supposer.
 - [ ] 3.6 Reprendre les branches restantes sur le nouvel historique.
@@ -81,3 +102,31 @@
 - [ ] 5.3 Vérifier que la suite passe sur un clone neuf du dépôt réécrit — c'est ce que
   recevra la prochaine personne qui arrive.
 - [ ] 5.4 `openspec validate purger-les-identifiants-de-l-historique --type change --strict`.
+
+## État au 2026-08-18, à l'arrêt de la session
+
+**Fait**
+
+- Sauvegarde miroir vérifiée : `sauvegarde-20260818-183310.git`, 214 refs, 1 082 commits,
+  `main` à `4df38ae`. C'est le retour arrière complet.
+- Inventaire exhaustif corrigé : **trois** dumps portent des identifiants, non deux.
+  `vagrant.dump.sql` avait échappé au premier relevé.
+- Réécriture éprouvée puis appliquée aux **branches** : `main`, la branche de ce change et
+  celle de release-please.
+- Amorçage anonymisé rétabli en un commit sans passé — `--invert-paths` l'avait retiré de
+  HEAD aussi, ce qui aurait laissé l'environnement de développement sans base.
+- Dépôt local réaligné sur l'historique réécrit, pour qu'une poussée ultérieure ne
+  réintroduise rien.
+
+**Non fait, et c'est l'essentiel**
+
+- Les **33 étiquettes** portent toujours l'ancien historique. Exposition réelle inchangée :
+  **207 empreintes, 171 courriels**.
+- Aucun mot de passe invalidé. Aucune des 173 personnes prévenue.
+- GitHub n'a pas été sollicité ; les 4 forks n'ont pas été informés.
+
+**Ce que la session a démontré, et qui vaut plus que ce qu'elle a fait**
+
+Le design annonçait que la réécriture n'était pas une réparation. L'échec des étiquettes le
+rend littéral : **les branches sont propres et l'exposition est entière.** Tant que les 207
+mots de passe ouvrent des comptes, rien n'a changé pour les personnes concernées.
