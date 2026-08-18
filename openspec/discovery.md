@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (douzième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (treizième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1793,3 +1793,24 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   bornes ; la 22, close ; et trois dettes nommées dans les archives — la montée en PHP 8,
   bloquée par `getid3` ; `make configure` inexécutable sur le serveur ; et `nightly.yml`
   rouge depuis deux mois, qui rend invisible tout ce qu'on y loge.
+
+- 2026-08-18 (treizième révision) — **Réconciliation des dettes, et une de mes affirmations
+  défaite.** Le change `assainir-le-rendu-markdown` léguait « un second verrou PHP 8
+  subsiste, `getid3` porte la même syntaxe supprimée ». C'est faux : l'occurrence est **dans
+  un commentaire**. Elle avait été relevée au `grep`, sans vérifier s'il s'agissait de code
+  vivant — la même erreur de méthode que le relevé de la story 20, où une expression
+  régulière avait été crue sur parole avant qu'on relise la liste.
+  La mesure reprise **par analyse de jetons** donne : zéro accès de chaîne en accolades
+  partout, trois constructeurs PHP 4 dans `src/lib/vendor/File/`, trois dans `src/vendor`.
+  Les trois premiers appartenaient à une bibliothèque PEAR `File_XSPF` **que rien n'utilise
+  et qui ne compile même pas** sur le PHP 7.4 du projet — elle emploie `return throw new …`,
+  syntaxe PHP 8. Elle est supprimée ; le XSPF continue d'être servi par ses gabarits.
+  Piège de méthode consigné : `php -l` sur le poste de développement, en PHP 8, déclarait ce
+  fichier sain. **Vérifier une compatibilité sur la mauvaise version d'interpréteur ne
+  prouve rien.**
+  **Quatre dettes que les archives croient ouvertes sont en fait fermées** : le contrat
+  n'est plus vérifié qu'en test (story 23), les autres `-dist` ont été mesurés (story 24),
+  `nightly.yml` a été supprimé, et le verrou `getid3` n'existait pas. Les archives ne sont
+  pas réécrites — un `tasks.md` archivé est le relevé de ce qui a été fait à une date.
+  **Reste ouvert** : les trois constructeurs de `src/vendor`, qu'un `composer install`
+  effacerait, et l'audit PHP 8 lui-même, qui porte sur bien plus que deux syntaxes.
