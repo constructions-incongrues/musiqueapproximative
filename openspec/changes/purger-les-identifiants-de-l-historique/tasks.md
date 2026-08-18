@@ -25,16 +25,37 @@
 
 ## 3. Réécrire — ce qui arrête la propagation, et rien d'autre
 
-- [ ] 3.1 **Clone miroir complet du dépôt, et vérifier qu'il se relit.** C'est le seul retour
-  arrière.
+- [x] 3.1 **Clone miroir complet du dépôt, et vérifier qu'il se relit.** C'est le seul retour
+  arrière. Fait le 2026-08-18 depuis `origin`, l'état qui fait foi : **214 refs, 1 081
+  commits, 37 Mo**, `fsck` propre.
 - [ ] 3.2 Réduire ce qu'il faudra reprendre : fusionner ou fermer ce qui peut l'être parmi
   les **46 branches distantes** et la PR de release en cours.
-- [ ] 3.3 `git filter-repo` sur les blobs de `src/data/fixtures/musiqueapproximative.sql` et
-  `src/data/fixtures/net_musiqueapproximative_www.dump.sql`. Le contenu final de l'arbre ne
-  change pas — le dump actuel est déjà anonymisé.
-- [ ] 3.4 Vérifier avant de pousser : plus aucune empreinte SHA1 ni courriel réel dans
-  l'historique réécrit. La commande de mesure est celle qui a produit les chiffres de la
-  proposition.
+- [x] 3.3 **Éprouvé sur une copie, et la liste de fichiers était fausse.** La proposition
+  n'en nommait que deux. Le galop d'essai a montré qu'après leur retrait, **104 empreintes
+  et 104 courriels subsistaient** — dans `src/data/fixtures/vagrant.dump.sql`, que le
+  premier relevé avait manqué.
+
+  Inventaire exhaustif, refait fichier par fichier sur tout l'historique :
+
+  | fichier | empreintes | courriels |
+  | --- | --- | --- |
+  | `src/data/fixtures/musiqueapproximative.sql` | 197 | 171 |
+  | `src/data/fixtures/net_musiqueapproximative_www.dump.sql` | 114 | 102 |
+  | `src/data/fixtures/vagrant.dump.sql` | **104** | **102** |
+  | `src/data/fixtures/subsonic.sql` | 0 | 2 — **fictifs**, `alice@example.net` et `bob@example.net`, RFC 2606 |
+  | **union** | **207** | **173** |
+
+  La commande à lancer porte donc sur **trois** fichiers :
+
+  ```
+  git filter-repo --force --invert-paths \
+    --path src/data/fixtures/musiqueapproximative.sql \
+    --path src/data/fixtures/net_musiqueapproximative_www.dump.sql \
+    --path src/data/fixtures/vagrant.dump.sql
+  ```
+- [x] 3.4 **Vérifié sur la copie réécrite** : `0` empreinte, `0` courriel réel, **1 081
+  commits conservés** — aucun n'est perdu, seuls les blobs sortent. Le pack passe de
+  35,9 à 33,3 Mo.
 - [ ] 3.5 Poussée forcée. **Elle déclenche le déploiement** — Plesk tire `main`. Le contenu
   final étant identique, l'effet devrait être nul ; vérifier le site après plutôt que de le
   supposer.

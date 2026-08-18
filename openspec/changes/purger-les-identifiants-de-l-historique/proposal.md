@@ -10,11 +10,20 @@ les postes qui ont déjà tiré le dépôt.
 
 ## L'exposition, mesurée
 
-| fichier | versions | empreintes | courriels |
-| --- | --- | --- | --- |
-| `src/data/fixtures/musiqueapproximative.sql` | 3 (avant anonymisation) | jusqu'à 179 | jusqu'à 170 |
-| `src/data/fixtures/net_musiqueapproximative_www.dump.sql` | 2, fichier supprimé depuis | jusqu'à 104 | jusqu'à 102 |
-| **union sur tout l'historique** | | **207** | **171** |
+*Inventaire refait fichier par fichier le 2026-08-18, après qu'un galop d'essai a montré que
+le premier relevé était incomplet.*
+
+| fichier | empreintes | courriels |
+| --- | --- | --- |
+| `src/data/fixtures/musiqueapproximative.sql` | 197 | 171 |
+| `src/data/fixtures/net_musiqueapproximative_www.dump.sql` | 114 | 102 |
+| `src/data/fixtures/vagrant.dump.sql` | **104** | **102** |
+| `src/data/fixtures/subsonic.sql` | 0 | 2 — fictifs, `example.net` réservé par la RFC 2606 |
+| **union sur tout l'historique** | **207** | **173** |
+
+**Trois fichiers, non deux.** `vagrant.dump.sql` avait échappé au premier relevé : une
+réécriture sur les deux premiers seulement aurait laissé 104 empreintes et 104 courriels en
+place, en donnant l'impression d'avoir purgé.
 
 `sf_guard_user.algorithm` vaut `sha1`. Ce sont donc des empreintes **SHA1 salées**, sans
 étirement de clé : une empreinte dont on connaît le sel — et le sel est dans le même dump —
