@@ -28,9 +28,10 @@ ALTER TABLE post
   ADD INDEX track_author_idx (track_author(191));
 ----
 
-Sur MySQL 5.7 cette opération est `ALGORITHM=INPLACE, LOCK=NONE` et
-sub-seconde sur les ~7 000 lignes actuelles : pas de fenêtre de maintenance
-nécessaire.
+La production tourne sur **MariaDB 10.11**, non sur MySQL — le conteneur de
+développement a été aligné dessus. L'opération y est `ALGORITHM=INPLACE,
+LOCK=NONE` et sub-seconde sur les ~8 200 lignes actuelles : pas de fenêtre de
+maintenance nécessaire.
 
 Détail complet et étapes suivantes : xref:API_SUBSONIC.adoc[] ou
 `docs/API_SUBSONIC.md`.
