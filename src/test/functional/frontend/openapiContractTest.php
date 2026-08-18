@@ -18,7 +18,8 @@
  *
  * Ce qu'il ne verifie PAS : la structure des corps au-dela du premier niveau,
  * et le fait que le document soit servi en HTTP a son adresse publique. Les
- * deux sont dits dans le contrat lui-meme.
+ * deux sont dits dans le contrat lui-meme. Le second a deja mordu : le contrat
+ * a ete vert en integration pendant qu'il repondait 404 en ligne.
  *
  * Les valeurs de substitution ci-dessous (slug, md5sum, current, url) viennent
  * des fixtures. Ce n'est pas une liste de routes : c'est de quoi remplir les
@@ -39,8 +40,8 @@ if (!file_exists($contrat))
 {
   $t = new lime_test(1);
   $t->fail(sprintf(
-    "Le contrat est absent de %s. Il est produit par `make configure` a partir de\n".
-    "web/openapi.yaml-dist ; lancer `docker-compose exec php sh -c 'cd /usr/local/src && make configure'`.",
+    "Le contrat est absent de %s. Il n'est plus genere : c'est un fichier versionne,\n".
+    'servi tel quel. S\'il manque, c\'est qu\'il a ete supprime ou deplace.',
     $contrat
   ));
 
@@ -49,23 +50,20 @@ if (!file_exists($contrat))
 
 $doc = sfYaml::load($contrat);
 
-// Un rendu qui mange les cles « $ref » produit un document qui s'analyse encore
-// mais ne declare plus rien. C'est arrive : `envsubst` sans liste blanche
-// substitue tout motif « $MOT ». Le contrat compte ses references avant de
-// servir de reference.
-$refsAttendues = preg_match_all('/\$ref:/', file_get_contents($contrat));
-$refsGabarit = preg_match_all('/\$ref:/', file_get_contents(dirname($contrat).'/openapi.yaml-dist'));
+// Le contrat n'est plus rendu : il est versionne et servi tel quel. L'invariant
+// a tenir n'est donc plus « la substitution n'a rien mange », c'est « personne
+// ne l'a retransforme en gabarit ». Un « ${...} » ici voudrait dire qu'une
+// etape de rendu est revenue — et comme les rendus sont ignores par git alors
+// que le deploiement se fait par `git pull`, elle ne produirait rien en ligne.
+$brut = file_get_contents($contrat);
 
-if ($refsAttendues !== $refsGabarit)
+if (preg_match('/\$\{[A-Z_]+\}/', $brut, $trouve))
 {
   $t = new lime_test(1);
   $t->fail(sprintf(
-    "Le contrat rendu porte %d references la ou son gabarit en porte %d : la
-".
-    "substitution les a mangees. Rendre avec une liste blanche de variables
-".
-    '(`envsubst \'$APP_DOMAIN $APP_TITLE …\'`), pas avec `envsubst` nu.',
-    $refsAttendues, $refsGabarit
+    "Le contrat porte la variable non substituee %s. Il est servi tel quel :\n".
+    'il ne doit contenir aucun motif a rendre. Voir l\'en-tete du fichier.',
+    $trouve[0]
   ));
 
   return;

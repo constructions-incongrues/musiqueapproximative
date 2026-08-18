@@ -8,7 +8,6 @@
 /src/log
 /src/vendor
 /musiqueapproxima.sql
-/src/web/openapi.yaml
 /src/web/avatars/*.png
 /src/web/avatars/*.mp4
 /src/web/tracks

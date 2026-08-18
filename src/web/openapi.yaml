@@ -4,8 +4,11 @@
 # spécification du comportement est tenue sous `openspec/specs/`. S'ils divergent,
 # c'est ce document qui a tort.
 #
-# NE PAS ÉDITER LA VERSION GÉNÉRÉE. Ce fichier est le gabarit ; `make configure`
-# en produit `openapi.yaml` en y substituant les variables du profil.
+# Ce fichier est servi tel quel, à `/openapi.yaml`. Il ne porte aucune variable
+# à substituer : l'adresse du serveur est relative, donc le document est valide
+# depuis n'importe quel domaine qui le sert. Ne pas le retransformer en gabarit
+# `-dist` — les rendus sont ignorés par git, et le déploiement se fait par
+# `git pull` : un gabarit n'arriverait jamais en production.
 #
 # Ce qui est vérifié et ce qui ne l'est pas — 60 faits déclarés sur 88, soit 68 %.
 # Le chiffre est donné ici parce que sans lui, le mot « vérifié » couvre aussi
@@ -60,8 +63,11 @@ info:
     identifier: AGPL-3.0-or-later
 
 servers:
-  - url: https://${APP_DOMAIN}
-    description: ${APP_TITLE}
+  # Adresse relative, resolue contre l'emplacement de ce document. C'est ce qui
+  # dispense le contrat d'etre un gabarit : il est juste sur la production comme
+  # sur un poste de developpement, sans rendu prealable.
+  - url: /
+    description: Le site qui sert ce document.
 
 tags:
   - name: morceau
