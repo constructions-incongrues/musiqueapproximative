@@ -73,5 +73,6 @@ docker-compose exec php rm -rf /usr/local/src/cache/frontend/prod/template
 **Reste à vérifier après mise en ligne** — la production sert encore l'ancien code au moment
 où ces lignes sont écrites :
 
-- [ ] 4.5 `curl -s "https://www.musiqueapproximative.net/posts?format=json" | python3 -c "import json,sys; json.load(sys.stdin)"`
+- [x] 4.5 Vérifié sur la production : le document **s'analyse**, 8 098 morceaux.
+  `curl -s "https://www.musiqueapproximative.net/posts?format=json" | python3 -c "import json,sys; json.load(sys.stdin)"`
   ne lève rien.

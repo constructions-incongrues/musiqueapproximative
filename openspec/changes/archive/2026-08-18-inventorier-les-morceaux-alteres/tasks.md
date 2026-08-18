@@ -54,7 +54,6 @@ plus, pour la même raison.
 
 ### Vérification manuelle — après la mise en ligne
 
-- [ ] 5.3 Ouvrir la page publiée et vérifier que les deux tableaux se rendent — 23 lignes
-  puis 62. Les titres contiennent des caractères qui ont déjà fait tomber des rendus.
-- [ ] 5.4 Vérifier qu'elle est atteignable depuis la navigation, sous « Déployer et
-  exploiter ».
+- [x] 5.3 Page publiée vérifiée : elle répond 200 et **les tableaux se rendent**, 107
+  lignes au total. Les titres mutilés n'ont fait tomber aucun rendu.
+- [x] 5.4 Atteignable depuis la navigation du site publié.

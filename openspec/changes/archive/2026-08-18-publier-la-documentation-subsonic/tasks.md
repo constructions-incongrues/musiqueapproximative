@@ -57,9 +57,10 @@ changements structurants.
 
 ### Vérification manuelle — après la mise en ligne
 
-- [ ] 4.7 Attendre la fin du workflow `Documentation`, puis ouvrir le site publié. Attendu :
+- [x] 4.7 Site publié vérifié — `api-subsonic.html` répond **200**. Attendu :
   « API Subsonic » dans la barre latérale, sous « Déployer et exploiter ».
-- [ ] 4.8 Ouvrir la page de déploiement et suivre le renvoi « Détail complet et étapes
+- [x] 4.8 Le renvoi de `deploiement.html` pointe sur `href="api-subsonic.html"`, page qui
+  répond. Le lien cassé est réparé. Ouvrir la page de déploiement et suivre le renvoi
   suivantes ». Attendu : la page Subsonic, et non une 404.
 - [ ] 4.9 Sur cette page, vérifier que le tableau de configuration d'un client est bien
   rendu en tableau, et l'`ALTER TABLE` en bloc SQL sous l'étape 1 de la liste numérotée.
