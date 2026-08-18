@@ -4,8 +4,11 @@ context: |
   Musique Approximative — playlist quotidienne collaborative du collectif
   Constructions Incongrues. Site en production : https://www.musiqueapproximative.net
 
-  Stack : Symfony 1.5 (legacy, fin de vie) + Doctrine 1.3, PHP 7.4, MySQL,
-  templates PHP. jQuery côté client, lecteur audio jPlayer.
+  Stack : Symfony 1.5 (legacy, fin de vie) + Doctrine 1.4, PHP 7.4, MariaDB 10.11
+  en `utf8mb4`, templates PHP. jQuery côté client, lecteur audio jPlayer.
+  Attention en lisant le code de Doctrine : `Doctrine_Core::VERSION` y vaut encore
+  `1.2.4`, constante que le fork `lexpress/doctrine1` n'a jamais mise à jour. La
+  version installée est `v1.4.6`.
   Dev sous Docker Compose (nginx :8080, PHP :8001). Déploiement **automatique** :
   Plesk tire `main` à chaque poussée, il n'y a pas de geste de mise en ligne. Une
   fusion sur `main` est donc une mise en production, et le `make deploy` par rsync
@@ -16,12 +19,22 @@ context: |
   slug, publish_on, contributeur `sfGuardUser`).
   Plugin maison notable : `sfDesastrePlugin` (effets aléatoires, `desastres.yml`).
 
-  Contrat public à préserver — aucun test automatisé ne le couvre aujourd'hui.
+  Contrat public à préserver, et **couvert par la suite de tests** : 21 fichiers,
+  625 assertions. Côté frontend, `openapiContractTest` confronte chaque route du
+  contrat OpenAPI au site, et `representationJsonTest`,
+  `representationsAlternativesTest`, `catalogueEtNavigationTest`,
+  `jsonContentTypeCacheTest` et `unicodeTest` exercent les représentations machine.
+  Ce que la suite ne couvre pas est dit dans `src/web/openapi.yaml` lui-même, qui
+  déclare la proportion vérifiée.
   Routes réelles, telles que définies dans `src/apps/frontend/config/routing.yml` :
   `/` (redirection vers le dernier morceau), `/post/:slug`, `/post/md5/:md5sum`,
   `/posts`, `/posts/feed`, `/posts/next`, `/posts/prev`, `/posts/random`, `/oembed`.
-  Formats de sortie : `json` (jsonapi.org), `xspf`, `max` (Max/MSP), flux RSS 2.01,
-  oEmbed (JSON et XML) ; métadonnées OpenGraph.
+  Formats de sortie : `json`, `xspf`, `max` (Max/MSP), flux RSS 2.01, oEmbed (JSON
+  et XML) ; métadonnées OpenGraph. Le JSON n'est **pas** conforme à JSON:API 1.0,
+  malgré le type de contenu `application/vnd.api+json` que `JsonApiFilter` impose :
+  la migration a été écartée délibérément. Ce que chaque route sert réellement est
+  décrit par `src/web/openapi.yaml`, servi à `/openapi.yaml` et rendu lisible à
+  `/api.html`.
 
   Ce contrat est spécifié en détail dans `openspec/specs/`, qui fait foi sur le
   comportement observable. Une banque de mémoire tenue à la main a existé sous
