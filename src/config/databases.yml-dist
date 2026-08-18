@@ -5,6 +5,18 @@ all:
       dsn:      mysql:host=${DATABASE_HOST};dbname=${DATABASE_NAME}
       username: ${DATABASE_USER}
       password: ${DATABASE_PASSWORD}
+      # `encoding` et non `charset=` dans le DSN : Doctrine 1 analyse le DSN
+      # lui-même et ignore ce qu'il n'y connaît pas. C'est ce paramètre qui
+      # produit le `SET NAMES`, via sfDoctrineConnectionListener.
+      #
+      # Sans cette ligne, sfDoctrineDatabase applique son défaut « UTF8 », qui
+      # tient sur trois octets et rejette les emoji avec une erreur 1366.
+      #
+      # À NE POSER QU'APRÈS la conversion des tables en utf8mb4 : avant, la
+      # connexion enverrait de l'utf8mb4 vers des colonnes latin1, c'est-à-dire
+      # le mécanisme qui détruisait, en pire. Voir
+      # docs/modules/ROOT/pages/migration-utf8mb4.adoc.
+      encoding: utf8mb4
 
 test:
   doctrine:
