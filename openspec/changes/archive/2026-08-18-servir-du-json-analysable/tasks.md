@@ -70,9 +70,28 @@ docker-compose exec php rm -rf /usr/local/src/cache/frontend/prod/template
 - [x] 4.4 `GET /posts?c=<contributeur>&format=json` s'analyse aussi : la liste filtrée passe
   par le même gabarit.
 
-**Reste à vérifier après mise en ligne** — la production sert encore l'ancien code au moment
-où ces lignes sont écrites :
+Après mise en ligne (PR #187 fusionnée le 18 août 2026) :
 
-- [x] 4.5 Vérifié sur la production : le document **s'analyse**, 8 098 morceaux.
-  `curl -s "https://www.musiqueapproximative.net/posts?format=json" | python3 -c "import json,sys; json.load(sys.stdin)"`
-  ne lève rien.
+- [x] 4.5 `curl -s "https://www.musiqueapproximative.net/posts?format=json" | python3 -c "import json,sys; json.load(sys.stdin)"`
+  ne lève rien : 8 098 morceaux, 8,4 Mo. Six sondes, six documents analysables. Le corps
+  d'`hyacinthe-retour-d-emeute-piege` vaut `<p>&#92; Chaque époque a son petit diable //</p>`.
+- [x] 4.6 `GET /post/hyacinthe-retour-d-emeute-piege?format=json` en production : douze
+  sondes analysables sur douze.
+
+**Défaut d'environnement observé au passage, hors périmètre et non résolu** : une première
+sonde sur la route du morceau a échoué (`Expecting property name enclosed in double quotes:
+line 2 column 3`) avant que douze appels consécutifs passent. C'est la signature déjà
+consignée — PHP-Markdown émet des `E_DEPRECATED` sur le premier rendu Markdown d'un
+processus (`src/lib/vendor/PHP-Markdown/markdown.php:910`, syntaxe `{0}` dépréciée depuis
+PHP 7.4), et ils atterrissent dans le corps de la réponse. C'est ce qui oblige chaque test
+JSON à une requête de chauffe. Indépendant de ce change, mais réel : il rend invalide une
+réponse sur N, selon le recyclage des processus PHP-FPM. Mérite son propre change.
+
+## 5. Documentation
+
+- [x] 5.1 `src/web/openapi.yaml` : décrire ce que portent `body.markdown` et `body.html`.
+  Le contrat déclarait `html: { type: string }` sans dire ce que la chaîne contient, ce qui
+  laissait sans réponse la question même que ce change tranche. Contrat revérifié après
+  l'ajout : `openapiContractTest` reste vert.
+- [x] 5.2 Aucune page d'`docs/` ne décrit la représentation JSON : le contrat est le seul
+  document concerné, et il est à jour.

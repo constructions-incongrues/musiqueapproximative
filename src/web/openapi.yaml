@@ -401,8 +401,18 @@ components:
         body:
           type: object
           properties:
-            markdown: { type: string }
-            html: { type: string }
+            markdown:
+              type: string
+              description: Le corps du morceau, tel que son contributeur l'a écrit.
+            html:
+              type: string
+              description: |
+                Le rendu HTML du corps, servi tel que le rendu le produit. Les caractères
+                qui ont une signification en HTML y figurent donc échappés — `&amp;`,
+                `&lt;`, `&#92;` — et le fragment est du HTML valide. Un consommateur qui
+                veut le texte brut décode ces entités lui-même ; le site ne le fait plus
+                pour lui, parce qu'il le faisait sur le document JSON déjà encodé, ce qui
+                le rendait inanalysable.
         track:
           type: object
           properties:
