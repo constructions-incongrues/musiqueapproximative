@@ -32,6 +32,13 @@ post_list:
   url: /posts
   param: { module: post, action: list }
 
+# Verification d'exploitation, pas une surface de contenu. Placee ici parce que
+# le module `post` porte tout le trafic public de ce site ; creer un module pour
+# une action serait plus lourd que le probleme.
+encodage:
+  url: /encodage
+  param: { module: post, action: encodage }
+
 post_feed:
   url: /posts/feed
   param: { module: post, action: feed }
