@@ -43,6 +43,12 @@
       "skillPath": ".agents/skills/grill-me/SKILL.md",
       "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
     },
+    "gstack": {
+      "source": "garrytan/gstack",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "782a00dbd75cd48f8912d35fd85cc823042ce4c566ab89a671d7e9b9d8663c95"
+    },
     "openspec-git-discipline": {
       "source": "intent-driven-dev/skills",
       "sourceType": "github",

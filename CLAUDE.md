@@ -134,3 +134,21 @@ Key routing rules:
 - Save progress → invoke /context-save
 - Resume context → invoke /context-restore
 - Author a backlog-ready spec/issue → invoke /spec
+
+## Système de design
+
+`DESIGN.md` décrit le système visuel du site tel qu'il est. Le lire avant toute
+décision d'interface : polices (Arvo, Rambla), palette monochrome, grille, et le
+geste central du site, l'inversion noir/blanc.
+
+Trois points qui changent la façon de s'en servir :
+
+- **C'est un relevé, pas une prescription.** Il consigne ce que le site fait
+  aujourd'hui, y compris ses écarts. Il ne dit pas ce qu'il devrait faire.
+- **La couche désastre fait partie du système.** `sfDesastrePlugin` écrase
+  l'apparence de base au hasard, par conception. Ne pas signaler un désastre comme
+  une incohérence visuelle.
+- **Les « Écarts relevés » ne sont pas une liste de tâches.** Le premier — la
+  racine `rem` annulée par `reset.css`, qui rend toute la typographie 1,6× trop
+  grande — se corrige en une ligne mais change la taille de tous les textes du
+  site. Ne pas le « nettoyer » au passage : c'est une décision de produit.
