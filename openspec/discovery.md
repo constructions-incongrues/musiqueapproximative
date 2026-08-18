@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (dixième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (onzième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1096,7 +1096,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
-- [ ] 12. `publier-la-page-subsonic` — l'auditeur en client Subsonic trouve comment se connecter
+- [x] 12. `publier-la-page-subsonic` — l'auditeur en client Subsonic trouve comment se connecter
   - **Persona servi** : hors des cinq personas de ce plan — celui qui écoute depuis une
     application Subsonic, retiré du plan le 2026-08-18
   - **Segment du parcours** : Découvrir
@@ -1110,6 +1110,14 @@ Chaque story est une tranche verticale : elle se démontre seule.
     AsciiDoc, inscrit dans la navigation. — dehors : le protocole lui-même, et
     `docs/API_JSON_API_TARGET.md`, qui décrit une option écartée et reste une archive.
   - **Code concerné** : `docs/API_SUBSONIC.md`, `docs/modules/ROOT/pages/`
+  - **Livrée le 2026-08-18, par un chemin détourné.** Elle n'a pas fait l'objet d'un change
+    à elle : la correction des liens internes cassés de la documentation — tâche ouverte en
+    marge de la story 11 — a converti `docs/API_SUBSONIC.md` en
+    `docs/modules/ROOT/pages/api-subsonic.adoc` et l'a inscrite à `nav.adoc`, parce que
+    `deploiement.adoc` pointait sur une page qui n'existait pas. Le déménagement demandé
+    ici était la façon la plus honnête de réparer ce lien.
+    Vérifié : la page existe, le Markdown d'origine est supprimé, la navigation la porte.
+
   - **Ajoutée** : 2026-08-18
   - **Change** : _pas encore proposé_
 
@@ -1164,6 +1172,61 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/apps/frontend/templates/layout.php` (ligne 7)
   - **Ajoutée** : 2026-08-18
   - **Change** : `2026-08-18-retirer-le-verrouillage-du-zoom` — **livré le 2026-08-18**
+
+- [ ] 23. `verifier-le-contrat-contre-la-production` — un contrat vert cesse de pouvoir être faux
+  - **Persona servi** : l'intégrateur, le mainteneur
+  - **Segment du parcours** : Vérifier
+  - **MoSCoW** : Should
+  - **Née d'un défaut réel, pas d'une inquiétude** : le 2026-08-18, `openapiContractTest`
+    déclarait le contrat conforme à chaque exécution pendant que
+    `https://www.musiqueapproximative.net/openapi.yaml` répondait **404**. Le test lit le
+    fichier de l'instance de test ; il n'a jamais demandé quoi que ce soit à la production.
+    Le document a passé une journée entière pour publié sans l'être.
+  - **Ce que ça généralise** : la suite prouve que le *code* sert le contrat. Elle ne prouve
+    rien de ce que le *déploiement* met en ligne. Entre les deux il y a `make configure`,
+    des fichiers gitignorés et un `git pull` — trois endroits où le contrat a déjà disparu.
+  - **Périmètre** — dedans : une vérification qui interroge la production, sur les points
+    que seul le déploiement peut casser (le document est-il servi, à son adresse, avec le
+    bon type, sans motif de substitution) ; décider où elle tourne, la CI n'étant pas le
+    bon endroit pour dépendre d'un site tiers ; décider ce qu'elle fait quand la production
+    est simplement indisponible, un test qui crie au loup se désactive en trois semaines.
+    — dehors : confronter chaque route de la production au contrat, ce que la suite fait
+    déjà contre l'instance de test ; surveiller autre chose que le contrat.
+  - **Dépend de** : rien
+  - **Question ouverte à trancher dans la proposal** : une tâche planifiée qui alerte, ou
+    une commande à lancer à la main après une mise en ligne ? La première se périme sans
+    qu'on la regarde, la seconde ne s'exécute pas. Il faudra choisir un mode de défaillance.
+  - **Code concerné** : `src/test/functional/frontend/openapiContractTest.php`,
+    `.github/workflows/`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 24. `auditer-les-fichiers-dist` — ce qui est en ligne cesse de diverger du dépôt
+  - **Persona servi** : le mainteneur
+  - **Segment du parcours** : Vérifier
+  - **MoSCoW** : Should
+  - **Née du même défaut, remontée d'un cran** : la convention `-dist` + `make configure`
+    datait du déploiement **par rsync**, qui rendait les fichiers avant de les envoyer. Le
+    déploiement se fait maintenant par **`git pull`**, et les rendus sont gitignorés :
+    **aucun fichier `-dist` ajouté depuis ce basculement n'arrive en production.** Le
+    contrat OpenAPI l'a démontré en répondant 404.
+  - **Ce qui n'est pas su** : les autres `-dist` sont antérieurs au basculement et présents
+    sur le serveur depuis l'ère rsync. **Rien ne prouve qu'ils soient à jour.** Un
+    `app.yml` figé à une version ancienne ne se signale pas — il sert simplement une
+    configuration périmée.
+  - **La story commence par mesurer**, et c'est le point : inventorier les `-dist`, établir
+    pour chacun s'il est rendu en production et depuis quand, avant de décider quoi que ce
+    soit. Décider ensuite, fichier par fichier, entre le versement direct — ce qu'a fait le
+    contrat, en supprimant le besoin de rendu — et une étape de rendu au déploiement.
+  - **Un fait aggravant est déjà connu** : `make configure` **n'est pas exécutable sur le
+    serveur** en l'état. Il lit `src/.env`, qui n'existe pas là-bas — c'est un montage
+    Docker en développement. Lancé sur le serveur, il réécrit toute la configuration en
+    gabarits bruts et met le site à terre. C'est arrivé le 2026-08-18.
+  - **Périmètre** — dedans : l'inventaire, l'écart mesuré, et la décision par fichier.
+    — dehors : appliquer la décision à tous les fichiers dans le même change ; refaire le
+    déploiement.
+  - **Dépend de** : rien
+  - **Code concerné** : tous les `*-dist` de `src/`, `src/Makefile`, `Makefile`
+  - **Ajoutée** : 2026-08-18
 
 ## Ordre d'exécution
 
@@ -1693,3 +1756,19 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   dit désormais pour que personne ne la retire en croyant nettoyer.
   Les stories **2** et **3** — borner les listes et le XSPF — restent en attente : l'auteur
   y réfléchit encore. Rien n'est tranché, donc rien n'est écrit au-delà de ça.
+
+- 2026-08-18 (onzième révision) — **La story 12 est livrée sans avoir eu de change.** La
+  correction des liens cassés de la documentation, ouverte en marge de la story 11, a dû
+  convertir `docs/API_SUBSONIC.md` en page Antora pour réparer un `xref` de
+  `deploiement.adoc` — ce qui est exactement le déménagement que la 12 demandait. Cochée,
+  avec le chemin qu'elle a réellement pris.
+  **Correction d'une lecture fautive de la story 17** : elle avait été présentée comme
+  bloquée par PHP 8. C'est l'inverse — elle en est le verrou, et son périmètre (corriger la
+  bibliothèque ou masquer `E_DEPRECATED` en test, retirer les requêtes de chauffe) ne
+  dépend de rien. Elle est faisable aujourd'hui.
+  **Deux stories nouvelles, 23 et 24**, nées du même défaut : le contrat OpenAPI vert en
+  intégration et 404 en ligne pendant une journée. La 23 fait vérifier la production et non
+  seulement le code ; la 24 remonte d'un cran, à la convention `-dist` qui ne survit pas au
+  passage de rsync à `git pull`. Toutes deux commencent par mesurer, et la 23 porte une
+  question ouverte qu'il faudra trancher : alerte planifiée ou commande manuelle, c'est-à-dire
+  quel mode de défaillance on préfère.
