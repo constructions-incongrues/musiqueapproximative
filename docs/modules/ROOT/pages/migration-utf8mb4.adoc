@@ -95,6 +95,30 @@ NOTE: `ALTER DATABASE` n'est pas supporté par le protocole des requêtes prépa
 part.
 
 . **Reconstruire l'index de recherche** : la collation de `post_index` a changé.
++
+[source,console]
+----
+mysql -u<user> -p -e "TRUNCATE post_index;" <base>
+
+cd src && php -r 'require "config/ProjectConfiguration.class.php";
+  $c = ProjectConfiguration::getApplicationConfiguration("frontend", "prod", false);
+  new sfDatabaseManager($c);
+  Doctrine_Core::getTable("Post")->batchUpdateIndex();'
+----
++
+WARNING: Le `TRUNCATE` n'est pas une précaution, c'est la moitié de la commande.
+`batchUpdateIndex()` est **incrémental** : sa requête ne sélectionne que les morceaux
+absents de l'index. Sur un index déjà peuplé, elle ne fait rien — 0,2 s et aucun
+changement. C'est précisément le cas après un changement de collation, où toutes les
+lignes sont présentes mais mal collationnées.
++
+Mesuré sur 6 155 morceaux : **14,7 s depuis un index vide, 19 Mo de pic mémoire, 28 129
+entrées produites**. Compter une vingtaine de secondes pour les 8 216 morceaux de la
+production.
++
+NOTE: L'index local portait 28 164 entrées avant reconstruction contre 28 129 après :
+35 orphelines, reliquats de morceaux supprimés ou modifiés. Vider avant de reconstruire
+les élimine au passage.
 
 . Reprendre l'échantillon relevé avant. Le texte doit être **identique**, et le `HEX()`
   avoir changé — un octet `latin1` devient deux octets UTF-8 :
