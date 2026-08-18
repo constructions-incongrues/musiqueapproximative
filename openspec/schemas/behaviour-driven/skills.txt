@@ -1,0 +1,5 @@
+acceptance-test-authoring
+gherkin-authoring
+glossary
+openspec-git-discipline
+spec-as-source
