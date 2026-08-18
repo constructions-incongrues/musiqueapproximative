@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-18 (seizième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-18 (dix-septième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1380,6 +1380,134 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : tout `src/`, `src/composer.json`, `src/composer.lock`
   - **Ajoutée** : 2026-08-18
 
+- [ ] 29. `mesurer-les-desastres` — on sait enfin ce qui se déclenche
+  - **Persona servi** : le mainteneur, et le collectif qui écrit les désastres
+  - **Segment du parcours** : Vérifier
+  - **MoSCoW** : Must — axe désastres, et **elle conditionne les quatre autres**
+  - **Ce qui existe aujourd'hui** : **rien**. Le plugin ne journalise que les fichiers
+    d'import manquants, par `error_log`. Aucun compteur, aucune trace du tirage, aucun
+    en-tête de réponse ne dit quel désastre a été appliqué. Personne ne sait lequel des
+    dix-neuf se déclenche, ni à quelle fréquence, ni si certains ne se déclenchent jamais.
+  - **Pourquoi elle vient en premier** : sans elle, les stories 30 et 31 se décident au
+    jugé. Réparer trois déclencheurs en l'air ou auto-héberger deux CDN n'a pas le même
+    prix selon qu'ils servent mille fois par jour ou jamais.
+  - **La difficulté est de conception, pas de code** : le tirage a lieu **à la production de
+    la page**, et son résultat vaut pour toutes les consultations servies depuis la même
+    représentation en cache — c'est ce qui distingue un désastre d'un effet aléatoire, et
+    c'est spécifié. **Un compteur posé au tirage compte donc des défauts de cache, pas des
+    visiteurs.** Compter à la consultation demanderait que PHP s'exécute là où le cache
+    l'évite précisément.
+  - **Dépend de** : rien
+  - **Périmètre** — dedans : décider ce qu'on mesure et à quel moment ; poser la collecte ;
+    un moyen de lire le résultat. — dehors : une interface de visualisation ; mesurer autre
+    chose que les désastres.
+  - **Question ouverte à trancher dans la proposal** : compter les tirages, ou les
+    consultations ? Le premier est faisable et répond à « quelle recette sort », le second
+    répond à « combien de gens l'ont vue » et se heurte au cache. **Ne pas prétendre
+    répondre aux deux avec un seul chiffre** — c'est ainsi qu'on obtient une statistique
+    qu'on ne sait plus interpréter six mois plus tard.
+  - **Ne pas casser l'invariance** : deux bugs archivés de cette zone n'étaient que des
+    ruptures d'invariance, et `desastreInvarianceTest` les garde. La collecte ne doit ni la
+    rompre, ni désactiver le cache pour se simplifier la vie.
+  - **Code concerné** : `src/plugins/sfDesastrePlugin/lib/sfDesastreManager.class.php`
+    (le tirage, `mt_rand()` ligne ~252), `lib/filter/sfDesastreFilter.class.php`,
+    `src/test/functional/frontend/desastreInvarianceTest.php`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 30. `reparer-les-references-en-l-air-des-desastres` — un déclencheur mène quelque part
+  - **Persona servi** : le collectif qui écrit les désastres
+  - **Segment du parcours** : Concevoir un désastre
+  - **MoSCoW** : Should — axe désastres
+  - **Relevé du 2026-08-18**, par recoupement des règles et des recettes :
+
+    | | |
+    | --- | --- |
+    | règles déclenchant une recette **inexistante** | `jinglist`, `mangelettres`, `quickos_noel` |
+    | recettes **jamais déclenchées** | `consonnard`, `tts_jinglist`, `voyelliste` |
+
+  - **`jinglist` ↔ `tts_jinglist` ressemble à un renommage à moitié atterri** — la même
+    dérive de nom qui a fait perdre trois stories à ce plan le même jour.
+  - **Ce qui n'est pas établi, et doit l'être d'abord** : ce que fait le moteur quand un
+    déclencheur ne résout pas. Silence, avertissement, erreur ? Le test
+    `DesastreConfigTest` vérifie que chaque règle porte un déclencheur et que les doublons
+    sont constatables ; **il ne vérifie pas qu'un déclencheur mène quelque part.**
+  - **Dépend de** : la story 29 pour savoir si ces règles se déclenchent réellement — trois
+    règles mortes coûtent moins que trois règles qui sortent chaque semaine dans le vide.
+  - **Périmètre** — dedans : établir le comportement actuel ; décider paire par paire —
+    renommer, brancher, ou retirer ; un contrôle qui refuse un déclencheur sans recette et
+    signale une recette sans règle. — dehors : le contenu des recettes elles-mêmes.
+  - **Ne pas confondre avec un bug d'apparence** : `CLAUDE.md` est explicite, un désastre
+    n'est pas un écart visuel. Ici il ne s'agit pas de ce que les recettes font, mais de
+    trois références qui ne pointent sur rien.
+  - **Code concerné** : `src/apps/frontend/config/desastres/regles/*.yml`,
+    `desastres/recettes/*.yml`, `src/test/unit/plugins/DesastreConfigTest.php`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 31. `trancher-les-dependances-tierces-des-desastres` — une contradiction cesse d'être implicite
+  - **Persona servi** : le visiteur, qui ne choisit pas d'être annoncé à un tiers
+  - **Segment du parcours** : Consulter une page
+  - **MoSCoW** : Should — axe désastres
+  - **Le fait, mesuré** : les recettes chargent du JavaScript depuis deux CDN, à
+    l'exécution, sur des pages publiques et au hasard des tirages — **6 renvois vers
+    `cdn.jsdelivr.net`** (gsap), **4 vers `cdnjs.cloudflare.com`** (anime.js), plus un
+    webhook `n8n`.
+  - **Pourquoi c'est une story et pas un détail** : le 2026-08-18, la page de consultation
+    du contrat a été **auto-hébergée exprès**, Redoc versé au dépôt, au motif que « le
+    visiteur qui lit la description de l'API n'a pas à être annoncé à un tiers ». Les deux
+    décisions ne peuvent pas rester vraies en même temps sans qu'on l'ait tranché.
+  - **Les deux réponses se défendent** : auto-héberger gsap et anime.js aligne les
+    désastres sur le reste ; assumer l'appel tiers est défendable aussi, mais **il faut
+    alors l'écrire**, parce qu'aujourd'hui la contradiction est muette.
+  - **Dépend de** : la story 29 — un CDN appelé sur un désastre qui ne sort jamais n'est pas
+    le même problème qu'un CDN appelé tous les jours.
+  - **Périmètre** — dedans : le relevé complet des appels tiers à l'exécution ; la décision,
+    écrite ; son application. — dehors : le webhook `n8n`, qui est un service maison du
+    collectif et relève d'un autre arbitrage ; les liens externes des pages de contenu.
+  - **Code concerné** : `src/apps/frontend/config/desastres/recettes/*.yml`,
+    `src/web/desastres/*/javascript/`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 32. `abaisser-le-cout-d-ecriture-d-un-desastre` — en écrire un cesse de demander de savoir où tout est
+  - **Persona servi** : le collectif — quelqu'un qui a une idée de désastre et pas la carte
+    du dépôt
+  - **Segment du parcours** : Concevoir un désastre
+  - **MoSCoW** : Could — axe désastres
+  - **Ce qu'il faut mesurer avant de décider quoi que ce soit** : combien de fichiers, dans
+    combien de dossiers, pour ajouter un désastre complet — recette, règle, déclencheur,
+    assets, schéma JSON, et l'import à déclarer dans `desastres.yml`. Le relevé n'a pas été
+    fait ; **cette story commence par le faire.**
+  - **Le piège à éviter** : cette story n'a de valeur que si quelqu'un écrit réellement des
+    désastres, et à quelle fréquence. Outiller une tâche qu'on fait deux fois par an coûte
+    plus qu'elle ne rend. **Si la mesure dit que c'est rare, la bonne conclusion est de ne
+    rien faire**, et de l'écrire.
+  - **Dépend de** : rien, mais elle n'a de sens qu'après la story 33 — c'est en en écrivant
+    un qu'on mesure ce qu'il coûte, pas en le supposant.
+  - **Périmètre** — dedans : le relevé du coût réel ; une décision argumentée. — dehors :
+    construire un générateur avant d'avoir établi qu'il sert.
+  - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`,
+    `src/plugins/sfDesastrePlugin/README.adoc`
+  - **Ajoutée** : 2026-08-18
+
+- [ ] 33. `ecrire-de-nouveaux-desastres` — **packet incomplet, il manque vous**
+  - **Persona servi** : l'auditeur sur le site, le mélomane fêlé
+  - **Segment du parcours** : Consulter une page
+  - **MoSCoW** : à trancher — c'est du travail créatif, pas de la maintenance
+  - **Pourquoi ce packet n'est pas rédigé** : les dix-neuf désastres existants sont des
+    gestes — *GARE AU MANGE-LETTRES*, *Postillons de la MUERTE*, la Web Speech API qui
+    parle, le rouge et bleu. Ils viennent d'une intention, pas d'un besoin déduit d'un
+    parcours. **Écrire un packet de story pour un désastre que je choisirais moi-même
+    reviendrait à inventer l'intention**, et ce serait le seul endroit de ce plan où un
+    packet ne vient de personne.
+  - **Ce qu'il me faut de vous** : ce que le désastre doit faire, ou au moins ce qu'il doit
+    provoquer chez celui qui le reçoit. Le reste — recette, règle, déclencheur, assets —
+    je le tiens.
+  - **Ce que je peux faire sans vous, si vous voulez** : proposer des pistes à partir de ce
+    que les dix-neuf existants ne font pas encore. Ce sont des suggestions, pas un packet.
+  - **Dépend de** : rien techniquement. Les stories 29 et 32 sont mieux servies si elle
+    passe avant — on ne mesure bien le coût d'écriture qu'en écrivant.
+  - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
+  - **Ajoutée** : 2026-08-18
+
 ## Ordre d'exécution
 
 L'ordre du fichier n'est plus l'ordre des travaux : les stories 10 à 12 sont arrivées après
@@ -2029,3 +2157,26 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   publiques, par décision consignée ; et le fait qu'aucun contrôle ne rattrape un packet
   dont les chiffres ont vieilli — la 27 le dit elle-même, c'est une affaire de convention,
   pas d'outil.
+
+- 2026-08-18 (dix-septième révision) — **Ouverture d'un axe désastres, apporté par l'auteur.**
+  Cinq stories, 29 à 33. Quatre pistes lui avaient été proposées ; il les a toutes retenues
+  et **en a ajouté une cinquième, la mesure**, qui s'est révélée être celle qui conditionne
+  les autres.
+  L'exploration a relevé trois choses. **Six références en l'air**, dans les deux sens :
+  `jinglist`, `mangelettres` et `quickos_noel` déclenchent une recette qui n'existe pas ;
+  `consonnard`, `tts_jinglist` et `voyelliste` ne sont jamais déclenchées. `jinglist` ↔
+  `tts_jinglist` ressemble à un renommage à moitié atterri — la même dérive de nom qui a
+  fait perdre trois stories à ce plan le même jour.
+  **Des dépendances tierces chargées à l'exécution** : 6 renvois vers `cdn.jsdelivr.net`,
+  4 vers `cdnjs.cloudflare.com`, sur des pages publiques et au hasard des tirages. Le même
+  jour, la page de consultation du contrat a été auto-hébergée exprès pour qu'aucun visiteur
+  ne soit annoncé à un tiers. Les deux décisions ne peuvent pas rester vraies ensemble sans
+  arbitrage.
+  **Aucune instrumentation, nulle part.** Personne ne sait lequel des dix-neuf désastres se
+  déclenche ni à quelle fréquence. Et la mesure porte une difficulté de conception réelle :
+  le tirage a lieu à la production de la page, son résultat vaut pour toutes les
+  consultations servies depuis le cache — **un compteur posé au tirage compte des défauts de
+  cache, pas des visiteurs.**
+  **La story 33 est délibérément incomplète.** Les désastres existants sont des gestes, nés
+  d'une intention. Rédiger un packet pour un désastre choisi par l'assistant reviendrait à
+  inventer cette intention, et ce serait le seul packet de ce plan qui ne vienne de personne.
