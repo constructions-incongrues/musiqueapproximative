@@ -463,7 +463,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/apps/frontend/modules/post/templates/listSuccess.json.php`,
     `src/apps/frontend/modules/post/templates/listSuccess.php`
   - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `borner-les-listes-de-morceaux` — proposé le 2026-08-18
 
 - [ ] 3. `borner-le-xspf` — la playlist XSPF cesse de coûter 3,1 secondes
   - **Persona servi** : l'auditeur sur le site (principal), l'intégrateur, le mélomane fêlé
@@ -510,17 +510,24 @@ Chaque story est une tranche verticale : elle se démontre seule.
     n'est pas une incohérence à corriger mais le contrat interne du lecteur : l'aligner
     casserait la navigation du site. La story se réduit donc à `/md5`, et l'avertissement de
     taille tombe.
-  - **Ce que la story 10 a ajouté à son périmètre** : *2026-08-18.* Le relevé machine
-    montre que `/post/md5/` ne sert pas seulement l'objet nu : il expose `publish_on`,
-    `created_at`, `updated_at`, `track_duration` et `track_size`. Le scénario « Champs
-    jamais exposés » de `formats-de-sortie` dit ces champs absents. La story a donc deux
-    écarts à corriger, pas un — l'enveloppe et la fuite.
+  - **Correction du 2026-08-18, à la proposition** : la révision précédente affirmait que
+    `/post/md5/` exposait des champs que `formats-de-sortie` dit absents, et en tirait un
+    second écart à corriger. **C'était faux, et l'erreur venait du relevé de la story 10.**
+    Vérification faite en comparant les deux réponses : elles servent le **même objet, aux
+    mêmes clés** — `publish_on`, `created_at`, `updated_at`, `track_duration`, `track_size`
+    et `buy_url` figurent dans les deux, parce que les deux passent par `Post::toJson()`.
+    Rien n'est propre à `/md5`. Et rien n'est interdit : les trois prohibitions nommées par
+    le scénario « Champs jamais exposés » — mise en ligne, révision, objet utilisateur —
+    portent sur `is_online`, `svn_revision` et `sfGuardUser`, qui sont bien retirés. Les
+    autres champs ne sont pas interdits, ils ne sont pas décrits : c'est un manque de la
+    spec, qui relève de la story 6, non un défaut du code.
+    **La story 4 reste donc ce qu'elle était : l'enveloppe, et rien d'autre.**
   - **Code concerné** : `src/apps/frontend/modules/post/actions/actions.class.php`
     (`executeMd5`, `renderJsonPost`),
     `src/apps/frontend/modules/post/templates/md5Success.php`,
     `src/apps/frontend/templates/layout.php` (les quatre `$.get`, à ne pas casser)
   - **Ajoutée** : 2026-08-18 · **Resserrée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `aligner-la-route-md5-sur-la-forme-commune` — proposé le 2026-08-18
 
 - [ ] 5. `servir-les-erreurs-en-json` — une erreur sur une route JSON revient en JSON
   - **Persona servi** : l'intégrateur
@@ -721,7 +728,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 (rétroactivement)
   - **Change** : `2026-08-18-fix-recherche-mobile` — **livré** en `f062b4f` (PR #146)
 
-- [ ] 14. `retirer-le-verrouillage-du-zoom` — le visiteur peut agrandir la page
+- [x] 14. `retirer-le-verrouillage-du-zoom` — le visiteur peut agrandir la page
   - **Persona servi** : le DJ de soirée, l'auditeur sur le site — et au premier chef
     quiconque a besoin d'agrandir pour lire
   - **Segment du parcours** : toutes les étapes servies en HTML
@@ -752,7 +759,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     une barrière. Voir « Ce que l'appareil de planification coûte ».
   - **Code concerné** : `src/apps/frontend/templates/layout.php` (ligne 7)
   - **Ajoutée** : 2026-08-18
-  - **Change** : _pas encore proposé_
+  - **Change** : `2026-08-18-retirer-le-verrouillage-du-zoom` — **livré le 2026-08-18**
 
 ## Ordre d'exécution
 
