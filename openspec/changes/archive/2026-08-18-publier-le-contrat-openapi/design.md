@@ -66,6 +66,34 @@ Conséquence sur le test : il doit tolérer que `src/web/openapi.yaml` soit **ab
 poste où `make configure` n'a pas encore tourné. Dans ce cas il le dit et échoue clairement,
 plutôt que de planter sur un fichier introuvable.
 
+### Le contrat traverse deux moteurs de substitution, qui doivent coïncider
+
+*Ajouté après un échec de CI, le 2026-08-18.* Le gabarit est rendu par `make configure`
+en local et en production — `envsubst` avec une liste blanche construite depuis `.env` —
+et par un `envsubst` **nu** dans `.github/workflows/tests.yml`, choisi délibérément là-bas
+pour être explicite et déterministe.
+
+Les deux ne produisent pas le même fichier. `envsubst` sans liste blanche substitue tout
+motif `$MOT`, accolades ou non : **il mange les clés `$ref:` d'un document OpenAPI**, qu'il
+remplace par du vide. Le contrat s'analyse encore, mais ne déclare plus rien — 17 références
+en local, 0 en CI. Le paramètre `current` disparaissant de `/posts/next`, le test ne
+l'envoyait plus, `find(null)` renvoyait `false`, et l'action levait une `TypeError`.
+
+Deux corrections, et la seconde compte autant que la première :
+
+1. **La liste blanche est passée à `envsubst` en CI**, écrite en toutes lettres dans le
+   workflow plutôt que déduite de l'environnement — le même choix d'explicite que le reste
+   de cette étape. Les deux moteurs coïncident désormais.
+2. **Le test compte les références du fichier rendu et les compare à celles du gabarit.**
+   Un contrat dont la substitution a mangé les références est un contrat qui ne déclare plus
+   rien : il faut qu'il le dise, plutôt que de laisser croire qu'il passe. C'est le même
+   principe que le reste de ce dispositif — un document non vérifié ment avec l'autorité
+   d'un format, et un document vidé de sa substance ment sans même qu'on le voie.
+
+La leçon générale, pour les `-dist` à venir : **tout fichier qui contient un `$` non destiné
+à la substitution est fragile ici**. Aujourd'hui seuls `app.yml-dist` et `databases.yml-dist`
+partagent ce chemin, et ni l'un ni l'autre n'en contient. Le contrat est le premier.
+
 ### Le contrat déclare les écarts au lieu de les corriger
 
 `/posts?format=json` est servi en `application/vnd.api+json` là où `formats-de-sortie`

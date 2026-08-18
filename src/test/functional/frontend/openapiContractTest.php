@@ -49,6 +49,28 @@ if (!file_exists($contrat))
 
 $doc = sfYaml::load($contrat);
 
+// Un rendu qui mange les cles « $ref » produit un document qui s'analyse encore
+// mais ne declare plus rien. C'est arrive : `envsubst` sans liste blanche
+// substitue tout motif « $MOT ». Le contrat compte ses references avant de
+// servir de reference.
+$refsAttendues = preg_match_all('/\$ref:/', file_get_contents($contrat));
+$refsGabarit = preg_match_all('/\$ref:/', file_get_contents(dirname($contrat).'/openapi.yaml-dist'));
+
+if ($refsAttendues !== $refsGabarit)
+{
+  $t = new lime_test(1);
+  $t->fail(sprintf(
+    "Le contrat rendu porte %d references la ou son gabarit en porte %d : la
+".
+    "substitution les a mangees. Rendre avec une liste blanche de variables
+".
+    '(`envsubst \'$APP_DOMAIN $APP_TITLE …\'`), pas avec `envsubst` nu.',
+    $refsAttendues, $refsGabarit
+  ));
+
+  return;
+}
+
 /**
  * Resout une reference locale `#/components/...`.
  */
@@ -257,9 +279,11 @@ foreach ($demandes as $demande)
     $typeServi = contrat_type_de_media($reponse->getContentType());
     $corps = $reponse->getContent();
   }
-  catch (Exception $e)
+  catch (Throwable $e)
   {
-    $statutServi = sprintf('exception %s', get_class($e));
+    // Une TypeError n'est pas une Exception : sans ce catch, elle tue le script
+    // et lime ne rapporte qu'un compte de tests manquants, sans dire ou.
+    $statutServi = sprintf('%s: %s', get_class($e), $e->getMessage());
     $typeServi = $statutServi;
     $corps = '';
   }
