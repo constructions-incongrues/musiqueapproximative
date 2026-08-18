@@ -1,5 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/refs/heads/main/schemas/config.json",
+  "last-release-sha": "a250cdf1affc38c1cd702b64c827d364ff378d43",
   "packages": {
     ".": {
       "display-name": "Musique Approximative",
