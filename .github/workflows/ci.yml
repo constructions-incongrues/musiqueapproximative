@@ -148,9 +148,10 @@ jobs:
         # correct. Les deux verdicts étaient faux ; seuls les squelettes cassés
         # masquaient le second.
         #
-        # `xargs` rend 123 dès qu'un `php -l` échoue, et le message d'erreur part
-        # sur la sortie d'erreur en nommant le fichier. Les squelettes sont
-        # exclus : leurs `##CLASS_NAME##` ne seront jamais du PHP valide.
+        # `php -l` rend 255 sur une erreur, `xargs` la relaie en 124, et le
+        # message part sur la sortie d'erreur en nommant le fichier. Les
+        # squelettes sont exclus : leurs `##CLASS_NAME##` ne seront jamais du
+        # PHP valide.
         run: |
           find src -name "*.php" -not -path "*/vendor/*" -not -path "*/skeleton/*" \
             -print0 | xargs -0 -n1 php -l > /dev/null
