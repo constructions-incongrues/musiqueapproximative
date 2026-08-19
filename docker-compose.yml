@@ -12,6 +12,15 @@ services:
     # Effet de bord bienvenu : plus de `platform: linux/amd64`. MySQL 5.7 n'a
     # pas d'image arm64 et tournait en emulation ; MariaDB en a une native.
     image: mariadb:10.11
+    # Le sql_mode de la production, releve sur elle (SELECT @@sql_mode) et non
+    # suppose. L'image ajoute STRICT_TRANS_TABLES, que la production n'a pas :
+    # sans cette ligne, le conteneur refuse bruyamment des ecritures que la
+    # production accepte en tronquant en silence, et le developpement ne voit
+    # jamais le comportement qu'il est cense reproduire.
+    #
+    # ONLY_FULL_GROUP_BY reste donc absent, comme en production — contrairement
+    # a ce que .github/workflows/tests.yml a longtemps affirme.
+    command: --sql-mode=ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
     volumes:
       - ./var/db:/var/lib/mysql
       - ./src/data/fixtures/musiqueapproximative.sql:/docker-entrypoint-initdb.d/00_musiqueapproximative.sql

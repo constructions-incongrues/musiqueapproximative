@@ -156,10 +156,26 @@ jobs:
           grep -q 'domain: localhost' src/apps/frontend/config/app.yml \
             || { echo "::error::app.yml mal rendu"; exit 1; }
 
-      - name: Créer la base de test
+      - name: Créer la base de test et poser le sql_mode de production
+        # Le sql_mode releve sur la production (SELECT @@sql_mode), et non suppose.
+        # L'image MariaDB y ajoute STRICT_TRANS_TABLES : sans cette ligne la CI
+        # echoue sur des ecritures que la production accepte en tronquant, et
+        # laisse donc passer en production le defaut qu'elle vient de signaler.
+        #
+        # Pourquoi ici et non dans `options:` du service : les services d'Actions
+        # ne permettent pas de surcharger la commande du conteneur — `options:`
+        # passe a `docker create`, avant l'image, donc `--sql-mode=...` n'y a pas
+        # sa place. `SET GLOBAL` est la seule voie, et elle suffit : toute
+        # connexion ouverte ensuite en herite, ce qui est le cas de toutes celles
+        # de la suite. Verifie, pas suppose.
         run: |
-          mysql -h 127.0.0.1 -uroot -proot \
-            -e "CREATE DATABASE IF NOT EXISTS musiqueapproximative_test CHARACTER SET utf8mb4;"
+          mysql -h 127.0.0.1 -uroot -proot -e "
+            SET GLOBAL sql_mode='ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+            CREATE DATABASE IF NOT EXISTS musiqueapproximative_test CHARACTER SET utf8mb4;"
+          effectif=$(mysql -h 127.0.0.1 -uroot -proot -N -B -e "SELECT @@session.sql_mode;")
+          echo "sql_mode d'une connexion neuve : $effectif"
+          test "$effectif" = "ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION" \
+            || { echo "::error::le sql_mode de production n'a pas pris"; exit 1; }
 
       - name: Construire le schéma de test
         # `doctrine:insert-sql` rend un code 1 sous PHP 8 alors qu'il a fait tout son
