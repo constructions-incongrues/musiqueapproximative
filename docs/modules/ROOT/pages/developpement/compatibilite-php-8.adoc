@@ -9,7 +9,7 @@ ne prouve pas.
 
 [cols="1,3"]
 |===
-| Verdict | *Atteignable.* La suite complète passe sous PHP 8.1.
+| Verdict | *Atteignable.* La suite complète passe sous PHP 8.1. Une tâche de maintenance échoue — voir plus bas, elle ne sert aucune page.
 | Mesuré le | 2026-08-19
 | Interpréteurs | PHP 7.4.33 (référence, production) et PHP 8.1.34
 | Base | MariaDB 10.11, la version de production
@@ -90,6 +90,37 @@ formats `max`, `rss` et `xspf` étaient touchés de même.
 
 Le défaut d'origine est plus ancien que PHP 8 — filtrer un désastre sur un contributeur
 nul n'a jamais eu de sens. Seul PHP 8 l'a rendu visible.
+
+== Une tâche de maintenance qui, elle, ne passe pas
+
+Le verdict porte sur l'application. Il ne s'étend pas à tout l'outillage, et la matrice
+d'intégration continue l'a démontré dès sa première exécution.
+
+`php symfony doctrine:insert-sql --env=test` rend un code 1 sous PHP 8 — code 0 sous 7.4
+— alors qu'il a fait tout son travail : les onze tables et leurs clés étrangères sont
+créées dans les deux cas.
+
+La mécanique est instructive et se retrouvera ailleurs :
+
+`Doctrine_Export::exportClasses()` ouvre une transaction, émet les `CREATE TABLE` puis les
+`ALTER TABLE`, et appelle `commit()`. Or *les instructions DDL de MySQL valident
+implicitement* : la transaction est déjà refermée quand Doctrine la valide. PHP 7.4
+laissait PDO silencieux ; PHP 8 lève une `PDOException` — « There is no active
+transaction ».
+
+----
+PDO->commit                       Doctrine/Transaction.php:417
+Doctrine_Export->exportClasses    Doctrine/Export.php:1224
+sfDoctrineInsertSqlTask->execute  sfDoctrineInsertSqlTask.class.php:57
+----
+
+Le défaut est dans une dépendance vendue, pas dans le code du projet. L'intégration
+continue asserte donc le *résultat* — la présence effective des tables — plutôt que le
+code de sortie de la tâche. Tolérer le code sans vérifier le schéma laisserait passer une
+base réellement incomplète.
+
+*C'est le premier élément connu à corriger avant une migration réelle*, et il ne concerne
+aucune page servie aux visiteurs.
 
 == Ce que ce verdict ne prouve pas
 

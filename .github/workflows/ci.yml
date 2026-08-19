@@ -237,10 +237,36 @@ jobs:
 
       - name: Préparer la base de test
         # Les fixtures commencent par des TRUNCATE : les tables doivent préexister.
+        #
+        # `doctrine:insert-sql` rend un code 1 sous PHP 8 alors qu'il a fait tout son
+        # travail. C'est une incompatibilite reelle, trouvee par cette matrice des sa
+        # premiere execution, et sa mecanique vaut d'etre ecrite :
+        #
+        #   Doctrine_Export::exportClasses() ouvre une transaction, emet les CREATE
+        #   TABLE puis les ALTER TABLE, et appelle commit(). Or les instructions DDL de
+        #   MySQL VALIDENT IMPLICITEMENT : la transaction est deja refermee quand
+        #   Doctrine la valide. PHP 7.4 laissait PDO silencieux, PHP 8 leve une
+        #   PDOException « There is no active transaction ».
+        #
+        #   Trace : Doctrine/Transaction.php:417 <- Export.php:1224 <-
+        #   sfDoctrineInsertSqlTask::execute()
+        #
+        # Les tables et leurs cles etrangeres sont toutes creees, sur les deux versions.
+        # On asserte donc le RESULTAT plutot que le code de sortie : un `|| true` seul
+        # laisserait passer un schema reellement incomplet.
         run: |
           mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS musiqueapproximative_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
           cd src
-          php symfony doctrine:insert-sql --env=test
+          php symfony doctrine:insert-sql --env=test || echo "doctrine:insert-sql a rendu un code non nul, le schema est verifie ci-dessous"
+          manquantes=""
+          for table in post post_index sf_guard_user sf_guard_user_profile user_profile; do
+            mysql -h 127.0.0.1 -uroot -proot musiqueapproximative_test -e "SELECT 1 FROM $table LIMIT 0;" >/dev/null 2>&1 || manquantes="$manquantes $table"
+          done
+          if [ -n "$manquantes" ]; then
+            echo "::error::schema de test incomplet, tables manquantes :$manquantes"
+            exit 1
+          fi
+          echo "schema de test complet"
 
       # Pas d'etape d'isolation de `cache/` et `log/` : chaque branche de la matrice
       # part d'un depot fraichement clone, et ces deux repertoires sont gitignores —
