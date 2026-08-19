@@ -13,8 +13,20 @@ ne prouve pas.
 | Mesuré le | 2026-08-19
 | Interpréteurs | PHP 7.4.33 (référence, production) et PHP 8.1.34
 | Base | MariaDB 10.11, la version de production
-| Résultat | 269 tests unitaires, 393 fonctionnels frontend, 4 fonctionnels admin — verts sur les deux versions
+| Résultat | 277 tests unitaires, 393 fonctionnels frontend, 4 fonctionnels admin — verts sur les deux versions
 |===
+
+[NOTE]
+====
+Ces chiffres datent du jour de la mesure et vieilliront. Ce qui fait foi est la matrice de
+`.github/workflows/tests.yml` : si elle est verte, la suite passe sous les deux versions,
+quel que soit le nombre de tests qu'elle porte alors.
+
+La remarque n'est pas de principe. La ligne ci-dessus a annoncé 269 unitaires pendant
+quelques heures alors que le change qui l'écrivait en avait ajouté 8 — dans la même
+journée où le plan de release consignait, pour la quatrième fois, qu'un packet vieillit
+par ses chiffres et non par ses phrases.
+====
 
 La montée elle-même n'a pas été faite : ni la version du conteneur, ni la contrainte
 `"php": "^7.4"` de `src/composer.json` n'ont changé.
