@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-huitième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-neuvième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1550,6 +1550,64 @@ Chaque story est une tranche verticale : elle se démontre seule.
     un qu'on mesure ce qu'il coûte, pas en le supposant.
   - **Périmètre** — dedans : le relevé du coût réel ; une décision argumentée. — dehors :
     construire un générateur avant d'avoir établi qu'il sert.
+  - **Cartographie du possible, mesurée le 2026-08-19** — matière apportée à la
+    conversation, pas un choix fait à votre place.
+
+    *Ce que les dix-neuf touchent, compté dans leur JavaScript* : injecter du DOM (58
+    occurrences), changer du style (66), jouer un fichier son (32), animer (23). Et
+    presque rien d'autre.
+
+    *Ce qui n'est jamais touché* : Web Audio, clavier, défilement, canvas, stockage,
+    presse-papier, capteurs, observateurs, sélection. Les variables CSS sont à **1**,
+    alors que le plugin documente tout un mécanisme d'options par Custom Properties.
+
+    *Quatre familles de déclencheurs* : le mot du titre (12 des 19 — le désastre est un
+    rébus), l'artiste (3), la date ou l'heure (2), tout le monde (2, à p=0,3, le bruit de
+    fond). Jamais déclenchés par : le corps du morceau, le contributeur, l'ancienneté du
+    morceau, le visiteur lui-même, l'absence de quelque chose.
+
+    *Prix d'entrée des API, relevé dans un navigateur et non de mémoire* :
+
+    - **Libres** (ni permission ni geste) : tout Web Audio — AudioWorklet, Analyser,
+      Convolver, WaveShaper, Biquad, Compressor, Oscillator ; Canvas, WebGL/2, WebGPU,
+      Houdini Paint, View Transitions ; les quatre Observers et `visibilitychange` ;
+      localStorage, IndexedDB, BroadcastChannel, Service Worker ; Pointer, Touch, Gamepad,
+      sélection de texte ; DeviceOrientation/Motion, Battery, Network Information,
+      `prefers-reduced-motion`, `prefers-color-scheme` ; Picture-in-Picture, Badging.
+    - **Sur geste** : Fullscreen, Pointer Lock, EyeDropper, Vibration, et le démarrage du
+      son Web Audio.
+    - **Sur permission, donc à éviter** : Web MIDI, caméra, micro, géolocalisation,
+      notifications, lecture du presse-papier, capture d'écran, Bluetooth, USB. Une popup
+      de permission détruit l'effet : le visiteur sait qu'on lui fait quelque chose et doit
+      dire oui. Le MIDI est le cas cruel — l'idée séduit, mais Safari ne l'implémente pas.
+
+    *Trois réserves* :
+
+    - Le relevé vient d'un Chromium sur macOS. Firefox et Safari divergent — Houdini Paint,
+      EyeDropper, WebGPU sont largement Chromium. Un désastre bâti dessus ne marchera que
+      pour une partie des visiteurs, ce qui est peut-être acceptable, voire drôle.
+    - `AudioContext` démarre suspendu tant que rien n'a été cliqué. En production, le geste
+      est nécessaire — le clic de lecture tombe bien.
+    - **`prefers-reduced-motion` est le seul de la liste qui dit « ne me fais pas ça ».**
+      Le respecter ou non est une décision de produit, pas un détail technique. Aucun des
+      dix-neuf ne le lit.
+
+    *Le morceau lui-même est atteignable, vérifié de bout en bout* : jPlayer crée un
+    `<audio id="jp_audio_0">`, et en production le fichier est servi par le même hôte que
+    la page avec `access-control-allow-origin: *`. `createMediaElementSource()` fonctionnerait
+    aujourd'hui, sans rien changer à l'infrastructure.
+
+    **Le constat qui ressort du recoupement** : la case la plus riche est la plus vide. Web
+    Audio est entièrement disponible, entièrement gratuit, le morceau est joignable — et
+    zéro désastre sur dix-neuf y touche. Les désastres décorent la page autour de la
+    musique sans jamais entrer dedans, sur un site de musique.
+
+  - **Trois pistes qui en découlent** (suggestions, pas un packet) : un désastre qui touche
+    le son du morceau plutôt que la page ; un désastre qui se souvient d'une visite à
+    l'autre, donc qui escalade ou s'épuise — la mémoire fait passer du geste accidentel à
+    la relation ; un désastre qui réagit au visiteur en cours de lecture, là où les
+    dix-neuf s'exécutent au chargement et n'écoutent plus rien. Les trois se combinent, et
+    aucune n'exclut le principe du rébus.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`,
     `src/plugins/sfDesastrePlugin/README.adoc`
   - **Ajoutée** : 2026-08-18
@@ -2468,3 +2526,20 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **La leçon, à ce stade de la release** : le défaut ne s'est pas déplacé des chiffres vers
   la portée, il alterne. Ici, une affirmation trop forte — « faux » là où « incomplet »
   suffisait — et une recherche menée dans un seul répertoire.
+
+- 2026-08-19 (vingt-neuvième révision) — **Conversation sur la story 33.** Elle reste
+  ouverte : son packet dit qu'il manque l'intention du collectif, et ce n'est pas quelque
+  chose qu'une mesure fournit. Ce qui a été apporté est la matière, pas le choix.
+  Le cadrage retenu vient du mainteneur : **la contrainte n'est pas le principe du rébus,
+  c'est la surface manipulable en JavaScript dans un navigateur.** La cartographie qui suit
+  a donc été relevée dans un navigateur réel plutôt que listée de mémoire, et le prix
+  d'entrée de chaque API — libre, sur geste, sur permission — y figure, parce qu'une popup
+  de permission détruit l'effet d'un désastre.
+  **Le constat central** : Web Audio est entièrement disponible et entièrement gratuit, le
+  fichier du morceau est joignable en production avec les bons en-têtes, et aucun des
+  dix-neuf désastres n'y touche. Ils décorent la page autour de la musique sans jamais
+  entrer dedans.
+  Deux points méritent une décision et non un réglage : `prefers-reduced-motion`, le seul
+  signal par lequel un visiteur demande explicitement qu'on ne l'agite pas, qu'aucun
+  désastre ne lit ; et le fait qu'un désastre bâti sur les API les plus riches ne marcherait
+  que pour une partie des navigateurs.
