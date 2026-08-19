@@ -24,7 +24,11 @@ if ('cli-server' !== PHP_SAPI) {
   return;
 }
 
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// Le chemin arrive percent-encode : « Fete avec espace.mp3 » devient
+// /tracks/Fete%20avec%20espace.mp3, qu'aucun is_file() ne reconnait. Tous les
+// morceaux du catalogue ont une espace dans leur nom — sans ce decodage, aucun
+// n'est ecoutable en local alors que la production les sert.
+$path = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $file = __DIR__.$path;
 
 if ('/' !== $path && is_file($file)) {
