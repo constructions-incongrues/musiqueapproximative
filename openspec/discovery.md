@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (trentième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-et-unième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1620,16 +1620,33 @@ Chaque story est une tranche verticale : elle se démontre seule.
     aucun désastre n'a jamais pris ce titre au mot. Celui-ci rend la lecture littéralement
     approximative — la hauteur du son se met à flotter, comme une bande magnétique passée
     trop de fois.
-  - **Ce qu'il doit provoquer** : le doute, quelques secondes. Le visiteur entend quelque
-    chose qui flotte et se demande si c'est sa connexion, son casque, ou le fichier. Un
-    désastre qui se présente comme un effet n'est plus un désastre — celui-ci ne s'annonce
-    pas, n'injecte rien, ne se voit pas.
+  - **Ce qu'il doit provoquer** : le doute, quelques secondes — puis la compréhension que
+    c'était voulu. Le visiteur entend quelque chose qui flotte et se demande si c'est sa
+    connexion, son casque, ou le fichier.
+    **Le doute seul ne suffit pas, et c'est une correction du 2026-08-19** : sur un site de
+    musique, quelqu'un qui croit le son cassé ferme l'onglet. Le désastre se retournerait
+    alors contre le morceau qu'il devait accompagner.
   - **Pourquoi il n'est pas un rébus** : douze des dix-neuf existants illustrent un mot du
     titre. Celui-ci ne vient pas du titre. C'est le premier dont l'intention vient du site
     lui-même plutôt que du morceau.
-  - **Ce qu'il a de nouveau dans le catalogue** : *une capture d'écran ne le montrerait
-    pas.* Le relevé de la story 29 le compterait, l'en-tête `X-Desastre` le nommerait, et il
-    resterait invisible à l'œil. Aucun des dix-neuf n'a cette propriété.
+  - **Le contrepoint visuel, et pourquoi il est contraint** : un visuel décoratif à côté ne
+    dirait rien — ce seraient deux choses simultanées, pas une seule perçue deux fois. Il
+    faut que l'œil confirme ce que l'oreille entend, **avec le même signal** : la modulation
+    ressort du worklet par son `MessagePort` et pilote une déformation minuscule, une
+    fraction de degré, un ou deux pixels. Une seule cause, deux sens. Ça ne s'explique pas,
+    ça se comprend.
+    **La cible est le titre du morceau** : c'est lui qui nomme ce qu'on écoute, et le voir
+    dériver au rythme exact de ce qu'on entend fait le lien sans un mot. `mangelettres` vise
+    déjà le titre — le catalogue a précédent.
+  - **Ce que le contrepoint coûte, et qu'il ne faut pas escamoter** : le désastre cesse
+    d'être *invisible à une capture d'écran*, ce qui était sa propriété la plus neuve dans ce
+    catalogue — aucun des dix-neuf ne l'avait. Elle est échangée contre un visiteur qui
+    reste. C'est un arbitrage, pas un gain net, et il est tranché : on préfère le visiteur.
+  - **Ce que le contrepoint résout, en revanche** : il n'existe pas de
+    `prefers-reduced-motion` pour le son, mais il en existe un pour le mouvement. Le visuel
+    se coupe pour qui l'a activé, l'audio continue. **La moitié qui pose un problème
+    d'accessibilité est précisément celle qui a un signal standard pour la refuser** — et
+    aucun des dix-neuf ne lit ce signal aujourd'hui.
   - **La forme technique**, mesurée et non supposée : `AudioWorklet` — disponible, gratuit,
     sans permission. Une ligne à retard modulée par deux oscillations lentes — *wow* autour
     de 0,5–2 Hz, *flutter* vers 6–12 Hz — un retard qui varie étant une hauteur qui varie.
@@ -1642,9 +1659,10 @@ Chaque story est une tranche verticale : elle se démontre seule.
     rien changer à l'infrastructure.
   - **Dépend de** : rien. Les stories 35 et 36 en dépendent, elles.
   - **Périmètre** — dedans : le processeur `AudioWorklet` ; le branchement sur le lecteur ;
-    une recette et une règle ; une intensité **fixe** pour cette story ; une sortie de
-    secours, faute de `prefers-reduced-motion` équivalent pour le son. — dehors : lier
-    l'intensité à quoi que ce soit (story 35) ; toute mémoire (story 36).
+    le contrepoint visuel piloté par la même modulation, et son respect de
+    `prefers-reduced-motion` ; une recette et une règle ; une intensité **fixe** pour cette
+    story ; une sortie de secours pour l'audio, qui n'a pas de signal standard. — dehors :
+    lier l'intensité à quoi que ce soit (story 35) ; toute mémoire (story 36).
   - **Les objections à trancher dans la proposal, pas à escamoter** : on dégrade la musique
     qu'un contributeur a choisi de partager, ce qui n'est pas du même ordre que défigurer
     une page — d'où une probabilité basse. Et `AudioContext` démarre suspendu : il faut un
@@ -2635,3 +2653,17 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   Les deux suites comblent chacune une case vide relevée le même jour : l'ancienneté du
   morceau, qui n'a jamais rien déclenché sur dix-huit ans de catalogue, et `localStorage`,
   à zéro sur dix-neuf.
+
+- 2026-08-19 (trente-et-unième révision) — **Le packet de la story 33 gagne un contrepoint
+  visuel, sur proposition du mainteneur, et c'est une correction de fond.** J'avais écrit que
+  le désastre visait le doute et ne devait rien montrer. Le doute a un coût que je n'avais
+  pas chiffré : sur un site de musique, qui croit le son cassé ferme l'onglet, et le désastre
+  se retourne contre le morceau qu'il accompagne.
+  **La forme du contrepoint est contrainte, pas libre.** Un visuel décoratif à côté ne dirait
+  rien — deux choses simultanées ne font pas une cause perçue deux fois. La modulation doit
+  ressortir du worklet et piloter elle-même une déformation minuscule du titre du morceau.
+  **Ce que ça coûte est écrit** : le désastre cesse d'être invisible à une capture d'écran,
+  ce qui était sa propriété la plus neuve. Échangé contre un visiteur qui reste.
+  **Ce que ça résout** : il n'existe pas de `prefers-reduced-motion` pour le son, mais il en
+  existe un pour le mouvement. La moitié qui pose un problème d'accessibilité est précisément
+  celle qui a un signal standard pour la refuser — qu'aucun des dix-neuf ne lit aujourd'hui.
