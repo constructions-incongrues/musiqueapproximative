@@ -1,5 +1,19 @@
 = Segmentation de la configuration des désastres
 
+[NOTE]
+====
+*Document de conception, conservé pour mémoire. Il n'est pas une description de ce qui
+existe.*
+
+Il proposait trois approches ; c'est l'*approche 1* — le support des imports dans
+`sfDesastreManager` — qui a été retenue et livrée le 2025-11-10. Les approches 2 et 3
+n'ont jamais été implémentées.
+
+Pour savoir comment la configuration fonctionne aujourd'hui, et comment écrire un
+désastre, voir `docs/modules/ROOT/pages/desastres.adoc`, qui fait foi.
+====
+
+
 == Problème
 
 Le fichier `desastres.yml` devient volumineux (284 lignes) et difficile à maintenir :

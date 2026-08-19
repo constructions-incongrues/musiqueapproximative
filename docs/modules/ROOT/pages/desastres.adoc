@@ -521,6 +521,53 @@ console.log(window.desastreOptions);
 |Web Speech API
 |===
 
+== Ce que coûte un désastre, et pourquoi il n'y a pas de générateur
+
+=== Le coût, mesuré
+
+Un désastre complet demande aujourd'hui **cinq fichiers dans quatre répertoires** :
+
+[cols="1,3"]
+|===
+| `config/desastres/recettes/<nom>.yml` | la recette — ce que le désastre fait
+| `config/desastres/regles/<nom>.yml` | la règle — quand il se déclenche
+| `config/desastres.yml` | **deux** lignes d'import à déclarer, une par fichier
+| `web/desastres/<nom>/javascript/*.js` | le comportement
+| `web/desastres/<nom>/stylesheets/*.css` | l'apparence
+|===
+
+Plus deux schémas JSON à respecter, validables avec `ajv` — voir « Validation avec JSON
+Schema » ci-dessus.
+
+=== La fréquence, mesurée
+
+Les dix-neuf recettes existantes sont apparues sur **deux jours**, les 9 et 10 novembre
+2025. Pas par un import massif : par pull requests distinctes et nommées — `SPOOOOOKYYYYY`
+(#18), `Desastres-plomberie` (#20), `Consonnards et Voyellistes` (#23), `Plomberie` (#27).
+Elles ont bien été écrites une à une, en rafale.
+
+Depuis : 27 commits sur les désastres en novembre 2025, 3 en janvier 2026, 4 en août 2026.
+*Aucun désastre neuf en neuf mois.*
+
+=== La décision
+
+*Il n'y a pas de générateur, et il n'y en aura pas tant que la mesure ressemblera à
+celle-ci.* Outiller une tâche qui n'a pas été faite une seule fois depuis neuf mois
+coûterait plus qu'elle ne rendrait — l'outil serait à écrire, à comprendre, à maintenir, et
+à corriger à chaque évolution du format.
+
+[NOTE]
+====
+*À quelle condition cette décision se révise.* Si une rafale d'écriture reprend — disons
+trois désastres neufs en un mois — la question mérite d'être reposée, avec la mesure
+refaite. Le raisonnement ci-dessus ne vaut que par ses chiffres, et ils sont datés du
+2026-08-19.
+
+Ce qui ne serait pas une raison de la réviser : trouver l'écriture fastidieuse une fois. Le
+coût est de cinq fichiers ; ce qui coûtait réellement était de ne pas savoir où ils vont, et
+c'est cette page qui y répond désormais.
+====
+
 == Bonnes pratiques
 
 === Performance
