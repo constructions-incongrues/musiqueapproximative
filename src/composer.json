@@ -16,8 +16,5 @@
     "php": "^7.4",
     "symfony/process": "^5.4",
     "james-heinrich/getid3": "^1.9"
-  },
-  "scripts": {
-    "purge-cloudflare": "php symfony musiqueapproximative:purge-cloudflare-cache"
   }
 }
