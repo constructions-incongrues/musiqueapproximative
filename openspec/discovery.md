@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-cinquième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-sixième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1435,7 +1435,21 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/test/functional/frontend/desastreInvarianceTest.php`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 30. `reparer-les-references-en-l-air-des-desastres` — un déclencheur mène quelque part
+- [~] 30. `reparer-les-references-en-l-air-des-desastres` — **RETIRÉE le 2026-08-19, sans objet**
+  - **Pourquoi elle est retirée** : la mesure du 2026-08-19 a établi qu'il n'existe
+    aucune référence en l'air. Le relevé qui la fondait comparait le champ `trigger:`
+    aux noms de recettes ; `trigger` n'est pas une référence mais un paramètre d'URL
+    qui force la règle, et le lien réel — le champ `recettes:` — résout dans les
+    dix-neuf cas. L'appliquer aurait renommé des déclencheurs pour les faire coïncider
+    avec des recettes, ce qui aurait détruit le regroupement `mangelettres` (un
+    déclencheur, deux recettes) et changé les URL par lesquelles on essaie les
+    désastres à la main.
+  - **Ce qui reste à faire dans cette zone, et qui n'est pas cette story** : `trigger`
+    est un interrupteur public non documenté — n'importe qui peut forcer n'importe quel
+    désastre sur n'importe quelle page. Ce n'est pas une référence cassée, c'est une
+    surface non écrite. À reprendre comme story neuve si le collectif le souhaite.
+  - **Conservée et non supprimée**, avec son packet d'origine ci-dessous, pour que la
+    trace de l'erreur de mesure reste lisible.
   - **Persona servi** : le collectif qui écrit les désastres
   - **Segment du parcours** : Concevoir un désastre
   - **MoSCoW** : Should — axe désastres
@@ -2404,3 +2418,12 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **La question ouverte du packet est tranchée** : on compte les tirages, pas les
   consultations, et le relevé imprime sa propre portée sous le tableau — pas dans une page
   qu'on ne lira pas au moment d'interpréter le chiffre.
+
+- 2026-08-19 (vingt-sixième révision) — **La story 30 est retirée**, sur décision du
+  mainteneur, après que la mesure a établi qu'elle était sans objet. Elle est marquée `[~]`
+  et son packet d'origine est conservé : la trace de l'erreur de mesure vaut mieux que sa
+  disparition.
+  **Ce qui reste dans cette zone n'est pas ce qu'elle décrivait** : `trigger` est un
+  interrupteur d'URL public et non documenté — n'importe qui peut forcer n'importe quel
+  désastre sur n'importe quelle page. Une surface non écrite, pas une référence cassée. À
+  reprendre comme story neuve si le collectif le souhaite.
