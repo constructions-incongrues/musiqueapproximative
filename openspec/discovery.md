@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-sixième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-septième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1505,7 +1505,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `desastres/recettes/*.yml`, `src/test/unit/plugins/DesastreConfigTest.php`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 31. `trancher-les-dependances-tierces-des-desastres` — une contradiction cesse d'être implicite
+- [x] 31. `trancher-les-dependances-tierces-des-desastres` — une contradiction cesse d'être implicite
+  - **Change** : `trancher-les-dependances-tierces-des-desastres` (archivé) — nom identique
   - **Persona servi** : le visiteur, qui ne choisit pas d'être annoncé à un tiers
   - **Segment du parcours** : Consulter une page
   - **MoSCoW** : Should — axe désastres
@@ -2427,3 +2428,19 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   interrupteur d'URL public et non documenté — n'importe qui peut forcer n'importe quel
   désastre sur n'importe quelle page. Une surface non écrite, pas une référence cassée. À
   reprendre comme story neuve si le collectif le souhaite.
+
+- 2026-08-19 (vingt-septième révision) — **La story 31 est livrée. Son relevé était juste et
+  incomplet** — les deux à la fois, ce qui est un mode de défaillance nouveau dans cette
+  release. Les dix renvois vers les deux CDN étaient exacts au chiffre près, mais ils
+  avaient été comptés **dans le YAML seulement**.
+  Hors du YAML : quatorze mentions dans les ressources et les README, le schéma JSON qui
+  proposait des URL de CDN **en exemple** — un gabarit qui enseigne à réintroduire ce qu'on
+  retire — et surtout **deux hôtes tiers vivants absents de tout inventaire** :
+  `lottie.host`, un `<iframe>` dans `fish`, et `allocestmamie.partouze-cagoule.fr`, le
+  jingle de `mamie`. Le second est un domaine du collectif ; le premier reste une exception
+  écrite, sa licence n'étant pas établissable.
+  **La leçon se déplace encore.** Les packets précédents étaient falsifiés par des chiffres
+  faux ; celui-ci l'est par une portée trop étroite. Un chiffre juste sur le mauvais
+  périmètre se défend mieux qu'un chiffre faux, et se corrige plus tard.
+  Le contrôle posé porte donc sur les recettes, les ressources ET le schéma — et il déclare
+  ce qu'il ne fait pas : suivre ce qu'une bibliothèque téléchargerait d'elle-même.

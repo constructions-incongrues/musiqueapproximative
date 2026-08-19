@@ -6,7 +6,7 @@ recettes:
     desastre: amour
     enabled: true
     scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+      - /frontend/assets/javascripts/animejs/anime-3.2.2.min.js
   bleu:
     desastre: bleu
     enabled: true
@@ -20,17 +20,17 @@ recettes:
     desastre: light
     enabled: true
     scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+      - /frontend/assets/javascripts/animejs/anime-3.2.2.min.js
   musique:
     desastre: musique
     enabled: true
     scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+      - /frontend/assets/javascripts/animejs/anime-3.2.2.min.js
   noir:
     desastre: noir
     enabled: true
     scripts:
-      - https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js
+      - /frontend/assets/javascripts/animejs/anime-3.2.2.min.js
   robot:
     desastre: robot
     enabled: true
