@@ -33,7 +33,7 @@
  */
 
 const TAILLE_TAMPON = 4096; // ~93 ms a 44,1 kHz : trois fois le retard maximal, de quoi
-                            // moduler sans jamais rattraper l'ecriture.
+// moduler sans jamais rattraper l'ecriture.
 
 class BandeUseeProcesseur extends AudioWorkletProcessor {
   /**
@@ -43,7 +43,13 @@ class BandeUseeProcesseur extends AudioWorkletProcessor {
    */
   static get parameterDescriptors() {
     return [
-      { name: "intensite", defaultValue: 1, minValue: 0, maxValue: 1, automationRate: "k-rate" },
+      {
+        name: "intensite",
+        defaultValue: 1,
+        minValue: 0,
+        maxValue: 1,
+        automationRate: "k-rate",
+      },
     ];
   }
 
@@ -177,7 +183,10 @@ class BandeUseeProcesseur extends AudioWorkletProcessor {
     if (this.quantumsDepuisEnvoi >= this.quantumsParEnvoi) {
       this.quantumsDepuisEnvoi = 0;
       // Normalise dans [-1, 1] : les contrepoints n'ont pas a connaitre nos amplitudes.
-      this.port.postMessage({ modulateur: modulateur / 1.12, intensite: intensite });
+      this.port.postMessage({
+        modulateur: modulateur / 1.12,
+        intensite: intensite,
+      });
     }
 
     return this.vivant;

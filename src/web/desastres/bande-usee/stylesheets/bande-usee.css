@@ -23,7 +23,8 @@ button,
 .jp-controls button,
 .jp-progress,
 .jp-volume-bar {
-  transition-property: color, background-color, border-color, opacity, text-decoration-color;
+  transition-property:
+    color, background-color, border-color, opacity, text-decoration-color;
   transition-duration: var(--bande-usee-retard);
   transition-delay: var(--bande-usee-retard);
   transition-timing-function: ease-out;

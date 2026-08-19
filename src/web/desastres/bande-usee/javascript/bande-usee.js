@@ -47,17 +47,24 @@
    * Documentée dans docs/modules/ROOT/pages/desastres.adoc.
    */
   if (/[?&]sans-desastre(=|&|$)/.test(window.location.search)) {
-    console.log("[desastres/" + NOM + "] sortie demandee par l'adresse, rien ne sera applique");
+    console.log(
+      "[desastres/" +
+        NOM +
+        "] sortie demandee par l'adresse, rien ne sera applique",
+    );
     return;
   }
 
   var mouvementRefuse =
-    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (mouvementRefuse) {
     console.log(
-      "[desastres/" + NOM + "] prefers-reduced-motion : les contrepoints visuel et tactile " +
-        "sont retires, l'alteration sonore reste"
+      "[desastres/" +
+        NOM +
+        "] prefers-reduced-motion : les contrepoints visuel et tactile " +
+        "sont retires, l'alteration sonore reste",
     );
   }
 
@@ -76,7 +83,11 @@
     var Contexte = window.AudioContext || window.webkitAudioContext;
 
     if (!Contexte || typeof window.AudioWorkletNode !== "function") {
-      console.warn("[desastres/" + NOM + "] AudioWorklet indisponible, le morceau reste intact");
+      console.warn(
+        "[desastres/" +
+          NOM +
+          "] AudioWorklet indisponible, le morceau reste intact",
+      );
 
       return;
     }
@@ -91,7 +102,11 @@
     // try/catch de DesastreAudio.onReady. On teste donc AudioWorkletNode, qui est un
     // constructeur global, et on lit `audioWorklet` sur le contexte construit.
     if (!contexte.audioWorklet) {
-      console.warn("[desastres/" + NOM + "] pas d'audioWorklet sur le contexte, le morceau reste intact");
+      console.warn(
+        "[desastres/" +
+          NOM +
+          "] pas d'audioWorklet sur le contexte, le morceau reste intact",
+      );
 
       return;
     }
@@ -145,7 +160,12 @@
         // Un desastre est un ornement : s'il echoue, le morceau doit rester audible. Le
         // `createMediaElementSource` n'ayant pas eu lieu, la sortie normale de l'element
         // audio n'a pas ete detournee et le son continue de lui-meme.
-        console.warn("[desastres/" + NOM + "] echec du chargement, le morceau reste intact :", e);
+        console.warn(
+          "[desastres/" +
+            NOM +
+            "] echec du chargement, le morceau reste intact :",
+          e,
+        );
       });
   }
 
@@ -160,12 +180,17 @@
     }
   }
 
-  if (window.DesastreAudio && typeof window.DesastreAudio.onReady === "function") {
+  if (
+    window.DesastreAudio &&
+    typeof window.DesastreAudio.onReady === "function"
+  ) {
     window.DesastreAudio.onReady(function (audio) {
       var element = audio && audio.element ? audio.element : null;
 
       if (!element) {
-        console.warn("[desastres/" + NOM + "] aucun element audio, rien a user");
+        console.warn(
+          "[desastres/" + NOM + "] aucun element audio, rien a user",
+        );
 
         return;
       }
@@ -174,11 +199,18 @@
       element.addEventListener("play", reveiller);
     });
   } else {
-    console.warn("[desastres/" + NOM + "] DesastreAudio absent, le desastre ne s'applique pas");
+    console.warn(
+      "[desastres/" +
+        NOM +
+        "] DesastreAudio absent, le desastre ne s'applique pas",
+    );
   }
 
   ["click", "keydown", "touchstart"].forEach(function (evenement) {
-    document.addEventListener(evenement, reveiller, { once: false, passive: true });
+    document.addEventListener(evenement, reveiller, {
+      once: false,
+      passive: true,
+    });
   });
 
   // ------------------------------------------------------- les deux contrepoints
@@ -230,13 +262,20 @@
         // Minuscule, et c'est voulu : on cherche la confirmation de ce qu'on entend, pas un
         // effet visuel qui prendrait le dessus.
         titre.style.transform =
-          "translateY(" + (m * 1.6).toFixed(3) + "px) rotate(" + (m * 0.14).toFixed(3) + "deg)";
+          "translateY(" +
+          (m * 1.6).toFixed(3) +
+          "px) rotate(" +
+          (m * 0.14).toFixed(3) +
+          "deg)";
       }
 
       // La page repond au pointeur avec le meme retard flottant. Le curseur n'est pas
       // touche : les clics restent exacts, seule la REPONSE tarde.
       var retardMs = 90 + Math.abs(m) * 110;
-      document.documentElement.style.setProperty("--bande-usee-retard", retardMs.toFixed(0) + "ms");
+      document.documentElement.style.setProperty(
+        "--bande-usee-retard",
+        retardMs.toFixed(0) + "ms",
+      );
     });
   }
 })();
