@@ -11,7 +11,7 @@ recettes:
           autoSplit: false
           mask: lines
           type: words, lines, chars
-          wordDelimiter: ' '
+          wordDelimiter: " "
           wordsClass: word
         selector: p.title, h1, h2
       tween:
@@ -22,7 +22,7 @@ recettes:
           ease: elastic
           opacity: 0
           rotation: 90
-          'y': 100
+          "y": 100
         type: chars
     scripts:
       - /desastres/shared/desastre-audio.js
