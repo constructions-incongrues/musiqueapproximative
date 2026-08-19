@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-huitième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-deuxième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1550,25 +1550,194 @@ Chaque story est une tranche verticale : elle se démontre seule.
     un qu'on mesure ce qu'il coûte, pas en le supposant.
   - **Périmètre** — dedans : le relevé du coût réel ; une décision argumentée. — dehors :
     construire un générateur avant d'avoir établi qu'il sert.
+  - **Cartographie du possible, mesurée le 2026-08-19** — matière apportée à la
+    conversation, pas un choix fait à votre place.
+
+    *Ce que les dix-neuf touchent, compté dans leur JavaScript* : injecter du DOM (58
+    occurrences), changer du style (66), jouer un fichier son (32), animer (23). Et
+    presque rien d'autre.
+
+    *Ce qui n'est jamais touché* : Web Audio, clavier, défilement, canvas, stockage,
+    presse-papier, capteurs, observateurs, sélection. Les variables CSS sont à **1**,
+    alors que le plugin documente tout un mécanisme d'options par Custom Properties.
+
+    *Quatre familles de déclencheurs* : le mot du titre (12 des 19 — le désastre est un
+    rébus), l'artiste (3), la date ou l'heure (2), tout le monde (2, à p=0,3, le bruit de
+    fond). Jamais déclenchés par : le corps du morceau, le contributeur, l'ancienneté du
+    morceau, le visiteur lui-même, l'absence de quelque chose.
+
+    *Prix d'entrée des API, relevé dans un navigateur et non de mémoire* :
+
+    - **Libres** (ni permission ni geste) : tout Web Audio — AudioWorklet, Analyser,
+      Convolver, WaveShaper, Biquad, Compressor, Oscillator ; Canvas, WebGL/2, WebGPU,
+      Houdini Paint, View Transitions ; les quatre Observers et `visibilitychange` ;
+      localStorage, IndexedDB, BroadcastChannel, Service Worker ; Pointer, Touch, Gamepad,
+      sélection de texte ; DeviceOrientation/Motion, Battery, Network Information,
+      `prefers-reduced-motion`, `prefers-color-scheme` ; Picture-in-Picture, Badging.
+    - **Sur geste** : Fullscreen, Pointer Lock, EyeDropper, Vibration, et le démarrage du
+      son Web Audio.
+    - **Sur permission, donc à éviter** : Web MIDI, caméra, micro, géolocalisation,
+      notifications, lecture du presse-papier, capture d'écran, Bluetooth, USB. Une popup
+      de permission détruit l'effet : le visiteur sait qu'on lui fait quelque chose et doit
+      dire oui. Le MIDI est le cas cruel — l'idée séduit, mais Safari ne l'implémente pas.
+
+    *Trois réserves* :
+
+    - Le relevé vient d'un Chromium sur macOS. Firefox et Safari divergent — Houdini Paint,
+      EyeDropper, WebGPU sont largement Chromium. Un désastre bâti dessus ne marchera que
+      pour une partie des visiteurs, ce qui est peut-être acceptable, voire drôle.
+    - `AudioContext` démarre suspendu tant que rien n'a été cliqué. En production, le geste
+      est nécessaire — le clic de lecture tombe bien.
+    - **`prefers-reduced-motion` est le seul de la liste qui dit « ne me fais pas ça ».**
+      Le respecter ou non est une décision de produit, pas un détail technique. Aucun des
+      dix-neuf ne le lit.
+
+    *Le morceau lui-même est atteignable, vérifié de bout en bout* : jPlayer crée un
+    `<audio id="jp_audio_0">`, et en production le fichier est servi par le même hôte que
+    la page avec `access-control-allow-origin: *`. `createMediaElementSource()` fonctionnerait
+    aujourd'hui, sans rien changer à l'infrastructure.
+
+    **Le constat qui ressort du recoupement** : la case la plus riche est la plus vide. Web
+    Audio est entièrement disponible, entièrement gratuit, le morceau est joignable — et
+    zéro désastre sur dix-neuf y touche. Les désastres décorent la page autour de la
+    musique sans jamais entrer dedans, sur un site de musique.
+
+  - **Trois pistes qui en découlent** (suggestions, pas un packet) : un désastre qui touche
+    le son du morceau plutôt que la page ; un désastre qui se souvient d'une visite à
+    l'autre, donc qui escalade ou s'épuise — la mémoire fait passer du geste accidentel à
+    la relation ; un désastre qui réagit au visiteur en cours de lecture, là où les
+    dix-neuf s'exécutent au chargement et n'écoutent plus rien. Les trois se combinent, et
+    aucune n'exclut le principe du rébus.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`,
     `src/plugins/sfDesastrePlugin/README.adoc`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 33. `ecrire-de-nouveaux-desastres` — **packet incomplet, il manque vous**
+- [ ] 33. `desastre-la-bande-usee` — le premier désastre qu'on ne peut pas voir
   - **Persona servi** : l'auditeur sur le site, le mélomane fêlé
-  - **Segment du parcours** : Consulter une page
-  - **MoSCoW** : à trancher — c'est du travail créatif, pas de la maintenance
-  - **Pourquoi ce packet n'est pas rédigé** : les dix-neuf désastres existants sont des
-    gestes — *GARE AU MANGE-LETTRES*, *Postillons de la MUERTE*, la Web Speech API qui
-    parle, le rouge et bleu. Ils viennent d'une intention, pas d'un besoin déduit d'un
-    parcours. **Écrire un packet de story pour un désastre que je choisirais moi-même
-    reviendrait à inventer l'intention**, et ce serait le seul endroit de ce plan où un
-    packet ne vient de personne.
-  - **Ce qu'il me faut de vous** : ce que le désastre doit faire, ou au moins ce qu'il doit
-    provoquer chez celui qui le reçoit. Le reste — recette, règle, déclencheur, assets —
-    je le tiens.
-  - **Ce que je peux faire sans vous, si vous voulez** : proposer des pistes à partir de ce
-    que les dix-neuf existants ne font pas encore. Ce sont des suggestions, pas un packet.
+  - **Segment du parcours** : Consulter une page — pendant l'écoute, et non au chargement
+  - **MoSCoW** : Should — c'est du travail créatif, tranché par le collectif le 2026-08-19
+  - **L'intention, donnée par le mainteneur** : le site s'appelle *Musique Approximative*, et
+    aucun désastre n'a jamais pris ce titre au mot. Celui-ci rend la lecture littéralement
+    approximative — la hauteur du son se met à flotter, comme une bande magnétique passée
+    trop de fois.
+  - **Ce qu'il doit provoquer** : le doute, quelques secondes — puis la compréhension que
+    c'était voulu. Le visiteur entend quelque chose qui flotte et se demande si c'est sa
+    connexion, son casque, ou le fichier.
+    **Le doute seul ne suffit pas, et c'est une correction du 2026-08-19** : sur un site de
+    musique, quelqu'un qui croit le son cassé ferme l'onglet. Le désastre se retournerait
+    alors contre le morceau qu'il devait accompagner.
+  - **Pourquoi il n'est pas un rébus** : douze des dix-neuf existants illustrent un mot du
+    titre. Celui-ci ne vient pas du titre. C'est le premier dont l'intention vient du site
+    lui-même plutôt que du morceau.
+  - **Le contrepoint visuel, et pourquoi il est contraint** : un visuel décoratif à côté ne
+    dirait rien — ce seraient deux choses simultanées, pas une seule perçue deux fois. Il
+    faut que l'œil confirme ce que l'oreille entend, **avec le même signal** : la modulation
+    ressort du worklet par son `MessagePort` et pilote une déformation minuscule, une
+    fraction de degré, un ou deux pixels. Une seule cause, deux sens. Ça ne s'explique pas,
+    ça se comprend.
+    **La cible est le titre du morceau** : c'est lui qui nomme ce qu'on écoute, et le voir
+    dériver au rythme exact de ce qu'on entend fait le lien sans un mot. `mangelettres` vise
+    déjà le titre — le catalogue a précédent.
+  - **La troisième couche : la main.** La même modulation pilote aussi la façon dont la page
+    répond au pointeur — états de survol, contrôles du lecteur, liens réagissent en retard et
+    en flottant, par `transition-delay`. **Le curseur n'est pas ralenti ; c'est la page qui
+    met du temps à le remarquer.**
+    *Mesuré le 2026-08-19 : aucune API ne permet de changer la vitesse du curseur.* La liste
+    des candidats est vide. Le seul moyen de contrôler le mouvement est `requestPointerLock`,
+    qui exige un geste, masque le vrai curseur, affiche une bannière du navigateur et capture
+    la souris dans la page — disqualifiant pour un désastre : ça ne surprend pas, ça
+    séquestre.
+    L'autre forme envisagée — masquer le curseur et en dessiner un qui traîne — est écartée
+    sauf à garder l'écart sous quelques pixels : les clics atterrissent où est le *vrai*
+    pointeur, et un curseur dessiné qui ment sur le point de clic est un bug, pas un
+    désastre.
+    Faire répondre le monde en retard prolonge la métaphore au lieu de la contredire : une
+    bande usée ne ralentit pas votre main, elle répond mollement. Et rien ne casse — les
+    clics restent exacts.
+  - **Ce que les trois couches donnent ensemble** : *une seule modulation, trois sens.*
+    L'oreille l'entend, l'œil la voit sur le titre, la main la sent dans la réponse de la
+    page. Le doute cesse alors d'être attribuable au matériel — aucun casque défectueux ne
+    fait ça aux liens.
+  - **Ce que le contrepoint coûte, et qu'il ne faut pas escamoter** : le désastre cesse
+    d'être *invisible à une capture d'écran*, ce qui était sa propriété la plus neuve dans ce
+    catalogue — aucun des dix-neuf ne l'avait. Elle est échangée contre un visiteur qui
+    reste. C'est un arbitrage, pas un gain net, et il est tranché : on préfère le visiteur.
+  - **Ce que le contrepoint résout, en revanche** : il n'existe pas de
+    `prefers-reduced-motion` pour le son, mais il en existe un pour le mouvement. Le visuel
+    se coupe pour qui l'a activé, l'audio continue. **La moitié qui pose un problème
+    d'accessibilité est précisément celle qui a un signal standard pour la refuser** — et
+    aucun des dix-neuf ne lit ce signal aujourd'hui.
+  - **La forme technique**, mesurée et non supposée : `AudioWorklet` — disponible, gratuit,
+    sans permission. Une ligne à retard modulée par deux oscillations lentes — *wow* autour
+    de 0,5–2 Hz, *flutter* vers 6–12 Hz — un retard qui varie étant une hauteur qui varie.
+    Le traitement doit être continu, échantillon par échantillon : sur le thread principal
+    il craquerait, c'est précisément ce pour quoi l'AudioWorklet existe. Quantum de 128
+    échantillons, intensité en `AudioParam` pour qu'elle s'automatise.
+  - **Le morceau est joignable, vérifié de bout en bout** : jPlayer crée un
+    `<audio id="jp_audio_0">` ; en production le fichier est servi par le même hôte que la
+    page avec `access-control-allow-origin: *`. `createMediaElementSource()` fonctionne sans
+    rien changer à l'infrastructure.
+  - **Dépend de** : rien. Les stories 35 et 36 en dépendent, elles.
+  - **Périmètre** — dedans : le processeur `AudioWorklet` ; le branchement sur le lecteur ;
+    le contrepoint visuel sur le titre et la réponse retardée au pointeur, tous deux pilotés
+    par la même modulation, et leur respect de `prefers-reduced-motion` ; une recette et une règle ; une intensité **fixe** pour cette
+    story ; une sortie de secours pour l'audio, qui n'a pas de signal standard. — dehors :
+    lier l'intensité à quoi que ce soit (story 35) ; toute mémoire (story 36).
+  - **Les objections à trancher dans la proposal, pas à escamoter** : on dégrade la musique
+    qu'un contributeur a choisi de partager, ce qui n'est pas du même ordre que défigurer
+    une page — d'où une probabilité basse. Et `AudioContext` démarre suspendu : il faut un
+    geste, que le clic de lecture fournit, ce qui tombe bien puisque le désastre commence
+    quand la musique commence.
+  - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`,
+    le lecteur jPlayer dans les gabarits de `post`
+  - **Ajoutée** : 2026-08-18 · **intention reçue et packet rédigé** : 2026-08-19
+
+- [ ] 35. `lier-l-usure-a-l-age-du-morceau` — l'archive s'entend
+  - **Persona servi** : l'auditeur, et le collectif dont le catalogue couvre dix-huit ans
+  - **Segment du parcours** : Consulter une page — pendant l'écoute
+  - **MoSCoW** : Could — elle donne son sens à la story 33, mais celle-ci tient sans elle
+  - **Pourquoi elle existe** : le catalogue va de 2008 à aujourd'hui, et **l'ancienneté d'un
+    morceau n'a jamais déclenché quoi que ce soit** — c'est une des cases vides relevées le
+    2026-08-19. Un morceau de 2008 est traité exactement comme celui d'hier.
+    Ici, l'usure devient fonction de la date de publication : un morceau qui dort là depuis
+    dix-huit ans sonne comme ce qu'il est, quelque chose qui a attendu longtemps. Le neuf
+    reste net.
+  - **Ce qu'elle change pour l'auditeur** : le désastre cesse d'être un accident uniforme et
+    devient une propriété du morceau. Deux morceaux de la même page ne s'usent pas pareil.
+  - **Dépend de** : la story 33 — il faut le processeur avant de moduler son intensité.
+  - **Périmètre** — dedans : l'intensité calculée depuis `publish_on` ; le choix de la
+    courbe, qui est une décision de goût et doit être écrite comme telle. — dehors : toute
+    autre source d'intensité ; la mémoire (story 36).
+  - **Le piège** : une courbe linéaire sur dix-huit ans rendrait presque tout inaudible ou
+    presque rien perceptible. La courbe se règle à l'oreille sur des morceaux réels du
+    catalogue, pas sur une formule qui paraît élégante.
+  - **Code concerné** : `src/web/desastres/`, `src/lib/model/doctrine/Post.class.php` pour
+    exposer la date au désastre
+  - **Ajoutée** : 2026-08-19
+
+- [ ] 36. `l-usure-vous-appartient` — le premier désastre qui se souvient
+  - **Persona servi** : l'auditeur qui revient — donc l'habitué, pas le passant
+  - **Segment du parcours** : Consulter une page, plusieurs fois
+  - **MoSCoW** : Could — c'est la plus spéculative des trois, et la plus intéressante
+  - **Pourquoi elle existe** : `localStorage` est à **zéro sur dix-neuf**. Aucun désastre ne
+    peut se souvenir de quoi que ce soit : pas de cumul, pas d'escalade, pas de « tu es déjà
+    venu ». Chaque visite repart de zéro.
+    Ici, le morceau se dégrade un peu plus à chaque réécoute — et pour vous seul. Le dixième
+    passage est plus fatigué que le premier.
+  - **Ce qu'elle change** : la nature du geste. Ce n'est plus un accident tombé sur une page,
+    c'est la conséquence de votre propre écoute. *Vous avez usé la bande.* Aucun autre
+    désastre du catalogue n'établit ce genre de rapport.
+  - **Dépend de** : la story 33. Se combine avec la 35 sans en dépendre.
+  - **Périmètre** — dedans : le compteur par morceau et par navigateur ; le plafond, sans
+    quoi le morceau devient inécoutable ; l'oubli, sans quoi l'usure est définitive.
+    — dehors : toute synchronisation entre appareils ; toute remontée au serveur.
+  - **La question à trancher dans la proposal** : est-ce que l'usure se répare ? Une bande
+    ne guérit pas, mais un désastre qui rend un morceau définitivement inécoutable pour un
+    habitué punit exactement les gens qui reviennent le plus.
+  - **Ce qui reste hors de portée, et doit être dit** : rien de tout cela ne quitte le
+    navigateur. Un visiteur qui vide son stockage repart neuf, et c'est très bien ainsi.
+  - **Code concerné** : `src/web/desastres/`
+  - **Ajoutée** : 2026-08-19
   - **Dépend de** : rien techniquement. Les stories 29 et 32 sont mieux servies si elle
     passe avant — on ne mesure bien le coût d'écriture qu'en écrivant.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
@@ -2468,3 +2637,71 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **La leçon, à ce stade de la release** : le défaut ne s'est pas déplacé des chiffres vers
   la portée, il alterne. Ici, une affirmation trop forte — « faux » là où « incomplet »
   suffisait — et une recherche menée dans un seul répertoire.
+
+- 2026-08-19 (vingt-neuvième révision) — **Conversation sur la story 33.** Elle reste
+  ouverte : son packet dit qu'il manque l'intention du collectif, et ce n'est pas quelque
+  chose qu'une mesure fournit. Ce qui a été apporté est la matière, pas le choix.
+  Le cadrage retenu vient du mainteneur : **la contrainte n'est pas le principe du rébus,
+  c'est la surface manipulable en JavaScript dans un navigateur.** La cartographie qui suit
+  a donc été relevée dans un navigateur réel plutôt que listée de mémoire, et le prix
+  d'entrée de chaque API — libre, sur geste, sur permission — y figure, parce qu'une popup
+  de permission détruit l'effet d'un désastre.
+  **Le constat central** : Web Audio est entièrement disponible et entièrement gratuit, le
+  fichier du morceau est joignable en production avec les bons en-têtes, et aucun des
+  dix-neuf désastres n'y touche. Ils décorent la page autour de la musique sans jamais
+  entrer dedans.
+  Deux points méritent une décision et non un réglage : `prefers-reduced-motion`, le seul
+  signal par lequel un visiteur demande explicitement qu'on ne l'agite pas, qu'aucun
+  désastre ne lit ; et le fait qu'un désastre bâti sur les API les plus riches ne marcherait
+  que pour une partie des navigateurs.
+
+- 2026-08-19 (trentième révision) — **La story 33 a reçu son intention, et devient
+  `desastre-la-bande-usee`.** Elle attendait depuis le 2026-08-18 la seule chose qu'aucune
+  mesure ne fournit : ce que le désastre doit provoquer. Le mainteneur a tranché, et le
+  packet est rédigé.
+  L'idée prend au mot le nom du site — rendre la lecture *approximative*, par une ligne à
+  retard modulée qui fait flotter la hauteur, comme une bande passée trop de fois. Elle vise
+  le doute, pas le rire : le visiteur se demande si c'est sa connexion.
+  **Deux propriétés nouvelles dans ce catalogue.** C'est le premier désastre dont l'intention
+  vient du site plutôt que du morceau — douze des dix-neuf illustrent un mot du titre. Et
+  c'est le premier qu'**une capture d'écran ne montrerait pas** : le relevé de la story 29 le
+  compterait, l'en-tête `X-Desastre` le nommerait, et il resterait invisible à l'œil.
+  **Découpée en trois au contrôle de taille.** Le packet complet ne tenait pas dans le budget
+  de ~200 mots : la 33 porte le désastre à intensité fixe — le squelette qui marche — la 35
+  lie l'intensité à l'âge du morceau, la 36 lui donne une mémoire. Les 35 et 36 dépendent de
+  la 33 et pas l'une de l'autre.
+  Les deux suites comblent chacune une case vide relevée le même jour : l'ancienneté du
+  morceau, qui n'a jamais rien déclenché sur dix-huit ans de catalogue, et `localStorage`,
+  à zéro sur dix-neuf.
+
+- 2026-08-19 (trente-et-unième révision) — **Le packet de la story 33 gagne un contrepoint
+  visuel, sur proposition du mainteneur, et c'est une correction de fond.** J'avais écrit que
+  le désastre visait le doute et ne devait rien montrer. Le doute a un coût que je n'avais
+  pas chiffré : sur un site de musique, qui croit le son cassé ferme l'onglet, et le désastre
+  se retourne contre le morceau qu'il accompagne.
+  **La forme du contrepoint est contrainte, pas libre.** Un visuel décoratif à côté ne dirait
+  rien — deux choses simultanées ne font pas une cause perçue deux fois. La modulation doit
+  ressortir du worklet et piloter elle-même une déformation minuscule du titre du morceau.
+  **Ce que ça coûte est écrit** : le désastre cesse d'être invisible à une capture d'écran,
+  ce qui était sa propriété la plus neuve. Échangé contre un visiteur qui reste.
+  **Ce que ça résout** : il n'existe pas de `prefers-reduced-motion` pour le son, mais il en
+  existe un pour le mouvement. La moitié qui pose un problème d'accessibilité est précisément
+  celle qui a un signal standard pour la refuser — qu'aucun des dix-neuf ne lit aujourd'hui.
+
+- 2026-08-19 (trente-deuxième révision) — **Une troisième couche pour la story 33, sur
+  proposition du mainteneur : la main.** L'intention était de ralentir la souris comme la
+  musique.
+  **Mesuré avant d'écrire : aucune API ne permet de changer la vitesse du curseur.** Le seul
+  moyen est `requestPointerLock`, qui exige un geste, masque le vrai curseur, affiche une
+  bannière et capture la souris — disqualifiant pour un désastre : ça ne surprend pas, ça
+  séquestre. Masquer le curseur pour en dessiner un qui traîne est écarté de même, sauf écart
+  minime : les clics atterrissent où est le vrai pointeur, et un curseur qui ment sur le
+  point de clic est un bug.
+  La forme retenue inverse la proposition sans la trahir : **le curseur n'est pas ralenti,
+  c'est la page qui met du temps à le remarquer**. Survols, contrôles, liens répondent en
+  retard et en flottant, par la même modulation. Une bande usée ne ralentit pas la main, elle
+  répond mollement.
+  **Le gain est de composition** : une seule modulation, trois sens. Le doute cesse d'être
+  attribuable au matériel — aucun casque défectueux ne fait ça aux liens. C'était l'objection
+  qui avait fait ajouter le contrepoint visuel à la révision précédente ; elle est maintenant
+  traitée deux fois.
