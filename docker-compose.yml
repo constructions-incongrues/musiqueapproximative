@@ -6,7 +6,7 @@ services:
     # MariaDB, et cette version precisement : c'est celle de la production
     # (10.11.14). Le conteneur etait en mysql:5.7.25 alors que le site n'a
     # jamais tourne que sur MariaDB — le dump d'amorcage lui-meme est produit
-    # par MariaDB 10.3. Faire repeter une migration de schema sur un autre
+    # par MariaDB 10.11. Faire repeter une migration de schema sur un autre
     # moteur que la cible n'a pas de sens.
     #
     # Effet de bord bienvenu : plus de `platform: linux/amd64`. MySQL 5.7 n'a
