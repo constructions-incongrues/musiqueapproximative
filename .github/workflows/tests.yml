@@ -119,18 +119,55 @@ jobs:
           DATABASE_NAME_TEST: musiqueapproximative_test
           DATABASE_USER: root
           DATABASE_PASSWORD: root
+        # POURQUOI PYTHON ET PLUS `envsubst`
+        #
+        # `envsubst` vient de `gettext-base`, que l'image du runner ne fournit
+        # pas : il fallait donc un `apt-get update` avant chaque suite de tests.
+        # Le 2026-08-19, cette étape est restée bloquée trois fois de suite,
+        # quinze minutes et plus, sans jamais atteindre le premier test. Faire
+        # dépendre la suite de la disponibilité d'un miroir de paquets, c'est
+        # accepter qu'elle échoue pour une raison qui n'a rien à voir avec le
+        # code — et une CI qui pend pour rien finit par ne plus être lue.
+        #
+        # Python 3 est garanti par l'image. Rien à installer, rien à attendre.
+        #
+        # C'est aussi PLUS déterministe, ce que cette étape réclame. `envsubst`
+        # substitue TOUT motif `$MOT` : sans liste blanche il vidait les clés
+        # `$ref` d'un document OpenAPI et corrompait le fichier. Ici un nom hors
+        # liste est rendu tel quel, par construction, sans rien à brider.
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq gettext-base
-          # Liste blanche explicite. Sans elle, `envsubst` substitue TOUT motif
-          # `$MOT`, y compris les clés `$ref` d'un document OpenAPI, qu'il
-          # remplace par du vide et dont il corrompt le fichier. La liste est
-          # écrite ici plutôt que déduite de l'environnement : c'est le même
-          # choix d'explicite que le reste de cette étape.
-          VARS='$APP_AUTOPLAY $APP_DOMAIN $APP_THEME $APP_TITLE $DATABASE_HOST $DATABASE_NAME $DATABASE_NAME_TEST $DATABASE_USER $DATABASE_PASSWORD'
-          find src -name '*-dist' -print0 | while IFS= read -r -d '' dist; do
-            envsubst "$VARS" < "$dist" > "${dist%-dist}"
-            echo "rendu : ${dist%-dist}"
-          done
+          python3 - <<'RENDU'
+          import os, pathlib, re, sys
+
+          # Liste blanche explicite, écrite ici plutôt que déduite de
+          # l'environnement : même choix d'explicite que le reste de l'étape.
+          ATTENDUES = [
+              "APP_AUTOPLAY", "APP_DOMAIN", "APP_THEME", "APP_TITLE",
+              "DATABASE_HOST", "DATABASE_NAME", "DATABASE_NAME_TEST",
+              "DATABASE_USER", "DATABASE_PASSWORD",
+          ]
+
+          # `envsubst` remplace une variable absente par du vide, en silence.
+          # C'est exactement la panne que l'étape suivante cherche a rattraper :
+          # autant refuser tout de suite.
+          manquantes = [nom for nom in ATTENDUES if os.environ.get(nom) is None]
+          if manquantes:
+              sys.exit("::error::variables absentes de l'environnement : " + ", ".join(manquantes))
+
+          valeurs = {nom: os.environ[nom] for nom in ATTENDUES}
+          # `${NOM}` et `$NOM`, les deux formes que comprenait `envsubst`.
+          motif = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}|\$([A-Za-z_][A-Za-z0-9_]*)")
+
+          def remplacer(trouve):
+              nom = trouve.group(1) or trouve.group(2)
+              # Hors liste : on rend le texte d'origine intact.
+              return valeurs.get(nom, trouve.group(0))
+
+          for dist in sorted(pathlib.Path("src").rglob("*-dist")):
+              rendu = dist.with_name(dist.name[: -len("-dist")])
+              rendu.write_text(motif.sub(remplacer, dist.read_text(encoding="utf-8")), encoding="utf-8")
+              print("rendu : " + str(rendu))
+          RENDU
 
       - name: Vérifier la configuration rendue
         # La substitution a déjà produit des valeurs tronquées dans un autre
