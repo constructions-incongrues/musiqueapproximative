@@ -119,8 +119,6 @@ jobs:
           DATABASE_NAME_TEST: musiqueapproximative_test
           DATABASE_USER: root
           DATABASE_PASSWORD: root
-          CLOUDFLARE_API_TOKEN: ""
-          CLOUDFLARE_ZONE_ID: ""
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq gettext-base
           # Liste blanche explicite. Sans elle, `envsubst` substitue TOUT motif
@@ -128,7 +126,7 @@ jobs:
           # remplace par du vide et dont il corrompt le fichier. La liste est
           # écrite ici plutôt que déduite de l'environnement : c'est le même
           # choix d'explicite que le reste de cette étape.
-          VARS='$APP_AUTOPLAY $APP_DOMAIN $APP_THEME $APP_TITLE $DATABASE_HOST $DATABASE_NAME $DATABASE_NAME_TEST $DATABASE_USER $DATABASE_PASSWORD $CLOUDFLARE_API_TOKEN $CLOUDFLARE_ZONE_ID'
+          VARS='$APP_AUTOPLAY $APP_DOMAIN $APP_THEME $APP_TITLE $DATABASE_HOST $DATABASE_NAME $DATABASE_NAME_TEST $DATABASE_USER $DATABASE_PASSWORD'
           find src -name '*-dist' -print0 | while IFS= read -r -d '' dist; do
             envsubst "$VARS" < "$dist" > "${dist%-dist}"
             echo "rendu : ${dist%-dist}"

@@ -61,7 +61,6 @@ docker-compose exec php php symfony doctrine:build-model           # regenerate 
 docker-compose exec php php symfony doctrine:build-forms
 docker-compose exec php php symfony doctrine:data-load             # load fixtures
 docker-compose exec php php symfony list                           # list all tasks
-docker-compose exec php php symfony musiqueapproximative:purge-cloudflare-cache
 ```
 
 Custom tasks live in `src/lib/task/` and are discovered automatically.
