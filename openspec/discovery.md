@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-deuxième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-troisième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1376,7 +1376,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
   - **Change** : `relier-les-stories-a-leurs-changes` (archivé) — nom identique
 
-- [ ] 28. `auditer-la-compatibilite-php-8` — on sait enfin si la montée est atteignable
+- [x] 28. `auditer-la-compatibilite-php-8` — on sait enfin si la montée est atteignable
+  - **Change** : `auditer-la-compatibilite-php-8` (archivé) — nom identique
   - **Persona servi** : le mainteneur
   - **Segment du parcours** : hors parcours — c'est l'horizon du projet
   - **MoSCoW** : Should — troisième axe, après les deux premiers
@@ -2315,3 +2316,31 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   packet dont les **chiffres** ont vieilli. Quatre l'ont été — le diagnostic Markdown, le
   verrou `getid3`, le « 3,1 s » du XSPF, le `.env` de `make configure`. Un chiffre périmé est
   syntaxiquement identique à un chiffre juste.
+
+- 2026-08-19 (vingt-troisième révision) — **La story 28 est livrée, et la mesure a inversé
+  sa prémisse.** Le packet supposait qu'on ne savait pas si la montée en PHP 8 était
+  atteignable. Elle l'est : toute la chaîne de dépendances la déclarait déjà — `symfony1`
+  v1.5.24 en `^7.4 || ^8.1`, `doctrine1` v1.4.6, swiftmailer — et le seul verrou était le
+  `"php": "^7.4"` que le projet s'imposait lui-même.
+  **Mais « déclare » n'est pas « tourne », et l'écart valait 64 assertions.** Les deux
+  passes statiques — syntaxe sous 8.4, fonctions supprimées — n'ont rien trouvé dans le
+  code exécuté. L'exécution en a trouvé 64 sur 408, avec un témoin 7.4 entièrement vert.
+  **Cinquième packet de cette release corrigé par ce qui est exécutable.**
+  **L'audit a trouvé un défaut introduit la veille.** Le `leftJoin` de la story 34 fait
+  hydrater la relation `UserProfile` absente en `null` là où le chargement paresseux
+  fabriquait un objet vide. En PHP 7.4 la lecture sur `null` n'est qu'une notice, et la
+  retombée produit le même affichage : le défaut était invisible à toute la suite. Un
+  second, plus ancien, servait une dépréciation PHP 8.1 **dans le corps** de
+  `/posts?format=json`.
+  **Deux tâches ont été élargies à l'implémentation, et l'une des deux reposait sur une
+  erreur de ma part.** J'ai écrit que la CI n'exécutait aucun test et créé un travail
+  complet ; `tests.yml` exécutait déjà la suite entière sous 7.4. Je n'avais lu que
+  `ci.yml`. Le doublon a été retiré et la matrice posée sur le travail existant.
+  Vingt-troisième révision, et le défaut reste le même : une conclusion tirée de ce qui
+  est lisible, pas de ce qui est exécutable — cette fois chez moi.
+  Et le test de non-régression, prévu rouge sous PHP 8 seulement, piège le gestionnaire
+  d'erreurs : il est rouge sur les deux versions, donc le défaut est désormais rattrapable
+  sur l'interpréteur du projet.
+  **Ce que le verdict ne prouve pas** est écrit avec lui : la suite ne couvre pas tout le
+  code exécuté, les ruptures silencieuses de PHP 8 — la comparaison chaîne/nombre — ne
+  lèvent rien, et rien n'est dit de 8.3 ni 8.4.

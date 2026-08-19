@@ -116,7 +116,7 @@ class Post extends BasePost
     $post['contributor'] = array(
       'name'         => $this->getContributorDisplayName(),
       'slug'         => $this->getSfGuardUser()->username,
-      'href_website' => $this->getSfGuardUser()->UserProfile->website_url
+      'href_website' => $this->getSfGuardUser()->getWebsiteUrl()
     );
     unset(
       $post['contributor_id'],

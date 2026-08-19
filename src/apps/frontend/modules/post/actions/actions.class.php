@@ -368,7 +368,12 @@ class postActions extends sfActions
 
     $this->getDisaster($request, $this->getResponse(), [
       "query" => $this->getRequestParameter('q'), 
-      "contributor" => strtolower($request->getParameter('c'))
+      // Le parametre absent vaut null, et PHP 8.1 deprecie null en premier argument de
+      // strtolower. La depreciation s'ecrit alors DANS LE CORPS de la reponse, avant
+      // le document : /posts?format=json servait du JSON invalide. Le defaut d'origine
+      // est plus ancien que PHP 8 — un desastre filtre sur un contributeur nul n'a
+      // jamais eu de sens — mais seul PHP 8 le rend visible.
+      "contributor" => strtolower((string) $request->getParameter('c', ''))
     ]);
 
     // Formats specifics

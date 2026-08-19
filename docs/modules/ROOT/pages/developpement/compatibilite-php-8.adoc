@@ -1,0 +1,204 @@
+= Compatibilité PHP 8
+:navtitle: Compatibilité PHP 8
+
+Le projet tourne en PHP 7.4, hors support depuis novembre 2022. Cette page dit où en est
+la montée en PHP 8 : ce qui a été mesuré, quand, avec quoi — et surtout ce que la mesure
+ne prouve pas.
+
+== Verdict
+
+[cols="1,3"]
+|===
+| Verdict | *Atteignable.* La suite complète passe sous PHP 8.1. Une tâche de maintenance échoue — voir plus bas, elle ne sert aucune page.
+| Mesuré le | 2026-08-19
+| Interpréteurs | PHP 7.4.33 (référence, production) et PHP 8.1.34
+| Base | MariaDB 10.11, la version de production
+| Résultat | 277 tests unitaires, 393 fonctionnels frontend, 4 fonctionnels admin — verts sur les deux versions
+|===
+
+[NOTE]
+====
+Ces chiffres datent du jour de la mesure et vieilliront. Ce qui fait foi est la matrice de
+`.github/workflows/tests.yml` : si elle est verte, la suite passe sous les deux versions,
+quel que soit le nombre de tests qu'elle porte alors.
+
+La remarque n'est pas de principe. La ligne ci-dessus a annoncé 269 unitaires pendant
+quelques heures alors que le change qui l'écrivait en avait ajouté 8 — dans la même
+journée où le plan de release consignait, pour la quatrième fois, qu'un packet vieillit
+par ses chiffres et non par ses phrases.
+====
+
+La montée elle-même n'a pas été faite : ni la version du conteneur, ni la contrainte
+`"php": "^7.4"` de `src/composer.json` n'ont changé.
+
+Cette contrainte est *le seul verrou déclaré de toute la chaîne* — chaque dépendance
+annonce déjà PHP 8 de son côté. Elle suffit à faire refuser `composer install` sous 8.1,
+ce qui est la raison pour laquelle la branche 8.1 de l'intégration continue passe
+`--ignore-platform-req=php` : vérifier avant de déclarer, et non l'inverse. Le jour de la
+migration, ce drapeau disparaît et la contrainte s'élargit — dans cet ordre. Cette page établit que la porte
+s'ouvre. La franchir se décide séparément, avec une production à surveiller.
+
+== Ce qui a été mesuré
+
+Trois passes, dans cet ordre — et l'ordre compte, chacune voyant ce que la précédente
+ne pouvait pas voir.
+
+=== 1. Syntaxe
+
+`php -l` sous PHP 8.4 sur les 289 fichiers du projet hors `vendor` : *aucun refus dans le
+code exécuté*. Les quatorze fichiers refusés — sept dans `src/plugins`, sept dans
+`src/vendor` — sont tous des gabarits de générateur sous `skeleton/`, porteurs de
+marqueurs `\##CLASS##`, jamais évalués comme PHP.
+
+=== 2. Suppressions invisibles au linter
+
+`php -l` ne voit que la syntaxe. Une fonction supprimée en PHP 8 reste un appel
+syntaxiquement valide, et ne se manifeste qu'à l'exécution.
+
+[cols="1,3"]
+|===
+| `create_function()` | Deux occurrences, aucune joignable : une tâche d'empaquetage de plugin que le site ne lance pas, et PHP-Markdown ligne 1645 — derrière un `if (function_exists(...)) return;` sur `mb_strlen`, présent dans l'image. Branche morte.
+| `split()` | Deux occurrences, toutes deux du *JavaScript* dans une chaîne PHP de la barre de débogage. Faux positifs du `grep`.
+| `get_magic_quotes_gpc()` | Dans `getid3`, dont le code du projet ne fait aucune référence. Dépendance vendue et morte.
+|===
+
+=== 3. Exécution
+
+La seule passe qui prouve quelque chose. Suite complète sous PHP 8.1, contre la même
+base, avec `cache/` et `log/` isolés.
+
+Elle a trouvé *64 échecs sur 408*, là où les deux premières passes ne trouvaient rien.
+
+== Ce que l'exécution a trouvé
+
+Deux défauts, tous deux invisibles en PHP 7.4, tous deux corrigés.
+
+=== Une lecture de propriété sur `null`
+
+`sfGuardUser::getDisplayName()` et `Post::toJson()` lisaient à travers la relation
+`UserProfile`. Les 210 comptes de la base n'ont aucun profil : la branche était prise à
+chaque rendu de contributeur.
+
+L'origine n'est pas celle qu'on supposerait. La relation absente prend *deux formes*
+selon la requête qui l'a chargée :
+
+----
+chargement paresseux  ->  objet UserProfile vide
+chargé par jointure   ->  null
+----
+
+La seconde date du `leftJoin('u.UserProfile pr')` ajouté à
+`PostTable::buildOnlinePostsQuery` pour supprimer un N+1 — la veille de cette mesure. En
+PHP 7.4, lire une propriété sur `null` n'est qu'une notice, et la retombée sur `username`
+produit exactement le même affichage qu'un `display_name` vide. *Le défaut était donc
+invisible à toute la suite*, et l'est resté une journée.
+
+=== Une dépréciation servie dans le corps de la réponse
+
+`strtolower($request->getParameter('c'))` — le paramètre absent vaut `null`, et PHP 8.1
+déprécie `null` en premier argument. La dépréciation s'écrivait *dans le corps* de la
+réponse, avant le document : `/posts?format=json` servait du JSON invalide, et les
+formats `max`, `rss` et `xspf` étaient touchés de même.
+
+Le défaut d'origine est plus ancien que PHP 8 — filtrer un désastre sur un contributeur
+nul n'a jamais eu de sens. Seul PHP 8 l'a rendu visible.
+
+== Une tâche de maintenance qui, elle, ne passe pas
+
+Le verdict porte sur l'application. Il ne s'étend pas à tout l'outillage, et la matrice
+d'intégration continue l'a démontré dès sa première exécution.
+
+`php symfony doctrine:insert-sql --env=test` rend un code 1 sous PHP 8 — code 0 sous 7.4
+— alors qu'il a fait tout son travail : les onze tables et leurs clés étrangères sont
+créées dans les deux cas.
+
+La mécanique est instructive et se retrouvera ailleurs :
+
+`Doctrine_Export::exportClasses()` ouvre une transaction, émet les `CREATE TABLE` puis les
+`ALTER TABLE`, et appelle `commit()`. Or *les instructions DDL de MySQL valident
+implicitement* : la transaction est déjà refermée quand Doctrine la valide. PHP 7.4
+laissait PDO silencieux ; PHP 8 lève une `PDOException` — « There is no active
+transaction ».
+
+----
+PDO->commit                       Doctrine/Transaction.php:417
+Doctrine_Export->exportClasses    Doctrine/Export.php:1224
+sfDoctrineInsertSqlTask->execute  sfDoctrineInsertSqlTask.class.php:57
+----
+
+Le défaut est dans une dépendance vendue, pas dans le code du projet. L'intégration
+continue asserte donc le *résultat* — la présence effective des tables — plutôt que le
+code de sortie de la tâche. Tolérer le code sans vérifier le schéma laisserait passer une
+base réellement incomplète.
+
+*C'est le premier élément connu à corriger avant une migration réelle*, et il ne concerne
+aucune page servie aux visiteurs.
+
+== Ce que ce verdict ne prouve pas
+
+Un « la suite passe » nu se lit comme « la migration est sûre ». Il ne l'établit pas.
+
+* *La suite ne couvre pas tout le code exécuté.* Un chemin sans test peut porter le même
+  défaut sans que rien ne le signale. Les deux défauts ci-dessus n'ont été trouvés que
+  parce qu'un test passait par là.
+* *Les ruptures silencieuses de PHP 8 ne lèvent rien.* La comparaison entre chaîne et
+  nombre a changé de sémantique en 8.0 : `0 == "foo"` valait `true`, il vaut `false`. Cela
+  se manifeste par un résultat faux, jamais par une erreur. Aucune suite verte ne les
+  exclut.
+* *La mesure porte sur PHP 8.1.* Elle ne dit rien de 8.3 ni de 8.4, où les dépréciations
+  de 8.2 sur les propriétés dynamiques — que Doctrine 1 emploie massivement — deviendront
+  un sujet à part entière.
+
+== Deux fausses pistes, à ne pas reparcourir
+
+Chacune aurait produit un verdict faux, et chacune coûte une demi-journée à celui qui la
+rencontre sans être prévenu.
+
+*Le cache d'autoload partagé.* La première exécution sous PHP 8 a échoué au démarrage sur
+un chemin absolu introuvable. Ce n'était pas une incompatibilité : deux conteneurs
+montaient `src/` à des emplacements différents et partageaient `src/cache/`. La mesure
+refaite avec un volume isolé sur `cache/` et `log/` donne exactement les mêmes échecs, les
+mêmes scripts, les mêmes numéros de test.
+
+*Le jeu d'extensions.* Un conteneur jetable n'a pas les extensions de l'image du projet.
+Elles ont été comparées terme à terme avant de conclure : identiques à `pdo_mysql` près,
+installé dans la passe. Sans cette comparaison, un `mbstring` manquant aurait produit la
+même ampleur de casse et fait accuser PHP 8 à tort.
+
+== Comment le verdict reste vrai
+
+Un chiffre écrit dans une page vieillit sans prévenir. C'est arrivé quatre fois dans
+cette release.
+
+La suite tourne donc sous *les deux* versions, 7.4 et 8.1, dans
+`.github/workflows/tests.yml`, avec le même statut bloquant. `fail-fast` est désactivé
+pour que les deux rendent leur verdict.
+
+La matrice a payé dès ses deux premières exécutions, en trouvant deux défauts que la
+mesure locale n'avait pas vus : la contrainte `php` de `composer.json`, invisible tant que
+`vendor/` était déjà installé, et l'échec de `doctrine:insert-sql` décrit plus haut,
+invisible tant que la base de test existait déjà.
+
+Une passe seulement consultative aurait viré au rouge permanent puis à l'ignorance —
+c'est le mode de défaillance habituel des vérifications facultatives, et il vaut mieux ne
+pas en ajouter que d'en ajouter sans dents.
+
+Le contrôle a été vérifié par l'échec avant d'être déclaré bon : le garde retiré,
+`test:unit` rend un code 1 sous 7.4 en nommant les assertions, et la suite fonctionnelle
+rend un code 1 sous 8.1 en nommant `sfGuardUser.class.php` et sa ligne.
+
+== Reproduire la mesure
+
+[source,bash]
+----
+docker run --rm --network musiqueapproximative_default \
+  -v "$PWD/src:/app" -v /app/cache -v /app/log -w /app php:8.1-cli sh -c '
+  docker-php-ext-install pdo_mysql >/dev/null 2>&1
+  php symfony test:unit
+  php symfony test:functional frontend
+  php symfony test:functional admin'
+----
+
+Les deux volumes anonymes sur `cache/` et `log/` ne sont pas décoratifs : sans eux, le
+cache du conteneur de développement fait échouer la mesure pour une raison qui n'a rien à
+voir avec PHP 8.
