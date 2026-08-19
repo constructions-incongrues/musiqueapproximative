@@ -38,8 +38,20 @@ if ('/' !== $path && is_file($file)) {
 // Quand un script de routage prend la main, php -S met le chemin demande dans
 // SCRIPT_NAME. Symfony 1 en deduit la racine de l'application et croirait donc
 // que /rest/ping.view en est la base, ce qui fait echouer tout le routage.
-$_SERVER['SCRIPT_NAME']     = '/index.php';
-$_SERVER['SCRIPT_FILENAME'] = __DIR__.'/index.php';
-$_SERVER['PHP_SELF']        = '/index.php';
+//
+// Le controleur frontal n'est index.php que par defaut : /admin_prod.php/post
+// designe le controleur de l'admin suivi d'un PATH_INFO. Sans ce decoupage,
+// tout partait dans index.php et l'admin repondait 404 en local alors qu'elle
+// fonctionne en production.
+$script = '/index.php';
 
-require __DIR__.'/index.php';
+if (preg_match('#^(/[^/]+\.php)(/.*)?$#', $path, $matches) && is_file(__DIR__.$matches[1])) {
+  $script              = $matches[1];
+  $_SERVER['PATH_INFO'] = isset($matches[2]) ? $matches[2] : '';
+}
+
+$_SERVER['SCRIPT_NAME']     = $script;
+$_SERVER['SCRIPT_FILENAME'] = __DIR__.$script;
+$_SERVER['PHP_SELF']        = $script;
+
+require __DIR__.$script;
