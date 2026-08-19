@@ -14,14 +14,17 @@ Cette page dit lesquels, pourquoi, et où est le piège.
 |Fichier |Pourquoi il ne peut pas être versionné rendu
 
 |`apps/frontend/config/app.yml-dist`
-|Porte le jeton d'API Cloudflare et l'identifiant de zone.
+|Porte le domaine, le titre, le thème et la lecture automatique — quatre valeurs qui
+diffèrent d'un profil à l'autre.
 
 |`config/databases.yml-dist`
 |Porte l'hôte, le nom de base, l'utilisateur et le mot de passe.
 |===
 
-Les verser rendus reviendrait à publier des secrets dans un dépôt public. Ils resteront
-donc des gabarits.
+`databases.yml` versé rendu reviendrait à publier des secrets dans un dépôt public.
+`app.yml` n'en porte plus depuis le 19 août 2026 — le jeton Cloudflare est parti avec la
+tâche de purge, morte, remplacée par un workflow qui appelle l'API directement — mais il
+reste un gabarit : ses quatre valeurs sont propres à chaque profil de déploiement.
 
 [NOTE]
 ====
