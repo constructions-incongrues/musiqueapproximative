@@ -5,10 +5,21 @@
 # Le site s'appelle Musique Approximative : ce désastre prend ce nom au mot et fait flotter
 # la hauteur du morceau, comme une bande passée trop de fois.
 #
-# C'est le premier désastre qui touche le SON et non la page. Il n'a pas de `scripts:`
-# tiers : le processeur AudioWorklet vit sous `worklet/`, hors du dossier `javascript/` que
-# le gestionnaire charge automatiquement — chargé là, il serait évalué comme un script
-# classique et échouerait, `AudioWorkletProcessor` n'existant pas sur le fil principal.
+# C'est le premier désastre qui touche le SON et non la page.
+#
+# Le processeur AudioWorklet n'est PAS listé dans `scripts:` : il vit sous `worklet/`, hors
+# du dossier `javascript/` que le gestionnaire charge automatiquement. Chargé comme un
+# script classique il échouerait, `AudioWorkletProcessor` n'existant pas sur le fil
+# principal. Le script principal le charge lui-même par `addModule()`.
+#
+# Aucun `scripts:` non plus. La première livraison s'appuyait sur `desastre-audio.js` sans
+# le déclarer : en développement `mangelettres` se déclenchait sur la même page et le
+# chargeait, si bien que ce désastre en profitait sans l'avoir demandé. Forcé seul en
+# production, il rendait « DesastreAudio absent » et ne faisait rien.
+#
+# Plutôt que de déclarer la dépendance, elle a été SUPPRIMÉE : son `onReady` n'appelle
+# qu'après le chargement des métadonnées, alors que `createMediaElementSource()` n'a besoin
+# que de l'élément. Le script cherche donc l'élément lui-même.
 recettes:
   bande_usee:
     desastre: bande-usee

@@ -79,6 +79,22 @@ processeur y serait évalué sur le fil principal, où `AudioWorkletProcessor` n
 il échouerait. Il vit donc sous `worklet/`, que le gestionnaire ne scanne pas, et le script
 principal le charge lui-même par `audioWorklet.addModule()`.
 
+== Ce désastre ne dépend d'aucun autre script
+
+Il cherche lui-même l'élément audio de jPlayer, et n'utilise pas `desastre-audio.js`.
+
+C'est une correction. La première livraison passait par le `onReady` de ce partagé, qui
+n'appelle qu'après le chargement des *métadonnées* du morceau — or
+`createMediaElementSource()` n'a besoin que de l'élément. Attendre le média rendait le
+désastre dépendant du réseau : fichier lent, absent ou en erreur, il ne s'appliquait jamais.
+
+Cette dépendance était en outre *non déclarée*. En développement, `mangelettres` se
+déclenchait sur la même page et chargeait le partagé, si bien que ce désastre en profitait
+sans l'avoir demandé. Forcé seul en production, il rendait « DesastreAudio absent » et ne
+faisait rien.
+
+Chercher l'élément soi-même supprime les deux problèmes d'un coup.
+
 == Diagnostiquer
 
 Un désastre qu'on ne voit pas est un désastre qu'on ne peut pas diagnostiquer à l'œil. Une
