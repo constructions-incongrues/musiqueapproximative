@@ -1,0 +1,62 @@
+/*
+ * La bande usée — le contrepoint tactile.
+ *
+ * Le curseur n'est pas ralenti : aucune API ne le permet, et `requestPointerLock` séquestre
+ * plutôt qu'il ne surprend. C'est la PAGE qui met du temps à remarquer le pointeur.
+ *
+ * Le retard est écrit dans `--bande-usee-retard` par le script, depuis la même modulation
+ * que celle qui fait flotter le son. Il n'est pas réglé sur des fréquences qui ressemblent
+ * à celles du son : c'est le même signal, et c'est ce qui fait la démonstration.
+ *
+ * On ne retarde QUE des propriétés de présentation. Rien ici ne déplace une zone
+ * cliquable — une réponse molle est un désastre, un clic qui rate est un bug.
+ */
+
+:root {
+  --bande-usee-retard: 90ms;
+}
+
+/* Les éléments que le pointeur touche : liens, contrôles du lecteur, boutons. */
+a,
+button,
+.jp-controls a,
+.jp-controls button,
+.jp-progress,
+.jp-volume-bar {
+  transition-property:
+    color, background-color, border-color, opacity, text-decoration-color;
+  transition-duration: var(--bande-usee-retard);
+  transition-delay: var(--bande-usee-retard);
+  transition-timing-function: ease-out;
+}
+
+/* Le titre porte le contrepoint visuel, écrit en ligne par le script. On l'aide seulement
+   à ne pas sauter entre deux trames, sans lui ajouter de retard : lui, il doit suivre le
+   son à l'instant. */
+article h2 {
+  will-change: transform;
+}
+
+/*
+ * Le visiteur qui a demandé moins de mouvement est entendu : les deux contrepoints
+ * disparaissent. L'altération sonore, elle, continue — c'est la seule couche qui n'a aucun
+ * réglage standard pour être refusée, et elle a sa propre sortie par l'adresse.
+ *
+ * Aucun des dix-neuf autres désastres ne lit ce réglage.
+ */
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button,
+  .jp-controls a,
+  .jp-controls button,
+  .jp-progress,
+  .jp-volume-bar {
+    transition-delay: 0s;
+    transition-duration: 0s;
+  }
+
+  article h2 {
+    transform: none !important;
+    will-change: auto;
+  }
+}

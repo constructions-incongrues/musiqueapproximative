@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-deuxième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-troisième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1612,7 +1612,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/plugins/sfDesastrePlugin/README.adoc`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 33. `desastre-la-bande-usee` — le premier désastre qu'on ne peut pas voir
+- [x] 33. `desastre-la-bande-usee` — le premier désastre qu'on ne peut pas voir
+  - **Change** : `desastre-la-bande-usee` (archivé) — nom identique
   - **Persona servi** : l'auditeur sur le site, le mélomane fêlé
   - **Segment du parcours** : Consulter une page — pendant l'écoute, et non au chargement
   - **MoSCoW** : Should — c'est du travail créatif, tranché par le collectif le 2026-08-19
@@ -1636,8 +1637,11 @@ Chaque story est une tranche verticale : elle se démontre seule.
     fraction de degré, un ou deux pixels. Une seule cause, deux sens. Ça ne s'explique pas,
     ça se comprend.
     **La cible est le titre du morceau** : c'est lui qui nomme ce qu'on écoute, et le voir
-    dériver au rythme exact de ce qu'on entend fait le lien sans un mot. `mangelettres` vise
-    déjà le titre — le catalogue a précédent.
+    dériver au rythme exact de ce qu'on entend fait le lien sans un mot.
+    **Correction du 2026-08-19** : j'avais écrit que `mangelettres` visait déjà le titre. Il
+    vise `.title`, qui est le **nom du site**. Le titre du morceau est dans `article h2`,
+    l'artiste dans `article h1`, et un `h1` nu attraperait la barre latérale — la page en
+    compte trois.
   - **La troisième couche : la main.** La même modulation pilote aussi la façon dont la page
     répond au pointeur — états de survol, contrôles du lecteur, liens réagissent en retard et
     en flottant, par `transition-delay`. **Le curseur n'est pas ralenti ; c'est la page qui
@@ -2705,3 +2709,22 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   attribuable au matériel — aucun casque défectueux ne fait ça aux liens. C'était l'objection
   qui avait fait ajouter le contrepoint visuel à la révision précédente ; elle est maintenant
   traitée deux fois.
+
+- 2026-08-19 (trente-troisième révision) — **La story 33 est livrée : le premier désastre qui
+  touche le son.** Trois défauts ont été trouvés en l'exécutant, aucun n'aurait été vu en
+  relisant.
+  **Une erreur que j'avais déjà commise, cette fois dans le code livré.** Le garde de
+  disponibilité lisait `AudioContext.prototype.audioWorklet` — un accesseur qui exige une
+  instance et lève « Illegal invocation ». C'est exactement le faux négatif qui m'avait fait
+  croire, en sondant le navigateur la veille, qu'AudioWorklet était absent. L'exception était
+  avalée par le `try/catch` de `DesastreAudio.onReady` : le désastre échouait en silence.
+  **Les réglages par défaut étaient six fois trop violents.** Mesuré par rendu hors ligne :
+  **154 cents d'amplitude**, plus d'un demi-ton — une machine cassée, pas une bande fatiguée.
+  La déviation dépend de la DÉRIVÉE du retard, donc de la fréquence autant que de la
+  profondeur, ce qui rend le flutter bien plus lourd que le wow. Ramené à **29,3 cents**,
+  dans la plage d'une bande réelle.
+  **Et `mangelettres` ne vise pas le titre du morceau** mais `.title`, le nom du site. Le
+  packet invoquait un précédent qui n'existait pas dans ce sens ; corrigé ici et dans le
+  change.
+  **Une tâche reste ouverte et le restera** : écouter. Aucune mesure ne dira si le doute dure
+  les quelques secondes qu'il faut.

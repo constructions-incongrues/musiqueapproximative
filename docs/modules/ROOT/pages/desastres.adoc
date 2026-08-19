@@ -172,6 +172,37 @@ recettes:
       voices: ["Google français", "Microsoft Hortense"]
 ----
 
+=== Désastres sur le son
+
+==== bande-usee
+
+*Le premier désastre qui touche le morceau et non la page.* Le site s'appelle Musique
+Approximative ; celui-ci prend ce nom au mot et fait flotter la hauteur du son, comme une
+bande magnétique passée trop de fois.
+
+Une ligne à retard modulée dans un `AudioWorklet` — un retard qui varie est une hauteur qui
+varie. Deux oscillations superposées : le *wow* lent, le *flutter* rapide.
+
+*Trois couches, une seule modulation.* L'oreille l'entend, l'œil la voit dériver sur le
+titre, la main la sent dans la réponse de la page au pointeur. Les contrepoints *partagent*
+le signal du processeur, ils ne l'imitent pas : c'est ce qui fait comprendre que l'effet est
+voulu. Un son qui flotte seul se lit comme une panne, et un visiteur qui croit le site cassé
+s'en va.
+
+Le curseur n'est pas ralenti — aucune API ne le permet — c'est la page qui met du temps à le
+remarquer. Aucune propriété de mise en page n'est transitionnée : les clics restent exacts.
+
+*Deux sorties.* `prefers-reduced-motion: reduce` retire les deux contrepoints en laissant le
+son ; `?sans-desastre` retire tout. La seconde existe parce qu'aucun réglage standard ne
+permet de refuser une altération sonore — sans elle, ce serait le seul désastre auquel on ne
+peut pas échapper.
+
+Détail d'arborescence qui a sa raison : le processeur vit sous `worklet/` et non
+`javascript/`, que le gestionnaire charge automatiquement en script classique — où
+`AudioWorkletProcessor` n'existe pas.
+
+Voir `src/web/desastres/bande-usee/README.adoc`.
+
 === Désastres interactifs
 
 ==== redirect
