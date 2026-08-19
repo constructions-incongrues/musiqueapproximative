@@ -80,13 +80,18 @@
    * alteree** — mesure sur les morceaux reels — ce qui ferait de l'usure l'etat normal
    * plutot que la marque d'un age. L'exposant 2 la reserve aux morceaux vraiment anciens :
    *
-   *   2026 → 4,4 cents     2016 → 12,2     2011 → 21,6     2008 → 28,6
+   *   2026 → 22,8 cents    2016 → 35,9     2011 → 52,2     2008 → 65,1
    *
    * POURQUOI UN PLANCHER
    *
    * Sans lui, 29 % des morceaux recevraient une alteration inaudible alors que l'en-tete
    * `X-Desastre` annonce le desastre. Un desastre declare et imperceptible se lit comme un
    * desastre casse.
+   *
+   * Encore faut-il que le plancher soit lui-meme audible. A 0,15 il ne l'etait pas — 4,4
+   * cents pour un morceau du jour — et le defaut qu'il pretendait corriger existait quand
+   * meme. La courbe etant quadratique, c'est ce plancher, et non la profondeur, qui decide
+   * de ce qu'entend la moitie recente du catalogue.
    *
    * POURQUOI UNE CONSTANTE ET PAS L'ETENDUE DU CATALOGUE
    *
@@ -97,7 +102,7 @@
   function intensiteSelonAge() {
     var repli = typeof options.intensite === "number" ? options.intensite : 1;
     var plancher =
-      typeof options.plancherUsure === "number" ? options.plancherUsure : 0.15;
+      typeof options.plancherUsure === "number" ? options.plancherUsure : 0.35;
     var referenceAns =
       typeof options.referenceAns === "number" ? options.referenceAns : 18;
 

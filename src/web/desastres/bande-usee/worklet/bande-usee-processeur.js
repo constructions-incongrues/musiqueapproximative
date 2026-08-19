@@ -73,9 +73,14 @@ class BandeUseeProcesseur extends AudioWorkletProcessor {
     // mesure par passages par zero sur un la 440 : **154 cents d'amplitude**, plus d'un
     // demi-ton. Ce n'est pas une bande fatiguee, c'est une machine cassee.
     //
-    // Une bande reelle tient entre dix et cinquante cents. Les valeurs ci-dessous visent
-    // une trentaine — nettement perceptible comme une instabilite, jamais comme une panne.
-    this.profondeurMs = reglages.profondeurMs || 0.9;
+    // Le reglage suivant, 0,9 ms, a corrige trop loin : 29 cents au maximum de la courbe
+    // d'age. Ecoute en ligne le 2026-08-19 sur un morceau de 2008, donc a l'usure MAXIMALE,
+    // l'effet ne s'entendait pas. « Dix a cinquante cents » decrit la derive tolerable d'un
+    // magnetophone en bon etat ; ce desastre imite une bande USEE, ce qui est autre chose.
+    //
+    // A 2,0 ms : 65 cents crete a crete au maximum, 23 pour un morceau du jour. Sous la
+    // moitie des 154 cents jugee machine cassee, et au-dessus du seuil d'audibilite.
+    this.profondeurMs = reglages.profondeurMs || 2.0;
     // Retard median. Il faut de la marge des deux cotes pour que la modulation reste
     // symetrique sans jamais demander un retard negatif.
     this.retardBaseMs = reglages.retardBaseMs || 12;

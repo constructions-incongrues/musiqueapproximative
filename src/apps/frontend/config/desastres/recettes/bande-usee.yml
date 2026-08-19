@@ -32,14 +32,33 @@ recettes:
       # En millisecondes. Réglage MESURÉ et non deviné : la déviation de hauteur dépend de
       # la dérivée du retard, donc de la fréquence autant que de la profondeur. Un premier
       # jeu à 2,2 ms donnait 154 cents d'amplitude — plus d'un demi-ton, une machine cassée
-      # et non une bande fatiguée. Une bande réelle tient entre dix et cinquante cents.
-      profondeurMs: 0.9
+      # et non une bande fatiguée.
+      #
+      # Le réglage suivant, 0,9 ms, a corrigé trop loin : 29 cents au maximum de la courbe
+      # d'âge, et 4,4 cents pour un morceau du jour. Écouté en ligne le 2026-08-19 sur un
+      # morceau de 2008 — donc à l'usure MAXIMALE — l'effet ne s'entendait pas. Un désastre
+      # que l'en-tête X-Desastre annonce et que l'oreille ne trouve pas se lit comme un
+      # désastre cassé.
+      #
+      # Mesure hors ligne, la 440 passé dans la ligne à retard, hauteur lue aux passages
+      # par zéro. Crête à crête, à 2,0 ms :
+      #
+      #   2026 → 22,8 cents   2016 → 35,9   2011 → 52,2   2008 → 65,1
+      #
+      # Le maximum reste sous la moitié des 154 cents jugés « machine cassée », et le
+      # morceau du jour passe enfin au-dessus du seuil d'audibilité.
+      profondeurMs: 2.0
       retardBaseMs: 12
       # Repli si la page ne porte pas de date lisible.
       intensite: 1
-      # Usure minimale : sans plancher, 29 % des morceaux recevraient une altération
-      # inaudible alors que l'en-tête X-Desastre annonce le désastre.
-      plancherUsure: 0.15
+      # Usure minimale. Le plancher existe pour qu'aucun morceau ne reçoive une altération
+      # inaudible alors que l'en-tête X-Desastre annonce le désastre — et à 0,15 il ne le
+      # faisait pas : un morceau du jour recevait 4,4 cents, c'est-à-dire rien.
+      #
+      # À 0,35 il vaut 22,8 cents, au-dessus du seuil. C'est le plancher qui décide de ce
+      # qu'entend le catalogue RÉCENT, là où la profondeur décide du maximum : la courbe
+      # étant quadratique, la moitié des morceaux vit près de ce plancher.
+      plancherUsure: 0.35
       # Âge auquel l'usure est maximale. CONSTANTE et non étendue du catalogue, qui
       # grandit chaque jour et ferait dériver l'usure d'un morceau sans décision.
       referenceAns: 18
