@@ -2,6 +2,27 @@
 
 Plugin Symfony 1.5 pour gérer un système de "désastres" basé sur des règles. Ce plugin permet d'injecter dynamiquement des assets (CSS/JavaScript) dans vos pages en fonction de conditions définies par des règles YAML.
 
+== Où trouver quoi
+
+[cols="2,3"]
+|===
+| Document | Ce qu'il dit
+
+| `docs/modules/ROOT/pages/desastres.adoc`
+| *Fait foi.* Comment la configuration fonctionne, comment écrire un désastre, ce que
+  l'exercice coûte et pourquoi il n'y a pas de générateur.
+
+| `README-TRIGGER.adoc`
+| Le paramètre `trigger`, qui force une règle depuis l'URL. Publics et délibérément.
+
+| `CONFIGURATION-SEGMENTATION.adoc`
+| Document de conception de 2025, conservé pour mémoire. Trois approches proposées, une
+  retenue. Ne décrit pas ce qui existe.
+
+| Ce fichier
+| L'API PHP du plugin et la façon de l'appeler depuis du code.
+|===
+
 == Caractéristiques
 
 * *Moteur de règles flexible* : Évaluez des expressions complexes basées sur les paramètres de requête et le contexte
@@ -68,75 +89,28 @@ mkdir -p web/desastres
 
 == Configuration
 
-=== Structure du fichier `desastres.yml`
+=== Où est décrite la configuration
 
-[,yaml]
-----
-regles:
-  - query: "query.title ~ /.*amour.*/i || (context.date.day == '14' && context.date.month == '2')"
-    recettes: [amour_caca, amour_pipi]
-    probability: 0.5
+La structure de la configuration — règles, recettes, syntaxe des requêtes, schémas JSON —
+n'est plus décrite ici, parce qu'elle l'était en double et que les deux descriptions
+avaient divergé.
 
-recettes:
-  amour_pipi:
-    enabled: true
-    desastre: amour
-    options:
-      color: yellow
-      text: PIPI
-----
+Elle est décrite dans `docs/modules/ROOT/pages/desastres.adoc`, qui fait foi.
 
-=== Syntaxe des règles
+[IMPORTANT]
+====
+Le plugin accepte *deux formes* de configuration, et les fusionne :
 
-==== Variables disponibles
+* un fichier `desastres.yml` unique portant `regles:` et `recettes:` — la forme minimale,
+  celle de `data/config/desastres.yml.example`, qui fonctionne toujours ;
+* la forme *à imports*, où `desastres.yml` ne fait que déclarer des fichiers de
+  `desastres/regles/` et `desastres/recettes/`.
 
-* *query.** : Tous les paramètres de la requête
- ** `query.title` : Titre d'un post
- ** `query.artist` : Artiste
- ** `query.contributor` : Contributeur
- ** etc.
-* *context.date.** : Informations de date/heure
- ** `context.date.day` : Jour du mois (1-31)
- ** `context.date.month` : Mois (1-12)
- ** `context.date.year` : Année (ex: 2025)
- ** `context.date.hour` : Heure (0-23)
- ** `context.date.minute` : Minute (0-59)
- ** `context.date.weekday` : Jour de la semaine (1=lundi, 7=dimanche)
-
-==== Opérateurs
-
-* `~` : Test de regex
- ** Exemple : `query.title ~ /.*love.*/i`
-* `==`, `!=`, `>`, `<`, `>=`, `+<=+` : Comparaisons
- ** Exemple : `context.date.month == '12'`
-* `&&` : ET logique
- ** Exemple : `query.artist ~ /.*beatles.*/i && context.date.hour >= '18'`
-* `||` : OU logique
- ** Exemple : `query.title ~ /.*rock.*/i || query.title ~ /.*metal.*/i`
-* `()` : Groupement
- ** Exemple : `(context.date.day == '25' && context.date.month == '12')`
-
-==== Exemples de règles
-
-[,yaml]
-----
-# Saint-Valentin ou titre contenant "amour"
-- query: "(context.date.day == '14' && context.date.month == '2') || query.title ~ /.*amour.*/i"
-  recettes: [valentines_day]
-
-# Weekend uniquement
-- query: "context.date.weekday == '6' || context.date.weekday == '7'"
-  recettes: [weekend_special]
-  probability: 0.3
-
-# Artiste spécifique
-- query: "query.artist ~ /.*beatles.*/i"
-  recettes: [beatles_theme]
-
-# Combinaison complexe
-- query: "query.contributor == 'john' && (query.title ~ /.*rock.*/i || query.title ~ /.*punk.*/i)"
-  recettes: [john_rock_playlist]
-----
+*Musique Approximative emploie la seconde.* Chercher ses dix-neuf recettes dans un
+`desastres.yml` unique ne donnerait rien : elles sont dans les fichiers importés. C'est
+cette ambiguïté qui a fait retirer la description d'ici plutôt que de la corriger — deux
+descriptions divergent toujours de nouveau.
+====
 
 == Utilisation
 
@@ -456,7 +430,7 @@ Charge la configuration depuis un fichier YAML.
 * *$configPath* : Chemin vers le fichier de configuration
 * *Retour* : Instance courante (chainage)
 
-==== `applyToRequest(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $webRoot = '/desastres', $fsRoot = null)`
+==== `applyToRequest(sfWebRequest $request, sfWebResponse $response, array $extraParams = array(), $webRoot = '/desastres', $fsRoot = null, sfContext $context = null)`
 
 *NOUVEAU* : Methode tout-en-un qui applique automatiquement les desastres pour une requete donnee.
 
@@ -480,7 +454,7 @@ Trouve les recettes correspondant aux parametres.
 * *$context* : Contexte additionnel (optionnel)
 * *Retour* : Tableau de recettes
 
-==== `applyRecettesToResponse(sfWebResponse $response, array $recettes, $webRoot = '/desastres', $fsRoot = null)`
+==== `applyRecettesToResponse(sfWebResponse $response, array $recettes, $webRoot = '/desastres', $fsRoot = null, sfContext $context = null)`
 
 Applique les recettes a une reponse Symfony.
 
@@ -504,36 +478,6 @@ Crée un moteur de règles.
 
 * *$expression* : Expression à évaluer
 * *Retour* : Boolean
-
-== Exemples avancés
-
-=== Désastre de Noël avec probabilité
-
-[,yaml]
-----
-regles:
-  - query: "context.date.month == '12' && context.date.day >= '20'"
-    recettes: [noel_snow, noel_lights]
-    probability: 0.7  # 70% de chances
-----
-
-=== Désastre par plage horaire
-
-[,yaml]
-----
-regles:
-  - query: "context.date.hour >= '22' || context.date.hour <= '6'"
-    recettes: [night_mode]
-----
-
-=== Désastre basé sur plusieurs critères
-
-[,yaml]
-----
-regles:
-  - query: "query.contributor ~ /.*john.*/i && query.title ~ /.*rock.*/i && context.date.weekday >= '5'"
-    recettes: [weekend_rock_special]
-----
 
 == Tests
 

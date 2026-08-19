@@ -35,8 +35,16 @@ Le README du plugin ne contient **aucune** occurrence de `recettes/`, `regles/` 
 `imports:`. La modularisation date du 2025-11-10 ; il n'a jamais suivi. Sa dernière
 modification, en janvier 2026, était une conversion de format.
 
-**Il est faux depuis neuf mois — exactement la période sans un seul désastre neuf.** Et
-c'est celui-là que trouve d'abord quelqu'un qui ouvre le code : il est posé à côté.
+**Correction apportée à cette proposal après vérification** : une première rédaction le
+disait « faux ». Il ne l'est pas. La forme monolithique qu'il documente **fonctionne
+toujours** — vérifié en construisant un `sfDesastreManager` sur une configuration sans
+imports : une recette lue, une règle lue, déclenchement obtenu. Le plugin accepte les deux
+formes et les fusionne.
+
+Il est donc **incomplet**, pas faux : il omet le mécanisme d'imports, qui est celui que ce
+projet emploie, et c'est lui qu'on trouve d'abord en ouvrant le code puisqu'il y est posé à
+côté. Quelqu'un qui le suit écrira une configuration qui marche, mais pas celle du projet —
+et ne trouvera pas ses dix-neuf recettes là où le README dit qu'elles sont.
 
 ## What Changes
 
@@ -44,9 +52,14 @@ c'est celui-là que trouve d'abord quelqu'un qui ouvre le code : il est posé à
   tâche `symfony`. La mesure ne le justifie pas, et l'écrire évite que la question soit
   reposée dans six mois sans les chiffres.
 
-- **Supprimer la carte fausse plutôt que la réparer.** Deux documents de 1 162 lignes qui
-  se contredisent coûtent plus que zéro. Le README du plugin devient un renvoi court vers
-  la page de documentation, qui est juste, versionnée et publiée.
+- **Désambiguïser les deux cartes, sans en supprimer le contenu unique.** La comparaison
+  section par section a montré que le README porte ce que la page n'a pas : la référence
+  d'API PHP — `sfDesastreManager`, `sfDesastreRuleEngine` — et la façon d'appeler le
+  système depuis du code. Sept méthodes documentées, **deux écarts seulement** avec le
+  code, tous deux un paramètre `sfContext` ajouté après coup.
+  Le README garde donc ce qui lui est propre, corrige ses deux signatures, et cesse de
+  décrire la configuration : il renvoie à la page pour cela, en disant que ce projet emploie
+  la forme à imports.
 
 - **Consigner le coût mesuré** — cinq fichiers, quatre répertoires, deux imports, deux
   schémas — pour que la prochaine personne qui posera la question parte d'un chiffre.

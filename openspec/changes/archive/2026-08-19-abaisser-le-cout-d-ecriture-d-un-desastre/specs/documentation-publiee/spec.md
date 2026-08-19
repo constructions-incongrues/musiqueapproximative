@@ -6,13 +6,18 @@ Le dépôt NE SHALL PAS porter deux descriptions concurrentes de la structure d'
 Une seule SHALL faire foi, et les autres emplacements SHALL y renvoyer plutôt que de la
 recopier.
 
-La règle n'est pas esthétique. Deux descriptions divergent : celle du plugin décrivait un
-fichier `desastres.yml` unique neuf mois après que la configuration eut été scindée en
-`recettes/`, `regles/` et imports. Elle n'était pas incomplète, elle était **fausse** — et
-c'est celle que rencontre d'abord qui ouvre le code, puisqu'elle est posée à côté.
+La règle n'est pas esthétique. Deux descriptions divergent : celle du plugin décrit un
+fichier `desastres.yml` unique, neuf mois après que la configuration de ce projet eut été
+scindée en `recettes/`, `regles/` et imports.
 
-Une documentation fausse coûte plus cher qu'une documentation absente : l'absence fait
-chercher, l'erreur fait construire quelque chose qui ne marche pas.
+Elle n'est pas fausse — la forme monolithique fonctionne toujours, le plugin acceptant les
+deux et les fusionnant. Elle est **incomplète pour ce projet**, ce qui est plus insidieux :
+qui la suit écrit une configuration valide, mais pas celle qui est en place, et ne trouve
+pas les recettes existantes là où elle dit qu'elles sont.
+
+Une description partielle présentée comme complète coûte plus cher qu'une absence :
+l'absence fait chercher, la demi-description fait chercher au mauvais endroit avec
+confiance.
 
 #### Scenario: chercher comment écrire un désastre depuis le code
 

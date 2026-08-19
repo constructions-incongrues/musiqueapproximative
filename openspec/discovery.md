@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-septième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-huitième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1444,10 +1444,12 @@ Chaque story est une tranche verticale : elle se démontre seule.
     avec des recettes, ce qui aurait détruit le regroupement `mangelettres` (un
     déclencheur, deux recettes) et changé les URL par lesquelles on essaie les
     désastres à la main.
-  - **Ce qui reste à faire dans cette zone, et qui n'est pas cette story** : `trigger`
-    est un interrupteur public non documenté — n'importe qui peut forcer n'importe quel
-    désastre sur n'importe quelle page. Ce n'est pas une référence cassée, c'est une
-    surface non écrite. À reprendre comme story neuve si le collectif le souhaite.
+  - **Ce qui reste à faire dans cette zone — CORRIGÉ le 2026-08-19** : j'avais écrit que
+    `trigger` était « un interrupteur public non documenté ». **C'est faux.**
+    `src/plugins/sfDesastrePlugin/README-TRIGGER.adoc`, 374 lignes, le documente — et
+    documente sa publicité comme un choix : « Ils sont publics, et c'est délibéré »,
+    « Aucun secret ne protège ces paramètres ». Je ne l'avais pas trouvé. Il n'y a donc
+    rien à reprendre ici.
   - **Conservée et non supprimée**, avec son packet d'origine ci-dessous, pour que la
     trace de l'erreur de mesure reste lisible.
   - **Persona servi** : le collectif qui écrit les désastres
@@ -1530,7 +1532,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `src/web/desastres/*/javascript/`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 32. `abaisser-le-cout-d-ecriture-d-un-desastre` — en écrire un cesse de demander de savoir où tout est
+- [x] 32. `abaisser-le-cout-d-ecriture-d-un-desastre` — en écrire un cesse de demander de savoir où tout est
+  - **Change** : `abaisser-le-cout-d-ecriture-d-un-desastre` (archivé) — nom identique
   - **Persona servi** : le collectif — quelqu'un qui a une idée de désastre et pas la carte
     du dépôt
   - **Segment du parcours** : Concevoir un désastre
@@ -2425,9 +2428,11 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   et son packet d'origine est conservé : la trace de l'erreur de mesure vaut mieux que sa
   disparition.
   **Ce qui reste dans cette zone n'est pas ce qu'elle décrivait** : `trigger` est un
-  interrupteur d'URL public et non documenté — n'importe qui peut forcer n'importe quel
-  désastre sur n'importe quelle page. Une surface non écrite, pas une référence cassée. À
-  reprendre comme story neuve si le collectif le souhaite.
+  interrupteur d'URL public — n'importe qui peut forcer n'importe quel désastre sur
+  n'importe quelle page.
+  **Correction du 2026-08-19** : j'ai écrit ici qu'il était « non documenté ». C'est faux,
+  et la story 32 l'a montré. `README-TRIGGER.adoc` le documente sur 374 lignes, publicité
+  comprise et assumée. Je ne l'avais pas cherché au bon endroit. Rien à reprendre.
 
 - 2026-08-19 (vingt-septième révision) — **La story 31 est livrée. Son relevé était juste et
   incomplet** — les deux à la fois, ce qui est un mode de défaillance nouveau dans cette
@@ -2444,3 +2449,22 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   périmètre se défend mieux qu'un chiffre faux, et se corrige plus tard.
   Le contrôle posé porte donc sur les recettes, les ressources ET le schéma — et il déclare
   ce qu'il ne fait pas : suivre ce qu'une bibliothèque téléchargerait d'elle-même.
+
+- 2026-08-19 (vingt-huitième révision) — **La story 32 est livrée, et son verdict est de ne
+  rien construire.** Le packet le prévoyait — « si la mesure dit que c'est rare, la bonne
+  conclusion est de ne rien faire, et de l'écrire ». Mesure : les dix-neuf recettes en deux
+  jours de novembre 2025, par PR distinctes et non par import massif, puis aucun désastre
+  neuf en neuf mois.
+  **Trois choses ont été corrigées en cours de route, dont deux de ma main.**
+  Ma proposal disait le README du plugin « faux ». Il ne l'est pas : la forme monolithique
+  qu'il documente **fonctionne toujours**, vérifié en construisant un manager dessus. Il est
+  *incomplet* — il omet les imports, que ce projet emploie. Plus insidieux que faux : qui le
+  suit écrit une configuration valide, mais pas celle en place.
+  J'avais écrit ici, en retirant la story 30, que `trigger` était « un interrupteur public
+  non documenté ». **Faux également** : `README-TRIGGER.adoc` le documente sur 374 lignes,
+  publicité comprise et assumée. Corrigé aux deux endroits.
+  Et il n'y avait pas deux cartes mais quatre. `CONFIGURATION-SEGMENTATION.adoc` proposait
+  trois approches sans dire laquelle avait atterri ; il est marqué historique.
+  **La leçon, à ce stade de la release** : le défaut ne s'est pas déplacé des chiffres vers
+  la portée, il alterne. Ici, une affirmation trop forte — « faux » là où « incomplet »
+  suffisait — et une recherche menée dans un seul répertoire.
