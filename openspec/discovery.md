@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-troisième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-quatrième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1438,7 +1438,30 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Persona servi** : le collectif qui écrit les désastres
   - **Segment du parcours** : Concevoir un désastre
   - **MoSCoW** : Should — axe désastres
-  - **Relevé du 2026-08-18**, par recoupement des règles et des recettes :
+  - **⚠️ CE RELEVÉ EST FAUX. Mesuré de nouveau le 2026-08-19 : il n'existe aucune
+    référence en l'air**, dans un sens ni dans l'autre. Le relevé ci-dessous comparait le
+    champ `trigger:` aux noms de recettes, or `trigger` est le LIBELLÉ de la règle et non
+    une référence — le lien réel est le champ `recettes:`, et il résout dans les dix-neuf
+    cas.
+
+    Les trois « déclencheurs en l'air » et les trois « recettes jamais déclenchées » sont
+    les mêmes trois règles, vues deux fois :
+
+    | fichier | `trigger` | `recettes` réellement pointées |
+    | --- | --- | --- |
+    | `mangelettres.yml` | `mangelettres` | `consonnard`, `voyelliste` |
+    | `redirects.yml` | `quickos_noel` | `quickos` |
+    | `tts.yml` | `jinglist` | `tts_jinglist` |
+
+    Le cas `mangelettres` suffit à écarter l'hypothèse du renommage : un déclencheur y
+    pointe DEUX recettes, ce qu'une identité de nom ne saurait exprimer. Ce n'est pas une
+    dérive, c'est un regroupement délibéré.
+
+    **Cette story est donc sans objet en l'état.** L'appliquer telle qu'écrite reviendrait
+    à renommer des déclencheurs pour les faire coïncider avec des recettes, ce qui
+    détruirait le regroupement. À reformuler ou à retirer — décision du mainteneur.
+
+  - **Relevé initial du 2026-08-18, conservé pour mémoire** (faux, voir ci-dessus) :
 
     | | |
     | --- | --- |
@@ -2344,3 +2367,19 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **Ce que le verdict ne prouve pas** est écrit avec lui : la suite ne couvre pas tout le
   code exécuté, les ruptures silencieuses de PHP 8 — la comparaison chaîne/nombre — ne
   lèvent rien, et rien n'est dit de 8.3 ni 8.4.
+
+- 2026-08-19 (vingt-quatrième révision) — **La story 30 repose sur une mesure fausse, et le
+  travail préparatoire de la story 29 l'a montrée.** Son relevé comparait le champ
+  `trigger:` aux noms de recettes ; `trigger` est le libellé de la règle, le lien réel est
+  `recettes:`, et il résout dans les dix-neuf cas. Les trois « déclencheurs en l'air » et
+  les trois « recettes jamais déclenchées » sont les mêmes trois règles vues deux fois. Le
+  cas `mangelettres` — un déclencheur, deux recettes — écarte l'hypothèse du renommage :
+  c'est un regroupement délibéré, et appliquer la story l'aurait détruit.
+  **Inventaire réel, mesuré** : 19 recettes, 19 règles, aucune référence en l'air, aucune
+  recette désactivée, probabilités de 0,1 à 1 dont six règles certaines.
+  **Cinquième packet falsifié par la mesure**, et le premier à l'être par le travail
+  préparatoire d'une AUTRE story. La leçon se déplace : mesurer avant d'écrire protège le
+  packet qu'on écrit, mais c'est en mesurant largement qu'on attrape ceux qui sont déjà
+  écrits.
+  La story 31 devra être relue de même : elle suppose des dépendances tierces dont
+  l'inventaire n'a pas été refait.
