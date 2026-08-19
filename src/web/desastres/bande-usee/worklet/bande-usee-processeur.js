@@ -182,9 +182,14 @@ class BandeUseeProcesseur extends AudioWorkletProcessor {
     this.quantumsDepuisEnvoi++;
     if (this.quantumsDepuisEnvoi >= this.quantumsParEnvoi) {
       this.quantumsDepuisEnvoi = 0;
-      // Normalise dans [-1, 1] : les contrepoints n'ont pas a connaitre nos amplitudes.
+      // Normalise dans [-1, 1], ET PONDERE PAR L'INTENSITE.
+      //
+      // Sans cette ponderation, le titre deriverait autant sur un morceau d'hier que sur un
+      // de 2008, alors que l'oreille entend sept fois moins. Les trois couches doivent
+      // suivre la MEME usure et pas seulement la meme oscillation : c'est ce qui fait que
+      // l'oeil confirme ce que l'oreille entend au lieu de le contredire.
       this.port.postMessage({
-        modulateur: modulateur / 1.12,
+        modulateur: (modulateur / 1.12) * intensite,
         intensite: intensite,
       });
     }

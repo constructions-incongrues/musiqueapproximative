@@ -256,6 +256,21 @@
 <?php endif; ?>
 
 <section class="content">
+  <?php
+    /**
+     * La date de publication, sous forme normalisee.
+     *
+     * Elle ne figurait NULLE PART dans la page, ce qui est notable pour un catalogue
+     * qui couvre dix-huit ans : la date existe en base et dans les representations
+     * machine, mais la page HTML n'en disait rien.
+     *
+     * Le desastre `bande-usee` s'en sert pour doser l'usure — un morceau de 2008
+     * sonne comme ce qui a attendu longtemps — mais elle ne lui est pas reservee :
+     * elle decrit le morceau, et quiconque lit la page doit pouvoir la retrouver.
+     */
+  ?>
+  <meta name="musiqueapproximative:publie-le" content="<?php echo date(DATE_ATOM, strtotime($post->publish_on)) ?>">
+
   <article class="wrapper">
     <div class="nav-l">
       <p>
