@@ -42,11 +42,11 @@
           "description": "Scripts JavaScript externes à charger pour ce désastre",
           "items": {
             "type": "string",
-            "description": "URL ou chemin du script",
+            "description": "Chemin du script, servi par le site. Les bibliotheques tierces sont versees sous /frontend/assets/javascripts/ plutot qu appelees depuis un CDN : le visiteur n a pas a etre annonce a un tiers. Voir docs/modules/ROOT/pages/dependances-tierces.adoc",
             "examples": [
-              "https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js",
-              "/desastres/shared/desastre-audio.js",
-              "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"
+              "/frontend/assets/javascripts/animejs/anime-3.2.2.min.js",
+              "/frontend/assets/javascripts/gsap/gsap-3.13.0.min.js",
+              "/desastres/shared/desastre-audio.js"
             ]
           }
         },

@@ -6,8 +6,8 @@
  * personnalisables (rotation, opacité, déplacement, etc.).
  *
  * Dépendances :
- * - GSAP 3.x (https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js)
- * - SplitText plugin (https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js)
+ * - GSAP 3.x (/frontend/assets/javascripts/gsap/gsap-3.13.0.min.js)
+ * - SplitText plugin (/frontend/assets/javascripts/gsap/SplitText-3.13.0.min.js)
  * - DesastreAudio helper (/desastres/shared/desastre-audio.js)
  *
  * Configuration via window.DesastreOptions.splitouine :

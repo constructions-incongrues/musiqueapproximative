@@ -20,7 +20,7 @@ recettes:
     desastre: mon_desastre
     scripts:
       - /desastres/shared/desastre-audio.js  # Charger en premier
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - /frontend/assets/javascripts/gsap/gsap-3.13.0.min.js
       # ... autres scripts
 ----
 
@@ -145,7 +145,7 @@ recettes:
     desastre: fade_out
     scripts:
       - /desastres/shared/desastre-audio.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
+      - /frontend/assets/javascripts/gsap/gsap-3.13.0.min.js
 ----
 
 *fade_out.js* :

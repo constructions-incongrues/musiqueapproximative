@@ -1,0 +1,96 @@
+= Dépendances tierces
+:navtitle: Dépendances tierces
+
+Cette page dit quels hôtes extérieurs le navigateur d'un visiteur contacte quand il
+consulte une page du site — et ce que ces hôtes reçoivent de lui.
+
+== La décision
+
+*Le visiteur qui consulte une page n'a pas à être annoncé à un tiers.*
+
+Elle a été prise une première fois le 2026-08-18, pour la page de consultation du contrat
+OpenAPI : Redoc a été versé au dépôt — 1 071 ko — plutôt qu'appelé depuis un CDN.
+
+Elle a été étendue aux désastres le 2026-08-19, parce que les deux ne pouvaient pas rester
+vraies en même temps sans qu'on l'écrive. Sept recettes sur dix-neuf appelaient deux CDN à
+l'exécution, sur des pages publiques, au hasard d'un tirage que le visiteur ne choisit pas.
+
+== Ce qu'un hôte tiers reçoit
+
+Ce n'est pas « un appel externe ». Un hôte qui sert un fichier à votre navigateur obtient :
+
+* *votre adresse IP*, donc votre opérateur et votre localisation approximative ;
+* *l'en-tête `Referer`*, qui nomme la page exacte que vous étiez en train de consulter ;
+* *de quoi constituer une empreinte de navigateur* — version, langue, plateforme, polices
+  disponibles — souvent suffisante pour vous reconnaître d'un site à l'autre.
+
+Un `<iframe>` va plus loin qu'un script : la page embarquée s'exécute dans son propre
+contexte, peut poser ses propres cookies et observer certaines de vos interactions.
+
+== Inventaire
+
+=== Bibliothèques, servies par le site
+
+[cols="2,1,3"]
+|===
+| Bibliothèque | Version | Emplacement
+
+| GSAP | 3.13.0 | `web/frontend/assets/javascripts/gsap/`
+| SplitText (greffon GSAP) | 3.13.0 | `web/frontend/assets/javascripts/gsap/`
+| anime.js | 3.2.2 | `web/frontend/assets/javascripts/animejs/`
+| Redoc | 2.5.3 | `web/frontend/assets/javascripts/redoc/`
+|===
+
+Chaque fichier porte sa version dans son nom et s'accompagne de sa licence. La version
+dans le nom rend une mise à jour explicite là où un chemin nu la masquerait.
+
+*Auto-héberger, c'est redistribuer.* La licence de chaque fichier a été vérifiée comme
+l'autorisant avant que le fichier soit versé — `anime.js` sous MIT, GSAP et SplitText
+utilisables sans frais depuis la 3.13, GreenSock documentant le téléchargement et le
+chargement depuis son propre site comme méthode d'installation supportée.
+
+=== Domaines du collectif
+
+Ce ne sont pas des tiers au sens de cette décision.
+
+* `musiqueapproximative.net` et ses sous-domaines
+* `musiques-incongrues.net` — dont le webhook `n8n` employé par le désastre `tts_jinglist`
+* `partouze-cagoule.fr` — sert le jingle du désastre `mamie`
+
+=== Exceptions écrites
+
+[cols="1,1,3"]
+|===
+| Hôte | Où | Pourquoi elle n'est pas levée
+
+| `lottie.host`
+| `web/desastres/fish/javascript/fish.js`
+| Le désastre `fish` embarque un `<iframe>` servi par ce service d'animations. Le
+  rapatrier demanderait de verser le fichier d'animation et un lecteur local — or *la
+  licence de cette animation n'est pas établissable* : son adresse est un identifiant
+  anonyme. Verser sans vérifier est exclu. L'exception est écrite ici en attendant que
+  l'origine de l'animation soit connue.
+|===
+
+Une exception écrite vaut mieux qu'une contradiction muette. C'est le motif même de cette
+page.
+
+== Ce que le contrôle vérifie
+
+`test/unit/plugins/DesastreDependancesTiercesTest.php` échoue si un hôte de CDN réapparaît,
+ou si un hôte tiers non prévu se glisse dans une ressource.
+
+Sa portée est plus large que les recettes, et c'est la leçon de la bascule : *changer les
+dix URL du YAML ne suffisait pas.* Quatorze mentions subsistaient dans les ressources et
+les README ; le schéma JSON proposait encore des URL de CDN *en exemple* — un gabarit qui
+enseigne à réintroduire ce qu'on retire ; et deux hôtes tiers vivants n'étaient dans aucun
+inventaire, découverts seulement en cherchant hors du YAML.
+
+Le contrôle porte donc sur les recettes, sur les ressources servies, et sur le schéma.
+
+[NOTE]
+====
+Ce qu'il ne fait pas : suivre ce qu'une bibliothèque télécharge d'elle-même à l'exécution.
+Aucune des quatre versées ne le fait aujourd'hui — vérifié — mais une mise à jour pourrait
+l'introduire sans que ce contrôle bronche.
+====

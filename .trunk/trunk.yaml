@@ -62,13 +62,18 @@ lint:
     - linters: [prettier]
       paths:
         - src/web/openapi.yaml
-    # Redoc 2.5.3, dependance tierce versionnee telle qu'elle est distribuee.
+    # Dependances tierces versionnees, servies telles qu'elles sont distribuees :
+    # Redoc 2.5.3, GSAP 3.13.0, SplitText 3.13.0, anime.js 3.2.2. Les trois dernieres
+    # ont ete versees le 2026-08-19 pour la meme raison que la premiere : les desastres
+    # les appelaient depuis deux CDN, sur des pages publiques.
     # On ne reformate pas et on n'analyse pas le code de quelqu'un d'autre : le
     # modifier romprait la correspondance avec la somme de controle notee dans
     # vendor/PROVENANCE.md, qui est ce qui rend le versement verifiable.
     - linters: [ALL]
       paths:
         - src/web/frontend/assets/javascripts/redoc/**
+        - src/web/frontend/assets/javascripts/gsap/**
+        - src/web/frontend/assets/javascripts/animejs/**
     # `version: "1.11.0" # x-release-please-version` : les guillemets sont
     # redondants pour YAML mais la ligne est reecrite par release-please. On ne
     # touche pas a la forme d'une ligne qu'un automate edite.

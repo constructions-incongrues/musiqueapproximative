@@ -8,8 +8,8 @@ recettes:
     desastre: mangelettres
     scripts:
       - /desastres/shared/desastre-audio.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+      - /frontend/assets/javascripts/gsap/gsap-3.13.0.min.js
+      - /frontend/assets/javascripts/gsap/SplitText-3.13.0.min.js
     options:
       selector: .title
       rate: 0.7
@@ -22,8 +22,8 @@ recettes:
     desastre: mangelettres
     scripts:
       - /desastres/shared/desastre-audio.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js
-      - https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js
+      - /frontend/assets/javascripts/gsap/gsap-3.13.0.min.js
+      - /frontend/assets/javascripts/gsap/SplitText-3.13.0.min.js
     options:
       selector: .title
       rate: 0.7
