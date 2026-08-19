@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-troisième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-quatrième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1613,7 +1613,13 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18
 
 - [x] 33. `desastre-la-bande-usee` — le premier désastre qu'on ne peut pas voir
-  - **Change** : `desastre-la-bande-usee` (archivé) — nom identique
+  - **Change** : `desastre-la-bande-usee` (**en cours**) — livré et fusionné, mais NON
+    ARCHIVÉ tant que personne n'a écouté. La tâche 6.1 reste ouverte à dessein : la
+    mesure dit que l'amplitude est juste (29,3 cents, dans la plage d'une bande réelle),
+    elle ne dira jamais si le doute dure les quelques secondes qu'il faut.
+    **Conséquence à connaître** : la story 35 attend cet archivage. Elle module
+    l'intensité d'un processeur dont la capacité `desastre-sonore` n'entrera dans
+    `openspec/specs/` qu'à ce moment-là.
   - **Persona servi** : l'auditeur sur le site, le mélomane fêlé
   - **Segment du parcours** : Consulter une page — pendant l'écoute, et non au chargement
   - **MoSCoW** : Should — c'est du travail créatif, tranché par le collectif le 2026-08-19
@@ -2728,3 +2734,8 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   change.
   **Une tâche reste ouverte et le restera** : écouter. Aucune mesure ne dira si le doute dure
   les quelques secondes qu'il faut.
+
+- 2026-08-19 (trente-quatrième révision) — **Rectification** : le plan annonçait la story 33
+  comme archivée. Elle ne l'est pas, et c'est délibéré — la tâche 6.1 demande d'écouter, et
+  aucune mesure ne la remplace. Le change reste actif jusque-là.
+  Ce qui bloque la story 35 n'est donc pas technique : c'est une oreille.
