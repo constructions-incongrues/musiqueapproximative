@@ -4,9 +4,7 @@
   "title": "Recettes de désastres - Musique Approximative",
   "description": "Schéma de validation pour les fichiers de recettes de désastres",
   "type": "object",
-  "required": [
-    "recettes"
-  ],
+  "required": ["recettes"],
   "properties": {
     "recettes": {
       "type": "object",
@@ -19,10 +17,7 @@
   "definitions": {
     "recette": {
       "type": "object",
-      "required": [
-        "enabled",
-        "desastre"
-      ],
+      "required": ["enabled", "desastre"],
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -62,11 +57,7 @@
             "selector": {
               "type": "string",
               "description": "Sélecteur CSS pour cibler les éléments",
-              "examples": [
-                "div.descriptif p",
-                ".title",
-                "h1, h2"
-              ]
+              "examples": ["div.descriptif p", ".title", "h1, h2"]
             },
             "url": {
               "type": "string",
@@ -99,13 +90,7 @@
                   "maxItems": 2
                 }
               ],
-              "examples": [
-                1.0,
-                [
-                  0.5,
-                  1.5
-                ]
-              ]
+              "examples": [1.0, [0.5, 1.5]]
             },
             "pitch": {
               "description": "Hauteur (TTS): nombre fixe ou plage [min, max]",
@@ -126,13 +111,7 @@
                   "maxItems": 2
                 }
               ],
-              "examples": [
-                1.0,
-                [
-                  0.5,
-                  1.5
-                ]
-              ]
+              "examples": [1.0, [0.5, 1.5]]
             },
             "volume": {
               "description": "Volume (TTS, audio): nombre fixe ou plage [min, max]",
@@ -153,23 +132,13 @@
                   "maxItems": 2
                 }
               ],
-              "examples": [
-                0.8,
-                [
-                  0.6,
-                  1.0
-                ]
-              ]
+              "examples": [0.8, [0.6, 1.0]]
             },
             "lang": {
               "type": "string",
               "description": "Code de langue BCP 47 (TTS)",
               "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
-              "examples": [
-                "fr-FR",
-                "en-US",
-                "fr-CA"
-              ]
+              "examples": ["fr-FR", "en-US", "fr-CA"]
             },
             "voices": {
               "type": "array",
@@ -178,42 +147,24 @@
                 "type": "string"
               },
               "examples": [
-                [
-                  "Thomas",
-                  "Amélie"
-                ],
-                [
-                  "Mauvaises nouvelles",
-                  "Superstar",
-                  "Violoncelles"
-                ]
+                ["Thomas", "Amélie"],
+                ["Mauvaises nouvelles", "Superstar", "Violoncelles"]
               ]
             },
             "imageFolder": {
               "type": "string",
               "description": "Dossier contenant les images",
-              "examples": [
-                "/desastres/mort/img"
-              ]
+              "examples": ["/desastres/mort/img"]
             },
             "imageBaseName": {
               "type": "string",
               "description": "Nom de base des fichiers images",
-              "examples": [
-                "cimetiere",
-                "kraftwerk"
-              ]
+              "examples": ["cimetiere", "kraftwerk"]
             },
             "imageExtension": {
               "type": "string",
               "description": "Extension des fichiers images",
-              "enum": [
-                "png",
-                "jpg",
-                "jpeg",
-                "gif",
-                "svg"
-              ]
+              "enum": ["png", "jpg", "jpeg", "gif", "svg"]
             },
             "imageCount": {
               "type": "integer",
@@ -233,18 +184,12 @@
             "target": {
               "type": "string",
               "description": "Caractères cibles (mangelettres)",
-              "examples": [
-                "aeiouy",
-                "bcdfghjklmnpqrstvwxz"
-              ]
+              "examples": ["aeiouy", "bcdfghjklmnpqrstvwxz"]
             },
             "case": {
               "type": "string",
               "description": "Sensibilité à la casse",
-              "enum": [
-                "sensitive",
-                "insensitive"
-              ]
+              "enum": ["sensitive", "insensitive"]
             },
             "tombSize": {
               "type": "integer",
@@ -278,20 +223,11 @@
           "desastre": "tts",
           "options": {
             "url": "https://n8n.musiques-incongrues.net/webhook/tts-jingles",
-            "pitch": [
-              0.5,
-              1.5
-            ],
-            "rate": [
-              0.5,
-              1.0
-            ],
+            "pitch": [0.5, 1.5],
+            "rate": [0.5, 1.0],
             "volume": 0.7,
             "lang": "fr-FR",
-            "voices": [
-              "Thomas",
-              "Amélie"
-            ]
+            "voices": ["Thomas", "Amélie"]
           }
         },
         "mort": {
