@@ -36,10 +36,70 @@ maintenance nécessaire.
 Détail complet et étapes suivantes : xref:api-subsonic.adoc[].
 ====
 
-== Déploiement par rsync
+== Comment la mise en ligne se produit
 
-C'est le chemin réellement utilisé en production (l'image GHCR décrite plus bas
-ne construit pas ses dépendances, cf. `TODOS.md`).
+**Plesk tire `main` à chaque poussée.** Il n'y a pas de geste de mise en ligne :
+une fusion sur `main` *est* une mise en production. Mesure du 2026-08-19, commit
+`ba9d5c2` : poussé à 04:37:15 UTC, fichier écrit sur l'origine à 04:37:20 —
+cinq secondes.
+
+Conséquences, qui expliquent plusieurs choix du dépôt :
+
+* Aucune migration de schéma ne s'exécute au déploiement. Il faut la passer à la
+  main **avant** la fusion (voir l'encadré en tête de page).
+* Il n'existe **aucune étape de mise en ligne** où accrocher une commande. Tout
+  ce qui doit suivre un déploiement s'accroche ailleurs : à un workflow GitHub
+  déclenché sur `push`, ou aux « actions de déploiement supplémentaires » de
+  l'extension Git de Plesk.
+
+=== Les caches, et lequel a mordu
+
+Trois couches, indépendantes, à ne pas confondre quand un fichier ne bouge pas :
+
+[cols="1,3"]
+|===
+| Couche | Ce qu'elle fait
+
+| Cloudflare (edge)
+| Sert une copie du fichier. **Rien ne la prévient d'un déploiement.** C'est elle
+  qui a servi pendant des heures un `bande-usee.js` antérieur à deux correctifs
+  déjà en ligne sur l'origine, le 2026-08-19.
+
+| Navigateur
+| Obéit au `cache-control: max-age=2678400` (31 jours). Ce n'est **pas l'origine
+  qui l'émet** — elle n'envoie aucun `cache-control` — mais le réglage
+  « Browser Cache TTL : 1 month » du tableau de bord Cloudflare. Une purge ne
+  l'atteint donc pas : le visiteur qui a déjà pris l'ancien fichier le garde.
+
+| Service worker (`src/web/sw.js`)
+| Troisième couche, distincte des deux autres.
+|===
+
+Ce qui les traite :
+
+* `.github/workflows/purge-cloudflare.yml` purge la zone après chaque poussée sur
+  `main`, puis **vérifie** que les octets servis par Cloudflare sont ceux du dépôt.
+  Il a besoin de deux secrets : `CLOUDFLARE_API_TOKEN` (permission
+  « Zone / Cache Purge ») et `CLOUDFLARE_ZONE_ID`.
+* Les assets de désastre portent une empreinte `?v=<date du fichier>`, posée par
+  `sfDesastreManager`. Leur adresse change quand le fichier change, donc aucun
+  cache ne peut les servir périmés — y compris celui des navigateurs, que la
+  purge n'atteint pas.
+
+[IMPORTANT]
+====
+Pour constater qu'un fichier est bien arrivé, interroger l'**URL nue**.
+
+Ajouter `?cachebust=…` à la main désigne une ressource *différente* aux yeux de
+Cloudflare, qui va donc la chercher à l'origine. On teste alors une adresse que
+personne ne demande, et on conclut à tort que le déploiement est bon.
+====
+
+== Déploiement par rsync (déprécié)
+
+`make deploy` n'est plus le chemin de mise en ligne : Plesk tire `main` tout seul.
+La cible reste décrite ici parce qu'elle sert encore à pousser ce que `git` ne
+porte pas, `src/vendor` en particulier.
 
 [source,bash]
 ----

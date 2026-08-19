@@ -1,0 +1,196 @@
+name: Purge Cloudflare
+
+# CE QU'IL REPARE
+#
+# Le 2026-08-19, un correctif JavaScript fusionne, deploye, present sur l'origine, n'a
+# pas atteint un seul visiteur : Cloudflare a continue de servir sa copie.
+#
+#   $ curl -sI https://www.musiqueapproximative.net/desastres/bande-usee/javascript/bande-usee.js
+#   cf-cache-status: HIT
+#   age: 2648
+#
+# La tache `musiqueapproximative:purge-cloudflare-cache` existait deja, ecrite en
+# prevision d'un usage qui n'est jamais venu : aucun Makefile, aucun workflow, aucun
+# script ne l'appelait. Et le deploiement reel ne passe pas par `make deploy` — Plesk
+# tire `main` a chaque poussee — donc l'y accrocher n'aurait rien change.
+#
+# Ce workflow est le point d'accroche qui manquait.
+#
+# LA COURSE AVEC PLESK, ET POURQUOI ELLE EST TENUE
+#
+# Purger avant que Plesk ait fini de tirer remettrait l'ANCIEN fichier en cache, et le
+# correctif serait a nouveau invisible. Mesure du 2026-08-19 : commit ba9d5c2 pousse a
+# 04:37:15 UTC, fichier ecrit sur l'origine a 04:37:20 — cinq secondes. L'attente
+# ci-dessous prend dix fois cette marge, et surtout le resultat est VERIFIE : on
+# compare les octets servis par Cloudflare a ceux du depot. Une purge trop tot se voit
+# et se rejoue.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+# Deux fusions rapprochees ne doivent pas purger en parallele : la seconde couvre la
+# premiere. On ne coupe pas celle en cours, elle vaut mieux que rien si la suivante rate.
+concurrency:
+  group: purge-cloudflare
+  cancel-in-progress: false
+
+jobs:
+  purge:
+    name: Purger le cache et verifier ce qui est servi
+    runs-on: ubuntu-latest
+
+    env:
+      SITE: https://www.musiqueapproximative.net
+      # Plesk tire en ~5 s. On attend bien plus, parce qu'une purge trop tot est le seul
+      # mode de defaillance qui reproduit exactement le bug qu'on repare.
+      # ponytail: attente forfaitaire ; si Plesk devient lent, la verification le dira.
+      ATTENTE_PLESK: 45
+      # Au-dela, on ne verifie pas : une grosse fusion n'a pas a faire durer le controle.
+      # Ce qui n'est pas verifie est IMPRIME, un plafond silencieux se lit comme une preuve.
+      MAX_FICHIERS: 20
+
+    steps:
+      - name: Recuperer les sources
+        uses: actions/checkout@v7.0.1
+        with:
+          # `git diff` entre l'avant et l'apres de la poussee : il faut l'historique.
+          fetch-depth: 0
+
+      - name: Verifier que les identifiants sont la
+        run: |
+          # Sans jeton, la purge ne fait rien et le site reste perime. Un workflow vert
+          # qui n'a rien purge est pire que pas de workflow : il rassure a tort.
+          test -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" || {
+            echo "::error::Secret CLOUDFLARE_API_TOKEN absent du depot."
+            echo "Jeton d'API Cloudflare avec la permission « Zone / Cache Purge » sur la zone."
+            exit 1
+          }
+          test -n "${{ secrets.CLOUDFLARE_ZONE_ID }}" || {
+            echo "::error::Secret CLOUDFLARE_ZONE_ID absent du depot."
+            echo "Identifiant de zone, visible sur la page d'accueil du domaine dans Cloudflare."
+            exit 1
+          }
+
+      - name: Laisser Plesk tirer
+        run: sleep "$ATTENTE_PLESK"
+
+      - name: Purger, puis constater sur l'URL NUE
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          AVANT: ${{ github.event.before }}
+          APRES: ${{ github.sha }}
+        run: |
+          set -u
+
+          purger() {
+            reponse=$(curl -sS --max-time 30 -X POST \
+              "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data '{"purge_everything":true}') || return 1
+
+            case "$reponse" in
+              *'"success":true'*) echo "Cache de la zone purge." ;;
+              *) echo "::error::Purge refusee par Cloudflare : $reponse"; return 1 ;;
+            esac
+          }
+
+          # Les fichiers statiques que CETTE poussee a changes : ce sont exactement ceux
+          # dont la fraicheur est en jeu. Rien de change, rien a verifier.
+          if [ -z "${AVANT:-}" ] || [ "$AVANT" = "0000000000000000000000000000000000000000" ]; then
+            # Declenchement manuel, premiere poussee, ou reecriture d'historique.
+            base="$APRES^"
+          else
+            base="$AVANT"
+          fi
+
+          candidats=$(git diff --name-only "$base" "$APRES" -- src/web/ 2>/dev/null \
+            | grep -Ev -- '-dist$' \
+            | grep -E '\.(js|css|svg|png|jpg|jpeg|gif|ico|json|yaml|txt|html)$' \
+            || true)
+
+          fichiers=""
+          for fichier in $candidats; do
+            # Un fichier supprime n'a plus rien a servir.
+            [ -f "$fichier" ] && fichiers="$fichiers $fichier"
+          done
+
+          total=$(echo $fichiers | wc -w | tr -d ' ')
+          if [ "$total" -gt "$MAX_FICHIERS" ]; then
+            echo "::notice::$total fichiers statiques changes, les $MAX_FICHIERS premiers sont verifies."
+            echo "Non verifies :"
+            echo $fichiers | tr ' ' '\n' | tail -n +$((MAX_FICHIERS + 1)) | sed 's/^/  /'
+            fichiers=$(echo $fichiers | tr ' ' '\n' | head -n "$MAX_FICHIERS" | tr '\n' ' ')
+            total="$MAX_FICHIERS"
+          fi
+
+          # Compare les octets servis par Cloudflare a ceux du depot, sur l'URL NUE.
+          #
+          # L'URL NUE, et rien d'autre : ajouter `?cachebust=` designerait une ressource
+          # differente aux yeux de Cloudflare, qui irait donc la chercher a l'origine. On
+          # testerait une adresse que personne ne demande, et on conclurait a tort que le
+          # deploiement est bon. C'est l'erreur qui a fait perdre une matinee le 2026-08-19.
+          verifier() {
+            perimes=""
+
+            for fichier in $fichiers; do
+              chemin=${fichier#src/web/}
+              # ponytail: seule l'espace est encodee ; les autres caracteres a encoder
+              # n'apparaissent dans aucun nom de fichier servi a ce jour.
+              url="$SITE/${chemin// /%20}"
+
+              statut=$(curl -sS --max-time 30 -o /tmp/servi -w '%{http_code}' "$url" || echo "000")
+
+              case "$statut" in
+                200) ;;
+                000|5??)
+                  # Une production INJOIGNABLE n'est pas un cache PERIME. Une alerte qui
+                  # crie au loup se desactive en trois semaines.
+                  echo "::notice::$chemin : statut $statut, la fraicheur n'est ni confirmee ni infirmee."
+                  continue
+                  ;;
+                *)
+                  echo "::notice::$chemin : statut $statut, ce fichier n'est pas servi a cette adresse."
+                  continue
+                  ;;
+              esac
+
+              if [ "$(sha256sum < /tmp/servi | cut -d' ' -f1)" = "$(sha256sum < "$fichier" | cut -d' ' -f1)" ]; then
+                echo "  a jour   $chemin"
+              else
+                etat=$(curl -sSI --max-time 30 "$url" | tr -d '\r' | grep -i '^cf-cache-status:' || true)
+                echo "  PERIME   $chemin ($etat)"
+                perimes="$perimes $chemin"
+              fi
+            done
+
+            [ -z "$perimes" ]
+          }
+
+          purger
+
+          if [ "$total" -eq 0 ]; then
+            echo "Aucun fichier statique dans cette poussee : purge faite, rien a verifier."
+            exit 0
+          fi
+
+          # Une purge peut arriver avant que Plesk ait fini de tirer : elle remet alors
+          # l'ancien fichier en cache. Ca se voit, donc ca se rejoue.
+          for essai in 1 2 3; do
+            echo "--- verification, essai $essai ---"
+            if verifier; then
+              echo "Les $total fichier(s) servis par Cloudflare sont ceux de $APRES."
+              exit 0
+            fi
+            [ "$essai" -lt 3 ] && { sleep 30; purger; }
+          done
+
+          echo "::error::Cloudflare sert encore d'anciens octets apres trois purges."
+          echo "Plesk n'a probablement pas tire cette poussee : verifier l'extension Git du panneau."
+          exit 1
