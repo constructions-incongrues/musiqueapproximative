@@ -66,10 +66,9 @@ Trois couches, indépendantes, à ne pas confondre quand un fichier ne bouge pas
   déjà en ligne sur l'origine, le 2026-08-19.
 
 | Navigateur
-| Obéit au `cache-control: max-age=2678400` (31 jours). Ce n'est **pas l'origine
-  qui l'émet** — elle n'envoie aucun `cache-control` — mais le réglage
-  « Browser Cache TTL : 1 month » du tableau de bord Cloudflare. Une purge ne
-  l'atteint donc pas : le visiteur qui a déjà pris l'ancien fichier le garde.
+| Obéit au `cache-control` que l'origine émet désormais elle-même, depuis
+  `src/web/.htaccess`. **Une purge n'atteint pas ce cache-là** : la seule façon de
+  le reprendre est qu'il expire, d'où un `max-age` court.
 
 | Service worker (`src/web/sw.js`)
 | Troisième couche, distincte des deux autres.
@@ -85,6 +84,41 @@ Ce qui les traite :
   `sfDesastreManager`. Leur adresse change quand le fichier change, donc aucun
   cache ne peut les servir périmés — y compris celui des navigateurs, que la
   purge n'atteint pas.
+* `src/web/.htaccess` donne un `Cache-Control` à chaque fichier statique. Deux
+  régimes, parce que les deux caches n'ont pas les mêmes moyens de se corriger :
++
+[cols="1,1,3"]
+!===
+! Fichiers ! En-tête ! Pourquoi
+
+! `js css svg png jpg gif ico woff json xml`
+! `max-age=600, s-maxage=2678400`
+! Dix minutes pour les navigateurs, qui ne se purgent pas ; trente et un jours
+  pour Cloudflare, qui se purge à chaque déploiement. Dix minutes est le délai
+  maximal entre un correctif déployé et un visiteur qui le reçoit.
+
+! `mp3 ogg m4a flac wav mp4 webm`
+! `max-age=2678400, immutable`
+! Un morceau ne change jamais après publication. Ce sont les plus gros fichiers
+  du site : rien à gagner à les revalider.
+!===
++
+Les pages HTML ne sont pas touchées : les actions posent leurs propres en-têtes.
+
+[WARNING]
+====
+Ce bloc et le réglage Cloudflare **Browser Cache TTL** forment une paire, et
+l'ordre compte.
+
+Basculer le réglage sur « Respect Existing Headers » *avant* que ce
+`.htaccess` soit en ligne ferait tomber les navigateurs sur leur cache
+**heuristique** — une fraction de l'âge du fichier, soit quelques minutes pour un
+fichier récent et des années pour `jquery.js`, qui date de 2012. Le piège des
+31 jours serait remplacé par un piège imprévisible.
+
+Donc : déployer d'abord, constater que l'origine émet bien l'en-tête, basculer
+le réglage ensuite.
+====
 
 [IMPORTANT]
 ====
