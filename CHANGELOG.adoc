@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.13.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.12.0...v1.13.0) (2026-08-19)
+
+
+### Fonctionnalités
+
+* **desastres:** compte les tirages, et distingue ce qu'on force de ce qu'on tire ([#217](https://github.com/constructions-incongrues/musiqueapproximative/issues/217)) ([43e998c](https://github.com/constructions-incongrues/musiqueapproximative/commit/43e998c15d45a7aba372d6d3c9e7c07fbb2ccf58))
+* **desastres:** l'usure de la bande suit l'age du morceau ([#224](https://github.com/constructions-incongrues/musiqueapproximative/issues/224)) ([063b060](https://github.com/constructions-incongrues/musiqueapproximative/commit/063b06032677dfa309ccd16777711685bd426224))
+* **desastres:** la bande usée, premier désastre qui touche le son ([#221](https://github.com/constructions-incongrues/musiqueapproximative/issues/221)) ([f588a00](https://github.com/constructions-incongrues/musiqueapproximative/commit/f588a00cc5b0f51180962234c55e70b306b60333))
+* **desastres:** sert les bibliothèques depuis le site, et écrit ce qui reste ([#218](https://github.com/constructions-incongrues/musiqueapproximative/issues/218)) ([8243d11](https://github.com/constructions-incongrues/musiqueapproximative/commit/8243d1121bf93aac5fc13e5d5fdbf2484dd527a1))
+* **php8:** rend le projet compatible PHP 8.1, et le vérifie à chaque PR ([#212](https://github.com/constructions-incongrues/musiqueapproximative/issues/212)) ([0136868](https://github.com/constructions-incongrues/musiqueapproximative/commit/0136868489016792cf51028d50eab6dee3a5e9ea))
+
+
+### Corrections de bugs
+
+* **admin:** le champ avatar disparait du formulaire, et l'admin clignote ([#230](https://github.com/constructions-incongrues/musiqueapproximative/issues/230)) ([bc40b5f](https://github.com/constructions-incongrues/musiqueapproximative/commit/bc40b5f2fdd884071ec00d28d0bc03725ed318c3))
+* **cache:** un fichier statique deploye atteint enfin les visiteurs ([#227](https://github.com/constructions-incongrues/musiqueapproximative/issues/227)) ([ca70370](https://github.com/constructions-incongrues/musiqueapproximative/commit/ca703708426a5766e04c7c69d91f065a53531dbf))
+* **ci:** aligne le sql_mode de la CI et du dev sur celui de la production ([#216](https://github.com/constructions-incongrues/musiqueapproximative/issues/216)) ([804e024](https://github.com/constructions-incongrues/musiqueapproximative/commit/804e0249be299ab0815314d75f0ffeb5d077b84c))
+* **ci:** fait échouer « Check PHP syntax » sur une erreur de syntaxe ([#214](https://github.com/constructions-incongrues/musiqueapproximative/issues/214)) ([02ba0e4](https://github.com/constructions-incongrues/musiqueapproximative/commit/02ba0e4b8956a501af99fc3cff33bdc57f6f844a))
+* **desastres:** la bande usee ne depend plus d'un script qu'elle n'avait pas declare ([#225](https://github.com/constructions-incongrues/musiqueapproximative/issues/225)) ([ba9d5c2](https://github.com/constructions-incongrues/musiqueapproximative/commit/ba9d5c2b4c3fcab799f2053cd012fc0afb1cb405))
+* **desastres:** la bande usee s'entend enfin ([#228](https://github.com/constructions-incongrues/musiqueapproximative/issues/228)) ([bdf63cc](https://github.com/constructions-incongrues/musiqueapproximative/commit/bdf63cc4ccd16cef390ad501ba62586846e7d70b))
+* **dev:** sert les fichiers dont le nom contient une espace ([#223](https://github.com/constructions-incongrues/musiqueapproximative/issues/223)) ([ea0b87d](https://github.com/constructions-incongrues/musiqueapproximative/commit/ea0b87d800ce09db9ef08b5a1107971f20739658))
+* **exploitation:** make configure refuse un rendu sans variables au lieu de détruire ([#208](https://github.com/constructions-incongrues/musiqueapproximative/issues/208)) ([4c985da](https://github.com/constructions-incongrues/musiqueapproximative/commit/4c985dac691c3cf289d215e3f6670c6d694f2473))
+
+
+### Documentation
+
+* **desastres:** écrit le verdict — pas de générateur — et désambiguë les cartes ([#219](https://github.com/constructions-incongrues/musiqueapproximative/issues/219)) ([3cc2ff7](https://github.com/constructions-incongrues/musiqueapproximative/commit/3cc2ff73dfeb07a0c0f80654d33b7b5f17610852))
+* **dev:** rectifie la version MariaDB du dump d'amorçage ([#215](https://github.com/constructions-incongrues/musiqueapproximative/issues/215)) ([9d808e1](https://github.com/constructions-incongrues/musiqueapproximative/commit/9d808e16df2ad1a88f980ce999d69aa2dd113f88))
+* **openspec:** cadre la 1.13.0, quatre stories ouvertes sur trois axes ([#200](https://github.com/constructions-incongrues/musiqueapproximative/issues/200)) ([f7bffe5](https://github.com/constructions-incongrues/musiqueapproximative/commit/f7bffe50298243f62adf5f5d8a3127bde91d4cfe))
+* **openspec:** cartographie du possible, et la story 33 reçoit son intention ([#220](https://github.com/constructions-incongrues/musiqueapproximative/issues/220)) ([e25c97b](https://github.com/constructions-incongrues/musiqueapproximative/commit/e25c97b80dec0b97588c46240ba627ea506878d7))
+* **openspec:** gèle la story 3, le diagnostic a défait sa prémisse ([#203](https://github.com/constructions-incongrues/musiqueapproximative/issues/203)) ([536e434](https://github.com/constructions-incongrues/musiqueapproximative/commit/536e4347143e82ced955f2502a2c407ad05cbf4b))
+* **openspec:** le change de la bande usee n'est pas archive, et c'est voulu ([#222](https://github.com/constructions-incongrues/musiqueapproximative/issues/222)) ([fc95d02](https://github.com/constructions-incongrues/musiqueapproximative/commit/fc95d02af846149f1e6300e721b97f0d01aae62a))
+* **openspec:** ouvre un axe désastres, cinq stories dont une incomplète ([#201](https://github.com/constructions-incongrues/musiqueapproximative/issues/201)) ([100f3dc](https://github.com/constructions-incongrues/musiqueapproximative/commit/100f3dca6eabdee0ade10848a0c3fb66d331827d))
+* **openspec:** propose hydrater-le-contributeur-en-une-requete ([#204](https://github.com/constructions-incongrues/musiqueapproximative/issues/204)) ([56741f1](https://github.com/constructions-incongrues/musiqueapproximative/commit/56741f13bc1c97c83e4c6d8d8024504738523c9b))
+* **openspec:** propose rendre-l-encodage-verifiable ([#206](https://github.com/constructions-incongrues/musiqueapproximative/issues/206)) ([998924c](https://github.com/constructions-incongrues/musiqueapproximative/commit/998924c451c8f9daa9bafe129c219c622897ad99))
+* **openspec:** reformule la story 3, la mesure ayant défait son motif ([#198](https://github.com/constructions-incongrues/musiqueapproximative/issues/198)) ([294e1dc](https://github.com/constructions-incongrues/musiqueapproximative/commit/294e1dc452d21dc531892e41f2df0e282d0894ce))
+* **openspec:** revue d'ingénierie — le change passe en attente de diagnostic ([#202](https://github.com/constructions-incongrues/musiqueapproximative/issues/202)) ([e7b7dad](https://github.com/constructions-incongrues/musiqueapproximative/commit/e7b7dad1ea9c527854df386c178757f1f568c6e1))
+
 ## [1.12.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.11.0...v1.12.0) (2026-08-18)
 
 
