@@ -197,6 +197,33 @@ son ; `?sans-desastre` retire tout. La seconde existe parce qu'aucun réglage st
 permet de refuser une altération sonore — sans elle, ce serait le seul désastre auquel on ne
 peut pas échapper.
 
+*L'usure suit l'âge du morceau.* Le catalogue va de juin 2008 à aujourd'hui — 6 643 jours,
+8 216 morceaux — et l'ancienneté n'avait jamais rien déclenché ni modulé. Elle module
+désormais l'intensité :
+
+[cols="1,1,1"]
+|===
+| morceau de | intensité | amplitude
+
+| 2026 | 0,15 | 4,4 cents
+| 2016 | 0,45 | 13,1 cents
+| 2011 | 0,74 | 21,6 cents
+| 2008 | 1,00 | 28,6 cents
+|===
+
+La courbe — plancher 0,15 puis exposant 2 — a été choisie *sur les morceaux réels*. Une
+courbe linéaire placerait 43 % du catalogue dans la bande la plus altérée, ce qui ferait de
+l'usure l'état normal plutôt que la marque d'un âge. Le plancher existe parce que sans lui,
+29 % des morceaux recevraient une altération inaudible alors que l'en-tête `X-Desastre`
+annonce le désastre.
+
+La référence de dix-huit ans est une *constante*, et non l'étendue du catalogue : celle-ci
+grandit chaque jour, et l'usure d'un morceau donné dériverait sans que personne ne l'ait
+décidé.
+
+La date de publication est lue dans la page, où elle ne figurait jusqu'alors nulle part —
+notable pour une archive de dix-huit ans. Elle n'est pas réservée au désastre.
+
 Détail d'arborescence qui a sa raison : le processeur vit sous `worklet/` et non
 `javascript/`, que le gestionnaire charge automatiquement en script classique — où
 `AudioWorkletProcessor` n'existe pas.

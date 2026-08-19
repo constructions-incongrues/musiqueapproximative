@@ -68,6 +68,75 @@
     );
   }
 
+  // ------------------------------------------------------------ l'age du morceau
+
+  /**
+   * Intensite de l'usure, deduite de l'age du morceau.
+   *
+   * POURQUOI UNE COURBE ET PAS UNE PROPORTION
+   *
+   * Le catalogue va de juin 2008 a aujourd'hui : 6 643 jours, 8 216 morceaux. Une courbe
+   * lineaire sur cette etendue placerait **43 % du catalogue dans la bande la plus
+   * alteree** — mesure sur les morceaux reels — ce qui ferait de l'usure l'etat normal
+   * plutot que la marque d'un age. L'exposant 2 la reserve aux morceaux vraiment anciens :
+   *
+   *   2026 → 4,4 cents     2016 → 12,2     2011 → 21,6     2008 → 28,6
+   *
+   * POURQUOI UN PLANCHER
+   *
+   * Sans lui, 29 % des morceaux recevraient une alteration inaudible alors que l'en-tete
+   * `X-Desastre` annonce le desastre. Un desastre declare et imperceptible se lit comme un
+   * desastre casse.
+   *
+   * POURQUOI UNE CONSTANTE ET PAS L'ETENDUE DU CATALOGUE
+   *
+   * L'etendue grandit chaque jour. L'usure d'un morceau donne changerait alors sans que
+   * personne ne l'ait decidee. Dix-huit ans est un repere qui se lit, se discute et se
+   * regle ; `MAX(publish_on)` n'en est pas un.
+   */
+  function intensiteSelonAge() {
+    var repli = typeof options.intensite === "number" ? options.intensite : 1;
+    var plancher =
+      typeof options.plancherUsure === "number" ? options.plancherUsure : 0.15;
+    var referenceAns =
+      typeof options.referenceAns === "number" ? options.referenceAns : 18;
+
+    var balise = document.querySelector(
+      'meta[name="musiqueapproximative:publie-le"]',
+    );
+
+    if (!balise || !balise.getAttribute("content")) {
+      // Un desastre est un ornement : une date absente ne doit pas le faire echouer.
+      return repli;
+    }
+
+    var publie = Date.parse(balise.getAttribute("content"));
+
+    if (isNaN(publie)) {
+      return repli;
+    }
+
+    var jours = (Date.now() - publie) / 86400000;
+
+    if (jours < 0) {
+      jours = 0;
+    }
+
+    var part = Math.min(1, jours / (referenceAns * 365.25));
+    var intensite = plancher + (1 - plancher) * part * part;
+
+    console.log(
+      "[desastres/" +
+        NOM +
+        "] morceau de " +
+        Math.round(jours / 365.25) +
+        " an(s), usure " +
+        intensite.toFixed(2),
+    );
+
+    return intensite;
+  }
+
   // --------------------------------------------------------------------- le son
 
   var contexte = null;
@@ -125,9 +194,7 @@
           },
         });
 
-        if (typeof options.intensite === "number") {
-          noeud.parameters.get("intensite").value = options.intensite;
-        }
+        noeud.parameters.get("intensite").value = intensiteSelonAge();
 
         noeud.port.onmessage = function (e) {
           if (e.data && typeof e.data.modulateur === "number") {
@@ -148,6 +215,7 @@
           noeud: noeud,
           etat: function () {
             return {
+              intensite: noeud.parameters.get("intensite").value,
               contexte: contexte.state,
               messagesRecus: messagesRecus,
               titreTrouve: !!titre,

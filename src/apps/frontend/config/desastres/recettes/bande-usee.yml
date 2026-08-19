@@ -24,7 +24,14 @@ recettes:
       # et non une bande fatiguée. Une bande réelle tient entre dix et cinquante cents.
       profondeurMs: 0.9
       retardBaseMs: 12
+      # Repli si la page ne porte pas de date lisible.
       intensite: 1
+      # Usure minimale : sans plancher, 29 % des morceaux recevraient une altération
+      # inaudible alors que l'en-tête X-Desastre annonce le désastre.
+      plancherUsure: 0.15
+      # Âge auquel l'usure est maximale. CONSTANTE et non étendue du catalogue, qui
+      # grandit chaque jour et ferait dériver l'usure d'un morceau sans décision.
+      referenceAns: 18
       # `article h1` porte l'artiste, `article h2` le titre. Un `h1` nu attraperait la barre
       # latérale — la page en compte trois — et `.title` est le nom du site.
       selecteurTitre: article h2
