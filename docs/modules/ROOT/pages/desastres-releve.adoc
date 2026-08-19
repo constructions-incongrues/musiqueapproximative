@@ -1,0 +1,110 @@
+= Relevé des désastres
+:navtitle: Relevé des désastres
+
+Dix-neuf recettes de désastre sont déclarées, dix-neuf règles les déclenchent. Cette page
+décrit ce que le site enregistre de ces tirages, comment le lire — et surtout ce que le
+chiffre obtenu ne dit pas.
+
+== Ce que le relevé compte
+
+*Des tirages.* C'est-à-dire des productions de page.
+
+Ce n'est pas une audience, et la distinction n'est pas de vocabulaire. Le tirage a lieu au
+moment où la page est produite ; le cache englobe la mise en page et vaut vingt-quatre
+heures. Toutes les consultations servies pendant cette période reçoivent la même
+représentation, donc le même désastre — c'est ce qui distingue un désastre d'un effet
+aléatoire, et c'est voulu.
+
+Un tirage peut donc correspondre à une consultation comme à dix mille. *Le rapport entre
+les deux n'est pas connu.*
+
+Compter les consultations demanderait que PHP s'exécute là où le cache l'évite
+précisément. Les trois contournements possibles ont été examinés et écartés : désactiver le
+cache détruirait la propriété mesurée, compter côté client mesurerait les navigateurs qui
+exécutent le script tout en ajoutant une dépendance tierce, et compter au niveau du serveur
+web mesurerait des requêtes sur une URL sans savoir quel désastre la représentation portait.
+
+== Tirage et application forcée
+
+Le champ `trigger` d'une règle nomme *un paramètre d'URL qui applique la règle sans tirer* :
+
+[source]
+----
+https://…/post/mon-morceau?danse=1
+----
+
+applique `danse` quelle que soit sa probabilité. C'est l'outil par lequel on essaie un
+désastre à la main.
+
+Ces applications sont *exclues du décompte des tirages*. Les compter ensemble gonflerait
+exactement les recettes sur lesquelles on est en train de travailler. Le relevé garde
+l'information, et l'option `--forces` les dénombre à part.
+
+À noter : la clé de cache varie sur la chaîne de requête. `?danse=1` a sa propre entrée et
+ne remplace pas la page ordinaire — un essai en crée une seconde.
+
+== Lire le relevé
+
+[source,bash]
+----
+docker-compose exec php php symfony musiqueapproximative:desastres-releve
+----
+
+La sortie liste *les dix-neuf recettes déclarées*, y compris celles qui n'ont jamais été
+tirées, avec un décompte nul. C'est le principal intérêt du relevé : une recette absente de
+la liste et une recette à zéro se confondraient autrement, alors que la question posée est
+justement « laquelle ne sort jamais ».
+
+Les applications forcées :
+
+[source,bash]
+----
+docker-compose exec php php symfony musiqueapproximative:desastres-releve --forces
+----
+
+La portée est réimprimée à chaque exécution, sous le tableau. Elle est là et non ici parce
+qu'un avertissement rangé dans une page de documentation n'est pas lu au moment où le
+chiffre est interprété.
+
+== L'en-tête `X-Desastre`
+
+Chaque réponse nomme le désastre appliqué :
+
+[source]
+----
+X-Desastre: splitouine_titles_matchduration
+X-Desastre: consonnard,voyelliste
+X-Desastre: aucun
+----
+
+*L'absence est déclarée, pas omise.* Un en-tête manquant ne distinguerait pas « aucun
+désastre » d'« en-tête cassé ».
+
+L'en-tête est *invariant* : il est posé pendant la production de la page et resservi tel
+quel à chaque consultation issue du cache. Le mécanisme est celui du corps —
+`sfViewCacheManager::setPageCache()` sérialise la réponse entière, en-têtes compris, et
+`getPageCache()` remplace l'objet réponse par celui qu'il désérialise. Un en-tête posé sur
+un succès de cache serait donc jeté sans effet.
+
+== Le journal
+
+Une ligne JSON par production de page, sous `log/desastres.log`, y compris quand aucune
+recette n'est retenue — une règle qui ne se déclenche jamais et une règle jamais évaluée
+sont deux situations différentes.
+
+[source,json]
+----
+{"date":"…","uri":"/post/…","recettes":[{"recette":"danse","mode":"force","trigger":"danse"}]}
+{"date":"…","uri":"/post/…","recettes":[]}
+----
+
+Rien n'est écrit quand la page est servie depuis le cache. C'est la contrepartie directe du
+choix de compter les tirages.
+
+[WARNING]
+====
+*Les journaux tournent.* La période couverte par un relevé n'est pas l'histoire du site.
+C'est acceptable pour éclairer des décisions sur les désastres ; ça ne le serait pas pour
+une statistique de long terme, et le jour où on en voudra une, ce sera une table et non un
+fichier.
+====
