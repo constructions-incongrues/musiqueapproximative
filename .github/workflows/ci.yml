@@ -136,8 +136,24 @@ jobs:
           composer install --prefer-dist --no-progress
 
       - name: Check PHP syntax
+        # `| grep -v "No syntax errors"` ne contrôlait rien. `grep` rend 0 dès
+        # qu'une ligne survit au filtre, et sept squelettes de générateur de
+        # `sfTaskExtraPlugin` — des gabarits à trous, pas du PHP — en produisent
+        # une à chaque exécution. L'étape passait donc TOUJOURS : vérifié le
+        # 2026-08-19 sur la PR #213, un `function casseMoi( {` dans `src/lib/`
+        # a traversé le contrôle en vert.
+        #
+        # Sur un arbre entièrement sain elle aurait fait l'inverse : plus aucune
+        # ligne, `grep` rend 1, et `bash -e` fait échouer l'étape sur du code
+        # correct. Les deux verdicts étaient faux ; seuls les squelettes cassés
+        # masquaient le second.
+        #
+        # `xargs` rend 123 dès qu'un `php -l` échoue, et le message d'erreur part
+        # sur la sortie d'erreur en nommant le fichier. Les squelettes sont
+        # exclus : leurs `##CLASS_NAME##` ne seront jamais du PHP valide.
         run: |
-          find src -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
+          find src -name "*.php" -not -path "*/vendor/*" -not -path "*/skeleton/*" \
+            -print0 | xargs -0 -n1 php -l > /dev/null
 
   docker-build:
     name: Build et Push Docker
