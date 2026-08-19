@@ -61,6 +61,31 @@ Le relevé nommera donc sa grandeur, et la portera à côté du chiffre plutôt 
 document séparé. Un « 1 240 » sans mention se lit comme une audience six mois plus tard —
 c'est exactement ce que le packet demandait d'éviter.
 
+### Distinguer une application forcée d'un tirage
+
+Découvert en implémentant, et absent du packet : le champ `trigger` d'une règle **n'est pas
+un libellé**, c'est un nom de paramètre d'URL qui applique la règle sans tirer.
+
+```php
+if (isset($query[$triggerParam])) { $triggerMatch = true; }
+...
+if ($triggerMatch) { $shouldApply = true; }   // la probabilite est court-circuitee
+```
+
+Vérifié : `?jinglist=1` applique `tts_jinglist`, `?danse=1` applique `danse`, et sans le
+paramètre aucun des deux ne sort.
+
+C'est l'outil par lequel on essaie un désastre à la main, et le mainteneur s'en sert — les
+paramètres arrivent par `array_merge($request->getParameterHolder()->getAll(), $extraParams)`.
+
+**Les confondre gonflerait précisément les recettes sur lesquelles on travaille.** Le
+relevé porte donc la façon dont la règle a été appliquée, et le décompte des tirages exclut
+les applications forcées.
+
+Conséquence de cache, à ne pas manquer : la clé de cache varie sur la chaîne de requête, si
+bien que `?danse=1` a sa propre entrée. Un essai ne remplace pas la page ordinaire, il en
+crée une seconde.
+
 ### Enregistrer au tirage, dans un journal dédié
 
 Le point d'enregistrement est le tirage lui-même, dans `sfDesastreManager` : c'est le seul

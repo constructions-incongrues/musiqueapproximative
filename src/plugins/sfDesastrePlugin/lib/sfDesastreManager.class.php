@@ -12,8 +12,47 @@
  */
 class sfDesastreManager
 {
+  /**
+   * Une regle a ete appliquee parce que le tirage l'a designee.
+   */
+  const MODE_TIRE = 'tire';
+
+  /**
+   * Une regle a ete appliquee parce que son parametre `trigger` etait dans l'URL.
+   *
+   * Ce n'est PAS un tirage : la probabilite est court-circuitee. C'est l'outil par
+   * lequel on essaie un desastre a la main — `?danse=1` applique `danse`. Compter ces
+   * applications avec les tirages gonflerait exactement les recettes sur lesquelles on
+   * travaille, d'ou la distinction jusque dans le releve.
+   */
+  const MODE_FORCE = 'force';
+
+  /**
+   * Nom du journal dedie, sous sf_log_dir.
+   */
+  const JOURNAL = 'desastres.log';
+
+  /**
+   * En-tete nommant le ou les desastres appliques a la reponse.
+   */
+  const ENTETE = 'X-Desastre';
+
+  /**
+   * Valeur de l'en-tete quand aucune recette n'a ete retenue.
+   */
+  const AUCUN = 'aucun';
+
   protected $config = null;
   protected $ruleEngine = null;
+
+  /**
+   * Releve du dernier appel a findRecettes() : une entree par recette retenue.
+   *
+   * Tableau vide = les regles ont ete evaluees et aucune n'a designe de recette. C'est
+   * une information, pas une absence d'information : une recette qui ne sort jamais et
+   * une recette qu'on n'a jamais evaluee sont deux situations differentes.
+   */
+  protected $dernierReleve = array();
 
   /**
    * Chemins declares sous "imports" qui ne designent aucun fichier.
@@ -216,6 +255,12 @@ class sfDesastreManager
     $this->ruleEngine->setContext($context);
 
     $selectedRecettes = array();
+
+    // Releve du tirage. Rempli ici parce que c'est le seul endroit qui sache COMMENT une
+    // regle a ete appliquee ; ecrit ailleurs, par applyToRequest, pour que les appels
+    // directs a findRecettes — tests, helper get_desastre_recettes — ne journalisent pas.
+    $this->dernierReleve = array();
+
     // Une recette peut etre designee par plusieurs regles satisfaites — c'est le
     // cas nominal quand deux conditions se recouvrent. Elle ne doit enrichir la
     // reponse qu'une fois, au rang de la premiere regle qui la designe.
@@ -225,6 +270,8 @@ class sfDesastreManager
       if (!isset($regle['query'])) {
         continue;
       }
+
+      $mode = null;
 
       // Verifier si un parametre trigger est defini et present dans l'URL
       $triggerMatch = false;
@@ -243,6 +290,7 @@ class sfDesastreManager
       if ($triggerMatch) {
         // Trigger present : application systematique
         $shouldApply = true;
+        $mode = self::MODE_FORCE;
       } else {
         // Pas de trigger ou trigger absent : evaluation normale
         if ($this->ruleEngine->evaluate($regle['query'])) {
@@ -251,6 +299,7 @@ class sfDesastreManager
 
           if (mt_rand() / mt_getrandmax() <= $probability) {
             $shouldApply = true;
+            $mode = self::MODE_TIRE;
           }
         }
       }
@@ -273,6 +322,11 @@ class sfDesastreManager
               if (!isset($recette['enabled']) || $recette['enabled'] === true) {
                 $recette['name'] = $recetteName;
                 $selectedRecettes[] = $recette;
+                $this->dernierReleve[] = array(
+                  'recette' => $recetteName,
+                  'mode' => $mode,
+                  'trigger' => isset($regle['trigger']) ? $regle['trigger'] : null,
+                );
                 $dejaRetenues[$recetteName] = true;
               }
             }
@@ -302,6 +356,19 @@ class sfDesastreManager
     // Trouver les recettes correspondantes
     $recettes = $this->findRecettes($allParams);
 
+    // Le releve s'ecrit ICI et pas dans findRecettes : c'est le chemin de production
+    // d'une page, et lui seul. Une page servie depuis le cache ne passe pas par la —
+    // le releve compte donc des TIRAGES, jamais des consultations.
+    $this->journaliser($request);
+
+    // L'en-tete est pose PENDANT la production, avec le reste de la reponse, et non sur
+    // un succes de cache : sfViewCacheManager::setPageCache() serialise la reponse
+    // entiere — en-tetes compris — et getPageCache() remplace l'objet reponse par celui
+    // qu'il desérialise. Ce qu'on poserait sur un succes serait donc jete.
+    // La consequence utile est l'invariance : deux consultations de la meme
+    // representation portent le meme en-tete, comme elles portent le meme desastre.
+    $this->nommerDesastreDansLaReponse($response);
+
     // Appliquer les recettes a la reponse
     if (!empty($recettes)) {
       $this->applyRecettesToResponse($response, $recettes, $webRoot, $fsRoot, $context);
@@ -310,6 +377,72 @@ class sfDesastreManager
     // Signaler les imports non resolus, qu'une recette s'applique ou non :
     // une configuration cassee doit se voir meme quand aucune regle ne matche.
     $this->injectUnresolvedImportsWarning($context);
+  }
+
+  /**
+   * Nomme dans la reponse le ou les desastres appliques.
+   *
+   * L'absence est DECLAREE et non omise : un en-tete absent ne distingue pas « aucun
+   * desastre » d'« en-tete casse », et c'est precisement la question a laquelle cette
+   * mesure doit repondre.
+   *
+   * @param sfWebResponse $response Reponse en cours de production
+   */
+  protected function nommerDesastreDansLaReponse(sfWebResponse $response)
+  {
+    $noms = array();
+
+    foreach ($this->dernierReleve as $entree) {
+      $noms[] = $entree['recette'];
+    }
+
+    $response->setHttpHeader(self::ENTETE, $noms ? implode(',', $noms) : self::AUCUN);
+  }
+
+  /**
+   * Retourne le releve du dernier appel a findRecettes().
+   *
+   * @return array Une entree par recette retenue : recette, mode, trigger
+   */
+  public function getDernierReleve()
+  {
+    return $this->dernierReleve;
+  }
+
+  /**
+   * Ecrit une ligne de releve dans le journal dedie.
+   *
+   * Une ligne par PRODUCTION de page, y compris quand aucune recette n'est retenue.
+   *
+   * Le journal est distinct du journal applicatif pour qu'un denombrement n'ait pas a
+   * filtrer le reste, et le format est une ligne JSON par production : un nom de recette
+   * ne contient pas d'espace aujourd'hui, mais compter en supposant le contraire est le
+   * genre de pari qui se perd silencieusement.
+   *
+   * L'ecriture ne doit jamais faire echouer une page. Un desastre est un ornement ; un
+   * journal indisponible n'est pas une raison de rendre une erreur au visiteur.
+   *
+   * @param sfWebRequest $request Requete en cours, pour situer le releve
+   */
+  protected function journaliser(sfWebRequest $request = null)
+  {
+    $repertoire = sfConfig::get('sf_log_dir');
+
+    if (!$repertoire || !is_dir($repertoire)) {
+      return;
+    }
+
+    $ligne = array(
+      'date' => date('c'),
+      'uri' => $request ? $request->getPathInfo() : null,
+      'recettes' => $this->dernierReleve,
+    );
+
+    @file_put_contents(
+      $repertoire.DIRECTORY_SEPARATOR.self::JOURNAL,
+      json_encode($ligne, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)."\n",
+      FILE_APPEND | LOCK_EX
+    );
   }
 
   /**

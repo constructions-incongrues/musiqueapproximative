@@ -16,6 +16,19 @@ Le fait de ne rien tirer SHALL être enregistré comme tel. Une règle qui ne se
 jamais et une règle qu'on n'a jamais évaluée sont deux situations différentes, et un
 relevé qui ne garde que les succès les rend indistinguables.
 
+Une application **forcée** SHALL être distinguée d'un tirage. Le champ `trigger` d'une
+règle nomme un paramètre d'URL qui, présent, applique la règle sans tirer : `?danse=1`
+applique `danse`. C'est l'outil par lequel on essaie un désastre à la main, et le
+mainteneur s'en sert. Confondre les deux ferait compter ses essais comme des tirages, et
+gonflerait exactement les recettes sur lesquelles il travaille.
+
+#### Scenario: une application forcée par un paramètre d'URL
+
+- **GIVEN** une règle dont le `trigger` est présent dans les paramètres de la requête
+- **WHEN** la page est produite et la règle appliquée sans tirage
+- **THEN** le relevé distingue cette application d'un tirage
+- **AND** elle n'entre pas dans le décompte des tirages
+
 #### Scenario: une recette est tirée
 
 - **GIVEN** une page dont une règle de désastre retient une recette

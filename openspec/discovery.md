@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-quatrième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (vingt-cinquième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1400,7 +1400,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : tout `src/`, `src/composer.json`, `src/composer.lock`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 29. `mesurer-les-desastres` — on sait enfin ce qui se déclenche
+- [x] 29. `mesurer-les-desastres` — on sait enfin ce qui se déclenche
+  - **Change** : `mesurer-les-desastres` (archivé) — nom identique
   - **Persona servi** : le mainteneur, et le collectif qui écrit les désastres
   - **Segment du parcours** : Vérifier
   - **MoSCoW** : Must — axe désastres, et **elle conditionne les quatre autres**
@@ -1440,9 +1441,12 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **MoSCoW** : Should — axe désastres
   - **⚠️ CE RELEVÉ EST FAUX. Mesuré de nouveau le 2026-08-19 : il n'existe aucune
     référence en l'air**, dans un sens ni dans l'autre. Le relevé ci-dessous comparait le
-    champ `trigger:` aux noms de recettes, or `trigger` est le LIBELLÉ de la règle et non
-    une référence — le lien réel est le champ `recettes:`, et il résout dans les dix-neuf
-    cas.
+    champ `trigger:` aux noms de recettes. Or `trigger` n'est pas une référence à une
+    recette : c'est **un nom de paramètre d'URL qui force la règle**. Lu dans
+    `sfDesastreManager` — `if (isset($query[$triggerParam])) { $shouldApply = true; }` — et
+    vérifié : `?jinglist=1` applique `tts_jinglist`, `?danse=1` applique `danse`, et sans
+    le paramètre aucun des deux ne sort. Le lien vers les recettes est le champ
+    `recettes:`, et il résout dans les dix-neuf cas.
 
     Les trois « déclencheurs en l'air » et les trois « recettes jamais déclenchées » sont
     les mêmes trois règles, vues deux fois :
@@ -1455,7 +1459,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
 
     Le cas `mangelettres` suffit à écarter l'hypothèse du renommage : un déclencheur y
     pointe DEUX recettes, ce qu'une identité de nom ne saurait exprimer. Ce n'est pas une
-    dérive, c'est un regroupement délibéré.
+    dérive, c'est un regroupement délibéré — et renommer les déclencheurs changerait les
+    URL par lesquelles on essaie les désastres à la main.
 
     **Cette story est donc sans objet en l'état.** L'appliquer telle qu'écrite reviendrait
     à renommer des déclencheurs pour les faire coïncider avec des recettes, ce qui
@@ -2383,3 +2388,19 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   écrits.
   La story 31 devra être relue de même : elle suppose des dépendances tierces dont
   l'inventaire n'a pas été refait.
+
+- 2026-08-19 (vingt-cinquième révision) — **La story 29 est livrée, et son implémentation a
+  trouvé ce que ni son packet ni sa proposal n'avaient vu.** Le champ `trigger` d'une règle
+  n'est pas un libellé : c'est un nom de paramètre d'URL qui applique la règle **sans
+  tirer** — `?danse=1` applique `danse`, probabilité court-circuitée. C'est l'outil par
+  lequel on essaie un désastre à la main.
+  **Une application forcée n'est donc pas un tirage**, et les confondre gonflerait
+  exactement les recettes sur lesquelles on travaille. Le relevé porte le mode, le décompte
+  exclut les forcées, et `--forces` les dénombre à part. Constaté sur la première mesure
+  réelle : une même page portait `danse` forcé par mon essai à côté de `consonnard` et
+  `voyelliste` réellement tirés.
+  **Premier relevé, sur sept productions** : 19 recettes déclarées, 16 jamais tirées. Le
+  chiffre qui manquait aux stories 30 à 33 existe désormais, et il est reproductible.
+  **La question ouverte du packet est tranchée** : on compte les tirages, pas les
+  consultations, et le relevé imprime sa propre portée sous le tableau — pas dans une page
+  qu'on ne lira pas au moment d'interpréter le chiffre.

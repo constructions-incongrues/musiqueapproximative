@@ -23,5 +23,6 @@
 .Contribuer
 * xref:inscription.adoc[Rejoindre le conventicule]
 * xref:desastres.adoc[Anatomie d'un Désastre]
+* xref:desastres-releve.adoc[Relevé des désastres]
 * xref:contribution.adoc[Contribuer au développement]
 * xref:README.adoc[Contribuer à la documentation]
