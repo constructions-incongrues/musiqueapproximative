@@ -12,12 +12,51 @@
  */
 class sfGuardUser extends PluginsfGuardUser
 {
+  /**
+   * Nom sous lequel le contributeur est affiche.
+   *
+   * La retombee sur `username` est le cas NORMAL et non le cas degrade : les 210
+   * comptes de la base sont depourvus de profil.
+   *
+   * La relation absente se presente sous DEUX formes, selon la requete qui a
+   * charge l'utilisateur, et c'est la raison d'etre du garde :
+   *
+   *   chargement paresseux  ->  objet UserProfile vide  ->  display_name = ''
+   *   charge par jointure   ->  null                    ->  lecture sur null
+   *
+   * La seconde forme date du `leftJoin('u.UserProfile pr')` de
+   * PostTable::buildOnlinePostsQuery, ajoute pour supprimer un N+1. En PHP 7.4 la
+   * lecture d'une propriete sur `null` n'est qu'une notice silencieuse, et la
+   * retombee produit le meme affichage qu'un display_name vide : le defaut y est
+   * INVISIBLE, tests compris. En PHP 8 c'est un avertissement, et le navigateur de
+   * test de symfony 1 le transforme en exception — 64 assertions sur 408.
+   *
+   * D'ou un garde sur la relation elle-meme, et non sur la seule valeur.
+   */
   public function getDisplayName()
   {
-    if (!$name = $this->UserProfile->display_name)
+    $profil = $this->UserProfile;
+
+    if (!$profil || !$name = $profil->display_name)
     {
       $name = $this->username;
     }
+
     return $name;
+  }
+
+  /**
+   * Adresse du site web du contributeur, ou null s'il n'en a pas declare.
+   *
+   * Meme garde que getDisplayName(), meme raison : la relation absente vaut `null`
+   * quand elle est chargee par jointure et objet vide quand elle l'est paresseusement.
+   * Passer par ici plutot que de lire `UserProfile->website_url` sur l'appelant evite
+   * d'avoir a le savoir a chaque site de lecture.
+   */
+  public function getWebsiteUrl()
+  {
+    $profil = $this->UserProfile;
+
+    return $profil ? $profil->website_url : null;
   }
 }

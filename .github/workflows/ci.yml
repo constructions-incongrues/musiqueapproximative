@@ -139,6 +139,107 @@ jobs:
         run: |
           find src -name "*.php" -not -path "*/vendor/*" -exec php -l {} \; | grep -v "No syntax errors"
 
+  tests:
+    name: Suite de tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+
+    # Les deux versions sont BLOQUANTES, et `fail-fast: false` les laisse toutes deux
+    # rendre leur verdict. Une passe PHP 8 seulement consultative aurait vire au rouge
+    # permanent puis a l'ignorance — c'est le mode de defaillance habituel des
+    # verifications facultatives, et il vaut mieux ne pas l'ajouter que l'ajouter sans
+    # dents.
+    #
+    # 7.4 est la version de production, 8.1 la version visee. Ce travail est ce qui
+    # empeche le verdict de compatibilite de vieillir en silence : sans lui, le document
+    # qui l'enonce n'est qu'un chiffre date de plus.
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["7.4", "8.1"]
+
+    permissions:
+      contents: read
+
+    services:
+      db:
+        # MariaDB 10.11, et pas MySQL : c'est la version de la production, et le projet
+        # n'a jamais tourne que sur MariaDB.
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: musiqueapproximative
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql
+          coverage: none
+
+      - name: Installer les dépendances
+        run: |
+          cd src
+          composer install --prefer-dist --no-progress
+
+      - name: Rendre la configuration
+        # `make configure` REFUSE de s'exécuter quand `.env` ne fournit aucune variable :
+        # `envsubst` recopierait alors les gabarits verbatim et la configuration rendue
+        # porterait le nom de la variable au lieu de sa valeur. Voir le commentaire en
+        # tête de src/Makefile — cette cible a mis le site en 500 le 2026-08-18.
+        run: |
+          cd src
+          cat > .env <<'ENV'
+          APP_AUTOPLAY=false
+          APP_DOMAIN=localhost
+          APP_THEME=default
+          APP_TITLE=Musique Approximative
+          DATABASE_HOST=127.0.0.1
+          DATABASE_NAME=musiqueapproximative
+          DATABASE_NAME_TEST=musiqueapproximative_test
+          DATABASE_USER=root
+          DATABASE_PASSWORD=root
+          CLOUDFLARE_API_TOKEN=
+          CLOUDFLARE_ZONE_ID=
+          ENV
+          make configure
+
+      - name: Préparer la base de test
+        # Les fixtures commencent par des TRUNCATE : les tables doivent préexister.
+        run: |
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS musiqueapproximative_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+          cd src
+          php symfony doctrine:insert-sql --env=test
+
+      # Pas d'etape d'isolation de `cache/` et `log/` : chaque branche de la matrice
+      # part d'un depot fraichement clone, et ces deux repertoires sont gitignores —
+      # ils sont donc vides par construction, et propres a leur version de PHP.
+      #
+      # La precision merite d'etre ecrite parce que la premiere mesure de ce change a
+      # ete FAUSSE pour cette exacte raison : deux conteneurs partageaient src/cache/
+      # avec des chemins de montage differents, et le cache d'autoload de l'un faisait
+      # echouer l'autre au demarrage. L'echec ressemblait a une incompatibilite PHP 8 ;
+      # il n'en etait pas une. Quiconque reproduira ces tests hors CI doit isoler ces
+      # deux repertoires a la main.
+      - name: Tests unitaires
+        run: cd src && php symfony test:unit
+
+      - name: Tests fonctionnels — frontend
+        run: cd src && php symfony test:functional frontend
+
+      - name: Tests fonctionnels — admin
+        run: cd src && php symfony test:functional admin
+
   docker-build:
     name: Build et Push Docker
     runs-on: ubuntu-latest

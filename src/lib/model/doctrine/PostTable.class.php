@@ -190,6 +190,19 @@ class PostTable extends Doctrine_Table
 
     if ($hydrateLeProfil)
     {
+      // Cette jointure change la FORME de la relation absente, et pas seulement le
+      // nombre de requetes :
+      //
+      //   sans elle (chargement paresseux)  ->  objet UserProfile vide
+      //   avec elle                         ->  null
+      //
+      // Les 210 comptes de la base etant sans profil, c'est la forme servie a chaque
+      // rendu de contributeur. Tout code qui lit la relation doit donc traiter les deux.
+      //
+      // A ne pas verifier sous PHP 7.4 : la lecture d'une propriete sur `null` n'y est
+      // qu'une notice silencieuse. Le defaut introduit ici est reste invisible, suite de
+      // tests comprise, jusqu'a une execution sous PHP 8 — ou il a fait tomber 64
+      // assertions sur 408. Voir sfGuardUser::getDisplayName().
       $q->leftJoin('u.UserProfile pr');
     }
 

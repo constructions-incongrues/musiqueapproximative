@@ -7,6 +7,7 @@
 * xref:developpement/environnement.adoc[Environnement de développement]
 * xref:developpement/commandes.adoc[Commandes utiles]
 * xref:developpement/tests.adoc[Tests]
+* xref:developpement/compatibilite-php-8.adoc[Compatibilité PHP 8]
 * xref:docker.adoc[Utilisation de Docker]
 
 .Déployer et exploiter
