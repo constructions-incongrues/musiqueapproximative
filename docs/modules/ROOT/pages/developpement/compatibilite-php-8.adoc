@@ -17,7 +17,13 @@ ne prouve pas.
 |===
 
 La montée elle-même n'a pas été faite : ni la version du conteneur, ni la contrainte
-`"php": "^7.4"` de `src/composer.json` n'ont changé. Cette page établit que la porte
+`"php": "^7.4"` de `src/composer.json` n'ont changé.
+
+Cette contrainte est *le seul verrou déclaré de toute la chaîne* — chaque dépendance
+annonce déjà PHP 8 de son côté. Elle suffit à faire refuser `composer install` sous 8.1,
+ce qui est la raison pour laquelle la branche 8.1 de l'intégration continue passe
+`--ignore-platform-req=php` : vérifier avant de déclarer, et non l'inverse. Le jour de la
+migration, ce drapeau disparaît et la contrainte s'élargit — dans cet ordre. Cette page établit que la porte
 s'ouvre. La franchir se décide séparément, avec une production à surveiller.
 
 == Ce qui a été mesuré

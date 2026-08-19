@@ -188,9 +188,30 @@ jobs:
           coverage: none
 
       - name: Installer les dépendances
+        # `--ignore-platform-req=php` hors 7.4, et SEULEMENT hors 7.4.
+        #
+        # `src/composer.json` declare `"php": "^7.4"` : composer refuse donc d'installer
+        # sous 8.1, et c'est le verrou que l'audit a identifie — le seul de toute la
+        # chaine, chaque dependance declarant deja PHP 8 de son cote.
+        #
+        # Le drapeau leve la verification de plateforme sans toucher a la declaration.
+        # C'est deliberé : la production tourne en 7.4, le projet ne pretend pas encore
+        # supporter PHP 8, et cette branche de matrice sert precisement a verifier AVANT
+        # de declarer. Le lock reste celui de 7.4 et n'est pas resolu a nouveau.
+        #
+        # La branche 7.4 garde sa verification intacte : y poser le meme drapeau
+        # masquerait une vraie incompatibilite de dependance sur la version de
+        # production.
+        #
+        # Le jour ou la migration se fait, ce drapeau disparait et la contrainte
+        # s'elargit — dans cet ordre, pas l'inverse.
         run: |
           cd src
-          composer install --prefer-dist --no-progress
+          if [ "${{ matrix.php }}" = "7.4" ]; then
+            composer install --prefer-dist --no-progress
+          else
+            composer install --prefer-dist --no-progress --ignore-platform-req=php
+          fi
 
       - name: Rendre la configuration
         # `make configure` REFUSE de s'exécuter quand `.env` ne fournit aucune variable :
