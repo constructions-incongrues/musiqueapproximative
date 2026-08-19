@@ -11,8 +11,23 @@ permissions:
 
 jobs:
   tests:
-    name: Suite de tests
+    name: Suite de tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
+
+    # Les deux versions sont BLOQUANTES, et `fail-fast: false` les laisse toutes deux
+    # rendre leur verdict. Une passe PHP 8 seulement consultative aurait vire au rouge
+    # permanent puis a l'ignorance — c'est le mode de defaillance habituel des
+    # verifications facultatives.
+    #
+    # 7.4 est la version de production, 8.1 la version visee. Cette matrice est ce qui
+    # empeche le verdict de docs/.../compatibilite-php-8.adoc de vieillir en silence.
+    # Elle a d'ailleurs trouve deux defauts que la mesure locale n'avait pas vus, des ses
+    # deux premieres executions : la contrainte php de composer.json, et
+    # `doctrine:insert-sql` sous PHP 8.
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["7.4", "8.1"]
 
     # MySQL 5.7 comme en production : les requetes d'agregat de l'API Subsonic
     # dependent de ONLY_FULL_GROUP_BY, actif par defaut a partir de la 5.7, et
@@ -35,10 +50,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7.0.1
 
-      - name: Setup PHP
+      - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.4"
+          php-version: ${{ matrix.php }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql
           coverage: none
 
@@ -46,14 +61,36 @@ jobs:
         uses: actions/cache@v6
         with:
           path: src/vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('src/composer.lock') }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('src/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
 
       - name: Installer les dépendances
+        # `--ignore-platform-req=php` hors 7.4, et SEULEMENT hors 7.4.
+        #
+        # `src/composer.json` declare `"php": "^7.4"` : composer refuse donc d'installer
+        # sous 8.1. C'est le seul verrou declare de toute la chaine — chaque dependance
+        # annonce deja PHP 8 de son cote — et c'est la premiere chose que cette matrice
+        # a trouvee.
+        #
+        # Le drapeau leve la verification de plateforme sans toucher a la declaration.
+        # C'est delibere : la production tourne en 7.4, le projet ne pretend pas encore
+        # supporter PHP 8, et cette branche sert precisement a verifier AVANT de
+        # declarer. Le lock reste celui de 7.4 et n'est pas resolu a nouveau.
+        #
+        # La branche 7.4 garde sa verification intacte : y poser le meme drapeau
+        # masquerait une vraie incompatibilite de dependance sur la version de
+        # production.
+        #
+        # Le jour de la migration, ce drapeau disparait et la contrainte s'elargit —
+        # dans cet ordre, pas l'inverse.
         run: |
           cd src
-          composer install --prefer-dist --no-progress
+          if [ "${{ matrix.php }}" = "7.4" ]; then
+            composer install --prefer-dist --no-progress
+          else
+            composer install --prefer-dist --no-progress --ignore-platform-req=php
+          fi
 
       - name: Générer la configuration
         # Rendu explicite plutôt que `make configure`. La cible du Makefile
@@ -113,10 +150,35 @@ jobs:
             -e "CREATE DATABASE IF NOT EXISTS musiqueapproximative_test CHARACTER SET utf8mb4;"
 
       - name: Construire le schéma de test
+        # `doctrine:insert-sql` rend un code 1 sous PHP 8 alors qu'il a fait tout son
+        # travail. Incompatibilite reelle, trouvee par cette matrice :
+        #
+        #   Doctrine_Export::exportClasses() ouvre une transaction, emet les CREATE
+        #   TABLE puis les ALTER TABLE, et appelle commit(). Or les instructions DDL de
+        #   MySQL VALIDENT IMPLICITEMENT : la transaction est deja refermee quand
+        #   Doctrine la valide. PHP 7.4 laissait PDO silencieux, PHP 8 leve une
+        #   PDOException « There is no active transaction ».
+        #
+        #   Trace : Doctrine/Transaction.php:417 <- Export.php:1224 <-
+        #   sfDoctrineInsertSqlTask::execute()
+        #
+        # Les tables et leurs cles etrangeres sont toutes creees, sur les deux versions.
+        # On asserte donc le RESULTAT plutot que le code de sortie : un `|| true` seul
+        # laisserait passer un schema reellement incomplet. Le defaut est dans une
+        # dependance vendue, et c'est le premier element a corriger avant une migration.
         run: |
           cd src
           php symfony doctrine:build --sql --env=test
-          php symfony doctrine:insert-sql --env=test
+          php symfony doctrine:insert-sql --env=test || echo "doctrine:insert-sql a rendu un code non nul, le schema est verifie ci-dessous"
+          manquantes=""
+          for table in post post_index sf_guard_user sf_guard_user_profile user_profile; do
+            mysql -h 127.0.0.1 -uroot -proot musiqueapproximative_test -e "SELECT 1 FROM $table LIMIT 0;" >/dev/null 2>&1 || manquantes="$manquantes $table"
+          done
+          if [ -n "$manquantes" ]; then
+            echo "::error::schema de test incomplet, tables manquantes :$manquantes"
+            exit 1
+          fi
+          echo "schema de test complet"
 
       - name: Tests unitaires
         run: |

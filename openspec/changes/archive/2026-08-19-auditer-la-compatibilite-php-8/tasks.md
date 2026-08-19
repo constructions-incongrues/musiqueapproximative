@@ -32,10 +32,20 @@
 
 - [x] 3.1 Ajouter à l'intégration continue l'exécution de la suite sous PHP 8.1, en plus
       de PHP 7.4, avec le même statut bloquant pour les deux. **Corrigé à
-      l'implémentation** : la CI n'exécutait AUCUN test — `validate` faisait la
-      navigation de la doc, `composer install` et `php -l`. Il n'y avait donc pas de
-      passe 7.4 à laquelle ajouter une passe 8.1 ; les deux ont été créées, avec un
-      service MariaDB 10.11 et la préparation de la base de test.
+      l'implémentation, puis CORRIGÉ APRÈS COUP** : j'ai d'abord écrit que la CI
+      n'exécutait aucun test, et créé un travail complet dans `ci.yml`. **C'était
+      faux.** `.github/workflows/tests.yml` exécutait déjà la suite entière sous 7.4 —
+      unitaires, frontend, admin. Je n'avais regardé que `ci.yml`.
+      Le travail ajouté était donc un doublon, et moins soigné que l'existant :
+      `tests.yml` rend la configuration par un `envsubst` à liste blanche explicite
+      *parce que* le comportement de `make configure` s'était révélé dépendre de la
+      façon dont on l'invoque, et il vérifie ensuite le rendu. Mon travail appelait
+      `make configure`.
+      Corrigé : le doublon est retiré de `ci.yml` et la matrice `7.4 / 8.1` est posée
+      sur le travail existant de `tests.yml`.
+      **Ce que cela dit de la méthode** : la conclusion « la CI n'exécute aucun test »
+      venait de la lecture d'un seul fichier, jamais d'une exécution. C'est le défaut
+      que ce change passe son temps à documenter chez les autres.
 - [x] 3.2 S'assurer que le travail isole `cache/` et `log/`. **Aucun mécanisme n'a été
       ajouté** : chaque branche de la matrice part d'un dépôt fraîchement cloné et ces
       deux répertoires sont gitignorés — l'isolation est acquise par construction. La

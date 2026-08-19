@@ -158,8 +158,14 @@ même ampleur de casse et fait accuser PHP 8 à tort.
 Un chiffre écrit dans une page vieillit sans prévenir. C'est arrivé quatre fois dans
 cette release.
 
-L'intégration continue exécute donc la suite sous *les deux* versions, 7.4 et 8.1, avec
-le même statut bloquant. `fail-fast` est désactivé pour que les deux rendent leur verdict.
+La suite tourne donc sous *les deux* versions, 7.4 et 8.1, dans
+`.github/workflows/tests.yml`, avec le même statut bloquant. `fail-fast` est désactivé
+pour que les deux rendent leur verdict.
+
+La matrice a payé dès ses deux premières exécutions, en trouvant deux défauts que la
+mesure locale n'avait pas vus : la contrainte `php` de `composer.json`, invisible tant que
+`vendor/` était déjà installé, et l'échec de `doctrine:insert-sql` décrit plus haut,
+invisible tant que la base de test existait déjà.
 
 Une passe seulement consultative aurait viré au rouge permanent puis à l'ignorance —
 c'est le mode de défaillance habituel des vérifications facultatives, et il vaut mieux ne

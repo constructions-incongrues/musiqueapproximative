@@ -2332,8 +2332,12 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   retombée produit le même affichage : le défaut était invisible à toute la suite. Un
   second, plus ancien, servait une dépréciation PHP 8.1 **dans le corps** de
   `/posts?format=json`.
-  **Deux tâches ont été élargies à l'implémentation.** La CI n'exécutait aucun test — il
-  n'y avait pas de passe 7.4 à laquelle ajouter une passe 8.1, les deux ont été créées.
+  **Deux tâches ont été élargies à l'implémentation, et l'une des deux reposait sur une
+  erreur de ma part.** J'ai écrit que la CI n'exécutait aucun test et créé un travail
+  complet ; `tests.yml` exécutait déjà la suite entière sous 7.4. Je n'avais lu que
+  `ci.yml`. Le doublon a été retiré et la matrice posée sur le travail existant.
+  Vingt-troisième révision, et le défaut reste le même : une conclusion tirée de ce qui
+  est lisible, pas de ce qui est exécutable — cette fois chez moi.
   Et le test de non-régression, prévu rouge sous PHP 8 seulement, piège le gestionnaire
   d'erreurs : il est rouge sur les deux versions, donc le défaut est désormais rattrapable
   sur l'interpréteur du projet.
