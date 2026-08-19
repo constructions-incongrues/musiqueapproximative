@@ -20,6 +20,51 @@ Allow from all
   RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
+# --------------------------------------------------------------------- Cache-Control
+#
+# POURQUOI CE BLOC EXISTE
+#
+# Jusqu'au 2026-08-19 l'origine n'envoyait AUCUN `Cache-Control`. Cloudflare comblait
+# donc le vide avec son reglage « Browser Cache TTL : 1 month », et annonçait aux
+# navigateurs `max-age=2678400` — trente et un jours sur des fichiers dont le nom ne
+# porte pas d'empreinte. Une purge de zone n'atteint pas cette copie-la : le visiteur
+# qui a pris l'ancien fichier le garde un mois.
+#
+# Le reglage Cloudflare passe a « Respect Existing Headers ». Sa documentation est
+# explicite : dans ce mode Cloudflare n'insere plus rien. Sans le bloc ci-dessous, les
+# navigateurs retomberaient sur leur cache HEURISTIQUE, une fraction de l'age du
+# fichier — quelques minutes pour un fichier recent, des ANNEES pour `jquery.js`, qui
+# date de 2012. Le piege serait remplace par un piege imprevisible.
+#
+# POURQUOI `max-age` COURT ET `s-maxage` LONG
+#
+# Les deux caches n'ont pas les memes moyens de se corriger. Celui de Cloudflare se
+# purge — `.github/workflows/purge-cloudflare.yml` le fait a chaque poussee sur `main`,
+# et verifie son travail. Celui des navigateurs ne se purge pas : la seule facon de le
+# reprendre est d'attendre qu'il expire. Il expire donc vite, et l'edge garde longtemps.
+#
+# Dix minutes, c'est le delai maximal entre un correctif deploye et un visiteur qui le
+# recoit. C'est aussi le prix : une revalidation par fichier et par dizaine de minutes,
+# qui repond 304 en deux cents octets.
+<IfModule mod_headers.c>
+  # Les fichiers qu'un deploiement modifie.
+  <FilesMatch "\.(js|css|svg|png|jpe?g|gif|ico|woff2?|json|xml)$">
+    Header set Cache-Control "public, max-age=600, s-maxage=2678400"
+  </FilesMatch>
+
+  # Les morceaux, eux, ne changent jamais apres publication : rien a gagner a les
+  # revalider, et ce sont les plus gros fichiers du site.
+  #
+  # A savoir avant de debugger ici : une Page Rule Cloudflare, `*musiqueapproximative.net
+  # /tracks/*.mp3`, impose deja « Browser Cache TTL: a year, Cache Level: Cache
+  # Everything ». Elle gagne sur cet en-tete pour tout ce qui est sous `/tracks/`. La
+  # regle ci-dessous vaut donc pour les medias ranges ailleurs, et sert de filet si la
+  # Page Rule disparait.
+  <FilesMatch "\.(mp3|ogg|m4a|flac|wav|mp4|webm)$">
+    Header set Cache-Control "public, max-age=2678400, immutable"
+  </FilesMatch>
+</IfModule>
+
 # Enabling mod_pagespeed results in wrong URLs in "Browse all tracks"
 <IfModule pagespeed_module>
   ModPagespeed off

@@ -510,7 +510,7 @@ class sfDesastreManager
       // Ajouter les scripts externes si definis dans la recette
       if (isset($recette['scripts']) && is_array($recette['scripts'])) {
         foreach ($recette['scripts'] as $script) {
-          $response->addJavascript($script);
+          $response->addJavascript($script . $this->empreinteDepuisCheminWeb($script));
         }
       }
 
@@ -518,14 +518,14 @@ class sfDesastreManager
       $stylesheets = $this->findAssets($fsRoot, $desastreName, 'stylesheets', array('css'));
       foreach ($stylesheets as $stylesheet) {
         $webPath = $webRoot . '/' . $desastreName . '/stylesheets/' . basename($stylesheet);
-        $response->addStylesheet($webPath);
+        $response->addStylesheet($webPath . $this->empreinte($stylesheet));
       }
 
       // Ajouter les javascripts
       $javascripts = $this->findAssets($fsRoot, $desastreName, 'javascript', array('js'));
       foreach ($javascripts as $javascript) {
         $webPath = $webRoot . '/' . $desastreName . '/javascript/' . basename($javascript);
-        $response->addJavascript($webPath);
+        $response->addJavascript($webPath . $this->empreinte($javascript));
       }
     }
 
@@ -579,6 +579,62 @@ class sfDesastreManager
       $context->getUser()->setAttribute('desastre_options_js', $jsCode);
       $context->getUser()->setAttribute('desastre_options_css', $cssCode);
     }
+  }
+
+  /**
+   * Suffixe de version d'un fichier, deduit de sa date de modification.
+   *
+   * POURQUOI CE SUFFIXE EXISTE
+   *
+   * Cloudflare sert les fichiers de desastre depuis son cache et rien ne le previent
+   * d'un deploiement : le 2026-08-19, l'edge a servi pendant des heures un
+   * `bande-usee.js` anterieur a deux correctifs deja en ligne sur l'origine. Le suffixe
+   * change l'adresse a chaque modification du fichier, donc le cache va forcement
+   * chercher la nouvelle version. Le probleme disparait sans purge et sans reglage de
+   * tableau de bord.
+   *
+   * CE N'EST PAS LE `?cachebust=` QUI PIEGE LES DIAGNOSTICS
+   *
+   * Ajouter une chaine au hasard a la main pour « contourner le cache » teste une adresse
+   * que personne ne demande, et conclut a tort que le deploiement est bon. Ici c'est la
+   * page elle-meme qui emet l'adresse versionnee : c'est celle que tout le monde recoit.
+   *
+   * POURQUOI `filemtime` ET PAS UNE EMPREINTE DU CONTENU
+   *
+   * Un `md5_file` se lit a chaque rendu de page, sur chaque fichier de chaque recette
+   * retenue. La date est dans l'inode, deja chaude dans le cache du systeme de fichiers.
+   * Une reecriture sans changement invalide inutilement le cache, ce qui coute un
+   * telechargement de plus, jamais une page fausse.
+   *
+   * @param string $cheminFichier Chemin systeme de fichiers de l'asset
+   * @return string `?v=<horodatage>`, ou chaine vide si le fichier est illisible
+   */
+  protected function empreinte($cheminFichier)
+  {
+    // Un desastre est un ornement : un fichier illisible ne doit pas faire echouer la page.
+    $mtime = @filemtime($cheminFichier);
+
+    return $mtime ? '?v=' . $mtime : '';
+  }
+
+  /**
+   * Meme empreinte, pour un `scripts:` de recette.
+   *
+   * Ces chemins-la sont declares dans `desastres.yml` en adresses web enracinees
+   * (`/desastres/shared/desastre-audio.js`), non en chemins systeme. On les ramene sous
+   * `sf_web_dir` pour lire la date. Une URL absolue vers un tiers n'a pas de fichier
+   * local, donc pas d'empreinte : la resolution echoue et on rend une chaine vide.
+   *
+   * @param string $cheminWeb Adresse enracinee declaree dans la recette
+   * @return string `?v=<horodatage>`, ou chaine vide
+   */
+  protected function empreinteDepuisCheminWeb($cheminWeb)
+  {
+    if (strpos($cheminWeb, '/') !== 0) {
+      return '';
+    }
+
+    return $this->empreinte(sfConfig::get('sf_web_dir') . $cheminWeb);
   }
 
   /**
