@@ -248,31 +248,54 @@
     }
   }
 
-  if (
-    window.DesastreAudio &&
-    typeof window.DesastreAudio.onReady === "function"
-  ) {
-    window.DesastreAudio.onReady(function (audio) {
-      var element = audio && audio.element ? audio.element : null;
+  /**
+   * Se brancher des que l'element audio existe.
+   *
+   * ON N'UTILISE PAS `DesastreAudio`, ET C'EST UNE CORRECTION.
+   *
+   * La premiere version passait par son `onReady`, qui n'appelle qu'apres le chargement des
+   * METADONNEES du morceau. Or `createMediaElementSource()` n'a besoin que de L'ELEMENT :
+   * attendre le media etait une exigence inutile, et elle rendait le desastre dependant du
+   * bon vouloir du reseau — fichier lent, absent ou en erreur, il ne s'appliquait jamais.
+   *
+   * Elle a aussi cache une dependance non declaree : `desastre-audio.js` n'etait pas dans
+   * les `scripts:` de la recette. En developpement, `mangelettres` se declenchait sur la
+   * meme page et le chargeait, si bien que ce desastre en profitait sans l'avoir demande.
+   * Force seul en production, il rendait « DesastreAudio absent » et ne faisait rien.
+   *
+   * Chercher l'element soi-meme supprime les deux problemes d'un coup. jPlayer le cree a
+   * l'execution, d'ou l'attente courte.
+   */
+  function surElementAudio(action) {
+    var essais = 0;
 
-      if (!element) {
-        console.warn(
-          "[desastres/" + NOM + "] aucun element audio, rien a user",
-        );
+    var chercher = function () {
+      var element =
+        document.querySelector("#jp_audio_0") ||
+        document.querySelector("audio");
+
+      if (element) {
+        action(element);
 
         return;
       }
 
-      brancher(element);
-      element.addEventListener("play", reveiller);
-    });
-  } else {
-    console.warn(
-      "[desastres/" +
-        NOM +
-        "] DesastreAudio absent, le desastre ne s'applique pas",
-    );
+      if (essais++ < 40) {
+        window.setTimeout(chercher, 250);
+      } else {
+        console.warn(
+          "[desastres/" + NOM + "] aucun element audio trouve, rien a user",
+        );
+      }
+    };
+
+    chercher();
   }
+
+  surElementAudio(function (element) {
+    brancher(element);
+    element.addEventListener("play", reveiller);
+  });
 
   ["click", "keydown", "touchstart"].forEach(function (evenement) {
     document.addEventListener(evenement, reveiller, {
