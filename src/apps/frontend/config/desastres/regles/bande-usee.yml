@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=../schemas/regles.schema.json
+
+# Règle du désastre « la bande usée ».
+#
+# PROBABILITÉ BASSE, ET DÉLIBÉRÉMENT.
+#
+# Ce désastre dégrade la musique qu'un contributeur a choisi de partager, ce qui n'est pas
+# du même ordre que défigurer une page. Le fichier reste intact à son adresse — l'altération
+# ne vaut que pour la lecture — mais l'écoute, elle, est bien touchée.
+#
+# La requête ne vise aucun mot du titre : douze des dix-neuf désastres sont des rébus, celui-ci
+# vient du nom du site et peut donc tomber sur n'importe quel morceau.
+regles:
+  - query: query.title ~ /(.*)/i
+    recettes: [bande_usee]
+    probability: 0.08
+    trigger: bande_usee

@@ -1,0 +1,98 @@
+= La bande usée
+:navtitle: bande-usee
+
+Le site s'appelle *Musique Approximative*. Ce désastre prend ce nom au mot : la hauteur du
+morceau se met à flotter, comme une bande magnétique passée trop de fois.
+
+C'est le premier désastre du catalogue qui touche *le son* et non la page.
+
+== Ce qu'il fait
+
+Une ligne à retard dont la longueur oscille — un retard qui varie est une hauteur qui
+varie. Deux oscillations superposées : le *wow*, lent, autour de 0,6 Hz, et le *flutter*,
+rapide, vers 7,5 Hz.
+
+Le traitement a lieu dans un `AudioWorklet`, donc sur le fil de rendu audio. Ce n'est pas
+un détail d'implémentation : sur le fil principal, la moindre contention produirait des
+craquements, et un craquement s'entend comme une *panne du site* — l'inverse du but.
+
+== Les trois couches
+
+Une seule modulation, trois sens.
+
+[cols="1,3"]
+|===
+| l'oreille | la hauteur du morceau flotte
+| l'œil | le titre — `article h2` — dérive au même rythme
+| la main | la page répond au pointeur avec le même retard flottant
+|===
+
+*Les contrepoints partagent le signal, ils ne l'imitent pas.* La valeur du modulateur sort
+du processeur par son `MessagePort` et pilote les deux autres couches. Deux animations
+réglées sur les mêmes fréquences seraient perçues comme deux événements simultanés ; ce qui
+fait la démonstration, c'est que l'œil et la main confirment ce que l'oreille entend, *au
+même instant*.
+
+Sans ces contrepoints, un son qui flotte se lit comme une panne — connexion, casque,
+fichier — et un visiteur qui croit le site cassé s'en va.
+
+=== Le curseur n'est pas ralenti
+
+C'est la page qui met du temps à le remarquer. Aucune API ne permet de changer la vitesse
+d'un curseur : le seul moyen serait `requestPointerLock`, qui exige un geste, masque le
+curseur, affiche une bannière et capture la souris — ça ne surprend pas, ça séquestre.
+
+Masquer le curseur pour en dessiner un qui traîne ferait atterrir les clics ailleurs que là
+où on les voit. Un désastre déforme ; il ne fait pas rater un clic.
+
+La feuille de style ne retarde donc que des propriétés de couleur. *Aucune propriété de
+mise en page n'est transitionnée* : les zones cliquables ne bougent pas.
+
+== Comment en sortir
+
+[cols="1,3"]
+|===
+| `prefers-reduced-motion: reduce`
+| Retire les deux contrepoints. L'altération sonore continue.
+
+| `?sans-desastre` dans l'adresse
+| Retire tout, son compris.
+|===
+
+La seconde existe parce qu'*il n'y a pas de réglage standard pour refuser une altération
+sonore*. Sans elle, ce serait le seul désastre du catalogue auquel on ne peut pas échapper.
+
+== L'arborescence, et pourquoi elle n'est pas celle des autres
+
+----
+bande-usee/
+├── javascript/
+│   └── bande-usee.js          chargé automatiquement, en script classique
+├── worklet/
+│   └── bande-usee-processeur.js   PAS chargé automatiquement — et c'est voulu
+└── stylesheets/
+    └── bande-usee.css
+----
+
+Le gestionnaire charge tous les `.js` de `javascript/` en `<script src>` classique. Le
+processeur y serait évalué sur le fil principal, où `AudioWorkletProcessor` n'existe pas, et
+il échouerait. Il vit donc sous `worklet/`, que le gestionnaire ne scanne pas, et le script
+principal le charge lui-même par `audioWorklet.addModule()`.
+
+== Diagnostiquer
+
+Un désastre qu'on ne voit pas est un désastre qu'on ne peut pas diagnostiquer à l'œil. Une
+fois branché, il expose :
+
+[source,javascript]
+----
+window.DesastreBandeUsee.etat()
+// { contexte: "running", messagesRecus: 3657, titreTrouve: true, mouvementRefuse: false }
+----
+
+`contexte: "suspended"` est normal tant que le visiteur n'a rien cliqué : `AudioContext`
+naît suspendu, et le clic de lecture est exactement le moment où le désastre doit commencer.
+
+Dans un onglet masqué, `requestAnimationFrame` est suspendu : les deux contrepoints se
+figent pendant que le son continue. C'est juste — personne ne regarde — et cela se répare de
+soi-même à la première trame du retour.

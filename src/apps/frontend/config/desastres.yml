@@ -14,6 +14,7 @@ imports:
     - desastres/recettes/redirect.yml
     - desastres/recettes/splitouine.yml
     - desastres/recettes/tts.yml
+    - desastres/recettes/bande-usee.yml
   regles:
     - desastres/regles/mamie.yml
     - desastres/regles/mangelettres.yml
@@ -22,6 +23,7 @@ imports:
     - desastres/regles/redirects.yml
     - desastres/regles/splitouine.yml
     - desastres/regles/tts.yml
+    - desastres/regles/bande-usee.yml
 
 # On peut aussi definir des regles/recettes directement ici
 # Elles seront fusionnees avec les imports
