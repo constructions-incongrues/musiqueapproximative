@@ -1,7 +1,7 @@
 # Discovery : Musique Approximative
 
 > Status: complete
-> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-et-unième révision)
+> Created: 2026-08-18 · Last revised: 2026-08-19 (trente-deuxième révision)
 
 > **Portée : généraliste.** Ce plan a d'abord été rédigé sur le seul axe « tenir les
 > formats machine ». L'auteur a corrigé le 2026-08-18 : ce n'est pas un plan d'axe, c'est
@@ -1638,6 +1638,26 @@ Chaque story est une tranche verticale : elle se démontre seule.
     **La cible est le titre du morceau** : c'est lui qui nomme ce qu'on écoute, et le voir
     dériver au rythme exact de ce qu'on entend fait le lien sans un mot. `mangelettres` vise
     déjà le titre — le catalogue a précédent.
+  - **La troisième couche : la main.** La même modulation pilote aussi la façon dont la page
+    répond au pointeur — états de survol, contrôles du lecteur, liens réagissent en retard et
+    en flottant, par `transition-delay`. **Le curseur n'est pas ralenti ; c'est la page qui
+    met du temps à le remarquer.**
+    *Mesuré le 2026-08-19 : aucune API ne permet de changer la vitesse du curseur.* La liste
+    des candidats est vide. Le seul moyen de contrôler le mouvement est `requestPointerLock`,
+    qui exige un geste, masque le vrai curseur, affiche une bannière du navigateur et capture
+    la souris dans la page — disqualifiant pour un désastre : ça ne surprend pas, ça
+    séquestre.
+    L'autre forme envisagée — masquer le curseur et en dessiner un qui traîne — est écartée
+    sauf à garder l'écart sous quelques pixels : les clics atterrissent où est le *vrai*
+    pointeur, et un curseur dessiné qui ment sur le point de clic est un bug, pas un
+    désastre.
+    Faire répondre le monde en retard prolonge la métaphore au lieu de la contredire : une
+    bande usée ne ralentit pas votre main, elle répond mollement. Et rien ne casse — les
+    clics restent exacts.
+  - **Ce que les trois couches donnent ensemble** : *une seule modulation, trois sens.*
+    L'oreille l'entend, l'œil la voit sur le titre, la main la sent dans la réponse de la
+    page. Le doute cesse alors d'être attribuable au matériel — aucun casque défectueux ne
+    fait ça aux liens.
   - **Ce que le contrepoint coûte, et qu'il ne faut pas escamoter** : le désastre cesse
     d'être *invisible à une capture d'écran*, ce qui était sa propriété la plus neuve dans ce
     catalogue — aucun des dix-neuf ne l'avait. Elle est échangée contre un visiteur qui
@@ -1659,8 +1679,8 @@ Chaque story est une tranche verticale : elle se démontre seule.
     rien changer à l'infrastructure.
   - **Dépend de** : rien. Les stories 35 et 36 en dépendent, elles.
   - **Périmètre** — dedans : le processeur `AudioWorklet` ; le branchement sur le lecteur ;
-    le contrepoint visuel piloté par la même modulation, et son respect de
-    `prefers-reduced-motion` ; une recette et une règle ; une intensité **fixe** pour cette
+    le contrepoint visuel sur le titre et la réponse retardée au pointeur, tous deux pilotés
+    par la même modulation, et leur respect de `prefers-reduced-motion` ; une recette et une règle ; une intensité **fixe** pour cette
     story ; une sortie de secours pour l'audio, qui n'a pas de signal standard. — dehors :
     lier l'intensité à quoi que ce soit (story 35) ; toute mémoire (story 36).
   - **Les objections à trancher dans la proposal, pas à escamoter** : on dégrade la musique
@@ -2667,3 +2687,21 @@ mesuré ça, et ce chiffre-là n'a pas de dénominateur.
   **Ce que ça résout** : il n'existe pas de `prefers-reduced-motion` pour le son, mais il en
   existe un pour le mouvement. La moitié qui pose un problème d'accessibilité est précisément
   celle qui a un signal standard pour la refuser — qu'aucun des dix-neuf ne lit aujourd'hui.
+
+- 2026-08-19 (trente-deuxième révision) — **Une troisième couche pour la story 33, sur
+  proposition du mainteneur : la main.** L'intention était de ralentir la souris comme la
+  musique.
+  **Mesuré avant d'écrire : aucune API ne permet de changer la vitesse du curseur.** Le seul
+  moyen est `requestPointerLock`, qui exige un geste, masque le vrai curseur, affiche une
+  bannière et capture la souris — disqualifiant pour un désastre : ça ne surprend pas, ça
+  séquestre. Masquer le curseur pour en dessiner un qui traîne est écarté de même, sauf écart
+  minime : les clics atterrissent où est le vrai pointeur, et un curseur qui ment sur le
+  point de clic est un bug.
+  La forme retenue inverse la proposition sans la trahir : **le curseur n'est pas ralenti,
+  c'est la page qui met du temps à le remarquer**. Survols, contrôles, liens répondent en
+  retard et en flottant, par la même modulation. Une bande usée ne ralentit pas la main, elle
+  répond mollement.
+  **Le gain est de composition** : une seule modulation, trois sens. Le doute cesse d'être
+  attribuable au matériel — aucun casque défectueux ne fait ça aux liens. C'était l'objection
+  qui avait fait ajouter le contrepoint visuel à la révision précédente ; elle est maintenant
+  traitée deux fois.
