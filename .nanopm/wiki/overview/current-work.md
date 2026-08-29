@@ -8,19 +8,34 @@ sources: [objectives.md]
 # Plan Brief
 Generated 2026-08-29 · Project: musiqueapproximative · Sources: objectives.md
 
+## Roadmap — NOW (une seule story à la fois)
+
+**Solder les changes en suspens.** Zéro change dans `openspec/changes/` qui ne soit ni
+archivé ni activement travaillé, `openspec validate --specs` vert, avant le 2026-09-15.
+Concrètement : archiver `mesurer-la-compatibilite-php-8-2-et-8-3` avec sa story
+rétroactive, et reprendre ou retirer `borner-les-representations-machine`, gelé depuis le
+2026-08-18.
+
+**NEXT** : le compteur de rythme mensuel (objectif 1 · KR2, et déclencheur de l'anti-goal
+« recruter ») · trancher le sort de l'API Subsonic · dégeler les stories 2 et 3.
+_More detail: `.nanopm/wiki/docs/roadmap.md`_
+
 ## Period
 **T4 2026 (octobre — décembre).** Trois objectifs. Pas de stratégie ni de roadmap écrites
 à ce jour — `/pm-strategy` est l'étape suivante.
 
 ## The objectives
 
-1. ~~**Arrêter la destruction des données des contributeurs.**~~ **Déjà livré** — les
+1. ✅ **Arrêter la destruction des données des contributeurs — atteint**, sauf le compteur
+   de rythme mensuel (KR2, passé en NEXT). La preuve Unicode existe : `/encodage` rapporte
+   2 morceaux hors cp1252, publiés par un contributeur réel. Détail historique :
+   ~~**Déjà livré** — les
    tables sont converties et `encoding: utf8mb4` est posé (`e61b38c`). Il reste deux
    choses : **faire la preuve** (aucun caractère hors cp1252 n'a encore été stocké — 0 sur
    73 174 chaînes de l'extrait du 2026-08-18 ; `/encodage` le rapportera dès qu'un titre
    non-latin sera publié), et **écrire le compteur de rythme mensuel** (morceaux +
    contributeurs distincts), seule pièce manquante. Voir l'Errata dans `objectives.md`.
-2. **Faire tourner le site sur un interpréteur encore soutenu.** La suite est verte sous
+2. ✅ **ATTEINT — la production sert en PHP 8.3.33** depuis le 2026-08-29. Détail : La suite est verte sous
    PHP 8.1 depuis six mois, mais la production sert en `php:7.4.33`. Bascule avant le
    31 déc, zéro dépréciation dans le corps des réponses, verdict documenté.
 3. **Cesser d'envoyer 3,7 Mo à qui ouvre le catalogue.** `/posts` n'est pas borné.
