@@ -57,3 +57,10 @@ tmp/
 # lancé — donc à la racine du dépôt, et non sous `docs/`. Un tel fichier a été
 # committé par mégarde et n'a été rattrapé que par le formateur SVG.
 /modules/
+
+# nanopm : les pages du wiki sont versionnees, pas ce qui se regenere.
+# `search.db` est un index FTS reconstruit a chaque recherche ; `.lock` et
+# `.last-lint` sont des marqueurs d'execution.
+.nanopm/search.db
+.nanopm/wiki/.lock
+.nanopm/wiki/.last-lint
