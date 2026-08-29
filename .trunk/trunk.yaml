@@ -43,6 +43,20 @@ lint:
       paths:
         - .claude/**
         - openspec/**
+    # Meme raison pour le wiki produit : ces pages sont regenerees par les competences
+    # nanopm a chaque passage, et leur structure est imposee par le schema decrit dans
+    # `.nanopm/NANOPM-WIKI.md`. La section « Provenance & assumptions » DOIT reprendre a
+    # l'identique les titres du corps pour qu'on puisse apparier une justification a sa
+    # claim — ce que markdownlint MD024 refuse, et c'est precisement ce qui la rend
+    # lisible. CONTEXT.md porte le gabarit d'entretien en 12 questions, dont l'en-tete
+    # commente declenche MD025 et MD026.
+    # Les reformater serait annule au prochain passage d'une competence.
+    # Comme pour openspec, seuls les linters de forme sont desactives : trufflehog et
+    # git-diff-check restent actifs sur ces chemins.
+    - linters: [markdownlint, prettier]
+      paths:
+        - .nanopm/**
+        - CONTEXT.md
     # Le contrat OpenAPI decrit une API PUBLIQUE et NON AUTHENTIFIEE. Les regles
     # checkov ci-dessous exigent une section `security` et un plafond sur les
     # tableaux ; les satisfaire demanderait de declarer des faits faux :

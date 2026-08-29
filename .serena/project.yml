@@ -113,7 +113,7 @@ added_modes:
 #     - "./subproject1"
 #     - "./subproject2"
 ls_workspace_folders:
-- .
+  - .
 
 # list of additional workspace folder paths for cross-package reference support.
 # Paths can be absolute or relative to the project root.
@@ -174,4 +174,4 @@ activation_command_timeout: 180.0
 # The first language server is the default language and the respective language server will be used as a fallback.
 # Note that when using the JetBrains backend, language servers are not used and this list is correspondingly ignored.
 language_servers:
-- php
+  - php
