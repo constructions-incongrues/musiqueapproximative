@@ -65,6 +65,19 @@
 
 ## 6. Vérification manuelle
 
+> **ARCHIVÉ AVEC TROIS CASES DÉCOCHÉES — 2026-08-29.** L'auteur a confirmé n'avoir pas
+> écouté, et a demandé l'archivage en l'état. Les cases 6.1, 6.10 et 6.11 ne sont donc PAS
+> cochées : une case cochée signifie vérifiée, jamais « probablement bon ».
+>
+> Ce qui reste dû, si quelqu'un veut fermer ce dossier :
+> **6.1** l'usure s'entend-elle entre la 1ʳᵉ et la 10ᵉ écoute · **6.10** le chemin lecture
+> quand `localStorage` est indisponible · **6.11** les deux réglages provisoires
+> (`ageVirtuelParEcouteAns`, `demiVieOubliJours`) tiennent-ils à l'oreille.
+>
+> Repère pour celui qui écoutera : un morceau récent passe de 0,350 à **0,552 vers dix
+> écoutes** et **sature vers dix-neuf**. Si le plafond arrive trop vite, baisser
+> `ageVirtuelParEcouteAns`.
+
 > **Ce qui a été vérifié, et comment.** Les vérifications de LOGIQUE ont été menées dans un
 > navigateur sur `http://localhost:8001`, désastre forcé par `?bande_usee`, en provoquant
 > l'événement `play` de l'élément audio — c'est exactement l'écouteur auquel le comptage est

@@ -1722,7 +1722,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
     exposer la date au désastre
   - **Ajoutée** : 2026-08-19
 
-- [ ] 36. `l-usure-vous-appartient` — le premier désastre qui se souvient
+- [x] 36. `l-usure-vous-appartient` — le premier désastre qui se souvient
   - **Persona servi** : l'auditeur qui revient — donc l'habitué, pas le passant
   - **Segment du parcours** : Consulter une page, plusieurs fois
   - **MoSCoW** : Could — c'est la plus spéculative des trois, et la plus intéressante
