@@ -1762,6 +1762,48 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
   - **Ajoutée** : 2026-08-18
 
+- [ ] 37. `retrouver-un-morceau-poste` — le contributeur retrouve ce qu'il a posté
+  - **Persona servi** : le mélomane fêlé, co-primaire — celui dont dépend l'existence
+    quotidienne du produit
+  - **Segment du parcours** : Retrouver un morceau qu'il a posté — le seul **gap** de son
+    parcours, les deux autres étapes étant supportées
+  - **MoSCoW** : Should. Ce n'est pas un Must : rien ne casse. Mais c'est la seule douleur
+    chiffrée du produit qui n'a pas bougé en six mois.
+  - **Pourquoi elle existe** : `generator.yml` porte `filter: class: false`, donc ni filtre
+    ni recherche dans l'admin — 993 morceaux à parcourir vingt par vingt chez le plus
+    prolifique, soit cinquante pages. Et `actAs: Searchable` n'indexe que `track_author` et
+    `track_title` : le message écrit sous le morceau, seule donnée que le schéma rend
+    obligatoire avec la date et le contributeur, n'est pas cherchable. On peut écrire
+    pourquoi un morceau compte, et ne jamais le retrouver par ce qu'on en a dit.
+  - **Ce qu'elle change** : rien pour l'auditeur, tout pour celui qui alimente le site.
+  - **Ce qui a été trouvé en la cadrant** : le formulaire de filtre EXISTE déjà —
+    `PostFormFilter` est généré et porte tous les widgets nécessaires. Seul `class: false`
+    l'empêchait de servir. Le travail côté admin est de déclarer, pas de construire.
+  - **Ce qui l'a élargie, et pourquoi c'était nécessaire** : `PostTable::search()` boucle sur
+    les résultats et appelle `getOnlinePostById()` sur chacun — une requête par résultat. Ce
+    n'est pas une dette découverte ici : c'est une violation de l'exigence « servir une liste
+    coûte un nombre de requêtes constant », déjà écrite sous `catalogue-morceaux`. Elle entre
+    au périmètre parce que **cette story l'aggrave** : indexer le message multiplie les
+    résultats, donc les requêtes.
+  - **Le piège à ne pas manquer** : ajouter un champ à `Searchable` ne réécrit pas
+    `post_index`, alimenté à la seule écriture d'un Post. Sans reconstruction, la recherche ne
+    trouverait le message que des morceaux postés APRÈS la livraison — un demi-état pire que
+    l'état actuel. D'où une tâche de reconstruction et une procédure écrite, à lancer à la
+    main comme la conversion utf8mb4, mais **dans l'ordre inverse** : le code d'abord.
+  - **Périmètre** — dedans : les filtres d'admin, `body` dans l'index, la reconstruction, le
+    N+1 de `search()`. — dehors : indexer le contributeur (`?c=` sert déjà cette demande, et
+    un nom d'utilisateur dans l'index remonterait sur toute recherche portant sur ce mot) ;
+    paginer l'admin ; le formulaire de publication.
+  - **Ce qui peut l'annuler** : la taille de `post_index` après réindexation. `body` est un
+    `mediumtext`. À mesurer sur copie avant de lancer en production.
+  - **Repriorisation assumée** : « réparer retrouver » était un anti-goal du T4. L'auteur l'a
+    levé le 2026-08-30, sans attendre le déclencheur qui y était écrit.
+  - **Change** : `retrouver-un-morceau-poste`
+  - **Code concerné** : `src/apps/admin/modules/post/config/generator.yml`,
+    `src/config/doctrine/schema.yml`, `src/lib/model/doctrine/PostTable.class.php`,
+    `src/lib/task/`
+  - **Ajoutée** : 2026-08-30
+
 - [x] 34. `hydrater-le-contributeur-en-une-requete` — le catalogue cesse de coûter 8 271 requêtes
   - **Persona servi** : l'auditeur sur le site, l'intégrateur, le mélomane fêlé — tous ceux
     qui attendent une liste

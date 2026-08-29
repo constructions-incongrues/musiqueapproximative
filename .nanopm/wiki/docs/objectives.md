@@ -175,13 +175,22 @@ qui est réellement séduisant.
 de 28 méthodes pendant qu'on change l'interpréteur et l'encodage de la base, c'est
 mélanger deux sources de panne.
 
-**Réparer « retrouver » pour le contributeur (filtre admin, recherche étendue).**
+**~~Réparer « retrouver » pour le contributeur (filtre admin, recherche étendue).~~
+✅ ANTI-GOAL LEVÉ le 2026-08-30.**
 *Pourquoi c'était tentant :* c'est la douleur chiffrée du persona co-primaire, elle est
 immobile depuis six mois, et le filtre admin est **une ligne** de `generator.yml`. Je vous
-l'ai proposé à la question précédente et vous avez choisi de ne pas l'ajouter — c'est noté
-comme votre décision, pas comme un oubli.
+l'ai proposé et vous aviez choisi de ne pas l'ajouter — c'était noté comme votre décision,
+pas comme un oubli.
 *Revisit when :* T1 2027, ou plus tôt si un contributeur signale un doublon publié faute
-d'avoir retrouvé son morceau. Ce signal-là vaut une repriorisation immédiate.
+d'avoir retrouvé son morceau.
+
+> **La levée.** Le déclencheur écrit n'a pas été attendu : l'auteur a demandé ce travail le
+> 2026-08-30. La règle posée ici était *« la réponse est non sans conversation de
+> repriorisation »* — la conversation a eu lieu, et elle a tranché pour. Change
+> `retrouver-un-morceau-poste`.
+>
+> L'anti-goal n'est pas effacé mais barré : il a tenu six mois et son argument reste lisible.
+> Ce qui a changé est la décision, pas le raisonnement.
 
 **Recruter de nouveaux contributeurs.**
 *Pourquoi c'était tentant :* le renouvellement est mort — 2 nouveaux par an depuis 2024

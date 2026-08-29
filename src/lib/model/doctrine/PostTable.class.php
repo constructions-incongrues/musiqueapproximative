@@ -233,20 +233,69 @@ class PostTable extends Doctrine_Table
     return $this->buildOnlinePostsQuery($contributor, $count)->count();
   }
 
+  /**
+   * Resultats de recherche, hydrates en UNE requete.
+   *
+   * POURQUOI CE N'EST PAS UNE BOUCLE
+   *
+   * La version precedente appelait `getOnlinePostById()` sur chaque ligne d'index : une
+   * requete par resultat. C'etait deja une violation de l'exigence « servir une liste coute
+   * un nombre de requetes constant » — une recherche rend une liste de morceaux, rien ne
+   * justifie qu'elle coute plus cher parce qu'elle a ete obtenue autrement.
+   *
+   * L'indexation du message a rendu la correction obligatoire plutot que souhaitable : elle
+   * multiplie les resultats, donc les requetes.
+   *
+   * L'ORDRE DE PERTINENCE EST CELUI DE L'INDEX
+   *
+   * `parent::search()` rend les identifiants classes par pertinence. `whereIn` n'en preserve
+   * aucun ordre. On reordonne donc en PHP, sur des resultats deja bornes par les termes,
+   * plutot que d'imposer un `FIELD(id, ...)` — une construction propre a MySQL qui n'a pas
+   * sa place dans une couche modele.
+   *
+   * `buildOnlinePostsQuery()` porte deja la jointure `UserProfile` : la recherche paie le
+   * meme cout constant que n'importe quelle liste, sans rien ajouter.
+   */
   public function search($query)
   {
-    $results = parent::search($query);
-    $posts = array();
-    foreach ($results as $result)
+    $resultats = parent::search($query);
+
+    $ids = array();
+    foreach ($resultats as $resultat)
     {
-      $post = $this->getOnlinePostById($result['id']);
-      if ($post)
+      $ids[] = $resultat['id'];
+    }
+
+    if (!$ids)
+    {
+      // `whereIn` sur un tableau vide produit un SQL invalide en Doctrine 1. Une recherche
+      // sans resultat ne doit couter aucune requete.
+      return array();
+    }
+
+    $morceaux = $this->buildOnlinePostsQuery()
+      ->andWhereIn('p.id', $ids)
+      ->execute();
+
+    // Indexer par identifiant, puis relire dans l'ordre de l'index. Un morceau rendu par la
+    // recherche mais non publiable n'est pas dans `$morceaux` : il disparait ici, ce qui est
+    // le comportement attendu.
+    $parId = array();
+    foreach ($morceaux as $morceau)
+    {
+      $parId[$morceau->getId()] = $morceau;
+    }
+
+    $ordonnes = array();
+    foreach ($ids as $id)
+    {
+      if (isset($parId[$id]))
       {
-        $posts[] = $post;
+        $ordonnes[] = $parId[$id];
       }
     }
 
-    return $posts;
+    return $ordonnes;
   }
 
   /**
