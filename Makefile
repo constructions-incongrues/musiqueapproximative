@@ -55,7 +55,7 @@ test-init: ## Prépare la base de test — PROFILE=musiqueapproximative.localhos
 		exit 1; \
 	}
 	docker-compose exec -T db mysql -u$(DATABASE_USER) -p$(DATABASE_PASSWORD) -e "CREATE DATABASE IF NOT EXISTS $(DATABASE_NAME_TEST) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-	docker-compose exec -T php php symfony doctrine:insert-sql --env=test
+	docker-compose exec -T php php symfony musiqueapproximative:build-test-schema --env=test
 
 logs:
 	docker-compose logs -f

@@ -5,22 +5,56 @@ Le projet tourne en PHP 7.4, hors support depuis novembre 2022. Cette page dit o
 la montée en PHP 8 : ce qui a été mesuré, quand, avec quoi — et surtout ce que la mesure
 ne prouve pas.
 
+== Ce que l'hébergement peut servir
+
+Un verdict rendu sur une version que l'hébergement ne propose pas est un verdict sans
+objet : il donne le sentiment d'une porte ouverte sur un mur. Cet inventaire vient donc
+avant le verdict.
+
+[cols="1,3"]
+|===
+| Relevé le | 2026-08-29, sur `panel.pastis-hosting.net` (Plesk Obsidian 18.0.65, Ubuntu 24.04)
+| Versions proposées | *7.4, 8.2, 8.3* — et rien d'autre. `apt-cache search ^plesk-php` ne connaît que `plesk-php74`, `plesk-php82`, `plesk-php83`.
+| Version servie | 7.4.33, par le gestionnaire `plesk-php74-fpm-dedicated`
+| *PHP 8.1 est hors d'atteinte* | Ni installée, ni installable. Or c'est la seule version sur laquelle portait le verdict du 2026-08-19. La cible mesurée n'existait pas.
+|===
+
+Cet inventaire dépend de l'hébergeur et changera sans prévenir : c'est pourquoi il porte sa
+date. Le reproduire tient en deux commandes — `ls -d /opt/plesk/php/*/` et
+`apt-cache search ^plesk-php`.
+
 == Verdict
 
 [cols="1,3"]
 |===
-| Verdict | *Atteignable.* La suite complète passe sous PHP 8.1. Une tâche de maintenance échoue — voir plus bas, elle ne sert aucune page.
-| Mesuré le | 2026-08-19
-| Interpréteurs | PHP 7.4.33 (référence, production) et PHP 8.1.34
+| Verdict | *Atteignable, et sur les versions qu'on peut réellement servir.* La suite complète passe sous 8.2 et sous 8.3, sans une seule dépréciation.
+| Mesuré le | 2026-08-29 pour 8.2 et 8.3 ; 2026-08-19 pour 8.1
+| Interpréteurs | PHP 7.4.33 (production), 8.1.34 (témoin), *8.2.33* et *8.3.33*
 | Base | MariaDB 10.11, la version de production
-| Résultat | 277 tests unitaires, 393 fonctionnels frontend, 4 fonctionnels admin — verts sur les deux versions
+| Résultat | 290 unitaires, 402 fonctionnels frontend, 4 fonctionnels admin — *verts sur 8.2 comme sur 8.3*
+| Diagnostics émis | *Aucune dépréciation, aucun avertissement, aucune erreur fatale.* Seules 28 `Notice: tempnam()` remontent, et elles viennent de Lime — le cadre de test, jamais servi à un visiteur.
 |===
+
+=== Le risque annoncé ne s'est pas matérialisé, et on sait pourquoi
+
+La version précédente de cette page avertissait que les dépréciations de 8.2 sur les
+propriétés dynamiques deviendraient « un sujet à part entière », Doctrine 1 en faisant un
+usage massif. *C'est faux, et pour une raison vérifiable.*
+
+La dépréciation de PHP 8.2 ne s'applique pas aux classes qui déclarent `__set()`. Or
+`Doctrine_Access::__set()` existe — `lib/Doctrine/Access.php`, ligne 58 — et
+`Doctrine_Record` en hérite. Tous les enregistrements Doctrine sont donc exemptés *par
+construction*, pas par chance. Là où l'exemption ne pouvait pas jouer, le fork
+`lexpress/doctrine1` a déjà posé l'attribut : `#[\AllowDynamicProperties]` sur
+`lib/Doctrine/Import/Builder.php`.
+
+Le travail avait été fait en amont. L'avertissement était prudent, il n'était pas fondé.
 
 [NOTE]
 ====
 Ces chiffres datent du jour de la mesure et vieilliront. Ce qui fait foi est la matrice de
-`.github/workflows/tests.yml` : si elle est verte, la suite passe sous les deux versions,
-quel que soit le nombre de tests qu'elle porte alors.
+`.github/workflows/tests.yml` : si elle est verte, la suite passe sous les *quatre*
+versions, quel que soit le nombre de tests qu'elle porte alors.
 
 La remarque n'est pas de principe. La ligne ci-dessus a annoncé 269 unitaires pendant
 quelques heures alors que le change qui l'écrivait en avait ajouté 8 — dans la même
@@ -28,8 +62,17 @@ journée où le plan de release consignait, pour la quatrième fois, qu'un packe
 par ses chiffres et non par ses phrases.
 ====
 
-La montée elle-même n'a pas été faite : ni la version du conteneur, ni la contrainte
-`"php": "^7.4"` de `src/composer.json` n'ont changé.
+La contrainte a été élargie le 2026-08-29 : `src/composer.json` déclare désormais
+`"php": "^7.4 || ^8.2"`, et le drapeau `--ignore-platform-req` ne subsiste que pour la
+branche 8.1 de la matrice. *L'ordre a compté* — le drapeau est tombé pour 8.2 et 8.3 avant
+que la contrainte s'élargisse, faute de quoi rien n'aurait vérifié la déclaration.
+
+8.1 n'est pas déclarée supportée, et ne le sera pas : on ne déclare pas une version que
+l'hébergement ne peut pas servir. Elle reste dans la matrice comme *témoin* — si 8.2 casse
+un jour et que 8.1 passe, le défaut est daté.
+
+*La bascule de la production reste à faire.* Le conteneur de développement est en 7.4.33 et
+le gestionnaire Plesk aussi.
 
 Cette contrainte est *le seul verrou déclaré de toute la chaîne* — chaque dépendance
 annonce déjà PHP 8 de son côté. Elle suffit à faire refuser `composer install` sous 8.1,
@@ -103,7 +146,7 @@ formats `max`, `rss` et `xspf` étaient touchés de même.
 Le défaut d'origine est plus ancien que PHP 8 — filtrer un désastre sur un contributeur
 nul n'a jamais eu de sens. Seul PHP 8 l'a rendu visible.
 
-== Une tâche de maintenance qui, elle, ne passe pas
+== Une tâche de maintenance qui ne passait pas — corrigée le 2026-08-29
 
 Le verdict porte sur l'application. Il ne s'étend pas à tout l'outillage, et la matrice
 d'intégration continue l'a démontré dès sa première exécution.
@@ -131,8 +174,24 @@ continue asserte donc le *résultat* — la présence effective des tables — p
 code de sortie de la tâche. Tolérer le code sans vérifier le schéma laisserait passer une
 base réellement incomplète.
 
-*C'est le premier élément connu à corriger avant une migration réelle*, et il ne concerne
-aucune page servie aux visiteurs.
+C'était *le premier élément connu à corriger avant une migration réelle*. Il l'est.
+
+`musiqueapproximative:build-test-schema` — sous `src/lib/task/` — enveloppe désormais la
+tâche de Doctrine : elle exécute le travail, ne tolère que l'exception « There is no active
+transaction », et *vérifie la présence effective des tables avant de rendre 0*. Toute autre
+erreur est propagée, et un schéma réellement incomplet fait échouer, quelle que soit la
+version de PHP.
+
+On ne corrige pas Doctrine lui-même : `src/vendor` est ignoré par git et réinstallé à
+chaque `composer install`, un correctif y serait perdu au premier déploiement.
+
+Le contournement qui vivait dans `tests.yml` a disparu au profit de cette tâche. Il ne
+couvrait qu'un poste de travail sur deux : `make test-init` lançait la même tâche sans
+garde, et un développeur voyait échouer sous PHP 8 ce que l'intégration continue voyait
+réussir. Les deux appelants ont maintenant le même comportement.
+
+Le garde a été éprouvé par l'échec avant d'être déclaré bon, comme la matrice l'avait été :
+table `post` retirée à la main, la tâche rend 1 en la nommant.
 
 == Ce que ce verdict ne prouve pas
 
@@ -145,9 +204,12 @@ Un « la suite passe » nu se lit comme « la migration est sûre ». Il ne l'é
   nombre a changé de sémantique en 8.0 : `0 == "foo"` valait `true`, il vaut `false`. Cela
   se manifeste par un résultat faux, jamais par une erreur. Aucune suite verte ne les
   exclut.
-* *La mesure porte sur PHP 8.1.* Elle ne dit rien de 8.3 ni de 8.4, où les dépréciations
-  de 8.2 sur les propriétés dynamiques — que Doctrine 1 emploie massivement — deviendront
-  un sujet à part entière.
+* *La mesure porte sur 7.4, 8.1, 8.2 et 8.3.* Elle ne dit rien de 8.4, que cet hébergement
+  ne propose pas — le mesurer serait mesurer ce qu'on ne peut pas servir.
+* *Une suite verte ne prouve pas l'absence de dépréciation.* Ici les deux ont été vérifiées
+  séparément : la suite passe, ET aucune ligne `Deprecated`, `Warning` ou `Fatal error`
+  n'est émise sous 8.2 ni sous 8.3. Le décompte est ce qui donne son poids au verdict ; le
+  vert seul ne l'aurait pas donné.
 
 == Deux fausses pistes, à ne pas reparcourir
 
