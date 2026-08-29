@@ -199,6 +199,16 @@ Le système SHALL exposer la liste des morceaux publiables, filtrable par contri
 interrogeable par termes de recherche. Le point d'entrée de la recherche SHALL être
 présent et utilisable sur toute page du site, quelle que soit la largeur d'affichage.
 
+La recherche par termes SHALL porter sur l'artiste, le titre **et le message écrit sous le
+morceau**. Ce message est la seule donnée que le schéma rend obligatoire avec la date de
+publication et le contributeur : il porte la raison pour laquelle un morceau a été posté.
+Ne pas le chercher, c'est laisser écrire pourquoi un morceau compte sans permettre de le
+retrouver par ce qu'on en a dit.
+
+La recherche par termes NE SHALL PAS porter sur l'identité du contributeur. Le paramètre
+`c` sert déjà cette demande, qui est d'une autre nature : un nom de contributeur versé dans
+l'index remonterait sur toute recherche portant sur ce mot, quel que soit le morceau.
+
 #### Scénario : Liste complète
 
 - **QUAND** un visiteur demande `/posts`
@@ -215,6 +225,18 @@ présent et utilisable sur toute page du site, quelle que soit la largeur d'affi
 - **QUAND** le paramètre `q` accompagne la demande
 - **ALORS** seuls les morceaux publiables correspondant aux termes sont listés
 - **ET** le titre de la page annonce le nombre de résultats et les termes recherchés
+
+#### Scénario : Recherche portant sur le message
+
+- **QUAND** les termes recherchés figurent dans le message d'un morceau, mais ni dans son
+  titre ni dans son artiste
+- **ALORS** ce morceau figure dans les résultats
+
+#### Scénario : Le nom d'un contributeur n'est pas un terme de recherche
+
+- **QUAND** les termes recherchés correspondent au nom d'un contributeur, sans figurer dans
+  l'artiste, le titre ni le message d'un morceau
+- **ALORS** ce morceau ne figure pas dans les résultats
 
 #### Scénario : Résultats de recherche non publiables
 
@@ -249,6 +271,10 @@ présent et utilisable sur toute page du site, quelle que soit la largeur d'affi
 Le coût en requêtes de base pour servir une liste de morceaux SHALL être indépendant du
 nombre de morceaux servis.
 
+Cette exigence SHALL valoir pour **les résultats d'une recherche** comme pour une liste
+demandée sans termes. Une recherche rend une liste de morceaux ; rien ne justifie qu'elle
+coûte plus cher parce qu'elle a été obtenue autrement.
+
 Aucune donnée de contributeur nécessaire au rendu d'une liste SHALL être lue morceau par
 morceau : ce que le rendu lit, la requête de liste SHALL l'avoir chargé.
 
@@ -262,6 +288,12 @@ accès ajouté dans un gabarit, sans que rien ne le signale.
 - **ALORS** le nombre de requêtes de base émises ne dépend pas du nombre de morceaux qu'elle
   contient
 - **ET** demander deux fois plus de morceaux n'émet pas deux fois plus de requêtes
+
+#### Scénario : Le coût d'une recherche ne suit pas le nombre de résultats
+
+- **QUAND** une recherche par termes rend des résultats
+- **ALORS** le nombre de requêtes de base émises ne dépend pas du nombre de résultats
+- **ET** une recherche rendant dix fois plus de morceaux n'émet pas dix fois plus de requêtes
 
 #### Scénario : Le contributeur est chargé avec la liste
 

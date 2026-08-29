@@ -120,7 +120,10 @@ production. Rien ici ne s'écoute.
       « No result » affiché, et la restriction reste dans le champ (`value="…"` présent),
       donc corrigeable sans ressaisie.* Filtrer sur quelque chose d'inexistant. *Attendu* : la
       liste est vide, le dit, et la restriction reste affichée pour être corrigée.
-- [ ] 6.4 **La recherche publique trouve par le message, sur un morceau ANCIEN.** Après la
+- [x] 6.4 **La recherche publique trouve par le message, sur un morceau ANCIEN.** *Vérifié
+      en production le 2026-08-30, après réindexation (37 804 → 144 627 lignes, 7,0 → 24,1 Mo) :
+      `?q=krautrock` remonte deux morceaux publiés en **2016** et en **2022**, dont ni le titre
+      ni l'artiste ne portent le terme.* Original : Après la
       réindexation en production. *Attendu* : un morceau de 2012 remonte sur un mot présent
       seulement dans son message.
 - [x] 6.5 **Le nom d'un contributeur ne remonte rien *par ce seul fait*.** *Vérifié sur

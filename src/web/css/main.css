@@ -1,0 +1,88 @@
+/*
+ * Feuille de style de l'administration.
+ *
+ * POURQUOI CE FICHIER EXISTE
+ *
+ * `apps/admin/config/view.yml` declare `stylesheets: [main.css]` depuis toujours, et ce
+ * fichier N'EXISTAIT PAS : l'admin demandait `/css/main.css` et recevait un 404. Tant
+ * qu'aucun module n'affichait de filtres, cela ne se voyait pas.
+ *
+ * LE DEFAUT QU'IL CORRIGE
+ *
+ * Les deux modules d'admin portent `css: nothing` dans leur `generator.yml`, ce qui
+ * remplace la feuille du generateur par un `/css/nothing.css` inexistant. On perd ainsi
+ * TOUTES les regles de mise en page du generateur — y compris celle qui borne la largeur
+ * de la barre laterale.
+ *
+ * Or `sfAdminDashPlugin/css/default.css` pose `#sf_admin_bar { float: right }` SANS
+ * largeur. Le panneau de filtres prend donc la largeur naturelle de son contenu — mesure
+ * a 1440 px : 996 px — et la liste, qui n'est pas flottante, s'etale sur toute la largeur
+ * et coule DESSOUS. Les deux se superposent.
+ *
+ * Le defaut n'apparait qu'en dessous d'environ 1600 px de large : au-dela, la barre tient
+ * a cote de la liste par chance, pas par regle.
+ */
+
+/* Borner la barre laterale. C'est la regle que la feuille du generateur portait et que
+ * `css: nothing` a emportee. Sans largeur, un flottant prend celle de son contenu. */
+#sf_admin_bar {
+  width: 24em;
+  max-width: 40%;
+  box-sizing: border-box;
+  padding-left: 1em;
+}
+
+/* Etablir un contexte de formatage sur la liste : elle se place A COTE du flottant au lieu
+ * de couler dessous. C'est ce qui supprime la superposition, pas la largeur seule. */
+#sf_admin_container .sf_admin_list {
+  overflow: hidden;
+}
+
+/* Le panneau de filtres et sa table doivent tenir dans la barre, sans la forcer. */
+#sf_admin_bar .sf_admin_filter,
+#sf_admin_bar .sf_admin_filter table {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* `default.css` pose `#sf_admin_container label { float: left; width: 11em }`. Dans une
+ * barre de 24em, un label de 11em ne laisse pas de quoi saisir : on empile. */
+#sf_admin_bar .sf_admin_filter label {
+  float: none;
+  width: auto;
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#sf_admin_bar .sf_admin_filter input[type="text"],
+#sf_admin_bar .sf_admin_filter select {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Les aides de saisie sont de la prose : elles ne doivent pas elargir la barre. */
+#sf_admin_bar .sf_admin_filter .help,
+#sf_admin_bar .sf_admin_filter .sf_admin_filter_field .help {
+  display: block;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: 0.85em;
+}
+
+/* La liste peut etre plus large que la place restante — huit ans de titres, dont certains
+ * tres longs. Elle defile dans son propre cadre plutot que de pousser la page. */
+#sf_admin_container .sf_admin_list {
+  overflow-x: auto;
+}
+
+/* En dessous de 1100 px, deux colonnes n'ont plus de sens : la barre passe au-dessus de la
+ * liste, sur toute la largeur. */
+@media (max-width: 1100px) {
+  #sf_admin_bar {
+    float: none;
+    width: 100%;
+    max-width: none;
+    padding-left: 0;
+  }
+}

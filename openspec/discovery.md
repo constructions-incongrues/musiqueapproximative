@@ -1762,7 +1762,7 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
   - **Ajoutée** : 2026-08-18
 
-- [ ] 37. `retrouver-un-morceau-poste` — le contributeur retrouve ce qu'il a posté
+- [x] 37. `retrouver-un-morceau-poste` — le contributeur retrouve ce qu'il a posté
   - **Persona servi** : le mélomane fêlé, co-primaire — celui dont dépend l'existence
     quotidienne du produit
   - **Segment du parcours** : Retrouver un morceau qu'il a posté — le seul **gap** de son
@@ -1798,7 +1798,9 @@ Chaque story est une tranche verticale : elle se démontre seule.
     `mediumtext`. À mesurer sur copie avant de lancer en production.
   - **Repriorisation assumée** : « réparer retrouver » était un anti-goal du T4. L'auteur l'a
     levé le 2026-08-30, sans attendre le déclencheur qui y était écrit.
-  - **Change** : `retrouver-un-morceau-poste`
+  - **Change** : `2026-08-30-retrouver-un-morceau-poste` (archivé) — **livrée le 2026-08-30**
+  - **Mesuré en production** : `post_index` 37 804 → 144 627 lignes, 7,0 → 24,1 Mo. Bruit
+    contenu : `musique` 3,4 % du catalogue, `album` 2,5 %, `disque` 0,5 %.
   - **Code concerné** : `src/apps/admin/modules/post/config/generator.yml`,
     `src/config/doctrine/schema.yml`, `src/lib/model/doctrine/PostTable.class.php`,
     `src/lib/task/`

@@ -56,6 +56,24 @@ est raisonnable.
 *Le verdict est bon* : vingt et un mégaoctets d'index pour dix-huit ans de catalogue. La
 mesure qui pouvait faire renoncer à ce travail ne le fait pas.
 
+.Reconstruction menée en PRODUCTION le 2026-08-30, catalogue de 8 228 morceaux
+[cols="1,1,1"]
+|===
+| | lignes | taille
+
+| avant | 37 804 | 7,0 Mo
+| après | *144 627* | *24,1 Mo*
+|===
+
+La production a confirmé la copie de dev à moins de 0,2 % près sur le nombre de lignes.
+Durée : quelques minutes, par lots de 200, sans interruption de service — `post_index` est
+une table dérivée, aucune donnée de morceau n'est touchée.
+
+*Vérifié après coup* : une recherche sur `krautrock` remonte deux morceaux publiés en 2016
+et en 2022, dont ni le titre ni l'artiste ne contiennent le terme. C'est la preuve que la
+reconstruction a porté sur le catalogue existant, et pas seulement sur les morceaux
+récents — la seule chose que cette page avait besoin d'établir.
+
 == Lancer
 
 [IMPORTANT]
