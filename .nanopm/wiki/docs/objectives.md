@@ -96,7 +96,23 @@ arrive naturellement vu ce que la bande écoute. Il n'y a rien à construire : i
 regarder `/encodage` et à cesser de le supposer.
 
 
-## Objective 2: Faire tourner le site sur un interpréteur encore soutenu
+## Objective 2: Faire tourner le site sur un interpréteur encore soutenu — ⚠️ cible corrigée le 2026-08-29
+
+> **La cible nommée ici, PHP 8.1, n'existe pas sur l'hébergement.** Relevé du 2026-08-29 sur
+> `panel.pastis-hosting.net` : Plesk ne propose que 7.4, 8.2 et 8.3, et `plesk-php81` n'est
+> pas même installable. J'avais écrit cet objectif depuis le verdict de l'audit sans vérifier
+> que sa cible était servable — c'est la seconde fois dans ce document qu'un objectif est
+> écrit sans regarder l'état réel, après l'errata Unicode ci-dessus.
+>
+> **Ce que la mesure a donné depuis** : 8.2 et 8.3 passent la suite complète (696 tests),
+> **sans une seule dépréciation**. Le risque annoncé — les propriétés dynamiques de
+> Doctrine 1 — ne se matérialise pas : la dépréciation 8.2 épargne les classes déclarant
+> `__set()`, et `Doctrine_Access` en déclare un. La contrainte `composer.json` a été
+> élargie à `^7.4 || ^8.2`.
+>
+> **Ce qui reste** : basculer le gestionnaire Plesk sur 8.2 ou 8.3. La cible se choisit
+> maintenant avec le chiffre en main, ce qui n'était pas le cas quand cet objectif a été
+> écrit.
 
 *La suite est verte sous PHP 8.1 depuis six mois et la CI le vérifie à chaque exécution
 (`tests.yml`, matrice 7.4 / 8.1). Mais la production sert toujours en `php:7.4.33`
