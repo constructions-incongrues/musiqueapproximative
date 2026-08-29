@@ -1,16 +1,16 @@
 generator:
   class: sfDoctrineGenerator
   param:
-    model_class:           Post
-    theme:                 admin
+    model_class: Post
+    theme: admin
     non_verbose_templates: true
-    with_show:             false
-    singular:              ~
-    plural:                ~
-    route_prefix:          post
-    with_doctrine_route:   true
-    actions_base_class:    sfActions
-    css:                   nothing
+    with_show: false
+    singular: ~
+    plural: ~
+    route_prefix: post
+    with_doctrine_route: true
+    actions_base_class: sfActions
+    css: nothing
 
     config:
       actions: ~
@@ -37,20 +37,32 @@ generator:
           help: "Éventuel lien permettant d'acheter les productions de l'artiste sus-mentionné"
       list:
         display: [=track_title, track_author, publish_on, is_online]
-      filter: 
-        class: false
-      form: 
-        display: 
+      filter:
+        # Le formulaire existait deja : `PostFormFilter` est genere et porte des widgets
+        # pour tous ces champs. Seul `class: false` l'empechait de servir.
+        #
+        # Sans lui, retrouver un morceau ancien exige de faire defiler la liste page par
+        # page : chez le contributeur le plus prolifique, 993 morceaux a vingt par page.
+        # Le mecanisme punissait exactement les contributeurs les plus fideles.
+        #
+        # `contributor_id` n'est PAS declare : `buildQuery()` restreint deja la liste aux
+        # morceaux du contributeur, sauf pour les detenteurs de `EditOthersPosts`. Pour tous
+        # les autres, ce filtre ne pourrait matcher qu'eux-memes — une commande sans effet
+        # apprend a ignorer les commandes.
+        display: [track_title, track_author, body, publish_on, is_online]
+      form:
+        display:
           Track: [body, track_author, track_title, track_filename]
           Support: [buy_url]
           Publication: [publish_on, is_unique, is_online]
       edit:
-        display: 
+        display:
           Track: [body, track_author, track_title, track_filename]
           Support: [buy_url]
           Publication: [publish_on, is_online]
       new:
-        display: 
-          Track: [body, _body_preview, track_author, track_title, track_filename]
+        display:
+          Track:
+            [body, _body_preview, track_author, track_title, track_filename]
           Support: [buy_url]
-          Publication: [publish_on, is_unique, is_online]      
+          Publication: [publish_on, is_unique, is_online]

@@ -1,0 +1,78 @@
+= Reconstruction de l'index de recherche
+:navtitle: Index de recherche
+
+Ajouter un champ à `actAs: Searchable` ne réécrit **rien**. Cette page dit pourquoi, et
+comment reconstruire `post_index` pour le catalogue déjà publié.
+
+== Pourquoi c'est un geste séparé
+
+`post_index` n'est alimenté qu'**à l'écriture d'un `Post`**. Déclarer un champ indexable
+change ce qui sera écrit la prochaine fois ; cela ne touche pas les 8 100 morceaux déjà
+publiés.
+
+Sans reconstruction, la recherche trouve le nouveau champ **uniquement sur les morceaux
+postés après la livraison**. C'est un demi-état pire que l'état précédent : les résultats
+dépendent alors de la date de publication d'un morceau, et rien sur le site ne le dit.
+
+== L'ordre des gestes, qui est une contrainte
+
+[IMPORTANT]
+====
+*Le code part d'abord, la reconstruction suit.*
+
+C'est l'inverse de l'ordre de la migration utf8mb4, et pour une raison opposée : là-bas
+l'encodage de connexion devait attendre la conversion des tables ; ici un index reconstruit
+**avant** que le champ soit déclaré indexable ne contiendrait pas ce champ, et le travail
+serait à refaire.
+====
+
+Le déploiement n'exécute aucune migration — Plesk tire `main`, un point c'est tout. La
+reconstruction se lance donc à la main, par le détenteur des accès.
+
+== Mesurer avant
+
+`body` est un `mediumtext` ; les titres et les artistes sont des chaînes courtes. Indexer
+les messages peut produire un nombre de lignes sans commune mesure avec l'existant.
+
+[source,bash]
+----
+php symfony musiqueapproximative:reconstruire-index-recherche --mesurer-seulement --env=prod
+----
+
+Elle rend le nombre de lignes et les octets occupés, sans rien modifier. **Noter les deux
+chiffres avant de lancer la reconstruction** : ils sont ce qui permettra de dire si le coût
+est raisonnable, et c'est la seule mesure qui peut faire renoncer.
+
+== Lancer
+
+[source,bash]
+----
+php symfony musiqueapproximative:reconstruire-index-recherche --env=prod
+----
+
+La tâche traite les morceaux par lots de 200 et rend compte de son avancement.
+
+Elle est **rejouable et interruptible** : elle n'a pas d'état propre, chaque morceau
+réindexé écrase ses propres lignes. L'arrêter au milieu laisse une partie du catalogue
+réindexée et le reste tel quel ; la relancer termine le travail. Deux exécutions complètes
+donnent le même index.
+
+Un morceau posté *pendant* la reconstruction peut être manqué selon le moment. Relancer la
+tâche après coup ne coûte que du temps.
+
+== Après
+
+. Comparer la taille à celle relevée avant.
+. Sur le site, chercher un mot présent **seulement dans le message** d'un morceau ancien.
+  Le morceau doit remonter. C'est la seule vérification qui prouve que la reconstruction a
+  porté sur le catalogue existant et pas seulement sur les morceaux récents.
+. Vérifier qu'un nom de contributeur ne remonte rien par lui-même — il n'est pas indexé,
+  délibérément.
+
+== Retour en arrière
+
+Retirer le champ de `actAs: Searchable`, régénérer les modèles, relancer la reconstruction.
+L'index redevient ce qu'il était.
+
+Aucune donnée de morceau n'est touchée à aucun moment : `post_index` est **dérivé**, il se
+reconstruit intégralement depuis les `Post`.

@@ -5,7 +5,20 @@ Post:
       fields: [track_author, track_title]
       canUpdate: true
     Searchable:
-      fields: [track_author, track_title]
+      # `body` porte la raison pour laquelle un morceau a ete poste. C'est la seule donnee
+      # que ce schema rend obligatoire avec `publish_on` et le contributeur : ne pas la
+      # chercher, c'est laisser ecrire pourquoi un morceau compte sans permettre de le
+      # retrouver par ce qu'on en a dit.
+      #
+      # Le contributeur n'y entre PAS, et c'est delibere : `/posts?c=<username>` sert deja
+      # cette demande. Un nom d'utilisateur verse dans l'index remonterait sur toute
+      # recherche portant sur ce mot, quel que soit le morceau.
+      #
+      # ATTENTION : ajouter un champ ici ne reecrit pas `post_index`, qui n'est alimente
+      # qu'a l'ecriture d'un Post. Les morceaux deja publies restent indexes sans leur
+      # message tant que la reconstruction n'a pas ete lancee. Voir
+      # docs/modules/ROOT/pages/reconstruction-index-recherche.adoc.
+      fields: [track_author, track_title, body]
   columns:
     id:
       type: integer
