@@ -44,7 +44,16 @@
    * STANDARD POUR REFUSER UNE ALTÉRATION SONORE. Sans cette échappatoire, ce serait le seul
    * désastre du catalogue auquel on ne peut pas échapper.
    *
-   * Documentée dans docs/modules/ROOT/pages/desastres.adoc.
+   * CE RETOUR DOIT RESTER AVANT TOUTE LECTURE OU ÉCRITURE DE LA MÉMOIRE D'ÉCOUTE.
+   *
+   * Ce n'est pas une commodité d'écriture, c'est une exigence : un visiteur qui refuse le
+   * désastre n'a pas à voir son écoute enregistrée pour autant, et retrouverait sinon, en le
+   * réactivant, une usure accumulée pendant qu'il l'avait refusé. Déplacer ce bloc plus bas
+   * romprait la spécification sans qu'aucun test ne le dise — la suite est en PHP et ne
+   * traverse pas `localStorage`.
+   *
+   * Documentée dans docs/modules/ROOT/pages/desastres.adoc, dans le README de cette recette,
+   * et — pour que le visiteur puisse la trouver — dans le pied de page du site.
    */
   if (/[?&]sans-desastre(=|&|$)/.test(window.location.search)) {
     console.log(
@@ -68,10 +77,181 @@
     );
   }
 
-  // ------------------------------------------------------------ l'age du morceau
+  // ------------------------------------------------------------ la memoire de l'ecoute
 
   /**
-   * Intensite de l'usure, deduite de l'age du morceau.
+   * L'usure que VOUS avez produite.
+   *
+   * Le desastre comptait l'age du morceau ; il compte desormais aussi ce que ce navigateur
+   * lui a fait subir. C'est la premiere memoire du catalogue : dix-huit autres recettes
+   * existent, aucune ne se souvient de quoi que ce soit.
+   *
+   * CE QU'ELLE N'EST PAS
+   *
+   * Rien ne quitte le navigateur : aucune requete, aucun identifiant, aucune correlation
+   * entre appareils. Le site ne sait pas que vous avez use la bande, et ne peut pas le
+   * savoir — la capacite `desastres` exige qu'une page mise en cache serve un corps
+   * identique a chaque requete, ce que `desastreInvarianceTest` verifie. Une usure calculee
+   * au service romprait ce test.
+   *
+   * L'ECOUTE VIEILLIT LE MORCEAU
+   *
+   * L'usure ne s'ajoute pas a l'intensite : elle s'ajoute a l'AGE, en jours virtuels, avant
+   * la courbe. `intensite` est un AudioParam borne a [0, 1] ou l'age sature deja pour un
+   * morceau de dix-huit ans — il n'y avait aucune marge au-dessus. Verser l'usure dans
+   * l'age donne le plafond gratuitement, par le `min(1, ...)` deja present, sans toucher au
+   * plancher ni a la courbe, tous deux mesures sur le catalogue reel.
+   */
+  var CLE_USURE = "desastres:" + NOM + ":usure";
+
+  // En dessous d'un jour virtuel, une entree ne change plus rien au rendu : elle est purgee
+  // a la prochaine ecriture. Le stockage se borne ainsi au repertoire reellement ecoute.
+  var SEUIL_OUBLI_JOURS = 1;
+
+  var ageVirtuelParEcouteJours =
+    (typeof options.ageVirtuelParEcouteAns === "number"
+      ? options.ageVirtuelParEcouteAns
+      : 1) * 365.25;
+
+  var demiVieOubliJours =
+    typeof options.demiVieOubliJours === "number"
+      ? options.demiVieOubliJours
+      : 30;
+
+  /**
+   * L'adresse d'un morceau est `/post/:slug`. Pas de balise a poser dans le gabarit,
+   * contrairement a la date de publication qu'avait exigee l'usure d'age.
+   */
+  function slugDuMorceau() {
+    var trouve = /\/post\/([^/?#]+)/.exec(window.location.pathname);
+
+    return trouve ? decodeURIComponent(trouve[1]) : null;
+  }
+
+  /**
+   * Un desastre est un ornement : un stockage indisponible — navigation privee stricte,
+   * quota atteint, stockage desactive — ne doit jamais empecher d'ecouter. Tout acces est
+   * enveloppe, et l'echec retombe sur l'usure d'age seule.
+   */
+  function lireMemoire() {
+    try {
+      return JSON.parse(window.localStorage.getItem(CLE_USURE)) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function ecrireMemoire(memoire) {
+    try {
+      window.localStorage.setItem(CLE_USURE, JSON.stringify(memoire));
+    } catch (e) {
+      // Rien a faire : l'usure de cette session sera simplement oubliee.
+    }
+  }
+
+  /**
+   * L'oubli se calcule A LA LECTURE, depuis l'horodatage stocke. Un navigateur ferme six
+   * mois n'a rien a rattraper, et lire n'ecrit jamais.
+   *
+   * La decroissance est continue plutot que par paliers : un oubli par paliers ferait
+   * chuter l'alteration d'un coup entre deux visites, ce qui s'entendrait comme un
+   * changement de reglage. L'oubli n'est pas un evenement.
+   */
+  function usureOubliee(entree) {
+    if (
+      !entree ||
+      typeof entree.j !== "number" ||
+      typeof entree.t !== "number"
+    ) {
+      return 0;
+    }
+
+    var jours = (Date.now() - entree.t) / 86400000;
+
+    if (!(jours > 0)) {
+      jours = 0;
+    }
+
+    var reste = entree.j * Math.pow(2, -jours / demiVieOubliJours);
+
+    return reste > 0 ? reste : 0;
+  }
+
+  /** Usure courante du morceau de cette page, en jours virtuels. */
+  function usureDuMorceau() {
+    var slug = slugDuMorceau();
+
+    return slug ? usureOubliee(lireMemoire()[slug]) : 0;
+  }
+
+  /** Nombre d'ecoutes enregistrees, pour le seul journal de console. */
+  function ecoutesDuMorceau() {
+    var slug = slugDuMorceau();
+
+    if (!slug) {
+      return 0;
+    }
+
+    var entree = lireMemoire()[slug];
+
+    return entree && typeof entree.n === "number" ? entree.n : 0;
+  }
+
+  /**
+   * Une ecoute est comptee au DEMARRAGE DE LA LECTURE, et une seule fois par chargement de
+   * page. Compter a l'affichage userait la bande de quelqu'un qui n'a rien entendu ; compter
+   * chaque reprise apres pause compterait une meme ecoute plusieurs fois.
+   */
+  var ecouteComptee = false;
+
+  function compterUneEcoute() {
+    if (ecouteComptee) {
+      return;
+    }
+
+    var slug = slugDuMorceau();
+
+    if (!slug) {
+      return;
+    }
+
+    ecouteComptee = true;
+
+    var memoire = lireMemoire();
+    var maintenant = Date.now();
+
+    // Purge des entrees devenues negligeables : elles ne changent plus rien au rendu.
+    Object.keys(memoire).forEach(function (autre) {
+      if (autre !== slug && usureOubliee(memoire[autre]) < SEUIL_OUBLI_JOURS) {
+        delete memoire[autre];
+      }
+    });
+
+    var entree = memoire[slug];
+
+    memoire[slug] = {
+      j: usureOubliee(entree) + ageVirtuelParEcouteJours,
+      t: maintenant,
+      n: (entree && typeof entree.n === "number" ? entree.n : 0) + 1,
+    };
+
+    ecrireMemoire(memoire);
+  }
+
+  // -------------------------------------------------- l'age du morceau, et le votre
+
+  /**
+   * Intensite de l'usure : l'age du morceau, augmente de ce que ce navigateur lui a fait.
+   *
+   * Les deux se composent AVANT la courbe, dans la meme unite — des jours. L'age reel dit
+   * ce que le temps a fait au morceau ; l'usure dit ce que vous en avez fait. Le
+   * `min(1, ...)` qui suit borne les deux d'un coup : c'est le plafond exige par la
+   * specification, et il ne peut pas etre contourne par erreur puisqu'il etait deja la.
+   *
+   * Consequence a connaitre : un morceau de dix-huit ans ou plus est deja a `part = 1`.
+   * L'ecouter cent fois n'y change rien — environ 2 % du catalogue. C'est le plafond
+   * applique tot plutot que tard, et il se defend : une bande usee jusqu'a la corde ne
+   * s'use plus. Le README de la recette le dit, pour que ce ne soit pas pris pour un defaut.
    *
    * POURQUOI UNE COURBE ET PAS UNE PROPORTION
    *
@@ -99,7 +279,7 @@
    * personne ne l'ait decidee. Dix-huit ans est un repere qui se lit, se discute et se
    * regle ; `MAX(publish_on)` n'en est pas un.
    */
-  function intensiteSelonAge() {
+  function intensiteDeLUsure() {
     var repli = typeof options.intensite === "number" ? options.intensite : 1;
     var plancher =
       typeof options.plancherUsure === "number" ? options.plancherUsure : 0.35;
@@ -127,15 +307,22 @@
       jours = 0;
     }
 
-    var part = Math.min(1, jours / (referenceAns * 365.25));
+    var usure = usureDuMorceau();
+    var part = Math.min(1, (jours + usure) / (referenceAns * 365.25));
     var intensite = plancher + (1 - plancher) * part * part;
 
+    // Le cumul ne se mesure pas a l'oreille d'une visite a l'autre : sans ce journal, rien
+    // ne permet de verifier qu'il a lieu.
     console.log(
       "[desastres/" +
         NOM +
         "] morceau de " +
         Math.round(jours / 365.25) +
-        " an(s), usure " +
+        " an(s), " +
+        ecoutesDuMorceau() +
+        " ecoute(s) ici = " +
+        Math.round(usure) +
+        " jour(s) d'usure, intensite " +
         intensite.toFixed(2),
     );
 
@@ -199,7 +386,7 @@
           },
         });
 
-        noeud.parameters.get("intensite").value = intensiteSelonAge();
+        noeud.parameters.get("intensite").value = intensiteDeLUsure();
 
         noeud.port.onmessage = function (e) {
           if (e.data && typeof e.data.modulateur === "number") {
@@ -225,6 +412,8 @@
               messagesRecus: messagesRecus,
               titreTrouve: !!titre,
               mouvementRefuse: mouvementRefuse,
+              usureJours: Math.round(usureDuMorceau()),
+              ecoutes: ecoutesDuMorceau(),
             };
           },
         };
@@ -300,6 +489,11 @@
   surElementAudio(function (element) {
     brancher(element);
     element.addEventListener("play", reveiller);
+
+    // L'intensite a ete posee par `brancher()` AVANT ce premier `play` : l'ecoute en cours
+    // porte l'usure des precedentes, pas la sienne. C'est la lecture voulue — vous avez use
+    // la bande, vous l'entendez la fois d'apres.
+    element.addEventListener("play", compterUneEcoute);
   });
 
   ["click", "keydown", "touchstart"].forEach(function (evenement) {

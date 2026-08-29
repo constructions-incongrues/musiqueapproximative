@@ -62,6 +62,26 @@ recettes:
       # Âge auquel l'usure est maximale. CONSTANTE et non étendue du catalogue, qui
       # grandit chaque jour et ferait dériver l'usure d'un morceau sans décision.
       referenceAns: 18
+      # ------------------------------------------------------------------------------
+      # LES DEUX RÉGLAGES CI-DESSOUS SONT PROVISOIRES ET NON MESURÉS.
+      #
+      # Tous les autres réglages de cette recette viennent d'une mesure : `profondeurMs` de
+      # la 440 passée dans la ligne à retard, `plancherUsure` du seuil d'audibilité,
+      # `referenceAns` d'un choix argumenté sur la distribution du catalogue. Ces deux-là
+      # sont des points de départ posés à vue, à régler À L'OREILLE comme `profondeurMs`
+      # l'a été — l'écoute en ligne est la vérification, pas le calcul.
+      # ------------------------------------------------------------------------------
+      #
+      # Âge virtuel gagné par écoute. L'usure ne s'ajoute pas à l'intensité mais à l'ÂGE,
+      # avant la courbe : écouter vieillit la bande. La courbe étant quadratique, les
+      # premières écoutes usent très peu — il en faut une dizaine pour qu'un morceau récent
+      # s'entende bouger, ce qui est l'intention.
+      ageVirtuelParEcouteAns: 1
+      # Demi-vie de l'oubli, en jours. L'usure décroît continûment depuis la dernière
+      # écoute : un oubli par paliers s'entendrait comme un changement de réglage.
+      # Assez lente pour qu'une série d'écoutes rapprochées cumule ; sans quoi l'usure ne
+      # s'accumulerait jamais.
+      demiVieOubliJours: 30
       # `article h1` porte l'artiste, `article h2` le titre. Un `h1` nu attraperait la barre
       # latérale — la page en compte trois — et `.title` est le nom du site.
       selecteurTitre: article h2

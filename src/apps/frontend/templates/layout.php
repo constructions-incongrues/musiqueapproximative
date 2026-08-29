@@ -138,6 +138,15 @@
             <li>s : recherche</li>
           </ul>
           <h2>
+            Désastres
+          </h2>
+          <p>
+            Le site s'abîme parfois tout seul : les pages se déforment, le son
+            fatigue. C'est voulu. Ajoutez
+            <code>?sans-desastre</code>
+            à l'adresse pour les couper, son compris.
+          </p>
+          <h2>
             Radio Approximative
           </h2>
           <p>

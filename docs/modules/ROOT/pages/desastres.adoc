@@ -193,9 +193,11 @@ Le curseur n'est pas ralenti — aucune API ne le permet — c'est la page qui m
 remarquer. Aucune propriété de mise en page n'est transitionnée : les clics restent exacts.
 
 *Deux sorties.* `prefers-reduced-motion: reduce` retire les deux contrepoints en laissant le
-son ; `?sans-desastre` retire tout. La seconde existe parce qu'aucun réglage standard ne
-permet de refuser une altération sonore — sans elle, ce serait le seul désastre auquel on ne
-peut pas échapper.
+son ; `?sans-desastre` retire tout, *et suspend le comptage des écoutes décrit plus bas*. La
+seconde existe parce qu'aucun réglage standard ne permet de refuser une altération sonore —
+sans elle, ce serait le seul désastre auquel on ne peut pas échapper. Elle est annoncée dans
+le pied de page du site : une sortie que seul un mainteneur peut trouver n'en est pas une
+pour le visiteur.
 
 *L'usure suit l'âge du morceau.* Le catalogue va de juin 2008 à aujourd'hui — 6 643 jours,
 8 216 morceaux — et l'ancienneté n'avait jamais rien déclenché ni modulé. Elle module
@@ -223,6 +225,23 @@ décidé.
 
 La date de publication est lue dans la page, où elle ne figurait jusqu'alors nulle part —
 notable pour une archive de dix-huit ans. Elle n'est pas réservée au désastre.
+
+*L'usure vous appartient aussi.* Depuis, l'âge n'est plus la seule source d'altération : le
+nombre de fois où *ce navigateur* a écouté le morceau s'y ajoute. C'est la première recette
+du catalogue qui se souvient de quoi que ce soit — les dix-huit autres repartent de zéro à
+chaque visite.
+
+L'usure ne s'ajoute pas à l'intensité mais *à l'âge*, en jours virtuels, avant la courbe :
+écouter vieillit la bande. Le `min(1, ...)` déjà présent sert alors de plafond, sans qu'il
+ait fallu l'écrire — le morceau reste audible quoi qu'il arrive. Conséquence à connaître :
+un morceau de dix-huit ans ou plus est déjà au plafond, l'écouter cent fois n'y change rien,
+ce qui concerne environ 2 % du catalogue.
+
+Une écoute est comptée au démarrage de la lecture, une seule fois par chargement de page ;
+elle s'oublie ensuite, avec une demi-vie de trente jours. *Rien ne quitte le navigateur* :
+aucune requête, aucun identifiant, aucune corrélation entre appareils. Ce n'est pas une
+politesse mais une contrainte — une page mise en cache doit servir un corps identique à
+chaque requête, et une usure calculée au service romprait cette invariance.
 
 Détail d'arborescence qui a sa raison : le processeur vit sous `worklet/` et non
 `javascript/`, que le gestionnaire charge automatiquement en script classique — où
