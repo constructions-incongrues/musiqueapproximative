@@ -48,6 +48,51 @@ où on les voit. Un désastre déforme ; il ne fait pas rater un clic.
 La feuille de style ne retarde donc que des propriétés de couleur. *Aucune propriété de
 mise en page n'est transitionnée* : les zones cliquables ne bougent pas.
 
+== L'usure vous appartient
+
+L'âge du morceau n'est pas la seule source d'altération : *le nombre de fois où vous l'avez
+écouté* en est une autre. Le dixième passage est plus fatigué que le premier — et pour vous
+seul.
+
+L'usure ne s'ajoute pas à l'intensité mais *à l'âge*, en jours virtuels, avant la courbe.
+Écouter vieillit la bande. Le `min(1, ...)` déjà présent sert alors de plafond : le morceau
+reste audible quoi qu'il arrive.
+
+[cols="1,3"]
+|===
+| Où c'est stocké
+| `localStorage`, clé `desastres:bande-usee:usure`, une entrée par slug de morceau.
+
+| Ce qui en sort
+| Rien. Aucune requête, aucun identifiant, aucune corrélation entre appareils. Le site ne
+sait pas que vous avez usé la bande, et ne peut pas le savoir : la capacité `desastres`
+exige qu'une page mise en cache serve un corps identique à chaque requête.
+
+| Quand une écoute compte
+| Au démarrage de la lecture, une seule fois par chargement de page. Ouvrir la page sans
+écouter n'use rien ; une pause suivie d'une reprise ne compte pas double.
+
+| L'oubli
+| L'usure décroît continûment depuis la dernière écoute, demi-vie de 30 jours. Revenir à un
+morceau des mois plus tard, c'est le retrouver presque tel qu'il était.
+|===
+
+=== Les morceaux les plus anciens ne portent pas cette marque, et c'est voulu
+
+Un morceau de dix-huit ans ou plus est *déjà au plafond* de la courbe d'âge : l'écouter cent
+fois n'y change rien. Cela concerne environ *2 % du catalogue* — les 179 morceaux de 2008 —
+et les morceaux de 2009 en sont proches.
+
+Ce n'est pas un défaut : c'est le plafond que la spécification exige, appliqué tôt plutôt
+que tard. Une bande usée jusqu'à la corde ne s'use plus. C'est écrit ici pour que personne
+ne le découvre comme un bug.
+
+=== Deux réglages provisoires
+
+`ageVirtuelParEcouteAns` (1) et `demiVieOubliJours` (30) sont les seuls réglages de cette
+recette qui *ne reposent sur aucune mesure*. Tous les autres viennent d'une écoute ou d'un
+calcul. Ceux-là sont des points de départ, à régler à l'oreille comme `profondeurMs` l'a été.
+
 == Comment en sortir
 
 [cols="1,3"]
@@ -56,11 +101,20 @@ mise en page n'est transitionnée* : les zones cliquables ne bougent pas.
 | Retire les deux contrepoints. L'altération sonore continue.
 
 | `?sans-desastre` dans l'adresse
-| Retire tout, son compris.
+| Retire tout, son compris — *et suspend le comptage des écoutes*.
 |===
 
 La seconde existe parce qu'*il n'y a pas de réglage standard pour refuser une altération
 sonore*. Sans elle, ce serait le seul désastre du catalogue auquel on ne peut pas échapper.
+
+Elle est annoncée dans le pied de page du site, au milieu des raccourcis clavier. Une sortie
+que seul un mainteneur peut trouver est, du point de vue du visiteur, une règle sans
+dérogation.
+
+Le test de `?sans-desastre` est *en tête du module, avant toute lecture ou écriture de la
+mémoire*. C'est une exigence et non une commodité : un visiteur qui refuse le désastre n'a
+pas à voir son écoute enregistrée, et retrouverait sinon, en le réactivant, une usure
+accumulée pendant qu'il l'avait refusé.
 
 == L'arborescence, et pourquoi elle n'est pas celle des autres
 
