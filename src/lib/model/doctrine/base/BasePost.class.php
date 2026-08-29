@@ -151,7 +151,6 @@ abstract class BasePost extends sfDoctrineRecord
              array(
               0 => 'track_author',
               1 => 'track_title',
-              2 => 'body',
              ),
              'canUpdate' => true,
              ));
@@ -160,6 +159,7 @@ abstract class BasePost extends sfDoctrineRecord
              array(
               0 => 'track_author',
               1 => 'track_title',
+              2 => 'body',
              ),
              ));
         $this->actAs($timestampable0);

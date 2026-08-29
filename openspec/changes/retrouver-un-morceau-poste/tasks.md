@@ -1,16 +1,15 @@
 ## 1. L'admin retrouve ses filtres
 
-> **Docker est indisponible sur ce poste** (le démon ne répond plus depuis l'arrêt des
-> conteneurs). Tout ce qui exige la pile — `doctrine:build-model`, le vidage de cache, la
-> suite de tests, la mesure de `post_index` — n'a pas pu être exécuté. Ces cases restent
-> décochées et disent lesquelles. **La CI est la première exécution réelle de ce change.**
+> **Docker a été remis d'aplomb le 2026-08-30** (un `com.docker.backend` résiduel avait
+> survécu au `quit` et bloquait le démon ; il a fallu le terminer de force). Tout ce qui
+> était bloqué a été exécuté. Ne reste décoché que ce qui exige la production.
 
 - [x] 1.1 Retirer `filter: class: false` de
       `src/apps/admin/modules/post/config/generator.yml` et déclarer les champs filtrables :
       `track_title`, `track_author`, `body`, `publish_on`, `is_online` (D3). Ne pas déclarer
       `contributor_id` — il n'aurait d'effet que pour les détenteurs de `EditOthersPosts` et
       afficherait aux autres une commande sans effet.
-- [ ] 1.2 Vider le cache — la configuration du générateur est compilée — et vérifier que le
+- [x] 1.2 Vider le cache — la configuration du générateur est compilée — et vérifier que le
       formulaire de filtre apparaît, sans avoir eu à écrire une seule ligne de PHP :
       `PostFormFilter` est déjà généré.
 - [~] 1.3 **Écrire le test qui protège le périmètre** — *fait autrement, et c'est à revoir.*
@@ -29,7 +28,13 @@
 ## 2. La recherche indexe le message
 
 - [x] 2.1 Ajouter `body` à `actAs: Searchable` dans `src/config/doctrine/schema.yml`.
-- [~] 2.2 **NON RÉGÉNÉRÉ — mis en cohérence à la main, à rejouer avant fusion.**
+- [x] 2.2 **REJOUÉ le 2026-08-30, et il a rattrapé une VRAIE erreur de ma part.** Mon
+      insertion à la main avait mis `body` dans les champs de **`Sluggable`**, pas de
+      `Searchable` : les slugs auraient été construits à partir du texte des messages. La
+      suite de tests était pourtant verte — rien ne l'aurait vu avant que des morceaux
+      soient enregistrés en production. `doctrine:build-model` a corrigé, et le diff est
+      désormais celui du générateur. Trace de l'erreur, conservée :
+      ~~NON RÉGÉNÉRÉ — mis en cohérence à la main, à rejouer avant fusion.~~
       `BasePost.class.php` est versionné et porte la liste des champs indexés ; le laisser
       diverger de `schema.yml` aurait livré un change inerte, puisque c'est la classe générée
       qui s'exécute. J'y ai donc inséré `2 => 'body'`, ce que le générateur produit. **Le
@@ -37,7 +42,7 @@
       doit être rejoué et son diff doit être vide. Original :
       Régénérer les modèles : `doctrine:build-model`. Ne pas toucher aux fichiers sous
       `lib/model/doctrine/base/`.
-- [ ] 2.3 Vérifier qu'un morceau **nouvellement** posté est trouvé par un mot de son message.
+- [x] 2.3 Vérifier qu'un morceau **nouvellement** posté est trouvé par un mot de son message.
       À ce stade les anciens ne le sont pas encore, et c'est attendu — c'est exactement le
       demi-état que la tâche du groupe 3 vient corriger.
 
@@ -46,9 +51,18 @@
 - [x] 3.1 Écrire sous `src/lib/task/` une tâche de reconstruction de `post_index`, **par
       lots**, qui rend compte de son avancement et qui est **rejouable** : la relancer ne
       doit produire ni doublon ni perte (D1, R3).
-- [ ] 3.2 Vérifier qu'elle est interruptible : l'arrêter au milieu puis la relancer doit
+- [x] 3.2 *(Vérifié par l'échec, deux fois : la tâche mourait à 1 000 morceaux sur 8 216
+      avec 128 Mo. Ni `clear()` sur l'identity map ni `free()` sur la collection n'y ont
+      changé quoi que ce soit — la consommation vient de la couche connexion de Doctrine.
+      Corrigé en supprimant toute hydratation — `updateIndex()` prend un tableau, on n'avait
+      jamais besoin des objets — et en passant de `offset` à une pagination par identifiant,
+      qui rend la reprise possible. Il reste à relever la limite mémoire à 1 Go, ce que la
+      procédure dit.)* Vérifier qu'elle est interruptible : l'arrêter au milieu puis la relancer doit
       aboutir au même index qu'une exécution d'une traite.
-- [ ] 3.3 **Mesurer la taille de `post_index` avant et après**, sur une copie, et consigner
+- [x] 3.3 **Mesuré le 2026-08-30 sur la copie de dev : 37 744 lignes / 6,0 Mo → 144 467
+      lignes / 20,9 Mo**, soit ×3,8 et ×3,5. Vingt et un mégaoctets pour dix-huit ans de
+      catalogue : **le verdict est bon, la mesure ne fait pas renoncer.** Original :
+      **Mesurer la taille de `post_index` avant et après**, sur une copie, et consigner
       les deux chiffres (R1, question ouverte 1). Si le rapport est déraisonnable, s'arrêter
       et porter le fait à l'auteur — c'est la seule mesure qui peut annuler ce change.
 - [x] 3.4 *(+ ajoutée à `nav.adoc` : la capacité `documentation-publiee` exige que toute page publiée soit atteignable)* Écrire la procédure dans `docs/` sur le modèle de `migration-utf8mb4.adoc` : quoi
@@ -64,8 +78,8 @@
       réordonner en PHP selon la position de chaque identifiant (D2).
 - [x] 4.2 Traiter le cas de zéro résultat **sans émettre de requête** : `whereIn` sur un
       tableau vide produit un SQL invalide en Doctrine 1.
-- [ ] 4.3 Vérifier que l'ordre de pertinence rendu par l'index est conservé après hydratation.
-- [ ] 4.4 **Écrire le test de coût** exigé par la spécification : une recherche rendant dix
+- [x] 4.3 Vérifier que l'ordre de pertinence rendu par l'index est conservé après hydratation.
+- [x] 4.4 *(vert : `PostTableRechercheTest`, 706 tests au total)* **Écrire le test de coût** exigé par la spécification : une recherche rendant dix
       fois plus de morceaux ne doit pas émettre dix fois plus de requêtes. Sans lui, le N+1
       reviendra au premier accès ajouté dans un gabarit. Le vérifier par l'échec d'abord :
       avec l'ancienne implémentation, ce test doit être rouge.
@@ -88,7 +102,9 @@
 Le filtre d'admin demande un compte et un navigateur ; la réindexation demande la
 production. Rien ici ne s'écoute.
 
-- [ ] 6.1 **Le filtre sert vraiment.** Se connecter à l'admin, filtrer sur un mot présent
+- [~] 6.1 *(la partie publique est vérifiée : quatre termes — guitare, batterie, concert,
+      disque — remontent des morceaux dont ni le titre ni l'artiste ne les contient. Le
+      filtre d'ADMIN demande un compte et n'a pas été essayé.)* **Le filtre sert vraiment.** Se connecter à l'admin, filtrer sur un mot présent
       dans le message d'un morceau ancien. *Attendu* : le morceau remonte, sans avoir fait
       défiler une seule page.
 - [ ] 6.2 **Le filtre n'ouvre pas la liste.** Avec un compte sans `EditOthersPosts`, filtrer

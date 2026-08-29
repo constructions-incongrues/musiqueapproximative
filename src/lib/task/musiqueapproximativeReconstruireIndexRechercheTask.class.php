@@ -32,6 +32,7 @@ class musiqueapproximativeReconstruireIndexRechercheTask extends sfBaseTask
   protected function configure()
   {
     $this->addOptions(array(
+      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'Connexion Doctrine', 'doctrine'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'Environnement', 'prod'),
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'Application', 'frontend'),
       new sfCommandOption('lot', null, sfCommandOption::PARAMETER_REQUIRED, 'Nombre de morceaux par lot', self::LOT_DEFAUT),
@@ -54,6 +55,11 @@ EOF;
 
   protected function execute($arguments = array(), $options = array())
   {
+    // Une tache n'a pas de connexion ouverte : c'est a elle de l'etablir. Meme idiome que
+    // `musiqueapproximativeRebuildMd5Task` et `musiqueapproximativeScanTracksTask`.
+    $gestionnaire = new sfDatabaseManager($this->configuration);
+    $gestionnaire->getDatabase($options['connection'] ? $options['connection'] : null)->getConnection();
+
     $table = Doctrine_Core::getTable('Post');
 
     $this->logSection('index', sprintf('avant : %s', $this->decrireIndex()));
@@ -66,35 +72,53 @@ EOF;
     $lot = max(1, (int) $options['lot']);
     $total = $table->createQuery('p')->count();
     $traites = 0;
+    $dernierId = 0;
 
     $this->logSection('index', sprintf('%d morceau(x) a reindexer, par lots de %d', $total, $lot));
 
-    while ($traites < $total)
+    // PAGINATION PAR CLE, ET AUCUNE HYDRATATION.
+    //
+    // Deux mesures, faites en se trompant deux fois :
+    //
+    // 1. Un `offset` croissant oblige la base a parcourir puis jeter tout ce qui precede :
+    //    le cout monte avec l'avancement, et la reprise est impossible. Avancer par
+    //    `id > dernier` donne un cout constant et une reprise triviale.
+    //
+    // 2. HYDRATER DES OBJETS EPUISE LA MEMOIRE. Sur 8 216 morceaux avec 128 Mo, la tache
+    //    mourait a 1 000 — et `clear()` sur l'identity map, puis `free()` sur la
+    //    collection, n'y ont rien change : la fuite est dans l'hydratation de Doctrine 1.
+    //    Or `updateIndex()` prend UN TABLEAU. On n'a jamais eu besoin des objets.
+    //    `HYDRATE_ARRAY` supprime le probleme au lieu de le contourner.
+    $plugin = $table->getTemplate('Searchable')->getPlugin();
+
+    while (true)
     {
       $morceaux = $table->createQuery('p')
+        ->select('p.id, p.track_author, p.track_title, p.body')
+        ->where('p.id > ?', $dernierId)
         ->orderBy('p.id ASC')
         ->limit($lot)
-        ->offset($traites)
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
 
-      if (0 === count($morceaux))
+      if (!$morceaux)
       {
         break;
       }
 
       foreach ($morceaux as $morceau)
       {
-        // `save()` declenche le comportement Searchable, qui reecrit les lignes d index de
-        // ce morceau. On ne modifie aucune colonne : `Timestampable` ne touche `updated_at`
-        // que si quelque chose a change.
-        $morceau->getTable()->getTemplate('Searchable')->getPlugin()->updateIndex($morceau->toArray());
+        $dernierId = $morceau['id'];
+
+        // Reecrit les lignes d index de ce morceau. On ne passe pas par `save()` : cela
+        // toucherait `updated_at` via Timestampable, alors qu'aucune colonne ne change.
+        $plugin->updateIndex($morceau);
       }
 
       $traites += count($morceaux);
-      $this->logSection('index', sprintf('%d / %d', $traites, $total));
+      $this->logSection('index', sprintf('%d / %d (dernier id %d)', $traites, $total, $dernierId));
 
-      // Rendre la memoire entre les lots : l identity map de Doctrine garde tout sinon.
-      Doctrine_Manager::getInstance()->getCurrentConnection()->clear();
+      unset($morceaux);
     }
 
     $this->logSection('index', sprintf('apres : %s', $this->decrireIndex()));

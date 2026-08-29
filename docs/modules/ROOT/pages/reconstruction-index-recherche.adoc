@@ -41,16 +41,42 @@ php symfony musiqueapproximative:reconstruire-index-recherche --mesurer-seulemen
 
 Elle rend le nombre de lignes et les octets occupés, sans rien modifier. **Noter les deux
 chiffres avant de lancer la reconstruction** : ils sont ce qui permettra de dire si le coût
-est raisonnable, et c'est la seule mesure qui peut faire renoncer.
+est raisonnable.
+
+.Mesure faite sur la copie de développement le 2026-08-30, catalogue de 8 216 morceaux
+[cols="1,1,1"]
+|===
+| | lignes | taille
+
+| avant — artiste et titre seulement | 37 744 | 6,0 Mo
+| après — avec le message | *144 467* | *20,9 Mo*
+| rapport | ×3,8 | ×3,5
+|===
+
+*Le verdict est bon* : vingt et un mégaoctets d'index pour dix-huit ans de catalogue. La
+mesure qui pouvait faire renoncer à ce travail ne le fait pas.
 
 == Lancer
 
+[IMPORTANT]
+====
+*Relever la limite mémoire.* La tâche meurt à environ 1 000 morceaux avec les 128 Mo par
+défaut du CLI. Ce n'est pas une fuite du code du projet : il n'hydrate aucun objet — il lit
+en `HYDRATE_ARRAY` et ne garde rien. La consommation vient de la couche connexion de
+Doctrine 1, qui accumule sur les centaines de milliers d'instructions qu'une réindexation
+complète émet.
+
+Mesuré : 1 Go suffit largement pour les 8 216 morceaux.
+====
+
 [source,bash]
 ----
-php symfony musiqueapproximative:reconstruire-index-recherche --env=prod
+php -d memory_limit=1G symfony musiqueapproximative:reconstruire-index-recherche --env=prod
 ----
 
-La tâche traite les morceaux par lots de 200 et rend compte de son avancement.
+La tâche traite les morceaux par lots de 200, avance par identifiant croissant — et non par
+`offset`, dont le coût monte avec l'avancement — et rend compte du dernier identifiant
+traité à chaque lot.
 
 Elle est **rejouable et interruptible** : elle n'a pas d'état propre, chaque morceau
 réindexé écrase ses propres lignes. L'arrêter au milieu laisse une partie du catalogue
@@ -59,6 +85,10 @@ donnent le même index.
 
 Un morceau posté *pendant* la reconstruction peut être manqué selon le moment. Relancer la
 tâche après coup ne coûte que du temps.
+
+Si elle s'interrompt, le journal donne le dernier identifiant traité. La relancer reprend
+depuis le début mais ne réécrit que ce qui l'a déjà été : le travail restant est le même,
+seul le temps est perdu.
 
 == Après
 
