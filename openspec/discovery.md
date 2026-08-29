@@ -1744,6 +1744,18 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ce qui reste hors de portée, et doit être dit** : rien de tout cela ne quitte le
     navigateur. Un visiteur qui vide son stockage repart neuf, et c'est très bien ainsi.
   - **Code concerné** : `src/web/desastres/`
+  - **Change** : `2026-08-29-l-usure-vous-appartient` (archivé) — **livrée le 2026-08-29**
+  - **La question ouverte a été tranchée dans la proposal** : *l'usure se répare-t-elle ?*
+    Oui, lentement — demi-vie de trente jours. Une bande magnétique ne guérit pas, mais la
+    fidélité au matériau ne vaut pas qu'on rende un morceau définitivement inécoutable à
+    celui qui l'écoute le plus.
+  - **Une limite mesurée, à connaître** : l'usure s'ajoute à l'ÂGE, en jours virtuels, avant
+    la courbe — `intensite` est borné à [0, 1] où l'âge sature déjà à dix-huit ans. D'où le
+    plafond gratuit, et d'où le fait qu'environ **2 % du catalogue** (les morceaux de 2008)
+    ne portera jamais cette marque : ils y sont déjà. Vérifié sur `coffee-giuniu`.
+  - **Livrée avec trois vérifications non faites**, et c'est écrit dans son `tasks.md` :
+    rien n'a été écouté. Les réglages `ageVirtuelParEcouteAns` et `demiVieOubliJours` sont
+    les seuls de cette recette à ne reposer sur aucune mesure.
   - **Ajoutée** : 2026-08-19
   - **Dépend de** : rien techniquement. Les stories 29 et 32 sont mieux servies si elle
     passe avant — on ne mesure bien le coût d'écriture qu'en écrivant.
