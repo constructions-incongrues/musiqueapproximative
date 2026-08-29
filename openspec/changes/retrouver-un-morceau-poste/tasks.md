@@ -12,7 +12,8 @@
 - [x] 1.2 Vider le cache — la configuration du générateur est compilée — et vérifier que le
       formulaire de filtre apparaît, sans avoir eu à écrire une seule ligne de PHP :
       `PostFormFilter` est déjà généré.
-- [~] 1.3 **Écrire le test qui protège le périmètre** — *fait autrement, et c'est à revoir.*
+- [~] 1.3 **Écrire le test qui protège le périmètre** — *fait autrement, et la propriété est
+      désormais vérifiée à la main (6.2) ; ce qui reste dû est son AUTOMATISATION.*
       Le harnais fonctionnel du projet ne porte aucune aide à la connexion sfGuard, et
       improviser une authentification sans pouvoir l'exécuter aurait produit un test dont
       personne ne saurait s'il vérifie quelque chose. Ce qui est livré : deux cas de plus
@@ -102,22 +103,36 @@
 Le filtre d'admin demande un compte et un navigateur ; la réindexation demande la
 production. Rien ici ne s'écoute.
 
-- [~] 6.1 *(la partie publique est vérifiée : quatre termes — guitare, batterie, concert,
-      disque — remontent des morceaux dont ni le titre ni l'artiste ne les contient. Le
-      filtre d'ADMIN demande un compte et n'a pas été essayé.)* **Le filtre sert vraiment.** Se connecter à l'admin, filtrer sur un mot présent
+- [x] 6.1 **Le filtre sert vraiment.** *Vérifié en session authentifiée (`bertier`, 997
+      morceaux) : filtre sur `body=krautrock` → 1 résultat, contre 20 par page sans filtre.
+      Côté public, quatre termes — guitare, batterie, concert, disque — remontent des
+      morceaux dont ni le titre ni l'artiste ne les contient.* Se connecter à l'admin, filtrer sur un mot présent
       dans le message d'un morceau ancien. *Attendu* : le morceau remonte, sans avoir fait
       défiler une seule page.
-- [ ] 6.2 **Le filtre n'ouvre pas la liste.** Avec un compte sans `EditOthersPosts`, filtrer
+- [x] 6.2 **Le filtre n'ouvre pas la liste — LE POINT CRITIQUE, ET IL TIENT.** *Vérifié :
+      `krautrock` figure dans le message d'un morceau de `bertier` (Taarida, 5049) ET d'un
+      morceau d'`oyibo` (ISM, 7751). Connecté en `bertier`, le filtre rend Taarida et **pas**
+      ISM. Le périmètre n'est pas élargi par les filtres.* Avec un compte sans `EditOthersPosts`, filtrer
       sur un terme qu'on sait présent chez un autre contributeur. *Attendu* : aucun résultat.
       C'est 1.3 rejoué à la main, parce que la conséquence d'une erreur est la seule qui ne
       se rattrape pas.
-- [ ] 6.3 **La liste vide se lit.** Filtrer sur quelque chose d'inexistant. *Attendu* : la
+- [x] 6.3 **La liste vide se lit.** *Vérifié : filtre sur un terme inexistant → 0 ligne,
+      « No result » affiché, et la restriction reste dans le champ (`value="…"` présent),
+      donc corrigeable sans ressaisie.* Filtrer sur quelque chose d'inexistant. *Attendu* : la
       liste est vide, le dit, et la restriction reste affichée pour être corrigée.
 - [ ] 6.4 **La recherche publique trouve par le message, sur un morceau ANCIEN.** Après la
       réindexation en production. *Attendu* : un morceau de 2012 remonte sur un mot présent
       seulement dans son message.
-- [ ] 6.5 **Le nom d'un contributeur ne remonte rien.** Chercher un nom d'utilisateur du
+- [x] 6.5 **Le nom d'un contributeur ne remonte rien *par ce seul fait*.** *Vérifié sur
+      `oyibo`, `glafouk`, `lovebot` : 2, 6 et 7 résultats — et dans **100 % des cas** le mot
+      figure réellement dans le titre, l'artiste ou le message du morceau. Aucun morceau ne
+      remonte parce que son contributeur porte ce nom. L'index ignore bien le contributeur.*
+      Original :  **Le nom d'un contributeur ne remonte rien.** Chercher un nom d'utilisateur du
       collectif. *Attendu* : aucun morceau ne remonte de ce seul fait — `?c=` reste le chemin.
-- [ ] 6.6 **Le bruit est supportable** (R2). Chercher un mot courant — « musique », « disque ».
+- [x] 6.6 **Le bruit est supportable — R2 ne se matérialise pas.** *Mesuré sur les 8 098
+      morceaux publiables : `musique` 272 résultats (3,4 %), `album` 201 (2,5 %), `chanson`
+      178 (2,2 %), `disque` 38 (0,5 %). Le pire cas est « musique » sur un site qui porte ce
+      mot dans son nom, et il reste sous 4 % du catalogue. La crainte d'une recherche
+      inexploitable ne se vérifie pas.* Original : **Le bruit est supportable** (R2). Chercher un mot courant — « musique », « disque ».
       *Attendu* : à juger. Si le résultat est inexploitable, c'est un fait à consigner, pas un
       échec de ce change.
