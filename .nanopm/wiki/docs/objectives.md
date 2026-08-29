@@ -84,16 +84,33 @@ lire, pas ce document.
 
 ### Ce qui reste de l'objectif 1
 
-*Une seule chose, et elle n'est pas du code : faire la preuve. Plus un compteur.*
+| Key Result | Target | État |
+|-----------|--------|------|
+| KR1 : `/encodage` rapporte au moins un caractère hors cp1252 stocké | ≥ 1 | ✅ **ATTEINT — 2, relevé le 2026-08-29** |
+| KR2 : un fichier SQL versionné donne le rythme mensuel — morceaux et contributeurs distincts | livré, rejouable | ⬜ manquant |
 
-| Key Result | Target | Metric |
-|-----------|--------|--------|
-| KR1 : `/encodage` rapporte au moins un caractère hors cp1252 stocké | **≥ 1** | `caracteres_hors_cp1252_stockes` en production, et `dernier_stocke_hors_cp1252` postérieur à la conversion |
-| KR2 : un fichier SQL versionné donne le rythme mensuel — morceaux et contributeurs distincts | livré, rejouable | le fichier existe dans le dépôt ; c'est le déclencheur de l'anti-goal « recruter » (médiane < 4 actifs deux mois de suite) |
+**KR1 est atteint, et je n'y suis pour rien.** J'avais écrit « il n'y a rien à construire :
+il y a à regarder `/encodage` et à cesser de le supposer ». C'était juste. Relevé du
+2026-08-29 sur la production :
 
-Le KR1 se satisfait dès qu'un contributeur publie un morceau au titre non-latin — ce qui
-arrive naturellement vu ce que la bande écoute. Il n'y a rien à construire : il y a à
-regarder `/encodage` et à cesser de le supposer.
+```
+caracteres_hors_cp1252_stockes: 2
+dernier_stocke_hors_cp1252:     2026-08-19 21:05:00
+titres_alteres_en_base:         60
+```
+
+Deux morceaux portent désormais un caractère que la base détruisait, publiés par un
+contributeur réel le 19 août — soit **le lendemain** de l'extrait sur lequel j'avais mesuré
+zéro sur 73 174 chaînes. La conversion utf8mb4 est démontrée en production, pas seulement
+appliquée.
+
+**Et l'écart 81 / 56 est tranché : ni l'un ni l'autre, 60.** J'avais dit que ce document
+n'était pas la bonne source et qu'il fallait lire `/encodage`, qui exécute la vraie requête
+sur la production. C'est fait : `titres_alteres_en_base: 60`. Le chiffre est versé dans
+`docs/modules/ROOT/pages/migration-utf8mb4.adoc`, où il a sa place — ici il vieillirait.
+
+**Il ne reste donc que le compteur de rythme mensuel** (KR2), qui est aussi le déclencheur
+de l'anti-goal « recruter » : médiane sous 4 contributeurs actifs deux mois consécutifs.
 
 
 ## Objective 2: Faire tourner le site sur un interpréteur encore soutenu — ⚠️ cible corrigée le 2026-08-29
@@ -110,20 +127,25 @@ regarder `/encodage` et à cesser de le supposer.
 > `__set()`, et `Doctrine_Access` en déclare un. La contrainte `composer.json` a été
 > élargie à `^7.4 || ^8.2`.
 >
-> **Ce qui reste** : basculer le gestionnaire Plesk sur 8.2 ou 8.3. La cible se choisit
-> maintenant avec le chiffre en main, ce qui n'était pas le cas quand cet objectif a été
-> écrit.
+> **✅ OBJECTIF ATTEINT le 2026-08-29.** La production sert en **PHP 8.3.33**
+> (`plesk-php83-fpm-dedicated`). Extensions comparées terme à terme avec 7.4 avant la
+> bascule — identiques ; contrainte `^7.4 || ^8.2` déjà déployée ; toutes les routes
+> répondent, les formats machine s'analysent, l'API Subsonic répond, et le journal
+> d'erreurs ne porte **aucune** ligne `fatal`, `warning` ou `deprecated`.
+>
+> Retour arrière en une commande si nécessaire :
+> `plesk bin site --update musiqueapproximative.net -php_handler_id plesk-php74-fpm-dedicated`
 
 *La suite est verte sous PHP 8.1 depuis six mois et la CI le vérifie à chaque exécution
 (`tests.yml`, matrice 7.4 / 8.1). Mais la production sert toujours en `php:7.4.33`
 (`Dockerfile:3`, `ci.yml:32`) — sans correctif de sécurité depuis fin 2022. Le travail
 d'audit est fait ; c'est la bascule qui ne l'est pas.*
 
-| Key Result | Target | Metric |
-|-----------|--------|--------|
-| KR1 : la production sert en PHP 8.1 | fait avant le 31 déc | `phpversion()` en production, ou l'en-tête serveur |
-| KR2 : aucune dépréciation n'est écrite dans le corps d'une réponse | **0** | la suite de contrat (`openapiContractTest.php`) reste verte sur les 9 routes déclarées ; précédent : `strtolower(null)` servait du JSON invalide |
-| KR3 : le verdict de compatibilité est publié avec sa date, la version exacte de l'interpréteur, et ce que la mesure ne couvre pas | publié | exigé par `openspec/specs/compatibilite-php-8/spec.md`, scénario « la documentation du verdict » |
+| Key Result | Target | État |
+|-----------|--------|------|
+| KR1 : la production sert un interpréteur soutenu | ~~PHP 8.1~~ → **8.3**, avant le 31 déc | ✅ **`x-powered-by: PHP/8.3.33`**, le 2026-08-29 — cible corrigée, 8.1 n'existait pas sur l'hébergement |
+| KR2 : aucune dépréciation n'est écrite dans le corps d'une réponse | **0** | ✅ `json`, `xspf` et `max` s'analysent en production ; `/posts?format=json` — la route qui avait cassé — parse ; **0** occurrence de `deprecated`/`warning`/`fatal` dans le journal |
+| KR3 : le verdict de compatibilité est publié avec sa date, la version exacte de l'interpréteur, et ce que la mesure ne couvre pas | publié | ✅ `docs/…/compatibilite-php-8.adoc`, mesures du 2026-08-29 sous 8.2.33 et 8.3.33, plus l'inventaire daté de ce que l'hébergement peut servir |
 
 ---
 

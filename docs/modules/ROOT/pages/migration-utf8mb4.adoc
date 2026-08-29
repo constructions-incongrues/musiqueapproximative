@@ -22,9 +22,31 @@ remplacé par `?` à l'écriture, définitivement.
 | `🎵` | `?` | intact
 |===
 
-Au dernier relevé : **81 morceaux** ont un titre ou un auteur détruit, **37
-contributeurs** sont concernés, et **cinq dégâts datent de 2026**. Sur 8 097 morceaux
-et dix-huit ans, **pas un seul caractère hors cp1252 n'a survécu**.
+Au relevé qui a motivé cette migration : **81 morceaux** ont un titre ou un auteur
+détruit, **37 contributeurs** sont concernés, et **cinq dégâts datent de 2026**. Sur
+8 097 morceaux et dix-huit ans, **pas un seul caractère hors cp1252 n'avait survécu**.
+
+[NOTE]
+====
+*Ce paragraphe décrit l'avant. La migration a eu lieu, et elle tient — relevé le
+2026-08-29 sur `/encodage`, qui interroge la production :*
+
+[cols="1,1"]
+|===
+| `caracteres_hors_cp1252_stockes` | *2* — dernier le 2026-08-19 à 21:05
+| `titres_alteres_en_base` | 60
+| `encodage_constate` | `utf8mb4`
+|===
+
+Le premier chiffre est celui qui compte : *deux morceaux portent désormais un caractère
+que la base détruisait*. La démonstration manquait encore le 2026-08-18 — un extrait de
+production de ce jour-là n'en contenait aucun, sur 73 174 chaînes. Elle existe depuis le
+lendemain, et elle vient d'un contributeur réel, pas d'un test.
+
+Le second corrige un chiffre qui a circulé à deux valeurs dans ce dépôt — 81 ici, 56 dans
+le plan de release. Aucune des deux : *60*, compté par la production elle-même avec la
+requête que sert `/encodage`. C'est cette source qui fait foi, pas une page.
+====
 
 == L'ordre des gestes, qui est une contrainte
 
@@ -146,6 +168,16 @@ continue de négocier l'ancien encodage et le changement reste sans effet. Plesk
 code, il ne vide pas le cache.
 
 == Vérification finale, sur le site en ligne
+
+[TIP]
+====
+*Ces étapes sont désormais sans objet : la production a fait la démonstration d'elle-même.*
+`/encodage` rapporte deux morceaux portant un caractère hors cp1252, publiés par un
+contributeur le 2026-08-19. Poster un titre cyrillique de test prouverait moins que ce qui
+s'est produit tout seul.
+
+Conservées telles quelles pour qui rejouerait cette migration ailleurs.
+====
 
 Ces étapes closent la migration. Elles demandent le site déployé et un compte d'admin.
 
