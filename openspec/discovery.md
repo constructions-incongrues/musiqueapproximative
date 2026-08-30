@@ -1762,6 +1762,39 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Code concerné** : `src/apps/frontend/config/desastres/`, `src/web/desastres/`
   - **Ajoutée** : 2026-08-18
 
+- [x] 38. `mesurer-la-compatibilite-php-8-2-et-8-3` — on mesure ce qu'on peut servir
+  - **Persona servi** : le mainteneur, et l'auditeur qui ignore tout de la version de PHP
+    mais que la moindre panne prive du site
+  - **Segment du parcours** : Livrer — la branche qui doit cesser d'être un pari
+  - **MoSCoW** : Must. Le socle tournait sur un interpréteur sans correctif de sécurité
+    depuis fin 2022.
+  - **Story ouverte APRÈS COUP, le 2026-08-30.** Le plan de release était épuisé quand ce
+    change a été créé : aucune story ne le portait, et le plan est donc resté muet sur ce
+    qui avait été livré. C'est exactement le défaut que le contrôle « Chaque story livrée
+    pointe un change existant » traque dans l'autre sens.
+  - **Ce qui l'a déclenchée** : l'objectif du trimestre visait PHP 8.1, la version que
+    l'audit avait mesurée. **Relevé du 2026-08-29 : elle n'existe pas sur l'hébergement.**
+    Plesk ne propose que 7.4, 8.2 et 8.3, et `plesk-php81` n'est même pas installable. La
+    cible mesurée était inatteignable ; les deux seules atteignables étaient précisément
+    celles que l'audit avait exclues de son verdict.
+  - **Ce que la mesure a donné** : 8.2.33 et 8.3.33 passent la suite complète — 290
+    unitaires, 402 fonctionnels frontend, 4 admin — **sans une seule dépréciation**.
+  - **Le risque annoncé ne s'est pas matérialisé, et on sait pourquoi** : la dépréciation
+    8.2 sur les propriétés dynamiques épargne les classes déclarant `__set()`, or
+    `Doctrine_Access::__set()` existe et `Doctrine_Record` en hérite. L'exemption est
+    structurelle, pas chanceuse. Là où elle ne jouait pas, `lexpress/doctrine1` avait déjà
+    posé `#[\AllowDynamicProperties]`.
+  - **Périmètre** — dedans : la matrice à quatre versions, la tâche qui enveloppe
+    `doctrine:insert-sql`, le retrait du drapeau puis l'élargissement de la contrainte —
+    dans cet ordre. — dehors : basculer la production, faite séparément le 2026-08-29.
+  - **Ce que la story lègue** : deux exigences neuves à `compatibilite-php-8` — on n'exerce
+    que ce que l'hébergement peut servir, et la déclaration suit la preuve.
+  - **Change** : `2026-08-30-mesurer-la-compatibilite-php-8-2-et-8-3` (archivé) — **livrée
+    le 2026-08-29**
+  - **Code concerné** : `.github/workflows/tests.yml`, `src/composer.json`, `src/lib/task/`,
+    `docs/modules/ROOT/pages/developpement/compatibilite-php-8.adoc`
+  - **Ajoutée** : 2026-08-30, rétroactivement
+
 - [x] 37. `retrouver-un-morceau-poste` — le contributeur retrouve ce qu'il a posté
   - **Persona servi** : le mélomane fêlé, co-primaire — celui dont dépend l'existence
     quotidienne du produit
