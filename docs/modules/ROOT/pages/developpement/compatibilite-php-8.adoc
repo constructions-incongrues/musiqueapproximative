@@ -29,7 +29,7 @@ date. Le reproduire tient en deux commandes — `ls -d /opt/plesk/php/*/` et
 |===
 | Verdict | *Atteignable, et sur les versions qu'on peut réellement servir.* La suite complète passe sous 8.2 et sous 8.3, sans une seule dépréciation.
 | Mesuré le | 2026-08-29 pour 8.2 et 8.3 ; 2026-08-19 pour 8.1
-| Interpréteurs | PHP 7.4.33 (production), 8.1.34 (témoin), *8.2.33* et *8.3.33*
+| Interpréteurs | PHP *8.3.33 (production depuis le 2026-08-29)*, 7.4.33 (développement), 8.1.34 (témoin), 8.2.33
 | Base | MariaDB 10.11, la version de production
 | Résultat | 290 unitaires, 402 fonctionnels frontend, 4 fonctionnels admin — *verts sur 8.2 comme sur 8.3*
 | Diagnostics émis | *Aucune dépréciation, aucun avertissement, aucune erreur fatale.* Seules 28 `Notice: tempnam()` remontent, et elles viennent de Lime — le cadre de test, jamais servi à un visiteur.
@@ -71,8 +71,26 @@ que la contrainte s'élargisse, faute de quoi rien n'aurait vérifié la déclar
 l'hébergement ne peut pas servir. Elle reste dans la matrice comme *témoin* — si 8.2 casse
 un jour et que 8.1 passe, le défaut est daté.
 
-*La bascule de la production reste à faire.* Le conteneur de développement est en 7.4.33 et
-le gestionnaire Plesk aussi.
+*La bascule a eu lieu le 2026-08-29.* La production sert désormais en *PHP 8.3.33*, par le
+gestionnaire `plesk-php83-fpm-dedicated`.
+
+Précautions prises avant, et elles valent d'être notées pour la prochaine fois : les jeux
+d'extensions de 7.4 et 8.3 ont été comparés terme à terme — identiques sur `mbstring`,
+`pdo_mysql`, `iconv`, `zlib`, `xml`, `ctype`, `json`, `intl` — et la contrainte
+`^7.4 || ^8.2` était déjà déployée, de sorte qu'aucun `composer install` ne pouvait tomber
+sur l'ancienne. C'était le second piège relevé plus bas : sans cette comparaison, un
+`mbstring` manquant aurait fait accuser PHP 8 à tort.
+
+Vérifié après bascule : toutes les routes répondent, `json`, `xspf` et `max` s'analysent,
+`/posts?format=json` — la route qui avait cassé sous 8.1 — parse, l'API Subsonic répond, et
+le journal d'erreurs ne porte *aucune* ligne `fatal`, `warning` ou `deprecated`.
+
+Retour en arrière en une commande :
+`plesk bin site --update musiqueapproximative.net -php_handler_id plesk-php74-fpm-dedicated`
+
+*Le conteneur de développement reste en 7.4.33.* C'est un écart assumé : la CI exerce les
+quatre versions, et développer sur la version que la production servait hier reste le moyen
+le plus sûr de voir venir ce qui casserait un retour arrière.
 
 Cette contrainte est *le seul verrou déclaré de toute la chaîne* — chaque dépendance
 annonce déjà PHP 8 de son côté. Elle suffit à faire refuser `composer install` sous 8.1,
