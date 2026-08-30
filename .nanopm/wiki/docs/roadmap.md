@@ -40,6 +40,19 @@ Strategy: *aucune* — `/pm-strategy` n'a jamais tourné
 
 **Capacity check :** 1 élément, ~1 session. Tenable. La contrainte OpenSpec est respectée.
 
+> ✅ **ATTEINT le 2026-08-30, en une session.** `ls openspec/changes/ | grep -v archive` ne
+> rend plus rien, et `openspec validate --specs` passe sur 15 capacités. Le critère était
+> « zéro change ni archivé ni activement travaillé avant le 2026-09-15 » : zéro, seize jours
+> d'avance.
+>
+> `mesurer-la-compatibilite-php-8-2-et-8-3` archivé avec ses deltas versés et une story 38
+> rétroactive. `borner-les-representations-machine` **retiré sans versement** — 3 tâches sur
+> 46, prémisse défaite par la story 34, et ses exigences auraient fait dire au corpus que
+> les listes sont bornées alors que `/posts` sert 3,71 Mo.
+>
+> **NOW est désormais vide.** Le prochain élément vient de NEXT : le compteur de rythme
+> mensuel.
+
 > ⚠ **Réécrit par la porte adverse.** La formulation d'origine échouait sur deux des quatre
 > éléments exigés : le critère n'était pas chiffré (« ne rend que du travail actif ») et
 > l'échéance n'en était pas une (« sous 2 sessions » n'est ni un jour ni une semaine — la

@@ -581,7 +581,16 @@ Chaque story est une tranche verticale : elle se démontre seule.
   - **Ajoutée** : 2026-08-18 · **Élargie** : 2026-08-18 · **Mise en attente** : 2026-08-18
   - **Change** : `borner-les-listes-de-morceaux`, proposé puis retiré le 2026-08-18
 
-- [~] 3. `borner-les-representations-machine` — les formats machine cessent de servir tout le catalogue
+- [~] 3. `borner-les-representations-machine` — **RETIRÉE le 2026-08-30, prémisse défaite**
+  - Le change du même nom est archivé sans avoir été livré : 3 tâches sur 46. Sa prémisse
+    attribuait 17,5 s au volume sérialisé ; la story 34 a montré que 88 % du coût venait
+    d'un N+1 sur le contributeur, et l'a corrigé sans rompre aucun contrat.
+  - **Ses spécifications n'ont PAS été versées** — elles affirmeraient que les listes sont
+    bornées, alors que `/posts` sert 3,71 Mo et `?format=json` 8,41 Mo (relevé du
+    2026-08-30). Le corpus de specs dit ce que le site fait, jamais ce qu'on voudrait.
+  - **Le poids reste un défaut réel** et relève désormais de l'objectif 3 du T4. Qui rouvre
+    le sujet repart du poids, pas de la latence, et re-mesure d'abord.
+  - **Change** : `2026-08-30-borner-les-representations-machine` (archivé, non livré)
   - *Reformulée le 2026-08-18. S'appelait `borner-le-xspf` et ne visait que ce format ; la
     mesure du jour a montré que le XSPF était la moins grave des trois. L'ancien énoncé et
     son motif sont conservés plus bas.*
