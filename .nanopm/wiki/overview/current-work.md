@@ -16,8 +16,9 @@ Concrètement : archiver `mesurer-la-compatibilite-php-8-2-et-8-3` avec sa story
 rétroactive, et reprendre ou retirer `borner-les-representations-machine`, gelé depuis le
 2026-08-18.
 
-**NEXT** : le compteur de rythme mensuel (objectif 1 · KR2, et déclencheur de l'anti-goal
-« recruter ») · trancher le sort de l'API Subsonic · dégeler les stories 2 et 3.
+**NEXT** : trancher le sort de l'API Subsonic · dégeler les stories 2 et 3.
+*Le compteur de rythme mensuel a été annulé le 2026-08-30* — avec lui disparaît le seul
+déclencheur automatique des anti-goals « recruter » et « ouvrir la contribution ».
 _More detail: `.nanopm/wiki/docs/roadmap.md`_
 
 ## Period
@@ -26,15 +27,14 @@ _More detail: `.nanopm/wiki/docs/roadmap.md`_
 
 ## The objectives
 
-1. ✅ **Arrêter la destruction des données des contributeurs — atteint**, sauf le compteur
-   de rythme mensuel (KR2, passé en NEXT). La preuve Unicode existe : `/encodage` rapporte
+1. ✅ **Arrêter la destruction des données des contributeurs — clos.** Le dernier KR, le
+   compteur de rythme mensuel, est **annulé** (2026-08-30) et non reporté. La preuve Unicode existe : `/encodage` rapporte
    2 morceaux hors cp1252, publiés par un contributeur réel. Détail historique :
    ~~**Déjà livré** — les
    tables sont converties et `encoding: utf8mb4` est posé (`e61b38c`). Il reste deux
    choses : **faire la preuve** (aucun caractère hors cp1252 n'a encore été stocké — 0 sur
    73 174 chaînes de l'extrait du 2026-08-18 ; `/encodage` le rapportera dès qu'un titre
-   non-latin sera publié), et **écrire le compteur de rythme mensuel** (morceaux +
-   contributeurs distincts), seule pièce manquante. Voir l'Errata dans `objectives.md`.
+   non-latin sera publié). Le compteur de rythme mensuel, seule autre pièce, est annulé. Voir l'Errata dans `objectives.md`.
 2. ✅ **ATTEINT — la production sert en PHP 8.3.33** depuis le 2026-08-29. Détail : La suite est verte sous
    PHP 8.1 depuis six mois, mais la production sert en `php:7.4.33`. Bascule avant le
    31 déc, zéro dépréciation dans le corps des réponses, verdict documenté.
@@ -64,7 +64,8 @@ existe.
 
 ## Known risks
 - Le renouvellement du collectif est mort (2 nouveaux/an depuis 2024, top 3 = 68 % des
-  morceaux 2026). Non traité ce trimestre, sous surveillance via le compteur de l'objectif 1.
+  morceaux 2026). **Non traité, et désormais non surveillé** : le compteur qui devait le
+  signaler est annulé.
 - Les dégâts Unicode déjà faits sont **irrécupérables** — la migration empêche les pertes
   futures, elle ne rend pas les anciennes.
 - Écart de comptage 81 / 56 non tranché, et ce document n'est pas la bonne source pour le

@@ -87,7 +87,7 @@ lire, pas ce document.
 | Key Result | Target | État |
 |-----------|--------|------|
 | KR1 : `/encodage` rapporte au moins un caractère hors cp1252 stocké | ≥ 1 | ✅ **ATTEINT — 2, relevé le 2026-08-29** |
-| KR2 : un fichier SQL versionné donne le rythme mensuel — morceaux et contributeurs distincts | livré, rejouable | ⬜ manquant |
+| ~~KR2 : un fichier SQL versionné donne le rythme mensuel~~ | — | ❌ **ANNULÉ le 2026-08-30, décision de l'auteur** |
 
 **KR1 est atteint, et je n'y suis pour rien.** J'avais écrit « il n'y a rien à construire :
 il y a à regarder `/encodage` et à cesser de le supposer ». C'était juste. Relevé du
@@ -109,8 +109,22 @@ n'était pas la bonne source et qu'il fallait lire `/encodage`, qui exécute la 
 sur la production. C'est fait : `titres_alteres_en_base: 60`. Le chiffre est versé dans
 `docs/modules/ROOT/pages/migration-utf8mb4.adoc`, où il a sa place — ici il vieillirait.
 
-**Il ne reste donc que le compteur de rythme mensuel** (KR2), qui est aussi le déclencheur
-de l'anti-goal « recruter » : médiane sous 4 contributeurs actifs deux mois consécutifs.
+**KR2 est annulé, et l'objectif 1 est donc clos.**
+
+> **Ce que l'annulation emporte, et qui n'est pas rien.** Ce compteur n'était pas seulement
+> le dernier KR : c'était **le seul instrument capable de rouvrir deux anti-goals** — «
+> recruter des contributeurs » et « ouvrir la contribution hors collectif ». Tous deux
+> portaient une condition de réouverture formulée en fonction de lui : *médiane sous
+> 4 contributeurs actifs deux mois consécutifs*.
+>
+> Sans lui, ces conditions sont **inobservables**. Les deux anti-goals ne sont plus « fermés
+> jusqu'à preuve du contraire » : ils sont fermés, point. Leurs paragraphes ci-dessous sont
+> corrigés en conséquence plutôt que de laisser des déclencheurs pointer vers un instrument
+> qui n'existera pas.
+>
+> Rappel de ce que la mesure ponctuelle du 2026-08-30 avait établi, et qui ne sera pas
+> réactualisé : 2 nouveaux contributeurs par an depuis 2024 contre 24-25 en 2010-2011, trois
+> personnes signant 68 % des morceaux de 2026, médiane de 6 actifs par mois sur 24 mois.
 
 
 ## Objective 2: Faire tourner le site sur un interpréteur encore soutenu — ⚠️ cible corrigée le 2026-08-29
@@ -196,9 +210,10 @@ d'avoir retrouvé son morceau.
 *Pourquoi c'était tentant :* le renouvellement est mort — 2 nouveaux par an depuis 2024
 contre 24 à 25 en 2010-2011, et 3 personnes signent 68 % des morceaux de 2026. C'est le
 risque de fond du produit.
-*Revisit when :* la médiane mensuelle passe sous 4 contributeurs actifs deux mois
-consécutifs (elle est à 6, stable sur 24 mois). KR4 de l'objectif 1 fournit exactement ce
-compteur — c'est pour ça qu'il est là.
+*Revisit when :* **plus aucune condition automatique.** Le compteur qui devait fournir ce
+déclencheur a été annulé le 2026-08-30. La réouverture ne peut donc venir que d'un constat
+humain — quelqu'un remarque que la file de publication se vide — ou d'une mesure ponctuelle
+relancée à la main, comme celle du 2026-08-30.
 
 **Mesurer l'audience.**
 *Pourquoi c'était tentant :* votre inquiétude déclarée est « que ça ne serve à personne »
