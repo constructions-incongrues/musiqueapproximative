@@ -50,8 +50,8 @@ Strategy: *aucune* — `/pm-strategy` n'a jamais tourné
 > 46, prémisse défaite par la story 34, et ses exigences auraient fait dire au corpus que
 > les listes sont bornées alors que `/posts` sert 3,71 Mo.
 >
-> **NOW est désormais vide.** Le prochain élément vient de NEXT : le compteur de rythme
-> mensuel.
+> **NOW est désormais vide.** Le prochain élément vient de NEXT — qui n'en compte plus que
+> deux : le compteur de rythme mensuel a été annulé le 2026-08-30.
 
 > ⚠ **Réécrit par la porte adverse.** La formulation d'origine échouait sur deux des quatre
 > éléments exigés : le critère n'était pas chiffré (« ne rend que du travail actif ») et
@@ -70,11 +70,11 @@ Ouvrir un troisième chantier par-dessus, c'est ce qui transforme un plan en dé
 
 *Engagé sur la direction. L'ordre se précisera quand NOW sera livré.*
 
-- **Le compteur de rythme mensuel** — un SQL versionné donnant morceaux et contributeurs
-  distincts par mois → ties to **Objectif 1 · KR2**, le dernier ouvert.
-  *Pourquoi il compte plus qu'il n'en a l'air :* c'est le déclencheur de l'anti-goal
-  « recruter » — médiane sous 4 contributeurs actifs deux mois de suite. Sans lui, **rien ne
-  surveille le pari central du produit**, qui est que le collectif continue de poster.
+- ~~**Le compteur de rythme mensuel**~~ — **ANNULÉ le 2026-08-30, décision de l'auteur.**
+  L'argument qui le portait est conservé ici parce qu'il reste vrai : c'était le déclencheur
+  de l'anti-goal « recruter », et **rien ne surveille désormais le pari central du produit**,
+  qui est que le collectif continue de poster. Ce n'est plus un manque à combler : c'est un
+  choix, et il est daté.
 - **Trancher le sort de l'API Subsonic** — l'annoncer ou la retirer → ties to **Challenge
   #1** (ce qui est tenu sans être habité). 28 méthodes livrées, testées, sans usage
   constaté, captant 43 % de l'effort de vérification. L'anti-goal qui la protégeait tombe :
@@ -98,8 +98,9 @@ Ouvrir un troisième chantier par-dessus, c'est ce qui transforme un plan en dé
   2026-08-30, jamais rejoué. — *revisit when* le harnais fonctionnel reçoit une aide à la
   connexion sfGuard, ou dès qu'un second test authentifié devient nécessaire.
 - **Recruter des contributeurs** — 2 nouveaux par an depuis 2024 contre 24-25 en 2010-2011,
-  et trois personnes signent 68 % des morceaux de 2026. — *revisit when* le compteur
-  ci-dessus montre une médiane sous 4 actifs deux mois consécutifs.
+  et trois personnes signent 68 % des morceaux de 2026. — *revisit when* **rien
+  d'automatique** : le compteur qui portait ce déclencheur est annulé. Seul un constat humain
+  ou une mesure relancée à la main peut rouvrir ce sujet.
 - **Reprendre `docs/API_JSON_API_TARGET.md`** — la migration JSON:API écartée délibérément.
   — *revisit when* un consommateur réel des formats machine se manifeste. Aucun n'a jamais
   été observé.
@@ -110,15 +111,16 @@ Ouvrir un troisième chantier par-dessus, c'est ce qui transforme un plan en dé
 
 - **Mesurer l'audience** — votre position (CONTEXT.md Q9) : mesurer changerait le produit.
   — *reconsidérer si* vous décidez que l'inquiétude « que ça ne serve à personne » mérite
-  une réponse chiffrée. Note : le compteur de NEXT regarde la **production**, pas la
-  consommation — il ne contredit pas cette position.
+  une réponse chiffrée. Note : le compteur qui regardait la **production** — et non la
+  consommation, donc sans contredire cette position — a lui aussi été annulé le 2026-08-30.
+  Le produit ne porte plus aucun instrument, des deux côtés.
 - **Servir l'auditeur de plateforme** — comptes, catalogue à parcourir, favoris,
   recommandations. — *reconsidérer si* le collectif cessait de poster quotidiennement :
   l'archive deviendrait le produit. Ce serait alors un autre produit.
 - **Ouvrir la contribution hors collectif** — « une bande de mélomanes fêlé⋅e⋅s » cesse
   d'exister dès qu'on peut s'y inscrire. — *reconsidérer si* le collectif descend sous un
-  seuil où le renouvellement interne ne suffit plus. Le compteur de NEXT est ce qui le
-  dirait.
+  seuil où le renouvellement interne ne suffit plus. **Rien ne le dira** : le compteur qui
+  aurait fourni ce signal est annulé. Cette condition de réouverture n'en est plus une.
 - **Quitter Symfony 1 / Doctrine 1** — le pari du socle EOL tient tant que le trafic est
   modeste et le produit stable. — *reconsidérer si* une faille sans correctif amont touche
   une dépendance servie, ou si PHP 8.3 sort du support de l'hébergement.
