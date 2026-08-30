@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.13.0...v1.13.1) (2026-08-30)
+
+
+### Documentation
+
+* **pm:** annule le compteur de rythme, et dit ce que ça emporte ([#241](https://github.com/constructions-incongrues/musiqueapproximative/issues/241)) ([3e0f623](https://github.com/constructions-incongrues/musiqueapproximative/commit/3e0f623f2d0870a1f5ae5a74fdd3770d40cdfd41))
+
 ## [1.13.0](https://github.com/constructions-incongrues/musiqueapproximative/compare/v1.12.0...v1.13.0) (2026-08-29)
 
 
