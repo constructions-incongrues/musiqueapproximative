@@ -1,3 +1,48 @@
+# RETIRÉ le 2026-08-30 — non implémenté, et il ne doit pas l'être en l'état
+
+**Ce change est archivé sans avoir été livré, et sans que ses spécifications soient
+versées.** 3 tâches sur 46. Le code n'a jamais été écrit.
+
+## Pourquoi il est retiré
+
+Sa prémisse a été défaite par la story 34. Il attribuait 17,5 s au volume sérialisé ; la
+mesure a montré que **88 % du coût venait d'un N+1 sur le contributeur**, pas des octets.
+`hydrater-le-contributeur-en-une-requete` a corrigé ce défaut le 2026-08-19 : le catalogue
+est passé de 8 271 requêtes / 7,17 s à 1 requête / 1,08 s, **sans rompre aucun contrat** —
+là où ce change proposait de rompre le contrat public pour traiter un coût dont il n'avait
+pas identifié la cause.
+
+## Pourquoi ses spécifications ne sont PAS versées
+
+Le delta déclare trois exigences : les représentations d'une liste sont bornées, une liste
+bornée est navigable, un document de playlist dit ce qu'il contient. **Aucune n'est vraie.**
+Relevé en production le 2026-08-30 :
+
+```
+GET /posts               3 711 343 octets
+GET /posts?format=json   8 413 910 octets
+```
+
+Les verser ferait dire au corpus qui fait foi que le site borne ses listes, alors qu'il sert
+huit mégaoctets. C'est précisément la faute que ce corpus existe pour empêcher, et le
+précédent est écrit dans `src/web/openapi.yaml` : le document qu'il remplace « portait la
+mention *Auto-generated analysis* et décrivait neuf routes qui n'existaient pas ».
+
+## Ce qui reste vrai, et où c'est traité
+
+**Le poids demeure un défaut réel** — 3,7 Mo servis à qui ouvre le catalogue, ce qui frappe
+le DJ de soirée sur un réseau de salle. Ce n'est pas ce change qui est faux, c'est son
+raisonnement : il visait la latence, qui a été traitée autrement.
+
+Le sujet est repris par **l'objectif 3 du T4** (« Cesser d'envoyer 3,7 Mo à qui ouvre le
+catalogue ») et reste porté par les stories 2 et 3 du plan de release, gelées. Quiconque le
+rouvre doit repartir du poids, pas de la latence, et re-mesurer avant de proposer quoi que
+ce soit.
+
+---
+
+*Texte d'origine conservé ci-dessous, y compris la revue d'ingénierie qui l'a gelé.*
+
 ## EN ATTENTE D'UN DIAGNOSTIC — revue d'ingénierie du 2026-08-18
 
 **Ce change ne part pas en l'état.** La revue a établi que sa prémisse n'est pas vérifiée.
